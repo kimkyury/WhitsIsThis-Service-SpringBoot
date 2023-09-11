@@ -134,8 +134,8 @@ body {
   margin-top: 1rem;
   margin-bottom: 1rem;
   height: 2rem;
-  width: 19.5rem;
-  border: 0.1875rem solid
+  width: 100%;
+  border: 0.21875rem solid
     rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
   border-radius: 1rem;
@@ -143,7 +143,7 @@ body {
   text-indent: 1rem;
   font-size: 1rem;
 }
-.Search .building-wrapper {
+.Search .building_wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -160,6 +160,16 @@ body {
 
   color: #2d4059;
   font-weight: bold;
+}
+.Search .search_bar_wrapper {
+  min-width: 19.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.Search .search_bar_wrapper img {
+  width: 50px;
+  height: 50px;
 }
 
 /* Buildiong */
@@ -213,6 +223,12 @@ body {
   color: #838383;
 
   margin: 0;
+}
+
+/* SearchDetail */
+.SearchDetail {
+  flex-direction: column;
+  align-items: center;
 }
 
 /* MyCamera */
