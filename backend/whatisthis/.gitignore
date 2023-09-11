@@ -27,7 +27,7 @@ out/
 !**/src/test/**/out/
 
 ### NetBeans ###
-/nbproject/private/<,
+/nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
@@ -36,5 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 
-### Credential ###
 src/main/resources/application.yml
