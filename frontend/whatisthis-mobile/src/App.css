@@ -1,0 +1,114 @@
+:root {
+  --background-color: #2d4059;
+  --background-camera: rgba(0, 0, 0, 0.7);
+  --text-color: #ffffff;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+
+  width: 22.5rem;
+  height: 50rem;
+  max-width: 100%;
+  max-height: 100%;
+
+  /* overflow: auto; */
+}
+
+/* common Button */
+.MyButton {
+  border: none;
+  box-shadow: 0px 4px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  transition: background-color 0.1s;
+}
+.MyButton:active {
+  background-color: #0e0e0e; /* 클릭 시 변경할 색상 설정 */
+  color: #2d4059;
+}
+
+/* Home */
+.Home {
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.Home img {
+  width: 312px;
+  height: auto;
+}
+.Home .MyButton {
+  background-color: rgb(255, 255, 255);
+  width: 312px;
+  height: 2.5rem;
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.Home .MyButton:active {
+  background-color: #7d7d7d; /* 클릭 시 변경할 색상 설정 */
+}
+
+/* Login */
+.Login {
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.Login img {
+  width: 144px;
+  height: auto;
+}
+.Login .MyButton {
+  background-color: rgb(255, 255, 255);
+  width: 216px;
+  height: 2.5rem;
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.Login .MyButton:active {
+  background-color: #7d7d7d; /* 클릭 시 변경할 색상 설정 */
+}
+.Login input {
+  margin-bottom: 0.5rem;
+  height: 2rem;
+  width: 210px;
+  border: 3px solid
+    rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
+  box-shadow: 0px 4px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+
+  text-indent: 1rem;
+}
+.Login h5 {
+  margin: 0.1rem;
+}
+
+/* MyCamera */
+.MyCamera video {
+  width: 300px;
+  height: 300px;
+}
+
+/* CaptureImage */
+.CaptureImage {
+  background-color: #ececec;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
