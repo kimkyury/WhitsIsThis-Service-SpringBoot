@@ -12,9 +12,6 @@ const Home = () => {
 
   useEffect(() => {
     const localData = localStorage.getItem("userId");
-
-    console.log(localData);
-
     if (localData) {
       const userData = JSON.parse(localData);
 
