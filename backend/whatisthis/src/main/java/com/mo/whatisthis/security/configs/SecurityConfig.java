@@ -1,4 +1,4 @@
-package com.mo.whatisthis.security.config;
+package com.mo.whatisthis.security.configs;
 
 import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
@@ -49,7 +49,6 @@ public class SecurityConfig {
             .disable()
             .formLogin()
             .disable();
-
 //            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
 //                UsernamePasswordAuthenticationFilter.class)
 //            .sessionManagement()
@@ -59,9 +58,6 @@ public class SecurityConfig {
 //            .exceptionHandling()
 //            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 //            .accessDeniedHandler(jwtAccessDeniedHandler)
-
-
-
         return http.build();
     }
 
@@ -70,5 +66,4 @@ public class SecurityConfig {
         return (web) -> web.ignoring()
                            .antMatchers(AUTH_WHITELIST);
     }
-
 }
