@@ -1,0 +1,23 @@
+.gridbox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+}
+
+.left {
+  margin-left: 5%;
+  background-color: #2D4059;
+  width: 45vw;
+  height: 10vh;
+  font-size: 30px;
+  /* border-radius: 8px; */
+  color: #ECECEC;
+  font-weight: bold;
+  border-radius: 4px;
+  border: solid 2px black;
+
+
+  
+
+
+}

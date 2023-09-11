@@ -1,0 +1,28 @@
+.idbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 650px;
+  height:275px; /* 원하는 너비 설정 */
+  background-color: white;
+  border-radius: 50px;
+}
+
+.input-group {
+  display: flex;
+  /* flex-direction: column; */
+  /* align-items: center; */
+}
+
+label {
+  margin-right: 10px; /* 레이블과 입력란 사이의 간격 조정 */
+}
+
+.inputbox {
+  font-size:'30px';
+  width:'600px';
+  height:'51px';
+  display:'flex';
+  justify-content:'space-between';
+}

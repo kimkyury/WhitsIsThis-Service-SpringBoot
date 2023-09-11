@@ -1,0 +1,30 @@
+.header {
+  height: 60px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  /* background-color: rgb(229, 246, 251); */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}   
+a {
+  text-decoration: none; /* 밑줄 없애기 */
+  color: inherit; /* 상위 엘리먼트에서 상속받은 글꼴 색상 사용 */
+}
+.item {
+
+  margin-left: 10px;
+  font-size: 25px;
+  ;
+  font-weight:bold;
+}
+
+.itemposition {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.activeLink {
+  color: red; /* 활성화된 링크의 글꼴 색상을 변경 */
+}
