@@ -1,4 +1,4 @@
-package com.mo.whatisthis.swagger.configs;
+package com.mo.whatisthis.springfox.configs;
 
 import java.util.Arrays;
 import java.util.Collections;
