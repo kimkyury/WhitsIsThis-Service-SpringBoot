@@ -6,7 +6,7 @@ import os
 from geometry_msgs.msg import Pose
 from squaternion import Quaternion
 from nav_msgs.msg import Odometry,OccupancyGrid,MapMetaData
-from math import pi
+from math import pi,sqrt
 
 # load_map 노드는 맵 데이터를 읽어서, 맵 상에서 점유영역(장애물) 근처에 로봇이 움직일 수 없는 영역을 설정하고 맵 데이터로 publish 해주는 노드입니다.
 # 추 후 a_star 알고리즘에서 맵 데이터를 subscribe 해서 사용합니다.
@@ -70,11 +70,27 @@ class loadMap(Node):
         map_to_grid=
         grid=
         '''
+        full_path='C:\\Users\\SSAFY\\Desktop\\S09P22E203\\embedded\\whatisthis\\src\\sub2\\map\\map.txt'
+        self.f=open(full_path,'r')
 
+        line = self.f.readline()
+        line_data=list(map(int,line.strip(' ').split(' ')))
 
+        map_to_grid=[[line_data[(349-j)+i*350] for i in range(self.map_size_y)] for j in range(self.map_size_x)]
+        grid=np.array(map_to_grid)
+
+        for num,data in enumerate(line_data) :
+            self.map_data[num]=data
+        
         for y in range(350):
             for x in range(350):
                 if grid[x][y]==100 :
+                    for i in range(-5,6,1):
+                        for j in range(-5,6,1):
+                            if sqrt(pow(i,2)+pow(j,2)) >= 5:continue
+                            if x+i<0 or x+i>=self.map_size_x or y+j<0 or y+j>=self.map_size_y:continue
+                            if grid[x+i][y+j] == 100:continue
+                            grid[x+i][y+j] = 127
 
                     '''
                     로직 3. 점유영역 근처 필터처리
@@ -87,9 +103,8 @@ class loadMap(Node):
         np_map_data=grid.reshape(1,350*350) 
         list_map_data=np_map_data.tolist()
    
-   
         ## 로직2를 완성하고 주석을 해제 시켜주세요.
-        ## self.f.close()
+        self.f.close()
         print('read_complete')
         self.map_msg.data=list_map_data[0]
 
