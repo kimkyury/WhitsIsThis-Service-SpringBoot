@@ -2,6 +2,8 @@ package com.mo.whatisthis.apis.members.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,13 +40,13 @@ public class MemberEntity {
     private String phone;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(nullable = true)
     private String image_url;
 
-    public MemberEntity(String username, String password,
-        Role role) {
+    public MemberEntity(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -57,18 +59,17 @@ public class MemberEntity {
     }
 
     public enum Role {
-        ROLE_EMPLOYEE("ROLE_EMPLOYEE"),
-        ROLE_DEVICE("ROLE_DEVICE");
-
-        private final String authority;
-
-        Role(String authority) {
-            this.authority = authority;
-        }
-
-        public String getAuthority() {
-            return authority;
-        }
+        ROLE_EMPLOYEE, ROLE_DEVICE
+//
+//        private final String authority;
+//
+//        Role(String authority) {
+//            this.authority = authority;
+//        }
+//
+//        public String getAuthority() {
+//            return authority;
+//        }
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
