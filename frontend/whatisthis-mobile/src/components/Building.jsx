@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
+import { getBuildingName } from "../utils/ParseAddress";
+
 const Building = ({ buildingData }) => {
   const navigate = useNavigate();
 
@@ -9,8 +11,8 @@ const Building = ({ buildingData }) => {
 
   return (
     <div className="Building " onClick={handleBuildingClick}>
-      <div className="contents_wrapper">
-        <h2>건물대표이름</h2>
+      <div className="building_info_wrapper">
+        <h2>{getBuildingName(buildingData.addr)}</h2>
         <h5>{buildingData.addr}</h5>
       </div>
       <div className="building_status_wrapper">

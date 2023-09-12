@@ -1,9 +1,18 @@
-const Notification = ({ text, onClick }) => {
+const Notification = ({ text, type, onClick }) => {
+  const btnType = ["left", "right"].includes(type) ? type : "default";
+
   return (
-    <button className={"Notification"} onClick={onClick}>
+    <button
+      className={["Notification", `Notification_${type}`].join(" ")}
+      onClick={onClick}
+    >
       {text}
     </button>
   );
+};
+
+Notification.defaultProps = {
+  type: "default",
 };
 
 export default Notification;

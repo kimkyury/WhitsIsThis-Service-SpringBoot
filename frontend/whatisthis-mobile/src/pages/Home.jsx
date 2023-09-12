@@ -33,6 +33,7 @@ const Home = () => {
 
       {isLogin && workInProgress && (
         <Notification
+          type={"right"}
           text={"작업 진행중"}
           onClick={() => navigate("/houselist")}
         />

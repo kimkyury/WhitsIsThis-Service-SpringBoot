@@ -45,7 +45,6 @@ body {
   border: none;
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
   background-color: #7a7a7a;
-  border-radius: 1rem 0 0 1rem;
   transition: background-color 0.1s;
 
   font-weight: bold;
@@ -55,6 +54,12 @@ body {
 .Notification:active {
   background-color: #ffffff; /* 클릭 시 변경할 색상 설정 */
   color: #2d4059;
+}
+.Notification_left {
+  border-radius: 0 1rem 1rem 0;
+}
+.Notification_right {
+  border-radius: 1rem 0 0 1rem;
 }
 
 /* Home */
@@ -199,12 +204,14 @@ body {
   background-color: #d5d5d5; /* 클릭 시 변경할 색상 설정 */
   color: #425e83;
 }
-.Building .contents_wrapper {
+.Building .building_info_wrapper {
   padding-left: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 0.5rem;
+
+  word-break: keep-all;
 }
 .Building .building_status_wrapper {
   display: flex;
@@ -212,7 +219,6 @@ body {
 }
 .Building h2 {
   color: #2d4059;
-
   margin: 0;
 }
 .Building h1 {
@@ -221,7 +227,6 @@ body {
 }
 .Building h5 {
   color: #838383;
-
   margin: 0;
 }
 
@@ -229,6 +234,39 @@ body {
 .SearchDetail {
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+}
+.SearchDetail .Notification {
+  margin-right: auto;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.SearchDetail .building_info_wrapper {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.SearchDetail .house_info_list_wrapper {
+  width: 80%;
+  height: 70%;
+  padding: 1rem;
+  box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  background-color: #ececec;
+}
+.SearchDetail h1 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.3rem;
+}
+
+.SearchDetail h3 {
+  color: #838383;
+  margin: 0;
 }
 
 /* MyCamera */
