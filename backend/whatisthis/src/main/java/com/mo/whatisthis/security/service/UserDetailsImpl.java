@@ -20,8 +20,7 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add(new SimpleGrantedAuthority(memberEntity.getRole()
-                                                              .getAuthority()));
+        collection.add(new SimpleGrantedAuthority(memberEntity.getRole().name()));
         return collection;
     }
 
@@ -33,6 +32,10 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return memberEntity.getUsername();
+    }
+
+    public Integer getUserId() {
+        return memberEntity.getId();
     }
 
     public MemberEntity.Role getRole() {
