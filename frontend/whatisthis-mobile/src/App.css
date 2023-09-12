@@ -242,7 +242,7 @@ body {
   margin-bottom: 2rem;
 }
 .SearchDetail .building_info_wrapper {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   margin-bottom: 1rem;
   min-width: 19.5rem;
   max-width: 19.5rem;
@@ -254,6 +254,9 @@ body {
   width: 80%;
   height: 70%;
   padding: 1rem;
+
+  overflow-y: scroll;
+
   box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
   border-radius: 0.5rem;
   background-color: #ececec;
@@ -266,7 +269,32 @@ body {
 
 .SearchDetail h3 {
   color: #838383;
+  font-size: 1rem;
   margin: 0;
+}
+
+.HouseInfo {
+  min-width: 17.5rem;
+  min-height: 5rem;
+  background-color: #ececec;
+  border-bottom: 0.0625rem solid #b3b3b3;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.1s;
+}
+.HouseInfo:active {
+  background-color: #cbcbcb; /* 클릭 시 변경할 색상 설정 */
+  color: #2d4059;
+}
+
+.HouseInfo h1 {
+  margin-left: 1rem;
+  color: black;
+}
+.HouseInfo img {
+  margin-right: 0.5rem;
 }
 
 /* MyCamera */

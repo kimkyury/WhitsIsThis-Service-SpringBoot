@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getBuildingName } from "../utils/ParseAddress";
 
 import Notification from "../components/Notification";
+import HouseInfo from "../components/HouseInfo";
 
 const dummyData = [
   {
@@ -15,22 +16,27 @@ const dummyData = [
       {
         dong: 101,
         ho: 101,
+        status: "done",
       },
       {
         dong: 101,
         ho: 102,
+        status: "todo",
       },
       {
         dong: 101,
         ho: 103,
+        status: "done",
       },
       {
         dong: 101,
         ho: 104,
+        status: "todo",
       },
       {
         dong: 101,
         ho: 105,
+        status: "done",
       },
     ],
   },
@@ -43,22 +49,27 @@ const dummyData = [
       {
         dong: 201,
         ho: 101,
+        status: "todo",
       },
       {
         dong: 201,
         ho: 102,
+        status: "done",
       },
       {
         dong: 201,
         ho: 103,
+        status: "done",
       },
       {
         dong: 201,
         ho: 104,
+        status: "todo",
       },
       {
         dong: 201,
         ho: 105,
+        status: "done",
       },
     ],
   },
@@ -71,22 +82,27 @@ const dummyData = [
       {
         dong: 301,
         ho: 101,
+        status: "todo",
       },
       {
         dong: 301,
         ho: 102,
+        status: "todo",
       },
       {
         dong: 301,
         ho: 103,
+        status: "done",
       },
       {
         dong: 301,
         ho: 104,
+        status: "done",
       },
       {
         dong: 301,
         ho: 105,
+        status: "todo",
       },
     ],
   },
@@ -99,22 +115,27 @@ const dummyData = [
       {
         dong: 401,
         ho: 101,
+        status: "done",
       },
       {
         dong: 401,
         ho: 102,
+        status: "done",
       },
       {
         dong: 401,
         ho: 103,
+        status: "done",
       },
       {
         dong: 401,
         ho: 104,
+        status: "done",
       },
       {
         dong: 401,
         ho: 105,
+        status: "done",
       },
     ],
   },
@@ -151,7 +172,9 @@ const SearchDetail = () => {
         </div>
         <div className="house_info_list_wrapper">
           {/* houst info list */}
-          <h5>building number is = {id}</h5>
+          {data.houses.map((it, idx) => {
+            return <HouseInfo key={idx} houseInfo={it} />;
+          })}
         </div>
         <Notification
           type={"left"}
