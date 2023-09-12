@@ -24,7 +24,7 @@ public class MemberEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     // 사원번호/기기 등록번호
     @Column(nullable = false)
