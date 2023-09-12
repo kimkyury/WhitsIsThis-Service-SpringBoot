@@ -28,13 +28,38 @@ body {
 /* common Button */
 .MyButton {
   border: none;
-  box-shadow: 0px 4px 1px rgba(0, 0, 0, 0.25);
-  border-radius: 16px;
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
   transition: background-color 0.1s;
 }
 .MyButton:active {
   background-color: #0e0e0e; /* 클릭 시 변경할 색상 설정 */
   color: #2d4059;
+}
+
+/* Notification */
+.Notification {
+  height: 2.5rem;
+  width: 8rem;
+
+  border: none;
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  background-color: #7a7a7a;
+  transition: background-color 0.1s;
+
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #fcfcfd;
+}
+.Notification:active {
+  background-color: #ffffff; /* 클릭 시 변경할 색상 설정 */
+  color: #2d4059;
+}
+.Notification_left {
+  border-radius: 0 1rem 1rem 0;
+}
+.Notification_right {
+  border-radius: 1rem 0 0 1rem;
 }
 
 /* Home */
@@ -44,21 +69,26 @@ body {
   flex-direction: column;
 }
 .Home img {
-  width: 312px;
+  width: 19.5rem;
   height: auto;
 }
 .Home .MyButton {
   background-color: rgb(255, 255, 255);
-  width: 312px;
+  width: 19.5rem;
   height: 2.5rem;
   margin-top: 2rem;
-  margin-bottom: 5rem;
+  /* margin-bottom: 5rem; */
 
   font-weight: bold;
   font-size: 1.3rem;
 }
 .Home .MyButton:active {
   background-color: #7d7d7d; /* 클릭 시 변경할 색상 설정 */
+}
+.Home .Notification {
+  position: absolute;
+  top: 2rem;
+  right: 0rem;
 }
 
 /* Login */
@@ -68,12 +98,12 @@ body {
   flex-direction: column;
 }
 .Login img {
-  width: 144px;
+  width: 9rem;
   height: auto;
 }
 .Login .MyButton {
   background-color: rgb(255, 255, 255);
-  width: 216px;
+  width: 13.5rem;
   height: 2.5rem;
   margin-top: 2rem;
   margin-bottom: 5rem;
@@ -87,16 +117,184 @@ body {
 .Login input {
   margin-bottom: 0.5rem;
   height: 2rem;
-  width: 210px;
-  border: 3px solid
+  width: 13.125;
+  border: 0.1875rem solid
     rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
-  box-shadow: 0px 4px 1px rgba(0, 0, 0, 0.25);
-  border-radius: 16px;
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
 
   text-indent: 1rem;
+  font-size: 1rem;
 }
 .Login h5 {
   margin: 0.1rem;
+}
+
+/* Search */
+.Search {
+  flex-direction: column;
+  align-items: center;
+}
+.Search input {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  height: 2rem;
+  width: 100%;
+  border: 0.21875rem solid
+    rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+
+  text-indent: 1rem;
+  font-size: 1rem;
+}
+.Search .building_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  padding-top: 0.5rem;
+
+  overflow-y: scroll;
+
+  box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  width: 100%;
+  height: 100%;
+  background-color: #ececec;
+
+  color: #2d4059;
+  font-weight: bold;
+}
+.Search .search_bar_wrapper {
+  min-width: 19.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.Search .search_bar_wrapper img {
+  width: 50px;
+  height: 50px;
+}
+
+/* Buildiong */
+.Building {
+  width: 18.5rem;
+  min-height: 4.9375rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  padding: 0.5rem;
+
+  color: black;
+  font-weight: bold;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  transition: background-color 0.1s;
+}
+.Building:active {
+  background-color: #d5d5d5; /* 클릭 시 변경할 색상 설정 */
+  color: #425e83;
+}
+.Building .building_info_wrapper {
+  padding-left: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+
+  word-break: keep-all;
+}
+.Building .building_status_wrapper {
+  display: flex;
+  align-items: center;
+}
+.Building h2 {
+  color: #2d4059;
+  margin: 0;
+}
+.Building h1 {
+  color: #343434;
+  margin: 0;
+}
+.Building h5 {
+  color: #838383;
+  margin: 0;
+}
+
+/* SearchDetail */
+.SearchDetail {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.SearchDetail .Notification {
+  margin-right: auto;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.SearchDetail .building_info_wrapper {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.SearchDetail .house_info_list_wrapper {
+  width: 80%;
+  height: 70%;
+  padding: 1rem;
+
+  overflow-y: scroll;
+
+  box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  background-color: #ececec;
+}
+.SearchDetail h1 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.3rem;
+}
+
+.SearchDetail h3 {
+  color: #838383;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.HouseInfo {
+  min-width: 17.5rem;
+  min-height: 5rem;
+  background-color: #ececec;
+  border-bottom: 0.0625rem solid #b3b3b3;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.1s;
+}
+.HouseInfo:active {
+  background-color: #cbcbcb; /* 클릭 시 변경할 색상 설정 */
+  color: #2d4059;
+}
+
+.HouseInfo h1 {
+  margin-left: 1rem;
+  color: black;
+}
+.HouseInfo img {
+  margin-right: 0.5rem;
 }
 
 /* MyCamera */

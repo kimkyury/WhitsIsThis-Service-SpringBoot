@@ -34,6 +34,8 @@ const Login = () => {
 
     // auth 통신로직
 
+    localStorage.setItem("userId", JSON.stringify(state.userId));
+
     navigate("/");
 
     setState({
