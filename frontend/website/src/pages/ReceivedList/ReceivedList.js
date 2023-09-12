@@ -7,10 +7,10 @@ function List() {
       <hr/>
       <div className='gridbox'>
         <div className='left' style={{  boxShadow:'0px 5px 5px rgba(0,0,0,0.5)'}}>
-          <span style={{display:'flex', alignItems:'center', height: '100%', marginLeft:'3%'}}>
+          <span style={{display:'flex',alignItems:'center', height: '100%', marginLeft:'3%'}}>
           접수대기
           </span>
-          <div style={{marginTop:'3%', paddingTop:'5px',width: '45vw', height:'70vh' , backgroundColor:'whitesmoke', borderRadius:'8px'}}>
+          <div style={{marginTop:'3%', paddingTop:'5px',width: '877.15px', height:'669px' , backgroundColor:'whitesmoke', borderRadius:'8px'}}>
           <p style={{justifyContent:'center'}}>
           <Item/>
           {/* 아이템 더블클릭하면 모달나오게 */}
@@ -23,6 +23,9 @@ function List() {
         <span style={{display:'flex', alignItems:'center', height: '100%', marginLeft:'3%'}}>
           내 접수
           </span>
+          <div style={{marginTop:'3%', paddingTop:'5px',width: '877.15px', height:'669px' , backgroundColor:'whitesmoke', borderRadius:'8px'}}>
+
+          </div>
         </div>
       </div>
       {/* <Item/> */}

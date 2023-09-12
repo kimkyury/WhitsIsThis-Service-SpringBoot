@@ -7,17 +7,34 @@
 .left {
   margin-left: 5%;
   background-color: #2D4059;
-  width: 45vw;
-  height: 10vh;
+  width: 877.15px;
+  height: 109.78px;
   font-size: 30px;
   /* border-radius: 8px; */
   color: #ECECEC;
   font-weight: bold;
   border-radius: 4px;
   border: solid 2px black;
+}
 
+.Modalbox {
+  width: 1900px;
+  height: 850px;
+  border: 2px solid black;
+  border-radius: 50px;
+  /* display: flex; */
+  /* justify-content: center; */
+}
 
-  
+.gridmodal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.nametag {
+  font-size: 35px;
+  font-weight: bold;
+}
 
-
+.Vtag {
+  font-size: 30px;
 }

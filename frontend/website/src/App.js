@@ -5,6 +5,8 @@ import Custom from '../src/pages/WebMain/GoHome';
 import List from '../src/pages/ReceivedList/ReceivedList';
 import ResultList from '../src/pages/ResultList/ResultList';
 import Mypage from '../src/pages/Mypage/Mypage';
+import Request from '../src/pages/ReceivedList/RequestModal'
+import Mypass from '../src/component/Inmypage/Mypassword/Mypassword';
 // import PrivateRoute from './components/PrivateRoute';
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           <Route path='/WebMain/List' element={[<Header/>, <List/>]}/>
           <Route path='/WebMain/ResultList' element={[<Header/>, <ResultList/>]}/>
           <Route path='/WebMain/Mypage' element={[<Header/>, <Mypage/>]}/>
+          <Route path='/WebMain/Request' element={[<Header/>, <Request/>]}/>
+          <Route path='/WebMain/pass' element={[<Header/>, <Mypass/>]}/>
           {/* <Route path="/CreateRoomModal" element={<PrivateRoute authenticated={access} component={<CreateRoomModal/>} />}/> */}
         </Routes>
       </Router>

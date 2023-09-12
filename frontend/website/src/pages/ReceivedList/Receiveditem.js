@@ -7,8 +7,8 @@ function Receiveditem() {
   return (
     <div style={{boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.5)', // 아래쪽 그림자 설정
     // padding: '20px', 
-    width:'44vw',
-    height:'15vh', 
+    width:'877.15px',
+    height:'172.21px', 
     borderLeft:'5px solid #F07B3F',
     marginTop: '1%',
     marginLeft: '1%',

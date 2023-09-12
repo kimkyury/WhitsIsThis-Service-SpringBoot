@@ -6,7 +6,7 @@ function ResultList() {
       결과내역
       <hr />
       <div style={{display:'flex', justifyContent:'center'}}>
-        <div style={{ paddingTop: '1%', paddingBottom:'1%', borderBottom:'solid 1px black',borderTop:'solid 1px black', width: '80vw', height: '5vh', display: 'flex', justifyContent: 'space-between', textAlign: 'start', height: '100%' }}>
+        <div style={{ paddingTop: '1%', paddingBottom:'1%', borderBottom:'solid 2px black',borderTop:'solid 2px black', width: '80vw', height: '5vh', display: 'flex', justifyContent: 'space-between', textAlign: 'start', height: '100%' }}>
           
           <span style={{ flex: '1', marginLeft: '2%' }}>신청자명</span>
           <span style={{ flex: '1',marginLeft: '-10%'  }}>연락처</span>
@@ -18,7 +18,7 @@ function ResultList() {
       </div>
       {/* div태그에 5줄 리스트 만들기 */}
       <div style={{display:'flex', justifyContent:'center'}}>
-      <div style={{border:'2px solid black', width:'80vw', height:'60vh'}}>
+      <div style={{borderBottom:'2px solid black', width:'80vw', height:'60vh'}}>
         {/* result item들들어올것 */}
       </div>
       </div>

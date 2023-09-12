@@ -1,0 +1,8 @@
+.passbox {
+  width: 574px;
+  height: 600px;
+  border-radius: 8px;
+  box-shadow: 3px 5px 5px rgba(0, 0, 0, 0.3);
+  background-color: white;
+  padding-top: 3%;
+}

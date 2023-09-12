@@ -3,10 +3,11 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 650px;
-  height:275px; /* 원하는 너비 설정 */
+  width: 900px;
+  height:400px; /* 원하는 너비 설정 */
   background-color: white;
   border-radius: 50px;
+  align-content: center;
 }
 
 .input-group {
