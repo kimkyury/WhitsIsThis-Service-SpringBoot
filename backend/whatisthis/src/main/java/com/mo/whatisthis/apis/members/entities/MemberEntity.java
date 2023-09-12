@@ -24,6 +24,7 @@ public class MemberEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 사원번호/기기 등록번호
     @Column(nullable = false)
     private String username;
 
@@ -56,11 +57,21 @@ public class MemberEntity {
     }
 
     public enum Role {
-        ROLE_EMPLOYEE, ROLE_DEVICE
+        ROLE_EMPLOYEE("ROLE_EMPLOYEE"),
+        ROLE_DEVICE("ROLE_DEVICE");
+
+        private final String authority;
+
+        Role(String authority) {
+            this.authority = authority;
+        }
+
+        public String getAuthority() {
+            return authority;
+        }
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         password = passwordEncoder.encode(password);
     }
-
 }
