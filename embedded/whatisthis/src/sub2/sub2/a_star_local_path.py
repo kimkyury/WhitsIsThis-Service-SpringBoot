@@ -59,8 +59,8 @@ class astarLocalpath(Node):
 
         
     def timer_callback(self):
+        print('here')
         if self.is_odom and self.is_path ==True:
-            
             local_path_msg=Path()
             local_path_msg.header.frame_id='/map'
             
@@ -82,7 +82,6 @@ class astarLocalpath(Node):
             
             min_dis=float('inf')
             for i,waypoint in enumerate(self.global_path_msg.poses) :
-
                 distance=sqrt(pow(x-waypoint.pose.position.x,2) + pow(y-waypoint.pose.position.y,2))
                 if distance < min_dis:
                     min_dis = distance
@@ -117,6 +116,7 @@ class astarLocalpath(Node):
                         tmp_pose.pose.position.y=self.global_path_msg.poses[num].pose.position.y
                         tmp_pose.pose.orientation.w=1.0
                         local_path_msg.poses.append(tmp_pose)
+                        
             self.local_path_pub.publish(local_path_msg)
         
 
