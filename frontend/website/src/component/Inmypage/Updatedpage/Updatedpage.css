@@ -1,0 +1,21 @@
+.nametagg {
+  margin-right: 1vw;
+  font-size: 0.7vw;
+  box-shadow: 0px 0.1vw 0px rgba(0, 0, 0, 0.3);
+  width: 5vw;
+  height: 2.8vh;
+  font-weight: bold;
+  background-color: #ECF0F3;
+  border: none;
+  border-radius: 0.04vw;
+  color: #2D4059;
+}
+
+.nameinput {
+    width: '24vw'; 
+    height: '7.5vh'; 
+    border-radius: '1vw'; 
+    background-color: '#2D4059'; 
+    color: 'white'; 
+    font-size: '1.6vw';
+}

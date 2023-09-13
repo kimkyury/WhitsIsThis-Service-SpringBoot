@@ -1,5 +1,6 @@
 .header {
-  height: 60px;
+  margin-top:1%;
+  height: 9.3vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,8 +16,8 @@ a {
 }
 .item {
 
-  margin-left: 10px;
-  font-size: 25px;
+  margin-left: 0.5vw;
+  font-size: 1.4vw;
   
   font-weight:bold;
 }

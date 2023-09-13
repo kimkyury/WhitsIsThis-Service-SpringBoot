@@ -2,26 +2,27 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-content: center;
+  margin-top:1%;
 }
 
 .left {
   margin-left: 5%;
   background-color: #2D4059;
-  width: 877.15px;
-  height: 109.78px;
-  font-size: 30px;
+  width: 46vw;
+  height: 10vh;
+  font-size: 1.6vw;
   /* border-radius: 8px; */
   color: #ECECEC;
   font-weight: bold;
-  border-radius: 4px;
-  border: solid 2px black;
+  border-radius: 0.2vw;
+  border: solid 0.1vw black;
 }
 
 .Modalbox {
-  width: 1900px;
-  height: 850px;
-  border: 2px solid black;
-  border-radius: 50px;
+  width: 100vw;
+  height: 80vh;
+  border: 0.1vw solid black;
+  border-radius: 2.7vw;
   /* display: flex; */
   /* justify-content: center; */
 }
@@ -31,10 +32,45 @@
   grid-template-columns: 1fr 1fr;
 }
 .nametag {
-  font-size: 35px;
+  font-size: 1.7vw;
   font-weight: bold;
 }
 
 .Vtag {
-  font-size: 30px;
+  font-size: 1.6vw;
+}
+
+.itemif {
+  margin-left: 2%;
+  font-size: 1vw;
+}
+
+.receibox {
+  margin-top: 3%;
+  padding-top: 0.5vh;
+  width: 45vw;
+  height: 62vh;
+  background-color: whitesmoke;
+  border-radius: 0.4vw;
+}
+
+
+.modalrebox {
+  
+  width: 42vw; 
+  height: 35vh;
+}
+
+.modaltitlebox {
+    width: 86vw;
+    border: 0.1vw solid #2D4059;
+    box-shadow: 0px 0.15vw 0px rgba(0, 0, 0, 0.5); 
+    border-radius: 1.4vw; 
+    color: #2D4059; 
+    height: 5.8vh; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    font-size: 2.6vw; 
+    font-weight: bold;
 }

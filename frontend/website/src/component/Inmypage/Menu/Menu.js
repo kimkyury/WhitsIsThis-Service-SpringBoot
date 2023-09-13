@@ -2,15 +2,17 @@ import React,{useState} from 'react';
 import pic from '../Myinfo/pic.jpg';
 import './Menu.css';
 function Menu() {
+  const [isinfo, setIsinfo] = useState(false);
+
   const user = '홍길동';
   return (
     <div className='Menu'>
       <div>
       <div style={{marginTop:'20%', display:'flex', justifyContent:'center'}}>
-      <img src={pic} style={{display:'flex', borderRadius:'100%', width:'200px', height:'200px'}}></img>
+      <img src={pic} className='ImgPTag'></img>
       </div>
       <div style={{display:'flex', justifyContent:'center'}}>
-      <p style={{fontSize:'30px', fontWeight:'bold'}}>{user}</p>
+      <p style={{fontSize:'1.6vw', fontWeight:'bold'}}>{user}</p>
       </div>
       </div>
       <p className='ptag'>내 정보</p>

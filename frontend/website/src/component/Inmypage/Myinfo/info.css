@@ -3,3 +3,51 @@
   grid-template-columns: 1fr 3fr;
 
 }
+
+.InfoMy {
+  width: 42vw;
+  box-shadow: 0.05vw 0.15vw 0.15vw rgba(0, 0, 0, 0.5);
+  border-radius: 0.42vw;
+}
+
+.UpdateBtn {
+  font-size: 0.8vw;
+  box-shadow: 0px 0.1vw 0px rgba(0, 0, 0, 0.3);
+  width: 5vw;
+  height: 2.8vh;
+  font-weight: bold;
+  background-color: #ECF0F3;
+  border: none;
+  border-radius: 0.42vw;
+  color: #2D4059;
+}
+
+.Myinform {
+  color: #2D4059; 
+  margin-left: 10%; 
+  font-weight: bold; 
+  font-size: 1.4vw;
+}
+
+.infobox {
+  color: #2D4059; 
+  margin-left: 10%; 
+  font-weight: bold; 
+  font-style: 1.4vw;
+}
+
+.updatebox {
+    font-size: 1.4vw; 
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between; 
+    margin-right: 0.5vw; 
+    align-items: center;
+}
+
+.imgbox {
+  margin-left: 5%;
+  border-radius: 100%; 
+  width: 5vw; 
+  height: 10vh;
+}

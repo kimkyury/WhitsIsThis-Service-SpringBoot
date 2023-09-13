@@ -1,12 +1,32 @@
+.LoginForm {
+    display:flex;
+    border-radius:2.6vw;
+    width:52vw;
+    height:55vh; 
+    background-color:whitesmoke;
+    justify-content:center;
+    align-items:'center';
+  }
+  
+  .LoginTag {
+  color: #2D4059;
+  font-weight:bold;
+  text-align: center;
+  font-size: 2.6vw;
+  margin-top:5%;
+  margin-bottom:2%;
+}
+
+
 .idbox {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 900px;
-  height:400px; /* 원하는 너비 설정 */
+  width: 46vw;
+  height:37vh; /* 원하는 너비 설정 */
   background-color: white;
-  border-radius: 50px;
+  border-radius: 2.6vw;
   align-content: center;
 }
 
@@ -17,13 +37,52 @@
 }
 
 label {
-  margin-right: 10px; /* 레이블과 입력란 사이의 간격 조정 */
+  margin-right: 0.5vw; /* 레이블과 입력란 사이의 간격 조정 */
 }
 
-.inputbox {
-  font-size:'30px';
-  width:'600px';
-  height:'51px';
-  display:'flex';
-  justify-content:'space-between';
+.IDPASS {
+  font-size:1.4vw;
+  width:40vw;
+  height:10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.IdPassTag {
+  box-shadow:0px 0.2vw 0px rgba(0, 0, 0, 0.3);
+  border:none; 
+  background-color:#ECF0F3; 
+  width:30vw; height:5vh; 
+  border-radius:0.4vw; 
+  font-size:1.4vw; 
+  padding-left:1vw;
+}
+
+.LoginTagDiv {
+  margin-top:4vh;
+  display: flex; 
+  justify-content: center; 
+  margin-bottom:5vh;
+}
+
+.LoginButton {
+  font-size:2.1vw;
+  width: 40vw;
+  height:10vh;
+  align-self: center; 
+  text-align: center; 
+  border-radius:0.4vw;
+  color:white; 
+  background-color:#2D4059;
+  margin-bottom: 2vh;
+}
+
+.IdPassFind {
+  display:flex;
+  justify-content:flex-end; 
+  padding-bottom:5vh; 
+  font-weight:bold; 
+  font-size:1.6vw;
+  margin-top:-0.3vh;
 }
