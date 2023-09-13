@@ -17,9 +17,21 @@ function List() {
 
   return (
     <div>
-      접수목록
-      <hr />
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <input           
+        style={{
+        marginTop: '1%',
+        marginRight: '5%',
+        borderRadius: '0.3vw',
+        textAlign: 'center',
+        }}
+          />
+        </div>
+
+   
       <div className="gridbox">
+        
         <div
           className="left"
           style={{ boxShadow: '0px 0.25vw 0.25vw rgba(0,0,0,0.5)' }}

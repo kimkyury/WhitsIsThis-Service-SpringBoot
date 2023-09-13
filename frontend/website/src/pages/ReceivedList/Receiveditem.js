@@ -11,7 +11,7 @@ function Receiveditem({ onItemDoubleClick }) {
     <div
       style={{
         boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.5)',
-        width: '43.7vw',
+        width: '45vw',
         height: '16vh',
         borderLeft: '0.25vw solid #F07B3F',
         marginTop: '1%',

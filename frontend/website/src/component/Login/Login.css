@@ -75,7 +75,8 @@ label {
   border-radius:0.4vw;
   color:white; 
   background-color:#2D4059;
-  margin-bottom: 2vh;
+  margin-bottom: 5vh;
+  box-shadow: 0 0.1vw 0 rgba(0, 0, 0.2);
 }
 
 .IdPassFind {

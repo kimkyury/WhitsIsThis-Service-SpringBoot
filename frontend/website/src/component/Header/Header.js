@@ -34,6 +34,7 @@ function Header(props) {
             className='item'
             style={activeLink === '접수 목록' ? { ...linkStyle,               
             color: '#F07B3F', 
+            height:'4vh',
             borderBottom: '3px solid #F07B3F',
             fontWeight: 'bold' } : linkStyle}
             onClick={() => handleLinkClick('접수 목록')}
@@ -46,6 +47,7 @@ function Header(props) {
             style={activeLink === '결과 목록' ? { ...linkStyle,               
             color: '#F07B3F', 
             borderBottom: '3px solid #F07B3F',
+            height:'4vh',
             fontWeight: 'bold'} : linkStyle}
             onClick={() => handleLinkClick('결과 목록')}
           >
@@ -55,7 +57,8 @@ function Header(props) {
             to={`/WebMain/Mypage`}
             className='item'
             style={activeLink === '내 정보' ? { ...linkStyle,               
-            color: '#F07B3F', 
+            color: '#F07B3F',
+            height:'4vh',
             borderBottom: '3px solid #F07B3F',
             fontWeight: 'bold' } : linkStyle}
             onClick={() => handleLinkClick('내 정보')}

@@ -12,12 +12,12 @@ function Login(props){
 
       <div className='IDPASS'>
 
-        <label style={{fontSize:'1.6vw'}}>아이디 : </label>
-        <input className='IdPassTag' id='Id' placeholder='아이디' />
+        <label style={{marginTop:'5vh', fontSize:'1.6vw'}}>아이디 : </label>
+        <input style={{marginTop:'5vh'}} className='IdPassTag' id='Id' placeholder='아이디' />
         </div>
       <div className='IDPASS'>
-        <label style={{marginTop:'3vh', fontSize:'1.6vw'}}>비밀번호 : </label>
-        <input style={{marginTop:'3vh'}} className='IdPassTag' id='Password' placeholder='비밀번호' />
+        <label style={{marginTop:'2vh', fontSize:'1.6vw'}}>비밀번호 : </label>
+        <input style={{marginTop:'2vh'}} className='IdPassTag' id='Password' placeholder='비밀번호' />
     </div>
     </div>
         <div className='LoginButtonDiv'>
