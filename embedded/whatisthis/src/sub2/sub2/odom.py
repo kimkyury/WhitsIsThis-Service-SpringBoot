@@ -177,8 +177,8 @@ s
                 '''
                 q = Quaternion.from_euler(0, 0, self.theta)
 
-                self.base_link_transform.transform.translation.x = posix- self.x
-                self.base_link_transform.transform.translation.y = posiy- self.y
+                self.base_link_transform.transform.translation.x = posix-self.x
+                self.base_link_transform.transform.translation.y = posiy-self.y
                 self.base_link_transform.transform.rotation.x = q.x
                 self.base_link_transform.transform.rotation.y = q.y
                 self.base_link_transform.transform.rotation.z = q.z

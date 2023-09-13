@@ -59,7 +59,6 @@ class astarLocalpath(Node):
 
         
     def timer_callback(self):
-        print('here')
         if self.is_odom and self.is_path ==True:
             local_path_msg=Path()
             local_path_msg.header.frame_id='/map'
@@ -100,8 +99,7 @@ class astarLocalpath(Node):
                               
             '''           
             if current_waypoint != -1 :
-                if current_waypoint + self.local_path_size < len(self.global_path_msg.poses):                 
-                    
+                if current_waypoint+self.local_path_size < len(self.global_path_msg.poses):                 
                     for num in range(current_waypoint,current_waypoint + self.local_path_size):
                         tmp_pose = PoseStamped()
                         tmp_pose.pose.position.x=self.global_path_msg.poses[num].pose.position.x
@@ -116,9 +114,9 @@ class astarLocalpath(Node):
                         tmp_pose.pose.position.y=self.global_path_msg.poses[num].pose.position.y
                         tmp_pose.pose.orientation.w=1.0
                         local_path_msg.poses.append(tmp_pose)
-                        
+
             self.local_path_pub.publish(local_path_msg)
-        
+
 
         
 def main(args=None):

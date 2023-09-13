@@ -150,7 +150,7 @@ class a_star(Node):
 
                 self.global_path_msg=Path()
                 self.global_path_msg.header.frame_id='map'
-                for grid_cell in reversed(self.final_path) :
+                for grid_cell in (self.final_path) :
                     tmp_pose=PoseStamped()
                     waypoint_x,waypoint_y=self.grid_cell_to_pose(grid_cell)
                     tmp_pose.pose.position.x=waypoint_x

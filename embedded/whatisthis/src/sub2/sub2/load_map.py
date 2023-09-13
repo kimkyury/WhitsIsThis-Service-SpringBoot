@@ -70,6 +70,7 @@ class loadMap(Node):
         map_to_grid=
         grid=
         '''
+        '''
         full_path='C:\\Users\\SSAFY\\Desktop\\S09P22E203\\embedded\\whatisthis\\src\\sub2\\map\\map.txt'
         self.f=open(full_path,'r')
 
@@ -91,20 +92,22 @@ class loadMap(Node):
                             if x+i<0 or x+i>=self.map_size_x or y+j<0 or y+j>=self.map_size_y:continue
                             if grid[x+i][y+j] == 100:continue
                             grid[x+i][y+j] = 127
-
-                    '''
+        '''
+        '''
                     로직 3. 점유영역 근처 필터처리
 
                     채워 넣기
 
                     '''
-
+        for y in range(350):
+            for x in range(350):
+                grid[x][y] = 1
         
         np_map_data=grid.reshape(1,350*350) 
         list_map_data=np_map_data.tolist()
    
         ## 로직2를 완성하고 주석을 해제 시켜주세요.
-        self.f.close()
+        #self.f.close()
         print('read_complete')
         self.map_msg.data=list_map_data[0]
 
