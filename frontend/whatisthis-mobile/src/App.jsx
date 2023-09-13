@@ -20,11 +20,20 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/connection" element={<Connection />} />
-          <Route path="/connectionresult" element={<ConnectionResult />} />
-          <Route path="/house/:id" element={<HouseDetail />} />
-          <Route path="/houselist" element={<HouseList />} />
-          <Route path="/house/:id/result" element={<HouseResult />} />
+          <Route
+            path="/connection/:buildingId/:houseId"
+            element={<Connection />}
+          />
+          <Route
+            path="/connection/:buildingId/:houseId/result"
+            element={<ConnectionResult />}
+          />
+          <Route path="/house/:buildingId/:id" element={<HouseDetail />} />
+          <Route path="/houselist/:buildingId" element={<HouseList />} />
+          <Route
+            path="/house/:buildingId/:houseId/result"
+            element={<HouseResult />}
+          />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:id" element={<SearchDetail />} />
         </Routes>

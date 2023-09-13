@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import { getBuildingName } from "../utils/ParseAddress";
 
-const Building = ({ buildingData }) => {
+const Building = ({ buildingData, onClick }) => {
   const navigate = useNavigate();
 
   const handleBuildingClick = () => {
@@ -10,7 +10,7 @@ const Building = ({ buildingData }) => {
   };
 
   return (
-    <div className="Building " onClick={handleBuildingClick}>
+    <div className="Building " onClick={onClick}>
       <div className="building_info_wrapper">
         <h2>{getBuildingName(buildingData.addr)}</h2>
         <h5>{buildingData.addr}</h5>
