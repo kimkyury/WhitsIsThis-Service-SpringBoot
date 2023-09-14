@@ -9,7 +9,7 @@ function Menu() {
     <div className='Menu'>
       <div>
       <div style={{marginTop:'20%', display:'flex', justifyContent:'center'}}>
-      <img src={pic} className='ImgPTag'></img>
+      <img src={pic} className='ImgPTag' />
       </div>
       <div style={{display:'flex', justifyContent:'center'}}>
       <p style={{fontSize:'1.6vw', fontWeight:'bold'}}>{user}</p>

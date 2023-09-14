@@ -21,9 +21,14 @@
 }
 
 .ImgPTag {
-  display:'flex'; 
-  justify-content:'flex-end'; 
-  padding-bottom:'5vh'; 
-  font-weight:'bold'; 
-  font-size:'1.6vw';
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 5vh;
+  font-weight: bold;
+  font-size: 1.6vw;
+  border-radius: 100%; /* 이미지를 원형태로 유지 */
+  width: 50%; /* 이미지의 너비를 조정합니다. */
+
+
+  /* 다른 스타일 속성을 필요에 따라 조절하세요. */
 }

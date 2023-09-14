@@ -16,13 +16,22 @@
   font-weight: bold;
   border-radius: 0.2vw;
   border: solid 0.1vw black;
+  z-index:-1
+}
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
 }
 
 .Modalbox {
   width: 57vw;
-  height: 50vh;
+  height: 55vh;
   border: 0.1vw solid black;
-  border-radius: 2.7vw;
+  box-shadow: 0.05vw 0.15vw 0.15vw rgba(0, 0, 0, 0.5);
+  border-radius: 0.42vw;
   /* display: flex; */
   /* justify-content: center; */
 }

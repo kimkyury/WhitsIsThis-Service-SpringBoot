@@ -14,26 +14,26 @@ function Myinfo() {
   return (
     <div className='InfomMy'>
       <p className='Myinform'>내 정보</p>
-      <div className='gridboxss' style={{ marginLeft: '10%', borderRadius: '0.42vw', border: '0.15vw solid black', width: '31vw', height: '12.5vh', alignItems: 'center' }}>
-        <img className='imgbox' style={{marginBottom:'40%'}}src={picture} alt="프로필 사진" />
+      <div className='gridboxss' style={{ marginLeft: '10%', borderRadius: '0.42vw', border: '0.15vw solid black', width: '31vw', height: '13vh', alignItems: 'center' }}>
+        <img className='imgbox' style={{ position: 'sticky', marginBottom:'40%'}}src={picture} alt="프로필 사진" />
         <div style={{display:'flex', alignItems:'center'}}>
           <div style={{display:'grid', gridTemplateRows:'1fr 1fr'}}>
           <p className='updatebox'>
             <span>{consumer}</span>
-            <button
+            {/* <button
               onClick={() => setIsModalVisible(true)} // 모달 열기
               className='UpdateBtn'
             >
               실명수정
-            </button>
+            </button> */}
           </p>
           <p className='updatebox' style={{marginTop:'-20%'}}>
-            <span>{Pnumber}</span>
-            <button
+            <span style={{marginBottom:'20%'}}>{Pnumber}</span>
+            {/* <button
               className='UpdateBtn'
               >
               수정
-            </button>
+            </button> */}
           </p>
               </div>
         </div>
@@ -45,11 +45,11 @@ function Myinfo() {
           <div style={{ marginLeft: '5%', marginRight: '5%', marginTop:'-2%' }}>
             <p className='updatebox'>
               <span>{id}</span>
-              <button
+              {/* <button
                 className='UpdateBtn'
               >
                 수정
-              </button>
+              </button> */}
             </p>
           </div>
           <div className='updatebox' style={{marginLeft:'5%', marginTop:'-3%'}}>

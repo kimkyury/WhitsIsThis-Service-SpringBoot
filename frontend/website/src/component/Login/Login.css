@@ -66,6 +66,15 @@ label {
   margin-bottom:5vh;
 }
 
+.IdPassFind {
+  display:flex;
+  justify-content:flex-end; 
+  padding-bottom:5vh; 
+  font-weight:bold; 
+  font-size:1.6vw;
+  margin-top:-0.3vh;
+}
+
 .LoginButton {
   font-size:2.1vw;
   width: 40vw;
@@ -79,11 +88,28 @@ label {
   box-shadow: 0 0.1vw 0 rgba(0, 0, 0.2);
 }
 
-.IdPassFind {
-  display:flex;
-  justify-content:flex-end; 
-  padding-bottom:5vh; 
-  font-weight:bold; 
-  font-size:1.6vw;
-  margin-top:-0.3vh;
+.LoginButton:hover {
+
+
+  background-image: linear-gradient(to right, #2D4059, #2D4080);
+  width: 40vw;
+  height: 10vh;
 }
+
+/* .LoginButton:hover::before {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: linear-gradient(to right, #7c08ed, #f9d5a2);
+  width: 100%;
+} */
+
+/* .LoginButtonDiv:hover::after {
+
+  height: 100%;
+  background-color: #f44336;
+  width: 50%;
+  background-image: linear-gradient(to right, #7c08ed, #f9d5a2);
+  transition: width 0.5s ease-in-out;
+  border-radius: 4px;
+} */

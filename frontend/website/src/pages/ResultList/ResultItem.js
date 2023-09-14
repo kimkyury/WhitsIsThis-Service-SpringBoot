@@ -1,23 +1,42 @@
 import React from 'react';
 import './ResultList.css';
-export function ResultItem({data}) {
+
+export function ResultItem({ data, onItemDoubleClick }) {
+  const handleDoubleClick = () => {
+    onItemDoubleClick(data);
+  };
+
   return (
-    <div style={{ marginTop: '3%', display: 'flex', justifyContent: 'center' }}>
-      <p           
-        style={{  width: '90vw',
+    <div
+      style={{
+        width: '70vw',
         height: '5vh',
         display: 'flex',
-        justifyContent: 'flex-start',
-        textAlign: 'start',
-        height: '100%',
-        marginTop:'-3%'
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingTop: '0.7%',
+        paddingLeft: '1%',
+        paddingRight:'1%',
+        paddingBottom:'0.7%',
+        cursor:'pointer',
+        
+        marginLeft: '-1%',
       }}
-      >
-        <span style={{marginLeft:'1%', width: '13vw'}} className='databox'>{data.consumer}</span>
-        <span style={{marginLeft:'0vw', width: '13vw'}} className='databox'>{data.phonenumber}</span>
-        <span style={{marginLeft:'5vw', width:'35vw'}} className='databox'>{data.address}</span>
-        <span style={{width:'13vw'}} className='databox'>{data.finishdate}</span>
-      </p>
+      className='relist'
+      onDoubleClick={handleDoubleClick}
+    >
+      <span style={{flex: '1', width:'10vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='databox'>
+        {data.consumer}
+      </span>
+      <span style={{flex: '1', width: '10vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='databox'>
+        {data.phonenumber}
+      </span>
+      <span style={{flex: '3', width: '40vw', display: 'flex',alignItems: 'center' }} className='databox'>
+        {data.address}
+      </span>
+      <span style={{  flex: '1', width:'10vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='databox'>
+        {data.finishdate}
+      </span>
     </div>
-  )
+  );
 }
