@@ -85,7 +85,14 @@ const Connection = () => {
         <h2>기기의 QR을 인식</h2>
 
         <MyButton text={"돌아가기"} onClick={() => navigate(-1)} />
-        {<SerealNumberRecognition isOpen={isSnum} />}
+        {
+          <SerealNumberRecognition
+            isOpen={isSnum}
+            addr={addr}
+            buildingId={buildingId}
+            houseId={houseId}
+          />
+        }
       </div>
     );
   }

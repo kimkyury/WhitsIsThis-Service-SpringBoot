@@ -34,7 +34,7 @@ const SearchDetail = () => {
       navigate(`/house/${data.id}/${info.id}/result`);
     } else {
       if (info.isConnected) {
-        navigate(`/houselist/:${data.id}`);
+        navigate(`/houselist/${data.id}`);
       } else if (!info.isConnected) {
         navigate(`/connection/${data.id}/${info.id}`);
       }
@@ -64,7 +64,8 @@ const SearchDetail = () => {
         <Notification
           type={"left"}
           text={"뒤로가기"}
-          onClick={() => navigate(-1)}
+          color={"orange"}
+          onClick={() => navigate(`/search`)}
         />
       </div>
     );

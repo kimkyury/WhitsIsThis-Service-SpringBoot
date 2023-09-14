@@ -28,39 +28,51 @@ body {
 
 /* common Button */
 .MyButton {
+  /* background-color: white; */
+  transition: background-color 0.1s;
   border: none;
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
   border-radius: 1rem;
-  transition: background-color 0.1s;
-}
-.MyButton:active {
-  background-color: #0e0e0e; /* 클릭 시 변경할 색상 설정 */
-  color: #2d4059;
+  &:active {
+    background-color: rgba(178, 178, 178, 0.581) !important;
+  }
 }
 
 /* Notification */
 .Notification {
-  height: 2.5rem;
+  height: 2.8rem;
   width: 8rem;
 
   border: none;
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
-  background-color: #7a7a7a;
 
   transition: background-color 0.1s;
   font-weight: bold;
   font-size: 1.3rem;
-  color: #fcfcfd;
+  &:active {
+    background-color: rgba(178, 178, 178, 0.581) !important;
+  }
 }
-.Notification:active {
-  background-color: #ffffff; /* 클릭 시 변경할 색상 설정 */
-  color: #2d4059;
-}
+
 .Notification_left {
+  margin-right: auto;
   border-radius: 0 1rem 1rem 0;
 }
 .Notification_right {
+  margin-left: auto;
   border-radius: 1rem 0 0 1rem;
+}
+.Notification_grey {
+  background-color: #7a7a7a;
+  color: #fcfcfd;
+}
+.Notification_orange {
+  background-color: #f07b3f;
+  color: #fcfcfd;
+}
+.Notification_green {
+  background-color: #64c964;
+  color: #fcfcfd;
 }
 
 /* Options menu (slide up) */
@@ -68,7 +80,7 @@ body {
   bottom: 0;
   display: flex;
 
-  width: 22.5rem;
+  width: 100%;
   height: 40rem;
   max-width: 100%;
   max-height: 100%;
@@ -77,7 +89,7 @@ body {
   transition: transform 0.5s ease-in-out;
 }
 .slide_up {
-  transform: translateY(0);
+  transform: translateY(0%);
 }
 .slide_out {
   transform: translateY(100%);
@@ -105,7 +117,7 @@ body {
   height: auto;
 }
 .Home .MyButton {
-  background-color: rgb(255, 255, 255);
+  background-color: white;
   width: 19.5rem;
   height: 2.5rem;
   margin-top: 2rem;
@@ -114,9 +126,7 @@ body {
   font-weight: bold;
   font-size: 1.3rem;
 }
-.Home .MyButton:active {
-  background-color: #7d7d7d; /* 클릭 시 변경할 색상 설정 */
-}
+
 .Home .Notification {
   position: absolute;
   top: 2rem;
@@ -143,13 +153,11 @@ body {
   font-weight: bold;
   font-size: 1.3rem;
 }
-.Login .MyButton:active {
-  background-color: #7d7d7d; /* 클릭 시 변경할 색상 설정 */
-}
+
 .Login input {
   margin-bottom: 0.5rem;
   height: 2rem;
-  width: 13.125;
+  width: 13.125rem;
   border: 0.1875rem solid
     rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
@@ -269,15 +277,10 @@ body {
   justify-content: space-between;
 }
 .SearchDetail .Notification {
-  background-color: #f07b3f;
   height: 2.8rem;
   margin-right: auto;
   margin-top: 1rem;
   margin-bottom: 2rem;
-}
-.SearchDetail .Notification:active {
-  background-color: #cc551a; /* 클릭 시 변경할 색상 설정 */
-  color: #d4d4d4;
 }
 
 .SearchDetail .building_info_wrapper {
@@ -394,16 +397,13 @@ body {
   font-weight: bold;
   font-size: 1.5rem;
 }
-.Connection .MyButton:active {
-  background-color: #7d7d7d; /* 클릭 시 변경할 색상 설정 */
-  color: #ececec;
-}
 
 .SerealNumberRecognition {
   border: none;
   border-radius: 2rem 2rem 0 0;
   background-color: #ffffff;
 
+  justify-content: flex-start;
   flex-direction: column;
   align-items: center;
 }
@@ -411,7 +411,100 @@ body {
   /* text-align: center; */
   color: black;
 }
+.SerealNumberRecognition .img_turtlebot {
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+}
 
+.SerealNumberRecognition input {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  height: 2.3rem;
+  width: 19.3rem;
+  border: 0.1875rem solid
+    rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+
+  text-indent: 1rem;
+  font-size: 1rem;
+}
+.SerealNumberRecognition input:focus {
+  outline-color: #ea5455; /* 포커스 색상 변경 */
+}
+
+.SerealNumberRecognition .MyButton {
+  background-color: black;
+  color: white;
+
+  margin-top: 3rem;
+
+  border-radius: 1rem;
+  height: 2.7rem;
+  width: 19.5rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.ConnectionResult {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.ConnectionResult .building_info_wrapper {
+  display: flex;
+  justify-content: center;
+  box-shadow: 0rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  background-color: white;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  width: 100%;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.ConnectionResult .building_info_wrapper h1 {
+  color: #2d4059;
+}
+.ConnectionResult .building_info {
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+}
+
+.ConnectionResult .connect_info_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+}
+.ConnectionResult .connect_info_wrapper h1,
+h2 {
+  color: #ececec;
+  margin: 0;
+}
+.ConnectionResult .button_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+
+  gap: 1rem;
+}
+.ConnectionResult h1 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.3rem;
+}
+.ConnectionResult h3 {
+  color: #838383;
+  font-size: 1rem;
+  margin: 0;
+}
 /*  */
 /*  */
 /*  */

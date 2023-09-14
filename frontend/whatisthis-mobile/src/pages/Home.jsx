@@ -35,6 +35,7 @@ const Home = () => {
         <Notification
           type={"right"}
           text={"작업 진행중"}
+          color={"grey"}
           onClick={() => navigate("/houselist")}
         />
       )}
