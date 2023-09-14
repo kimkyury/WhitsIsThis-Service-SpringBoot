@@ -30,14 +30,13 @@ public class SecurityConfig {
 
     private final CorsFilter corsFilter;
     private final JwtTokenProvider jwtTokenProvider;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    private final String[] AUTH_WHITELIST = {"/swagger-ui.html", "/webjars/**",
-        "/file/**", "/swagger-resources/**", "/swagger/**", "/swagger-ui/**"};
+    private final String[] AUTH_WHITELIST = {"/v2/api-docs", "/v3/api-docs/**", "/configuration/ui",
+        "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**",
+        "/file/**", "/image/**", "/swagger/**", "/swagger-ui/**", "/h2/**"};
     private final String[] AUTH_BLACK_LIST = {"/api/v1/private/**"};
-
-    private AuthenticationManager authenticationManager;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -77,7 +76,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
