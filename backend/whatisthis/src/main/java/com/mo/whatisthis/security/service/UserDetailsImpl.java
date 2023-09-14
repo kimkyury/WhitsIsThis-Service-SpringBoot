@@ -3,12 +3,10 @@ package com.mo.whatisthis.security.service;
 import com.mo.whatisthis.apis.members.entities.MemberEntity;
 import java.util.ArrayList;
 import java.util.Collection;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Data
 public class UserDetailsImpl implements UserDetails {
 
     private MemberEntity memberEntity;
@@ -20,7 +18,10 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add(new SimpleGrantedAuthority(memberEntity.getRole().name()));
+
+        collection.add(new SimpleGrantedAuthority(memberEntity.getRole()
+                                                              .name()));
+
         return collection;
     }
 
@@ -40,6 +41,10 @@ public class UserDetailsImpl implements UserDetails {
 
     public MemberEntity.Role getRole() {
         return memberEntity.getRole();
+    }
+
+    public String getPhone() {
+        return memberEntity.getPhone();
     }
 
     @Override
