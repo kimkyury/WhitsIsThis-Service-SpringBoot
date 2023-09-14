@@ -53,11 +53,14 @@ class astarLocalpath(Node):
         self.global_path_msg=
         
         '''
+        
+        self.is_path=True
+        self.global_path_msg=msg
 
         
     def timer_callback(self):
+        print('here')
         if self.is_odom and self.is_path ==True:
-            
             local_path_msg=Path()
             local_path_msg.header.frame_id='/map'
             
@@ -77,7 +80,12 @@ class astarLocalpath(Node):
 
             '''           
             
-            
+            min_dis=float('inf')
+            for i,waypoint in enumerate(self.global_path_msg.poses) :
+                distance=sqrt(pow(x-waypoint.pose.position.x,2) + pow(y-waypoint.pose.position.y,2))
+                if distance < min_dis:
+                    min_dis = distance
+                    current_waypoint=i+1
             '''
             로직 5. local_path 예외 처리
 
@@ -91,7 +99,24 @@ class astarLocalpath(Node):
                     
                               
             '''           
+            if current_waypoint != -1 :
+                if current_waypoint + self.local_path_size < len(self.global_path_msg.poses):                 
+                    
+                    for num in range(current_waypoint,current_waypoint + self.local_path_size):
+                        tmp_pose = PoseStamped()
+                        tmp_pose.pose.position.x=self.global_path_msg.poses[num].pose.position.x
+                        tmp_pose.pose.position.y=self.global_path_msg.poses[num].pose.position.y
+                        tmp_pose.pose.orientation.w=1.0
+                        local_path_msg.poses.append(tmp_pose)
 
+                else :
+                   for num in range(current_waypoint,len(self.global_path_msg.poses)):
+                        tmp_pose = PoseStamped()
+                        tmp_pose.pose.position.x=self.global_path_msg.poses[num].pose.position.x
+                        tmp_pose.pose.position.y=self.global_path_msg.poses[num].pose.position.y
+                        tmp_pose.pose.orientation.w=1.0
+                        local_path_msg.poses.append(tmp_pose)
+                        
             self.local_path_pub.publish(local_path_msg)
         
 

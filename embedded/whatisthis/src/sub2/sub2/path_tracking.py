@@ -5,12 +5,11 @@ from geometry_msgs.msg import Twist,Point
 from ssafy_msgs.msg import TurtlebotStatus
 from squaternion import Quaternion
 from nav_msgs.msg import Odometry,Path
-from math import pi,cos,sin,sqrt,atan2
+from math import pi,cos,sin,sqrt,atan2,exp
 import numpy as np
 
 # path_tracking 노드는 로봇의 위치(/odom), 로봇의 속도(/turtlebot_status), 주행 경로(/local_path)를 받아서, 주어진 경로를 따라가게 하는 제어 입력값(/cmd_vel)을 계산합니다.
 # 제어입력값은 선속도와 각속도로 두가지를 구합니다. 
-# sub2의 path_tracking은 sub1의 path_tracking를 사용해도 됩니다.
 
 
 # 노드 로직 순서
@@ -65,7 +64,6 @@ class followTheCarrot(Node):
 
                 # 로봇이 경로에서 떨어진 거리를 나타내는 변수
                 lateral_error= sqrt(pow(self.path_msg.poses[0].pose.position.x-robot_pose_x,2)+pow(self.path_msg.poses[0].pose.position.y-robot_pose_y,2))
-                print(robot_pose_x,robot_pose_y,lateral_error)
                 '''
                 로직 4. 로봇이 주어진 경로점과 떨어진 거리(lateral_error)와 로봇의 선속도를 이용해 전방주시거리 설정
                 
@@ -77,6 +75,12 @@ class followTheCarrot(Node):
                     self.lfd=self.max_lfd
 
                 '''
+                self.lfd= 2 * lateral_error*self.status_msg.twist.linear.x
+
+                if self.lfd < self.min_lfd :
+                    self.lfd=self.min_lfd
+                if self.lfd > self.max_lfd:
+                    self.lfd=self.max_lfd
 
                 min_dis=float('inf')
                 '''
@@ -90,8 +94,15 @@ class followTheCarrot(Node):
                         self.forward_point=
                         self.is_look_forward_point=
 
-                '''               
-                
+                '''
+                for num, waypoint in enumerate(self.path_msg.poses):
+                    self.current_point = waypoint.pose.position
+                    dis = sqrt(pow(self.current_point.x - robot_pose_x, 2) + pow(self.current_point.y - robot_pose_y, 2))
+                    if abs(dis - self.lfd) < min_dis:
+                        min_dis = abs(dis - self.lfd)
+                        self.forward_point = self.current_point
+                        self.is_look_forward_point = True
+
                 if self.is_look_forward_point :
             
                     global_forward_point=[self.forward_point.x ,self.forward_point.y,1]
@@ -113,16 +124,27 @@ class followTheCarrot(Node):
                     theta=
                     
                     '''
-                    
+                    trans_matrix = np.array([
+                        [cos(self.robot_yaw), -sin(self.robot_yaw), robot_pose_x],
+                        [sin(self.robot_yaw), cos(self.robot_yaw), robot_pose_y],
+                        [0, 0, 1]
+                    ])
+
+                    det_trans_matrix = np.linalg.inv(trans_matrix)
+                    local_forward_point = np.dot(det_trans_matrix, global_forward_point)
+                    theta = atan2(local_forward_point[1], local_forward_point[0])
+
                     '''
                     로직 7. 선속도, 각속도 정하기
                     out_vel=
                     out_rad_vel=
 
-                    '''             
-
+                    '''
+                    out_rad_vel = 0.3 * theta # Adjust this factor as needed
+                    out_vel = self.status_msg.twist.linear.x  # Use the robot's current linear velocity
+                    print(out_vel, out_rad_vel, theta)
                     self.cmd_msg.linear.x=out_vel
-                    self.cmd_msg.angular.z=out_rad_vel                    
+                    self.cmd_msg.angular.z=out_rad_vel
            
             else :
                 print("no found forward point")
@@ -143,6 +165,9 @@ class followTheCarrot(Node):
         _,_,self.robot_yaw=
 
         ''' 
+        q=self.odom_msg.pose.pose.orientation
+        q=Quaternion(q.w, q.x, q.y, q.z)
+        self.robot_roll,self.robot_pitch,self.robot_yaw=q.to_euler()
 
     
     def path_callback(self, msg):
