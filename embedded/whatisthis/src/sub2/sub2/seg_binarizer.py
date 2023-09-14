@@ -38,11 +38,9 @@ class IMGParser(Node):
         
 
     def img_callback(self, msg):
-
         # 로직 2. compressed image 받기
         np_arr = np.frombuffer(msg.data, np.uint8)
         self.img_bgr = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-
 
     def find_bbox(self):
 
@@ -69,7 +67,19 @@ class IMGParser(Node):
         self.img_key = cv2.inRange(self.img_bgr, lower_key, upper_key)
 
         """
+        lower_wal = np.array([100, 245, 245]) # wallet
+        upper_wal = np.array([110, 255, 255])
+        lower_bp = np.array([100, 210, 240]) # backpack
+        upper_bp = np.array([110, 220, 250])
+        lower_rc = np.array([100, 210, 208]) # remote control
+        upper_rc = np.array([110, 220, 218])
+        lower_key = np.array([100, 243, 210]) # key
+        upper_key = np.array([110, 253, 220])
 
+        self.img_wal = cv2.inRange(self.img_bgr, lower_wal, upper_wal)
+        self.img_bp = cv2.inRange(self.img_bgr, lower_bp, upper_bp)
+        self.img_rc = cv2.inRange(self.img_bgr, lower_rc, upper_rc)
+        self.img_key = cv2.inRange(self.img_bgr, lower_key, upper_key)
         """
         # 로직 4. 물체의 contour 찾기
         # 지갑, 키 등의 물체들이 차지한 픽셀만 흰색으로 이진화되어 있는 이미지에 대해서,
@@ -85,6 +95,11 @@ class IMGParser(Node):
         contours_key, _ = 
 
         """
+        # cv2.findContuors(image, 외곽선 검출 모드, 외각선 근사화 방법)
+        contours_wal, _ = cv2.findContours(self.img_wal, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        contours_bp, _ = cv2.findContours(self.img_bp, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        contours_rc, _ = cv2.findContours(self.img_rc, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        contours_key, _ = cv2.findContours(self.img_key, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
         """
         # 로직 5. 물체의 bounding box 좌표 찾기
@@ -98,9 +113,14 @@ class IMGParser(Node):
         self.find_cnt(contours_key)
 
         """
+        self.find_cnt(contours_wal)
+        self.find_cnt(contours_bp)     
+        self.find_cnt(contours_rc)       
+        self.find_cnt(contours_key)
+
+
 
     def find_cnt(self, contours):
-
         """
         # 로직 5. 물체의 bounding box 좌표 찾기
         # 지갑, 키 등의 물체들의 흰색 영역을 감싸는 contour 결과를 가지고
@@ -112,7 +132,11 @@ class IMGParser(Node):
 
             cv2.rectangle( ... )
 
-        """     
+        """
+        print(contours)
+        for cnt in contours: # countours : 그림 그릴 컨투어 배열
+            x,y,w,h = cv2.boundingRect(cnt) #  cv2.boundingRect : 인자로 받은 contour에 외접하고 똑바로 세워진 직사각형의 좌상단 꼭지점 좌표 (x,y)와 가로 세로 폭을 리턴
+            cv2.rectangle(self.img_bgr,(x,y),(x+w,y+h),(201,174,255),2) # (0, 255, 0) : 초록색
 
 
     def timer_callback(self):
