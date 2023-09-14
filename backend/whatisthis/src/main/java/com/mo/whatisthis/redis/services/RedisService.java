@@ -24,12 +24,12 @@ public class RedisService {
 
     public void saveRefreshToken(String key, String value, int ttl) {
         redisTemplate.opsForValue()
-                     .set(key, value, ttl, TimeUnit.SECONDS);
+                     .set(key, value, refreshTokenTTL, TimeUnit.SECONDS);
     }
 
     public void saveAccessToken(String key, String value) {
         redisTemplate.opsForValue()
-                     .set(key, value);
+                     .set(key, value, accessTokenTTL, TimeUnit.SECONDS);
     }
 
     public void deleteValue(String key) {
