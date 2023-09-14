@@ -7,6 +7,7 @@ from squaternion import Quaternion
 from nav_msgs.msg import Odometry,OccupancyGrid,MapMetaData,Path
 from math import pi,cos,sin
 from collections import deque
+from queue import PriorityQueue
 
 # a_star 노드는  OccupancyGrid map을 받아 grid map 기반 최단경로 탐색 알고리즘을 통해 로봇이 목적지까지 가는 경로를 생성하는 노드입니다.
 # 로봇의 위치(/pose), 맵(/map), 목표 위치(/goal_pose)를 받아서 전역경로(/global_path)를 만들어 줍니다. 
@@ -61,13 +62,11 @@ class a_star(Node):
         '''
         로직 3. 맵 데이터 행렬로 바꾸기
         '''
-        map_to_grid=self.map_msg.data
-        self.grid=np.array(map_to_grid).reshape(350,350)
+        map_to_grid = np.reshape(self.map_msg.data, (350, 350))
+        self.grid = map_to_grid
 
 
     def pose_to_grid_cell(self,x,y):
-        map_point_x = 0
-        map_point_y = 0
         '''
         로직 4. 위치(x,y)를 map의 grid cell로 변환 
         (테스트) pose가 (-8,-4)라면 맵의 중앙에 위치하게 된다. 따라서 map_point_x,y 는 map size의 절반인 (175,175)가 된다.
@@ -123,8 +122,7 @@ class a_star(Node):
             goal_x=msg.pose.position.x
             goal_y=msg.pose.position.y
             goal_cell=self.pose_to_grid_cell(goal_x,goal_y)
-            print(goal_cell[0],goal_cell[1])
-            self.goal = [goal_cell[0],goal_cell[1]]
+            self.goal = list(goal_cell)
 
             if self.is_map ==True and self.is_odom==True  :
                 if self.is_grid_update==False :
@@ -136,17 +134,15 @@ class a_star(Node):
                 x=self.odom_msg.pose.pose.position.x
                 y=self.odom_msg.pose.pose.position.y
                 start_grid_cell=self.pose_to_grid_cell(x,y)
-                print(x,y)
                 print(start_grid_cell[0],start_grid_cell[1])
                 self.path = [[0 for col in range(self.GRIDSIZE)] for row in range(self.GRIDSIZE)]
                 self.cost = np.array([[self.GRIDSIZE*self.GRIDSIZE for col in range(self.GRIDSIZE)] for row in range(self.GRIDSIZE)])
 
-                print(self.grid[start_grid_cell[0]][start_grid_cell[1]],self.grid[self.goal[0]][self.goal[1]])
                 # 다익스트라 알고리즘을 완성하고 주석을 해제 시켜주세요. 
                 # 시작지, 목적지가 탐색가능한 영역이고, 시작지와 목적지가 같지 않으면 경로탐색을 합니다.
-                if self.grid[start_grid_cell[0]][start_grid_cell[1]] !=127  and self.grid[self.goal[0]][self.goal[1]] !=127  and start_grid_cell != self.goal :
-                    print('dijkstra')
-                    self.dijkstra(start_grid_cell)
+                if self.grid[start_grid_cell[0]][start_grid_cell[1]] ==0  and self.grid[self.goal[0]][self.goal[1]] ==0  and start_grid_cell != self.goal :
+                    self.a_star(start_grid_cell)
+
 
                 self.global_path_msg=Path()
                 self.global_path_msg.header.frame_id='map'
@@ -159,49 +155,15 @@ class a_star(Node):
                     self.global_path_msg.poses.append(tmp_pose)
             
                 if len(self.final_path)!=0 :
-                    
-                    print(self.final_path)
                     self.a_star_pub.publish(self.global_path_msg)
 
+
     def dijkstra(self,start):
+        # deque는 양쪽에서 삽입 삭제가 가능하다.
         Q = deque()
         Q.append(start)
         self.cost[start[0]][start[1]] = 1
         found = False
-        while Q:
-            if found:
-                break
-
-            current = Q.popleft()
-
-            for i in range(8):
-                next_x = current[0] + self.dx[i]
-                next_y = current[1] + self.dy[i]
-
-                if (
-                    0 <= next_x < self.GRIDSIZE
-                    and 0 <= next_y < self.GRIDSIZE
-                    and self.grid[next_x][next_y] <= 50
-                ):
-                    distance = self.cost[current[0]][current[1]] + self.dCost[i]
-
-                    if distance < self.cost[next_x][next_y]:
-                        Q.append((next_x, next_y))
-                        self.path[next_x][next_y] = current
-                        self.cost[next_x][next_y] = distance
-
-                        if next_x == self.goal[0] and next_y == self.goal[1]:
-                            found = True
-
-        if found:
-            node = self.goal
-            while node != start:
-                self.final_path.append(node)
-                node = self.path[node[0]][node[1]]
-
-            self.final_path.append(start)
-            self.final_path.reverse()
-            
         '''
         로직 7. grid 기반 최단경로 탐색
         
@@ -225,7 +187,107 @@ class a_star(Node):
             nextNode = ??
             self.final_path.??
             node = ??
-        '''       
+        '''      
+        # 로직 7. grid 기반 최단경로 탐색
+        while Q:
+            # popleft를 통해서 한 쪽 방향으로만 뺀다.
+            # 파장이 퍼지듯이 경로를 찾기 때문에
+            # 가장 먼저 도착하면 그게 최단경로다.
+            if current == self.goal:
+                found = True
+                break
+
+            current = Q.popleft()
+
+            # 시작점을 기준으로 8방향을 의미하는 것 같다.
+            for i in range(8):
+
+                next = [current[0]+self.dx[i], current[1]+self.dy[i]]
+                
+                # 범위를 벗어나지 않는 좌표 중에서
+                if next[0] >= 0 and next[1] >= 0 and next[0] < self.GRIDSIZE and next[1] < self.GRIDSIZE:
+                    # 이동가능한 영역이라는 의미인 것 같다.
+                    if self.grid[next[0]][next[1]] < 50:
+
+                        # cost 비교
+                        if self.cost[current[0]][current[1]] + self.dCost[i] < self.cost[next[0]][next[1]]:
+                            
+                            # 넥스트를 넣어준다.
+                            Q.append(next)
+                            # 명세서 : path를 역으로 추적해서 최종 경로를 얻는다.
+                            # 이 노드가 어디서 왔는지를 적어주어야 하는 것 같다.
+                            self.path[next[0]][next[1]] = current
+                            self.cost[next[0]][next[1]] = self.cost[current[0]][current[1]] + self.dCost[i]
+
+        # path를 역으로 추적하는 코드
+        # 나중에 reversed로 list 순서 바꿔준다.
+        node = self.goal
+        # 도착지 넣어주고
+        self.final_path.append(node)
+
+        while node != start:
+            # node는 nextNode에서 왔다
+            nextNode = self.path[node[0]][node[1]]
+            # nextNode 넣어주고
+            self.final_path.append(nextNode)
+            node = nextNode
+    
+    # Manhattan distance와 Euclidean distance 중 Manhattan distance을 선택함
+    # 방식은 크게 중요하지 않다고 생각했음. 다만 Euclidean distance는 계산하는데 더 시간이 오래 걸릴 것 같아서
+    # Manhattan distance를 선택함
+    def heuristic(self, start, goal):
+        x1, y1 = start
+        x2, y2 = goal
+        return abs(x1 - x2) + abs(y1 - y2)
+
+    def a_star(self,start):
+        Q = PriorityQueue()
+        # Q.put((우선 순위, 좌표))
+        # 우선 순위에 비용을 넣겠다. 그러면 비용이 작은 좌표부터 나올 것이다.
+        Q.put((1, start))
+        self.cost[start[0]][start[1]] = 1
+        found = False
+
+        while not Q.empty():
+            if found:
+                break
+
+            # Q.get() 하면 (우선순위, [ , ]) 이렇게 나온다.
+            current = Q.get()[1]
+            # print("current:", current)
+            if current == self.goal:
+                found = True
+
+            for i in range(8):
+                next = [current[0]+self.dx[i], current[1]+self.dy[i]]
+                if next[0] >= 0 and next[1] >= 0 and next[0] < self.GRIDSIZE and next[1] < self.GRIDSIZE:
+                    # 맵의 데이터를 이용한다.
+                    # 대단히 중요한 부분이다. [next[0]][next[1]]이 아닌 점에 주목하기
+                    # if self.grid[next[0]][next[1]] < 50:
+                    if self.grid[next[1]][next[0]] < 50:
+                    
+                        # f = g+h
+                        g = self.cost[current[0]][current[1]] + self.dCost[i]
+                        f = g + self.heuristic(next, self.goal)
+                        if f < self.cost[next[0]][next[1]]:
+                            # 넥스트를 넣어준다.
+                            # Q.put((f, next))
+                            Q.put((g, next))
+                            self.path[next[0]][next[1]] = current
+                            self.cost[next[0]][next[1]] = g
+
+        node = self.goal
+        self.final_path.append(node)
+
+        while node != start:
+            nextNode = self.path[node[0]][node[1]]
+            self.final_path.append(nextNode)
+            node = nextNode
+            
+        print(self.final_path)
+
+
+ 
         
 
 def main(args=None):

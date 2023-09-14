@@ -21,8 +21,6 @@ import time
 # 4. 로봇 위치 추정
 # 5. 추정한 로봇 위치를 메시지에 담아 publish, broadcast
 
-posix = 0
-posiy = 0
 
 class odom(Node):
 
@@ -46,8 +44,8 @@ class odom(Node):
         self.is_imu=False
         self.is_calc_theta=False
         # x,y,theta는 추정한 로봇의 위치를 저장할 변수 입니다.
-        self.x=-12.0
-        self.y=-2.7
+        self.x=-10
+        self.y=-8
                 
         self.theta=0.0
         # imu_offset은 초기 로봇의 orientation을 저장할 변수 입니다.
@@ -105,7 +103,6 @@ class odom(Node):
             imu_q = Quaternion(imu_q.w, imu_q.x, imu_q.y, imu_q.z)
 
             roll, pitch, yaw = imu_q.to_euler()
-            print('roll : {}, pitch : {}, yaw : {}'.format(roll, pitch, yaw))
             self.imu_offset = yaw
 
         else:
@@ -114,10 +111,7 @@ class odom(Node):
 
             roll, pitch, yaw = imu_q.to_euler()
             
-            self.theta = yaw - self.imu_offset
-            if self.theta > pi:self.theta-=2*pi
-            if self.theta < -pi:self.theta+=2*pi
-            print(self.theta)
+            self.theta = yaw
 
 
     def listener_callback(self, msg):
@@ -177,8 +171,8 @@ s
                 '''
                 q = Quaternion.from_euler(0, 0, self.theta)
 
-                self.base_link_transform.transform.translation.x = posix- self.x
-                self.base_link_transform.transform.translation.y = posiy- self.y
+                self.base_link_transform.transform.translation.x = self.x
+                self.base_link_transform.transform.translation.y = self.y
                 self.base_link_transform.transform.rotation.x = q.x
                 self.base_link_transform.transform.rotation.y = q.y
                 self.base_link_transform.transform.rotation.z = q.z
