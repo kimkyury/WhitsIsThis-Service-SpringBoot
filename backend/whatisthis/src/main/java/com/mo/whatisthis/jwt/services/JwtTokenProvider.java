@@ -38,7 +38,7 @@ public class JwtTokenProvider implements InitializingBean {
     private final RedisService redisService;
     private final UserDetailsService userDetailsService;
 
-    private static final String MEMBER_NO = "no";
+    private static final String MEMBER_NO_KEY = "memberNo";
     private static final String AUTHORITIES_KEY = "role";
 
     @Override
@@ -51,7 +51,7 @@ public class JwtTokenProvider implements InitializingBean {
         signingKey = Keys.hmacShaKeyFor(secretKeyBytes);
     }
 
-    public TokenDto createToken(String memberNo, String authorities) {
+    public TokenDto createToken(String memberNo, String role) {
         //      2. 토큰 생성 메소드
         Long now = System.currentTimeMillis();
         Date validityAccess = new Date(now + accessTokenTTL * 1000);
@@ -62,8 +62,8 @@ public class JwtTokenProvider implements InitializingBean {
                                  .setHeaderParam("alg", "HS256")
                                  .setExpiration(validityAccess)
                                  .setSubject("access-token")
-                                 .claim(MEMBER_NO, memberNo)   // 사원번호, 기기 번호
-                                 .claim(AUTHORITIES_KEY, authorities)  // 권한 ROLE
+                                 .claim(MEMBER_NO_KEY, memberNo)   // 사원번호, 기기 번호
+                                 .claim(AUTHORITIES_KEY, role)  // 권한 ROLE
                                  .signWith(signingKey, SignatureAlgorithm.HS256)
                                  .compact();
 
@@ -77,7 +77,6 @@ public class JwtTokenProvider implements InitializingBean {
 
         return new TokenDto(accessToken, refreshToken);
     }
-
 
     public boolean validateAccessToken(String accessToken) {
         try {
@@ -112,7 +111,7 @@ public class JwtTokenProvider implements InitializingBean {
 
     public Authentication getAuthentication(String accessToken) {
 
-        String memberNo = getClaims(accessToken).get(MEMBER_NO)
+        String memberNo = getClaims(accessToken).get(MEMBER_NO_KEY)
                                                 .toString();
         UserDetails userDetails = userDetailsService.loadUserByUsername(memberNo);
         return new UsernamePasswordAuthenticationToken(userDetails, "",
