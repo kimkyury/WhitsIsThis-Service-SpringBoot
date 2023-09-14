@@ -1,11 +1,13 @@
 package com.mo.whatisthis.apis.auth.responses;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class EmployeeLoginResponse {
 
     private String accessToken;

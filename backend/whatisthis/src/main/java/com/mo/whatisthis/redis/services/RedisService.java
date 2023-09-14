@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RedisService {
 
-    private final RedisTemplate<String, String> redisTemplate;
-
     @Value("${jwt.refresh-token-ttl}")
     private Long refreshTokenTTL;
     @Value("${jwt.access-token-ttl}")
     private Long accessTokenTTL;
 
+    private final RedisTemplate<String, String> redisTemplate;
+    
     public String getValue(String key) {
         return redisTemplate.opsForValue()
                             .get(key);
