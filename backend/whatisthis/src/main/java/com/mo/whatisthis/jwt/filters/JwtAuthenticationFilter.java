@@ -27,16 +27,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Value("${jwt.header}")
     private String header;
-    // 1. Username, password를 받아서 유저인지 확인하기
-    // UserDetailServiceImpl내에 있는 loadUserByUsername이 자동으로 실행됨
-
-    // 2. username, password 받기
-
-    // 3. UserDetails 세션에 담기
-
-    // 4. JWT토큰을 만들어서 응답하기
-    // 권한 처리때문에 session을 넣어줌
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -45,17 +35,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = resolveToken(request);
 
         try {
-            if ( accessToken != null && jwtTokenProvider.validateAccessToken(accessToken)){
+            if (accessToken != null && jwtTokenProvider.validateAccessToken(accessToken)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-                System.out.println("인증 저장");
+                SecurityContextHolder.getContext()
+                                     .setAuthentication(authentication);
             }
         } catch (IncorrectClaimException e) {
             SecurityContextHolder.clearContext();
-            System.out.println("유효하지 않은 JWT 입니다. ");
             response.sendError(403);
         } catch (UsernameNotFoundException e) {
             SecurityContextHolder.clearContext();
-            System.out.println("해당 유저를 찾을 수가 없습니다. ");
             response.sendError(403);
         }
 
@@ -64,11 +53,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(header);
-        if ( bearerToken != null && bearerToken.startsWith("Bearer ")) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         return null;
     }
-
-
 }
