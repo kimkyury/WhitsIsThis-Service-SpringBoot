@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthPublicController {
 
     @Value("${jwt.refresh-token-ttl}")
-    private final Long refreshTokenTTL;
+    private long refreshTokenTTL;
 
     @Value("${jwt.access-token-ttl}")
-    private final Long accessTokenTTL;
+    private long accessTokenTTL;
 
     private final AuthService authService;
 
