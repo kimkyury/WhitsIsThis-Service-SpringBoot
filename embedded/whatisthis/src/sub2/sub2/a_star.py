@@ -42,12 +42,12 @@ class a_star(Node):
 
 
         # 로직 2. 파라미터 설정
-        self.goal = [184,224] 
+        self.goal = [184,224] # 목적지
         self.map_size_x=350
         self.map_size_y=350
-        self.map_resolution=0.05
-        self.map_offset_x=-8-8.75
-        self.map_offset_y=-4-8.75
+        self.map_resolution=0.05 
+        self.map_offset_x=-16.75
+        self.map_offset_y=-12.75
     
         self.GRIDSIZE=350 
  
@@ -60,9 +60,9 @@ class a_star(Node):
         self.is_grid_update=True
         '''
         로직 3. 맵 데이터 행렬로 바꾸기
-        map_to_grid=
-        self.grid=
         '''
+        map_to_grid=self.map_msg.data
+        self.grid=np.array(map_to_grid).reshape(350,350)
 
 
     def pose_to_grid_cell(self,x,y):
@@ -74,8 +74,10 @@ class a_star(Node):
         pose가 (-16.75,12.75) 라면 맵의 시작점에 위치하게 된다. 따라서 map_point_x,y는 (0,0)이 된다.
         map_point_x= ?
         map_point_y= ?
+        map_point_x = int((목적지 x 좌표 - map_offset_x) / map_resolution)
         '''
-        
+        map_point_x= int((x - self.map_offset_x)/self.map_resolution)
+        map_point_y= int((y - self.map_offset_y)/self.map_resolution)
         return map_point_x,map_point_y
 
 
@@ -92,6 +94,9 @@ class a_star(Node):
         y=?
 
         '''
+        
+        x = (grid_cell[0] * self.map_resolution) + self.map_offset_x
+        y = (grid_cell[1] * self.map_resolution) + self.map_offset_y
         return [x,y]
 
 
@@ -114,9 +119,12 @@ class a_star(Node):
             goal_y=
             goal_cell=
             self.goal = 
-            '''             
-            print(msg)
-            
+            ''' 
+            goal_x=msg.pose.position.x
+            goal_y=msg.pose.position.y
+            goal_cell=self.pose_to_grid_cell(goal_x,goal_y)
+            print(goal_cell[0],goal_cell[1])
+            self.goal = [goal_cell[0],goal_cell[1]]
 
             if self.is_map ==True and self.is_odom==True  :
                 if self.is_grid_update==False :
@@ -128,16 +136,17 @@ class a_star(Node):
                 x=self.odom_msg.pose.pose.position.x
                 y=self.odom_msg.pose.pose.position.y
                 start_grid_cell=self.pose_to_grid_cell(x,y)
-
+                print(x,y)
+                print(start_grid_cell[0],start_grid_cell[1])
                 self.path = [[0 for col in range(self.GRIDSIZE)] for row in range(self.GRIDSIZE)]
                 self.cost = np.array([[self.GRIDSIZE*self.GRIDSIZE for col in range(self.GRIDSIZE)] for row in range(self.GRIDSIZE)])
 
-                
+                print(self.grid[start_grid_cell[0]][start_grid_cell[1]],self.grid[self.goal[0]][self.goal[1]])
                 # 다익스트라 알고리즘을 완성하고 주석을 해제 시켜주세요. 
                 # 시작지, 목적지가 탐색가능한 영역이고, 시작지와 목적지가 같지 않으면 경로탐색을 합니다.
-                # if self.grid[start_grid_cell[0]][start_grid_cell[1]] ==0  and self.grid[self.goal[0]][self.goal[1]] ==0  and start_grid_cell != self.goal :
-                #     self.dijkstra(start_grid_cell)
-
+                if self.grid[start_grid_cell[0]][start_grid_cell[1]] !=127  and self.grid[self.goal[0]][self.goal[1]] !=127  and start_grid_cell != self.goal :
+                    print('dijkstra')
+                    self.dijkstra(start_grid_cell)
 
                 self.global_path_msg=Path()
                 self.global_path_msg.header.frame_id='map'
@@ -150,6 +159,8 @@ class a_star(Node):
                     self.global_path_msg.poses.append(tmp_pose)
             
                 if len(self.final_path)!=0 :
+                    
+                    print(self.final_path)
                     self.a_star_pub.publish(self.global_path_msg)
 
     def dijkstra(self,start):
@@ -157,6 +168,40 @@ class a_star(Node):
         Q.append(start)
         self.cost[start[0]][start[1]] = 1
         found = False
+        while Q:
+            if found:
+                break
+
+            current = Q.popleft()
+
+            for i in range(8):
+                next_x = current[0] + self.dx[i]
+                next_y = current[1] + self.dy[i]
+
+                if (
+                    0 <= next_x < self.GRIDSIZE
+                    and 0 <= next_y < self.GRIDSIZE
+                    and self.grid[next_x][next_y] <= 50
+                ):
+                    distance = self.cost[current[0]][current[1]] + self.dCost[i]
+
+                    if distance < self.cost[next_x][next_y]:
+                        Q.append((next_x, next_y))
+                        self.path[next_x][next_y] = current
+                        self.cost[next_x][next_y] = distance
+
+                        if next_x == self.goal[0] and next_y == self.goal[1]:
+                            found = True
+
+        if found:
+            node = self.goal
+            while node != start:
+                self.final_path.append(node)
+                node = self.path[node[0]][node[1]]
+
+            self.final_path.append(start)
+            self.final_path.reverse()
+            
         '''
         로직 7. grid 기반 최단경로 탐색
         
@@ -183,7 +228,6 @@ class a_star(Node):
         '''       
         
 
-        
 def main(args=None):
     rclpy.init(args=args)
 
