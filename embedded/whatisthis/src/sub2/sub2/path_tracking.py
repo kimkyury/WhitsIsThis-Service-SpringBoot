@@ -75,7 +75,7 @@ class followTheCarrot(Node):
                     self.lfd=self.max_lfd
 
                 '''
-                self.lfd= 2 * lateral_error*self.status_msg.twist.linear.x
+                self.lfd= (self.status_msg.twist.linear.x+lateral_error)*0.5
 
                 if self.lfd < self.min_lfd :
                     self.lfd=self.min_lfd
@@ -97,7 +97,7 @@ class followTheCarrot(Node):
                 '''
                 for num, waypoint in enumerate(self.path_msg.poses):
                     self.current_point = waypoint.pose.position
-                    dis = sqrt(pow(self.current_point.x - robot_pose_x, 2) + pow(self.current_point.y - robot_pose_y, 2))
+                    dis = sqrt(pow(self.current_point.x - self.path_msg.poses[0].pose.position.x, 2) + pow(self.current_point.y - self.path_msg.poses[0].pose.position.y, 2))
                     if abs(dis - self.lfd) < min_dis:
                         min_dis = abs(dis - self.lfd)
                         self.forward_point = self.current_point
@@ -131,8 +131,8 @@ class followTheCarrot(Node):
                     ])
 
                     det_trans_matrix = np.linalg.inv(trans_matrix)
-                    local_forward_point = np.dot(det_trans_matrix, global_forward_point)
-                    theta = atan2(local_forward_point[1], local_forward_point[0])
+                    local_forward_point = det_trans_matrix.dot(global_forward_point)
+                    theta = -atan2(local_forward_point[1], local_forward_point[0])
 
                     '''
                     로직 7. 선속도, 각속도 정하기
@@ -140,9 +140,8 @@ class followTheCarrot(Node):
                     out_rad_vel=
 
                     '''
-                    out_rad_vel = 0.3 * theta # Adjust this factor as needed
-                    out_vel = self.status_msg.twist.linear.x  # Use the robot's current linear velocity
-                    print(out_vel, out_rad_vel, theta)
+                    out_vel = 1*exp((-1)*(abs(theta))/(2*sqrt(2))) 
+                    out_rad_vel = 2*theta
                     self.cmd_msg.linear.x=out_vel
                     self.cmd_msg.angular.z=out_rad_vel
            
@@ -162,7 +161,7 @@ class followTheCarrot(Node):
         '''
         로직 3. Quaternion 을 euler angle 로 변환
         q=
-        _,_,self.robot_yaw=
+        _,_,self.robot_yaw=s
 
         ''' 
         q=self.odom_msg.pose.pose.orientation
