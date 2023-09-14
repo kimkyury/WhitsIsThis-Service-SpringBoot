@@ -70,45 +70,47 @@ class loadMap(Node):
         map_to_grid=
         grid=
         '''
-        '''
-        full_path='C:\\Users\\SSAFY\\Desktop\\S09P22E203\\embedded\\whatisthis\\src\\sub2\\map\\map.txt'
+        full_path = os.path.abspath(__file__)
+        full_path = full_path.replace('install\\sub2\\Lib\\site-packages\\sub2\\load_map.py', 'src\\sub2\\map\\output.txt')
         self.f=open(full_path,'r')
 
         line = self.f.readline()
-        line_data=list(map(int,line.strip(' ').split(' ')))
-
-        map_to_grid=[[line_data[(349-j)+i*350] for i in range(self.map_size_y)] for j in range(self.map_size_x)]
-        grid=np.array(map_to_grid)
-
-        for num,data in enumerate(line_data) :
-            self.map_data[num]=data
+        line_data = line.split(' ')
+        for num, data in enumerate(line_data):
+            try:
+                if data.strip():  # 데이터가 빈 문자열이 아닌지 확인
+                    self.map_data[num] = int(data)
+            except ValueError:
+                print(f"Invalid data on line {num + 1}: '{data}'")
+        # 350 X 350 행렬로 만들기
+        map_to_grid = np.array(self.map_data)
+        grid = np.reshape(map_to_grid, (350, 350))
         
-        for y in range(350):
-            for x in range(350):
-                if grid[x][y]==100 :
-                    for i in range(-5,6,1):
-                        for j in range(-5,6,1):
-                            if sqrt(pow(i,2)+pow(j,2)) >= 5:continue
-                            if x+i<0 or x+i>=self.map_size_x or y+j<0 or y+j>=self.map_size_y:continue
-                            if grid[x+i][y+j] == 100:continue
-                            grid[x+i][y+j] = 127
-        '''
-        '''
-                    로직 3. 점유영역 근처 필터처리
 
-                    채워 넣기
+        # 로직 3. 점유영역 근처 필터처리
+        for x in range(350):
+            for y in range(350):
+                # grid 영역이 100이면 장애물이 있다.
+                if grid[x][y] == 100:
+                    # 그 좌표를 127로 바꿔주고
+                    grid[x][y] = 127
 
-                    '''
-        for y in range(350):
-            for x in range(350):
-                grid[x][y] = 1
+                    # for i in range(-2,3):
+                    #     for j in range(-2,3):
+                    # 벽에 딱 붙어서 가는 걸 막기 위해서
+                    for i in range(-4,5):
+                        for j in range(-4,5):
+                            if 0 <= x+i < 350 and 0 <= y+j < 350:
+                                # 그 점도 장애물이 있으면 그 장애물 주위도 127로 바꿔야 하기 때문에 놔둔다.
+                                if grid[x+i][y+j] != 100:
+                                    grid[x+i][y+j] = 127
         
-        np_map_data=grid.reshape(1,350*350) 
+        # 350X350 행렬을 array([[, , , ,]]) 형태로 만들어준다.
+        np_map_data=grid.reshape(1,350*350)
+        # [[, , , , ,]] 형태로 만들어준다.
         list_map_data=np_map_data.tolist()
-   
-        ## 로직2를 완성하고 주석을 해제 시켜주세요.
-        #self.f.close()
-        print('read_complete')
+
+        self.f.close()
         self.map_msg.data=list_map_data[0]
 
 

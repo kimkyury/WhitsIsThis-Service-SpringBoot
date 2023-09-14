@@ -30,7 +30,7 @@ class astarLocalpath(Node):
         self.is_path=False
        
         self.global_path_msg=Path()
-
+        self.index = 0
 
         # 로직 3. 주기마다 실행되는 타이머함수 생성, local_path_size 설정
         time_period=0.05 
@@ -45,7 +45,6 @@ class astarLocalpath(Node):
 
 
     def path_callback(self,msg):
-        pass
         '''
         로직 2. global_path 데이터 수신 후 저장
 
@@ -81,10 +80,14 @@ class astarLocalpath(Node):
             
             min_dis=float('inf')
             for i,waypoint in enumerate(self.global_path_msg.poses) :
-                distance=sqrt(pow(x-waypoint.pose.position.x,2) + pow(y-waypoint.pose.position.y,2))
-                if distance < min_dis:
-                    min_dis = distance
-                    current_waypoint=i+1
+                 if i-10 < self.index < i+10:
+                    # 피타고라스의 정리
+                    distance=sqrt(pow(x-waypoint.pose.position.x,2) + pow(y-waypoint.pose.position.y,2))
+                    if distance < min_dis:
+                        min_dis = distance
+                        current_waypoint=i
+            
+            self.index = current_waypoint
             '''
             로직 5. local_path 예외 처리
 
