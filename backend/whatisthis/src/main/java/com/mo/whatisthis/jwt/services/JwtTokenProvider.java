@@ -22,7 +22,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider implements InitializingBean {
@@ -41,7 +40,6 @@ public class JwtTokenProvider implements InitializingBean {
 
     private static final String MEMBER_NO = "no";
     private static final String AUTHORITIES_KEY = "role";
-
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -92,8 +90,6 @@ public class JwtTokenProvider implements InitializingBean {
                 .build()
                 .parseClaimsJws(accessToken);
             return true;
-            // TODO: 만료된 토큰임을 확인했는데도 true를 보내는 이유는 무엇인가?
-            // Maybe.. refreshToken으로 재발급 하려고!
         } catch (ExpiredJwtException e) {
             return true;
         } catch (Exception e) {
@@ -118,15 +114,8 @@ public class JwtTokenProvider implements InitializingBean {
 
         String memberNo = getClaims(accessToken).get(MEMBER_NO)
                                                 .toString();
-//        String role = getClaims(accessToken).get(AUTHORITIES_KEY)
-//                                            .toString();
         UserDetails userDetails = userDetailsService.loadUserByUsername(memberNo);
         return new UsernamePasswordAuthenticationToken(userDetails, "",
             userDetails.getAuthorities());
     }
-
-//
-//
-//    //      3. 권한 객체 생성 메소드
-//    //      4. 유효성 검사 메소드
 }

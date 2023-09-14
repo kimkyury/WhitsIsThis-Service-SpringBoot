@@ -1,6 +1,8 @@
 package com.mo.whatisthis.security.configs;
 
 import com.mo.whatisthis.jwt.filters.JwtAuthenticationFilter;
+import com.mo.whatisthis.jwt.handlers.JwtAccessDeniedHandler;
+import com.mo.whatisthis.jwt.handlers.JwtAuthenticationEntryPoint;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ public class SecurityConfig {
 
     private final CorsFilter corsFilter;
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private final String[] AUTH_WHITELIST = {"/swagger-ui.html", "/webjars/**",
         "/file/**", "/swagger-resources/**", "/swagger/**", "/swagger-ui/**"};
@@ -46,6 +50,8 @@ public class SecurityConfig {
 
             .and()
             .addFilter(corsFilter)
+            .csrf()
+            .disable()
             .httpBasic()
             .disable()
             .formLogin()
@@ -56,10 +62,10 @@ public class SecurityConfig {
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-//            .and()
-//            .exceptionHandling()
-//            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-//            .accessDeniedHandler(jwtAccessDeniedHandler)
+            .and()
+            .exceptionHandling()
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .accessDeniedHandler(jwtAccessDeniedHandler)
 
             .and()
             .authorizeRequests()
@@ -68,7 +74,6 @@ public class SecurityConfig {
 
             .anyRequest()
             .permitAll();
-
 
         return http.build();
     }
