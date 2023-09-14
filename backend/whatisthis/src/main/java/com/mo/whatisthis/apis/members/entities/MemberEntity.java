@@ -44,7 +44,7 @@ public class MemberEntity {
     private Role role;
 
     @Column(nullable = true)
-    private String image_url;
+    private String imageUrl;
 
     public MemberEntity(String username, String password, Role role) {
         this.username = username;
@@ -52,10 +52,10 @@ public class MemberEntity {
         this.role = role;
     }
 
-    public void setInitialInfo(String name, String phone, String image_url) {
+    public void setInitialInfo(String name, String phone, String imageUrl) {
         this.name = name;
         this.phone = phone;
-        this.image_url = image_url;
+        this.imageUrl = imageUrl;
     }
 
     public enum Role {

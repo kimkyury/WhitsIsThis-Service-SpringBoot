@@ -8,18 +8,20 @@ import lombok.Getter;
 @Builder
 public class EmployeeLoginResponse {
 
-    private String token;
+    private String accessToken;
 
     private int isInitLoginUser;
 
+    private EmployeeInfo employeeinfo;
+
     @Data
     @Builder
-    public static class employeeInfo{
+    public static class EmployeeInfo{
         private Integer id;
         private String username;
         private String name;
         private String phone;
         private String role;
-        private String image_url;
+        private String imageUrl;
     }
 }

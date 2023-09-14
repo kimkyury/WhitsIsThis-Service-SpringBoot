@@ -8,6 +8,6 @@ import lombok.Data;
 @Builder
 public class DeviceLoginResponse {
 
-    private String token;
+    private String accessToken;
 
 }

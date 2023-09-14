@@ -13,16 +13,16 @@ public class RedisService {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${jwt.refresh-token-ttl}")
-    private Integer refreshTokenTTL;
+    private Long refreshTokenTTL;
     @Value("${jwt.access-token-ttl}")
-    private Integer accessTokenTTL;
+    private Long accessTokenTTL;
 
     public String getValue(String key) {
         return redisTemplate.opsForValue()
                             .get(key);
     }
 
-    public void saveRefreshToken(String key, String value, int ttl) {
+    public void saveRefreshToken(String key, String value) {
         redisTemplate.opsForValue()
                      .set(key, value, refreshTokenTTL, TimeUnit.SECONDS);
     }
