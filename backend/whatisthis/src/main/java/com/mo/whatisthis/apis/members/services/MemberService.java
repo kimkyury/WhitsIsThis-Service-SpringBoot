@@ -5,11 +5,13 @@ import com.mo.whatisthis.apis.members.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.members.repositories.MemberRepository;
 import com.mo.whatisthis.apis.members.requests.DeviceRegisterRequest;
 import com.mo.whatisthis.apis.members.requests.EmployeeRegisterRequest;
+import com.mo.whatisthis.apis.members.responses.MemberCreateResponse;
 import com.mo.whatisthis.supports.utils.UUIDUtil;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,18 +20,27 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public void createEmployee() {
-        String lastENO = memberRepository.findTopByRoleOrderByUsernameDesc(
-            Role.ROLE_EMPLOYEE.name())
+    public MemberCreateResponse createEmployee() {
+
+        String lastENO = memberRepository.findTopByRoleOrderByUsernameDesc(Role.ROLE_EMPLOYEE)
                                          .get()
-                                         .getName();
+                                         .getUsername();
 
-        String newENO = String.valueOf(Integer.parseInt(lastENO) + 1);
-        String password = UUIDUtil.generateEfficientUUID();
-
-        MemberEntity newEmployeeEntity = new MemberEntity(newENO, password, Role.ROLE_EMPLOYEE);
+        String newENO = String.valueOf(Long.parseLong(lastENO) + 1);
+        String tempPassword = UUIDUtil.generateEfficientUUID();
+        String encodedTempPassword = passwordEncoder.encode(tempPassword);
+        MemberEntity newEmployeeEntity = new MemberEntity(newENO, encodedTempPassword,
+            Role.ROLE_EMPLOYEE);
         memberRepository.save(newEmployeeEntity);
+
+        MemberCreateResponse memberCreateResponse = MemberCreateResponse.builder()
+                                                                        .userName(newENO)
+                                                                        .tempPassword(tempPassword)
+                                                                        .build();
+
+        return memberCreateResponse;
     }
 
     public void registerDevice(DeviceRegisterRequest deviceRegisterRequest) {

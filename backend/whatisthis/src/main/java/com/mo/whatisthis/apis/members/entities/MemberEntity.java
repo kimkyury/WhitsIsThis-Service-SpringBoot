@@ -60,16 +60,6 @@ public class MemberEntity {
 
     public enum Role {
         ROLE_EMPLOYEE, ROLE_DEVICE
-//
-//        private final String authority;
-//
-//        Role(String authority) {
-//            this.authority = authority;
-//        }
-//
-//        public String getAuthority() {
-//            return authority;
-//        }
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
