@@ -13,6 +13,15 @@
   color: #F07B3F; /* Change to your desired highlight color */
   border-bottom: 0.21vw solid #F07B3F;
 }
+.ptag:hover {
+  margin-left:10%;
+  font-size:1.4vw;
+  font-weight: bold;
+  color: #F07B3F; /* Change to your desired highlight color */
+  /* border-bottom: 0.21vw solid #F07B3F; */
+  cursor: pointer;
+}
+
 .ptag {
   margin-left:10%;
   font-size:1.4vw;

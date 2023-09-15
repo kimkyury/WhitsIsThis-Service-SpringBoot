@@ -1,0 +1,17 @@
+
+
+.datePicker {
+  display: flex;
+  align-items: center;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background-color: black;
+  box-sizing: border-box;
+  width: 15vw;
+  height: 4vh;
+  color: white;
+  text-align: center;
+  padding-right: 14px;
+
+
+}

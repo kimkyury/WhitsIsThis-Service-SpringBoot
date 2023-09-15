@@ -14,9 +14,30 @@ function Myinfo() {
   return (
     <div className='InfomMy'>
       <p className='Myinform'>내 정보</p>
-      <div className='gridboxss' style={{ marginLeft: '10%', borderRadius: '0.42vw', border: '0.15vw solid black', width: '31vw', height: '13vh', alignItems: 'center' }}>
-        <img className='imgbox' style={{ position: 'sticky', objectFit:'cover', marginBottom:'40%'}}src={picture} alt="프로필 사진" />
-        <div style={{display:'flex', alignItems:'center'}}>
+      <div className='gridboxss' 
+      style={{ 
+        marginLeft: '10%', 
+        borderRadius: '0.42vw', 
+        border: '0.15vw solid black', 
+        width: '31vw', 
+        height: '13vh', 
+        alignItems: 'center' 
+        }}>
+        <img className='imgbox' 
+        style={{ 
+          position: 'sticky', 
+          objectFit:'cover', 
+          marginBottom:'40%'
+          }}
+          src={picture} 
+          alt="프로필 사진" 
+          />
+        <div 
+        style={{
+          display:'flex', 
+          alignItems:'center'
+          }} 
+          >
           <div style={{display:'grid', gridTemplateRows:'1fr 1fr'}}>
           <p className='updatebox'>
             <span>{consumer}</span>

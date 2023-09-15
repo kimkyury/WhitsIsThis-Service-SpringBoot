@@ -198,7 +198,7 @@ function ResultList() {
             onChange={handleInputChange}
           />
           <div style={{
-            height: '3vh',
+            // height: '3vh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

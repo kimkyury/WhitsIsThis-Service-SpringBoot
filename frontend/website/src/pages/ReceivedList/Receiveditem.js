@@ -14,6 +14,7 @@ function Receiveditem({ data, onItemDoubleClick }) {
         marginLeft: '1%',
         backgroundColor: 'white',
         color: 'black',
+        zIndex:'998',
       }}
       onDoubleClick={() => onItemDoubleClick(data)}
     >

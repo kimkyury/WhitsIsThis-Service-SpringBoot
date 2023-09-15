@@ -58,7 +58,7 @@ function Mypage() {
             비밀번호 변경
           </p>
         </div>
-        <div style={{ position:'fixed', top:'25vh', left:'15vw', marginLeft: '30%' }}> {/* 내용을 표시할 영역 */}
+        <div  style={{ position:'fixed', top:'25vh', left:'15vw', marginLeft: '30%' }}> {/* 내용을 표시할 영역 */}
           {selectedMenu === '내 정보' && <Myinfo />}
           {selectedMenu === '비밀번호 변경' && <Mypassword />}
         </div>

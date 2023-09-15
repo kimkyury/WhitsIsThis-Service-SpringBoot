@@ -15,7 +15,7 @@
   font-weight: bold;
   color: #F07B3F;
 }
-
+/* <Item key={index} data={data} onItemDoubleClick={handleItemDoubleClick} /> */
 .box {
   border:none;
   background-color: white;
