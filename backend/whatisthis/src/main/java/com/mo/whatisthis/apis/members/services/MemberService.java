@@ -8,6 +8,8 @@ import com.mo.whatisthis.apis.members.requests.EmployeeRegisterRequest;
 import com.mo.whatisthis.apis.members.responses.MemberCreateResponse;
 import com.mo.whatisthis.supports.utils.UUIDUtil;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -24,19 +26,26 @@ public class MemberService {
 
     public MemberCreateResponse createEmployee() {
 
-        String lastENO = memberRepository.findTopByRoleOrderByUsernameDesc(Role.ROLE_EMPLOYEE)
-                                         .get()
-                                         .getUsername();
+        Optional<MemberEntity> topEmployeeNo = memberRepository.findTopByRoleOrderByUsernameDesc(
+            Role.ROLE_EMPLOYEE);
 
-        String newENO = String.valueOf(Long.parseLong(lastENO) + 1);
+        String newEmployeeNo = null;
+        if (topEmployeeNo.isEmpty()) {
+            newEmployeeNo = LocalDate.now()
+                                     .getYear() + "00000001";
+        } else {
+            newEmployeeNo = String.valueOf(Long.parseLong(topEmployeeNo.get()
+                                                                       .getUsername()) + 1);
+        }
+
         String tempPassword = UUIDUtil.generateEfficientUUID();
         String encodedTempPassword = passwordEncoder.encode(tempPassword);
-        MemberEntity newEmployeeEntity = new MemberEntity(newENO, encodedTempPassword,
+        MemberEntity newEmployeeEntity = new MemberEntity(newEmployeeNo, encodedTempPassword,
             Role.ROLE_EMPLOYEE);
         memberRepository.save(newEmployeeEntity);
 
         MemberCreateResponse memberCreateResponse = MemberCreateResponse.builder()
-                                                                        .userName(newENO)
+                                                                        .userName(newEmployeeNo)
                                                                         .tempPassword(tempPassword)
                                                                         .build();
 

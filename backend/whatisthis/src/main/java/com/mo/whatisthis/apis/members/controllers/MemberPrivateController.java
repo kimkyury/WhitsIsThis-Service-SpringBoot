@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
 @RestController
-@RequestMapping("/api/v1/private/members")
+@RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 public class MemberPrivateController {
 
