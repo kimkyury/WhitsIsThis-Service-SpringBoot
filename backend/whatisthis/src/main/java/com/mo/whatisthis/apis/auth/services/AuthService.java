@@ -9,6 +9,7 @@ import com.mo.whatisthis.jwt.dtos.TokenDto;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.security.service.UserDetailsImpl;
+import com.mo.whatisthis.security.utils.SecurityUtil;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,8 +29,6 @@ public class AuthService {
     private final RedisService redisService;
     private final MemberRepository memberRepository;
 
-    private UserDetailsImpl userDetails;
-
     public TokenDto loginEmployee(EmployeeLoginRequest employeeLoginRequest) {
 
         // 인증 정보를 가진 인스턴스 생성
@@ -37,12 +36,13 @@ public class AuthService {
             new UsernamePasswordAuthenticationToken(
                 employeeLoginRequest.getUsername(), employeeLoginRequest.getPassword());
 
+        System.out.println("----------- Done Make Token");
         // DB에 존재하는지 확인, 성공할시 사용자의 세부 정보과 권한 정보를 갖고 있음
 
-        System.out.println(authenticationToken);
         Authentication authentication = authenticationManagerBuilder.getObject()
                                                                     .authenticate(
                                                                         authenticationToken);
+        System.out.println("----------- Done Make Token22222");
         // 인증된 사용자의 정보 저장소
         SecurityContextHolder.getContext()
                              .setAuthentication(authentication);
@@ -53,21 +53,22 @@ public class AuthService {
                                                .next()
                                                .getAuthority();
 
+
+        System.out.println(employeeNo + " " + employAuthority);
+
         return issueTokens(employeeNo, employAuthority);
     }
 
     public TokenDto issueTokens(String memberNo, String role) {
         TokenDto tokenDto = jwtTokenProvider.createToken(memberNo, role);
-        redisService.saveRefreshToken(memberNo, role);
+        redisService.saveRefreshToken(memberNo, tokenDto.getRefreshToken());
         return tokenDto;
     }
 
-
     public int isInitLoginUser() {
-        userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
-                                                             .getAuthentication();
-        if (userDetails.getPhone()
-                       .isEmpty()) {
+
+        if (SecurityUtil.getPhone().isEmpty()) {
+            System.out.println(SecurityUtil.getPhone());
             return 1;
         }
         return 0;
@@ -75,7 +76,7 @@ public class AuthService {
 
     public EmployeeInfo findEmployeeInfoUseSCH() {
 
-        Integer id = userDetails.getUserId();
+        Integer id = SecurityUtil.getLoginId().get();
         MemberEntity  employeeEntity =  memberRepository.findById(id).get();
 
         EmployeeInfo employeeInfo = EmployeeInfo.builder()
