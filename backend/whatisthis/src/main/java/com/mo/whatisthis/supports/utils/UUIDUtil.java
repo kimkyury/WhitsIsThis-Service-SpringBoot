@@ -2,6 +2,8 @@ package com.mo.whatisthis.supports.utils;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UUIDUtil {
 
@@ -24,7 +26,8 @@ public class UUIDUtil {
         result[2] = SPECIAL_CHARACTERS[random.nextInt(SPECIAL_CHARACTERS.length)];
 
         // 나머지 문자들을 모든 문자 세트를 사용하여 무작위로 채우기
-        char[] allChars = (new String(UPPER_CASE_LETTERS) + new String(NUMBERS) + new String(SPECIAL_CHARACTERS)).toCharArray();
+        char[] allChars = (new String(UPPER_CASE_LETTERS) + new String(NUMBERS) + new String(
+            SPECIAL_CHARACTERS)).toCharArray();
 
         for (int i = 3; i < 10; i++) {
             result[i] = allChars[random.nextInt(allChars.length)];
