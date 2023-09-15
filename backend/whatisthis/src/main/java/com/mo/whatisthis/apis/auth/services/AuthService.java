@@ -61,7 +61,7 @@ public class AuthService {
 
     public TokenDto issueTokens(String memberNo, String role) {
         TokenDto tokenDto = jwtTokenProvider.createToken(memberNo, role);
-        redisService.saveRefreshToken(memberNo, tokenDto.getRefreshToken());
+        redisService.saveRefreshToken("member:" + memberNo +":refreshToken", tokenDto.getRefreshToken());
         return tokenDto;
     }
 
