@@ -10,12 +10,12 @@ const ConnectionResult = () => {
   const [connectState, setConnectState] = useState(true);
 
   const { buildingId, houseId } = useParams();
-  const { serealNumber, addr } = useLocation().state;
+  const { serialNumber, addr } = useLocation().state;
 
   const startWorking = () => {
     // houselist 추가하는 로직
 
-    navigate(`/houselist/${buildingId}`);
+    navigate(`/houselist/${buildingId}`, { replace: true });
   };
 
   return (
@@ -31,7 +31,7 @@ const ConnectionResult = () => {
           src={`/assets/${connectState ? "check_big" : "uncheck_big"}.png`}
           alt="chkimg"
         />
-        <h1>[ {serealNumber} ]</h1>
+        <h1>[ {serialNumber} ]</h1>
         {connectState ? <h2>기기연결 성공!</h2> : <h2>기기연결 실패..</h2>}
       </div>
 
@@ -48,7 +48,11 @@ const ConnectionResult = () => {
               text={"기기변경"}
               type={"right"}
               color={"orange"}
-              onClick={() => navigate(-1)}
+              onClick={() =>
+                navigate(`/connection/${buildingId}/${houseId}`, {
+                  replace: true,
+                })
+              }
             />
           </>
         ) : (

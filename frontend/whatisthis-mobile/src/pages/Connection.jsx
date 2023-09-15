@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getBuildingName } from "../utils/ParseAddress";
 
 import MyButton from "../components/MyButton";
-import SerealNumberRecognition from "../components/SerealNumberRecognition";
+import SerialNumberRecognition from "../components/SerialNumberRecognition";
 
 import { dummyBuildingData } from "../utils/DummyData";
 import { dummyHouseData } from "../utils/DummyData";
@@ -86,7 +86,7 @@ const Connection = () => {
 
         <MyButton text={"돌아가기"} onClick={() => navigate(-1)} />
         {
-          <SerealNumberRecognition
+          <SerialNumberRecognition
             isOpen={isSnum}
             addr={addr}
             buildingId={buildingId}

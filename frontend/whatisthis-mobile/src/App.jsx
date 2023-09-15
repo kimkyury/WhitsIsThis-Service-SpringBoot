@@ -13,11 +13,17 @@ import HouseResult from "./pages/HouseResult";
 import Search from "./pages/Search";
 import SearchDetail from "./pages/SearchDetail";
 
+// testpage
+import TestPage from "./test/TestPage";
+
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
+          {/* startregion: this is test page */}
+          <Route path="/test" element={<TestPage />} />
+          {/* endregion */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route

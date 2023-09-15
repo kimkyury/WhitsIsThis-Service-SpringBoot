@@ -315,6 +315,8 @@ body {
   margin: 0;
 }
 
+/* HouseInfo */
+
 .HouseInfo {
   min-width: 17.5rem;
   min-height: 5rem;
@@ -338,6 +340,8 @@ body {
 .HouseInfo img {
   margin-right: 0.5rem;
 }
+
+/* Connection */
 
 .Connection {
   background-color: #484747;
@@ -398,7 +402,9 @@ body {
   font-size: 1.5rem;
 }
 
-.SerealNumberRecognition {
+/* SerialNumberRecognition */
+
+.SerialNumberRecognition {
   border: none;
   border-radius: 2rem 2rem 0 0;
   background-color: #ffffff;
@@ -407,16 +413,16 @@ body {
   flex-direction: column;
   align-items: center;
 }
-.SerealNumberRecognition h2 {
+.SerialNumberRecognition h2 {
   /* text-align: center; */
   color: black;
 }
-.SerealNumberRecognition .img_turtlebot {
+.SerialNumberRecognition .img_turtlebot {
   margin-top: 5rem;
   margin-bottom: 3rem;
 }
 
-.SerealNumberRecognition input {
+.SerialNumberRecognition input {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   padding-left: 0rem;
@@ -432,11 +438,11 @@ body {
   text-indent: 1rem;
   font-size: 1rem;
 }
-.SerealNumberRecognition input:focus {
+.SerialNumberRecognition input:focus {
   outline-color: #ea5455; /* 포커스 색상 변경 */
 }
 
-.SerealNumberRecognition .MyButton {
+.SerialNumberRecognition .MyButton {
   background-color: black;
   color: white;
 
@@ -448,6 +454,8 @@ body {
   font-weight: bold;
   font-size: 1.5rem;
 }
+
+/* ConnectionResult */
 
 .ConnectionResult {
   flex-direction: column;
@@ -504,6 +512,101 @@ h2 {
   color: #838383;
   font-size: 1rem;
   margin: 0;
+}
+
+/* HouseList */
+.HouseList {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+.HouseList .building_info_wrapper {
+  display: flex;
+  justify-content: center;
+  box-shadow: 0rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  background-color: white;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  width: 100%;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.HouseList .building_info_wrapper h1 {
+  color: #2d4059;
+}
+.HouseList .building_info {
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+}
+.HouseList h1 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.3rem;
+}
+.HouseList h3 {
+  color: #838383;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.HouseList .house_card_wrapper {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: scroll;
+}
+::-webkit-scrollbar {
+  display: none; /* 스크롤바 숨김 */
+}
+
+.HouseList .MyButton {
+  background-color: #f07b3f;
+  height: 2.5rem;
+
+  color: white;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.HouseList .building_title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.HouseCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  margin: 0.5rem;
+  width: 10rem;
+  background-color: white;
+
+  transition: background-color 0.1s;
+  &:active {
+    background-color: rgba(178, 178, 178, 0.581) !important;
+  }
+}
+.HouseCard h2 {
+  color: #2d4059;
+}
+.HouseCard .title {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.HouseCard .work_name {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 /*  */
 /*  */
