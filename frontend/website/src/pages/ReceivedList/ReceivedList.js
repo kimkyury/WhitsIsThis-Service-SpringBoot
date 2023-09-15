@@ -46,7 +46,7 @@ function List() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-      <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', alignItems:'center'}}>
+      <div style={{display:'grid', gridTemplateColumns:'8fr 1fr', marginRight: '2%', alignItems:'center'}}>
         
       <input
         style={{
@@ -70,6 +70,7 @@ function List() {
         width: '1.5vw',
         height: '1.5vw',
         borderRadius: '50%',
+        
         color: '#2D4059',
         textAlign: 'center',
         alignItems: 'center', // 세로 중앙 정렬을 위해 추가

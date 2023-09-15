@@ -36,7 +36,7 @@ function Mypage() {
                   borderRadius: '100%',
                   width: '10vw',
                   height: '10vw',
-                  imageStyle // 이미지의 크기를 조정합니다.
+                  objectFit:'cover', // 이미지의 크기를 조정합니다.
                 }}
                 alt="사용자 사진"
               />

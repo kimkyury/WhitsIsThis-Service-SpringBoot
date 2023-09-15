@@ -16,3 +16,16 @@
   color: #F07B3F;
 }
 
+.box {
+  border:none;
+  background-color: white;
+  font-weight: bold;
+  color: black;
+}
+
+.box:hover {
+  background-color: #2D4059;
+  border-radius: 0.2vw;
+  color: white;
+  font-weight: bold;
+}
