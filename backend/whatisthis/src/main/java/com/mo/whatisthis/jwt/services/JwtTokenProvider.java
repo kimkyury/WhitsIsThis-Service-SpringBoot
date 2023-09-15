@@ -1,6 +1,5 @@
 package com.mo.whatisthis.jwt.services;
 
-
 import com.mo.whatisthis.jwt.dtos.TokenDto;
 import com.mo.whatisthis.redis.services.RedisService;
 import io.jsonwebtoken.Claims;
@@ -9,9 +8,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
@@ -44,10 +41,7 @@ public class JwtTokenProvider implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
 
-        // 1. secret 값을 디코딩시켜 byte값 얻기
         byte[] secretKeyBytes = Decoders.BASE64.decode(secret);
-
-        // 2. Encoding에 필요한 KEY 생성
         signingKey = Keys.hmacShaKeyFor(secretKeyBytes);
     }
 
