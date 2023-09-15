@@ -1,5 +1,6 @@
 package com.mo.whatisthis.jwt.handlers;
 
+import com.mo.whatisthis.supports.codes.ErrorCode;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
         AuthenticationException authException) throws IOException, ServletException {
 
-//        response.setCharacterEncoding("utf-8");
-//        response.sendError(ErrorCode.FORBIDDEN_ERROR.getStatus(),
-//            ErrorCode.FORBIDDEN_ERROR.getMessage());
+        response.setCharacterEncoding("utf-8");
+        response.sendError(ErrorCode.FORBIDDEN.getStatus(),
+            ErrorCode.FORBIDDEN.getMessage());
     }
 }

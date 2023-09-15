@@ -17,8 +17,9 @@ public enum ErrorCode {
     VALIDATION_ERROR(400, "Validation Exception"),
     MISSING_HEADER(400, "Header data missing"),
 
+
     TOKEN_EXPIRED(401, "Token is expired"),
-    TOKEN_INVALID(401, "Token is invalid"),
+    TOKEN_INVALID(401, "토큰이 올바르지 않거나 만료되어 거부되었습니다. "),
     UNAUTHORIZED(401, "Unauthorized"),
 
     FORBIDDEN(403, "Forbidden"),
