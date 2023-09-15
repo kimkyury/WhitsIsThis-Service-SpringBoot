@@ -32,11 +32,11 @@ public class MemberPrivateController {
     public final MemberService memberService;
 
     @PostMapping("/employees/register")
-    public ResponseEntity<?> createEmployee() {
+    public ResponseEntity<SuccessResponse<MemberCreateResponse>> createEmployee() {
 
         MemberCreateResponse memberCreateResponse = memberService.createEmployee();
 
-        return createSuccessResponse(SuccessCode.CREATED, "임시 비밀번호를 통해 로그인 후, 개인 정보를 수정해주세요. ",
+        return  createSuccessResponse(SuccessCode.CREATED, "임시 비밀번호를 통해 로그인 후, 개인 정보를 수정해주세요. ",
             memberCreateResponse);
     }
 
