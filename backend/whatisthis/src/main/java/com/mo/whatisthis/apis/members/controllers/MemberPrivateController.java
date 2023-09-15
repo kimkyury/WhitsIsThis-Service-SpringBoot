@@ -2,8 +2,13 @@ package com.mo.whatisthis.apis.members.controllers;
 
 import com.mo.whatisthis.apis.members.requests.DeviceRegisterRequest;
 import com.mo.whatisthis.apis.members.requests.EmployeeRegisterRequest;
+import com.mo.whatisthis.apis.members.responses.MemberCreateResponse;
 import com.mo.whatisthis.apis.members.services.MemberService;
 import com.mo.whatisthis.security.utils.SecurityUtil;
+import com.mo.whatisthis.supports.codes.SuccessCode;
+import com.mo.whatisthis.supports.responses.SuccessResponse;
+import java.lang.reflect.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,18 +22,22 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
+
 @RestController
 @RequestMapping("/api/v1/private/members")
+@RequiredArgsConstructor
 public class MemberPrivateController {
 
-    MemberService memberService;
+    public final MemberService memberService;
 
     @PostMapping("/employees/register")
     public ResponseEntity<?> createEmployee() {
 
-        memberService.createEmployee();
+        MemberCreateResponse memberCreateResponse = memberService.createEmployee();
 
-        return ResponseEntity.ok("EMPLOYEE 생성 성공");
+        return createSuccessResponse(SuccessCode.CREATED, "임시 비밀번호를 통해 로그인 후, 개인 정보를 수정해주세요. ",
+            memberCreateResponse);
     }
 
     @PatchMapping(value = "/employees", consumes = {
@@ -40,7 +49,8 @@ public class MemberPrivateController {
         @RequestPart("profileImage") MultipartFile profileImage) {
 
         // TODO: getLoginId() Exception Handling
-        memberService.registerEmployee(SecurityUtil.getLoginId().get(), employeeRegisterRequest, profileImage);
+        memberService.registerEmployee(SecurityUtil.getLoginId()
+                                                   .get(), employeeRegisterRequest, profileImage);
 
         return ResponseEntity.ok("EMPLOYEE 최초 등록 성공");
     }
