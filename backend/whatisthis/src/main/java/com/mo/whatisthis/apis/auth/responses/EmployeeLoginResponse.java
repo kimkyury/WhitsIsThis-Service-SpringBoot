@@ -7,7 +7,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class EmployeeLoginResponse {
 
     private String accessToken;

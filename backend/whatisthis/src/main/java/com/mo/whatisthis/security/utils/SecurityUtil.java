@@ -3,6 +3,7 @@ package com.mo.whatisthis.security.utils;
 import com.mo.whatisthis.apis.members.entities.MemberEntity.Role;
 import com.mo.whatisthis.security.service.UserDetailsImpl;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -29,6 +30,17 @@ public class SecurityUtil {
             return Optional.ofNullable(((UserDetailsImpl) principal).getRole());
         }
 
+        return Optional.empty();
+    }
+
+    public static Optional<String> getPhone(){
+        Object principal = SecurityContextHolder.getContext()
+                                                .getAuthentication()
+                                                .getPrincipal();
+
+        if (principal instanceof UserDetailsImpl) {
+            return Optional.ofNullable(((UserDetailsImpl) principal).getPhone());
+        }
         return Optional.empty();
     }
 }

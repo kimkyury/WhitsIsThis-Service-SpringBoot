@@ -34,7 +34,7 @@ public class AuthPublicController {
     private final AuthService authService;
 
     @PostMapping("/employees/login")
-    public ResponseEntity<?> employeeLogin(
+    public ResponseEntity<SuccessResponse<EmployeeLoginResponse>> employeeLogin(
         @RequestBody EmployeeLoginRequest employeeLoginRequest) {
 
         TokenDto tokenDto = authService.loginEmployee(employeeLoginRequest);
@@ -44,7 +44,20 @@ public class AuthPublicController {
                                               .httpOnly(true)
                                               .secure(true)
                                               .build();
+
         EmployeeInfo employeeInfo = authService.findEmployeeInfoUseSCH();
+        System.out.println("------T:" + tokenDto.getAccessToken());
+        System.out.println(isInitLoginUser);
+        EmployeeLoginResponse test = EmployeeLoginResponse.builder()
+                                                          .accessToken(
+                                                              "Bearer "
+                                                                  + tokenDto.getAccessToken())
+                                                          .isInitLoginUser(
+                                                              isInitLoginUser)
+                                                          .employeeinfo(employeeInfo)
+                                                          .build();
+
+        System.out.println(test);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
