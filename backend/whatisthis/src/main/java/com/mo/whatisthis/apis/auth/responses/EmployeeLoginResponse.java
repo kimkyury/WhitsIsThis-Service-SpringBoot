@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class EmployeeLoginResponse {

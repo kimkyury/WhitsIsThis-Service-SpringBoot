@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -32,8 +34,7 @@ public class SuccessResponse<T> {
     }
 
     public static <T> SuccessResponse<T> ofStatusAndMessageAndData(final SuccessCode code,
-        String message,
-        T data) {
+        String message, T data) {
         return new SuccessResponse<>(code.getStatus(), message, data);
     }
 
