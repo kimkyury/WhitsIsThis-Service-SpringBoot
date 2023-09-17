@@ -5,6 +5,50 @@
   margin-top:1%;
 }
 
+.recitembox {
+    box-shadow: 0px 0.25vw 0.25vw rgba(0, 0, 0, 0.5);
+    width: 45vw;
+    height: 16vh;
+    border-left: 0.25vw solid #F07B3F;
+    margin-top: 1%;
+    margin-left: 1%;
+    background-color: white;
+    color: black;
+}
+
+.rectag {
+  margin-left: 2%; 
+  font-size: 1vw;
+  margin-top: 6%;
+}
+
+.iconsearch {
+    display: flex;
+    background-color: orange;
+    margin-left: 5%;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-radius: 50%;
+    color: #2D4059;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputgrid {
+ display: grid;
+ grid-template-columns: 8fr 1fr;
+ margin-right: 2%;
+ align-items: center;
+}
+
+.recspan {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 3%;
+}
+
 .left {
   margin-left: 5%;
   background-color: #2D4059;
@@ -16,14 +60,15 @@
   font-weight: bold;
   border-radius: 0.2vw;
   border: solid 0.1vw black;
-  z-index:-1
+  box-shadow: 0px 0.25vw 0.25vw rgba(0,0,0,0.5);
+
 }
 .modal-container {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 999;
+
 }
 
 .Modalbox {
@@ -34,13 +79,76 @@
   border-radius: 0.42vw;
   /* display: flex; */
   /* justify-content: center; */
+  background-color: white; 
+  display: flex; 
+  justify-content: center;
 }
 
 .gridmodal {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+
+.vtag {
+  margin-left: 5%; 
+  border-bottom:2px dashed black;
+  width:20vw;
+
+}
+
+.tagv {
+  margin-left: 5%; 
+  border-bottom:2px dashed black; 
+  width:20vw
+}
+
+.recfspan {
+  margin-left: 1vw; 
+  border-bottom: 2px solid #2D4059; 
+  height: 5vh;
+}
+
+.recmodalbutton {
+  display:flex; 
+  color:white; 
+  font-weight:bold; 
+  cursor: pointer;
+  opacity:90%; 
+  width:3vw;
+  background-color:#2D4059; 
+  height:4vh;
+  border-radius:0.6vw; 
+  font-size: 0.8vw; 
+  justify-content:center;
+  align-items:center; 
+  position: relative;
+}
+.nameVtagv {
+  border: 0.1vw solid black; 
+  width: 26vw; 
+  border: none; 
+  height: 37vh;
+}
+
+.recitemdiv {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 2%;
+}
+
+.recmodalform {
+    width: 51vw; 
+    border-radius: 1.4vw; 
+    color: #2D4059; 
+    height: 4.2vh; 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 1.6vw; 
+    font-weight: bold;
+}
 .nametag {
+  margin-left: 5%;
+  border-bottom:2px solid black;
   font-size: 1.3vw;
   font-weight: bold;
 }
@@ -82,4 +190,27 @@
     align-items: center; 
     font-size: 1.5vw; 
     font-weight: bold;
+}
+
+.Dropbox {
+  margin-top: 3%;
+  /* padding-top: 1.5vw; */
+  width: 46vw;
+  height: 62vh;
+  background-color: whitesmoke;
+  border-radius: 0.4vw;
+
+}
+
+.recinputtag {
+
+    display: flex;
+    margin-top: 2%;
+    margin-right: 5%;
+    border-radius: 0.3vw;
+    text-align: center;
+    border: 4px solid #F07B3F;
+    width: 10vw;
+    height: 3vh;
+
 }

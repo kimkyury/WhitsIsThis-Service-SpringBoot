@@ -78,7 +78,7 @@ function ResultList() {
       finishdate: '2023-09-23',
     }
   ];
-  const handleItemDoubleClick = (itemData) => {
+  const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
     setShowModal(true);
   };
@@ -114,48 +114,35 @@ function ResultList() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
       </div>
-      <div style={{ marginTop: '3%', display: 'flex', justifyContent: 'center' }}>
+      <div style={{ marginTop: '3%' }} className='flexcenter'>
         <div
-          style={{
-            width: '70vw',
-            height: '5vh',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingTop: '1%',
-            paddingLeft: '1%',
-            paddingRight: '1%',
-            paddingBottom: '1%',
-            borderBottom: 'solid 0.01vw black',
-            borderTop: 'solid 0.15vw black',
-            textAlign: 'start',
-          }}
+          className='relistforms'
         >
-          <div style={{ display: 'flex', height: '5vh', justifyContent: 'center' }}>
-            <span style={{ flex: '1', width: '10vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='listtitle'>
+          <div style={{  height: '5vh' }} className='flexcenter'>
+            <span className='listtitle relistdata'>
               신청자명
             </span>
-            <span style={{ flex: '1', width: '10vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='listtitle'>
+            <span className='listtitle relistdata'>
               연락처
             </span>
-            <span style={{ paddingLeft: '2%', flex: '3', width: '40vw', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }} className='listtitle'>
+            <span style={{ paddingLeft: '2%',  justifyContent: 'flex-start'}} className='listtitle dataflex'>
               주소
             </span>
-            <span style={{ flex: '1', width: '10vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='listtitle'>
+            <span  className='listtitle relistdata'>
               점검완료일자
             </span>
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div style={{ borderBottom: '0.15vw solid black', width: '70vw', height: '57vh' }}>
+      <div className='flexcenter'>
+        <div className='itemresult'>
           {currentItems.map((v, idx) => (
-            <ResultItem data={v} key={idx} onItemDoubleClick={handleItemDoubleClick} />
+            <ResultItem data={v} key={idx} onClick={handleItemClick} />
           ))}
         </div>
       </div>
       {/* 페이지네이션 컨트롤 */}
-      <div style={{ marginTop: '2%', display: 'flex', justifyContent: 'center' }}>
+      <div style={{ marginTop: '2%'}} className='flexcenter'>
         <div>
           <button
             onClick={() => setCurrentPage(currentPage - 1)}
@@ -181,23 +168,15 @@ function ResultList() {
           <ResultModal selectedItem={selectedItem} setShowModal={setShowModal} />
         </div>
       )}
-      <div style={{ marginTop:'1%', width: '100vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '10fr 1fr' }}>
+      <div className='resultlistinput'>
+        <div>
           <input
-            style={{
-              marginTop: '2%',
-              marginRight: '5%',
-              borderRadius: '0.3vw',
-              textAlign: 'center',
-              border: '3px solid #2D4059',
-              width: '20vw',
-              height: '3vh',
-            }}
-            placeholder="검색..."
+            className='relistinput'
+            placeholder="검색"
             value={searchQuery}
             onChange={handleInputChange}
           />
-          <div style={{
+          {/* <div style={{
             // height: '3vh',
             display: 'flex',
             alignItems: 'center',
@@ -218,7 +197,7 @@ function ResultList() {
             }}>
               <FaSearch />
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import './passbox.css';
 function Mypassword() {
   return (
     <div className='passbox'>
-      <div style={{ marginLeft: '5%', color: '#2D4059', fontSize: '1.6vw', fontWeight: 'bold' }}>
+      <div className='passtagbox'>
         비밀번호 변경
       </div>
 

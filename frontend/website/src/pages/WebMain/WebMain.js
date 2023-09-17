@@ -1,10 +1,10 @@
 import React from 'react';
 import Login from '../../component/Login/Login';
+import './login.css'
 function WebMain() {
   return (
     <div>로그인페이지 프라이빗
-      <div style={{display:'flex', justifyContent:'center', alignItems: 'center', // 세로 중앙 정렬
-      height: '90vh'}}>
+      <div className='loginform'>
       <Login/>
       </div>
     </div>

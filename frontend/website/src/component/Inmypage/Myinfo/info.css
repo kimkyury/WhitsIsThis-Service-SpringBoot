@@ -1,7 +1,14 @@
 .gridboxss {
   display: grid;
   grid-template-columns: 1fr 3fr;
-  
+
+    margin-left: 10%;
+    border-radius: 0.42vw;
+    border: 0.15vw solid black;
+    width: 31vw;
+    height: 13vh;
+    align-items: center;
+
 
 }
 

@@ -6,7 +6,13 @@
   background-color: white;
   padding-top: 3%;
 }
+.passtagbox {
 
+  margin-left: 5%; 
+  color: #2D4059; 
+  font-size: 1.6vw; 
+  font-weight: bold; 
+}
 .detailpassbox {
   padding-left: 0.5vw; 
   margin-left: 5%;

@@ -12,13 +12,13 @@ function ResultModal({ selectedItem, setShowModal }) {
   };
 
   return (
-    <div className="Modalbox" style={{ backgroundColor: 'white', display: 'flex', justifyContent: 'center' }}>
+    <div className="Modalbox flexcenter" style={{ backgroundColor: 'white' }}>
       <div>
       
-        <p style={{ width: '51vw', borderRadius: '1.4vw', color: '#2D4059', height: '4.2vh', display: 'flex', justifyContent: 'space-between', fontSize: '1.6vw', fontWeight: 'bold' }}>
+        <p className="resmodalform">
           <span style={{marginLeft:'1vw'}}>결과내용</span>
        
-        <button onClick={closeModal} style={{display:'flex', color:'white', fontWeight:'bold', cursor: 'pointer',opacity:'90%', width:'3vw',backgroundColor:'#2D4059', height:'4vh',borderRadius:'0.6vw', fontSize: '0.8vw', justifyContent:'center',alignItems:'center', position: 'relative', zIndex: 1 }}>
+        <button onClick={closeModal} className="resclosebutton">
           <span style={{textAlign:'center'}}>닫기</span>
         </button>
       
