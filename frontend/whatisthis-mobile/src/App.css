@@ -12,6 +12,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
+  overflow: hidden;
 }
 
 .container {
@@ -27,39 +28,102 @@ body {
 
 /* common Button */
 .MyButton {
+  /* background-color: white; */
+  transition: background-color 0.1s;
   border: none;
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
   border-radius: 1rem;
-  transition: background-color 0.1s;
+  &:active {
+    background-color: rgba(178, 178, 178, 0.581) !important;
+  }
 }
-.MyButton:active {
-  background-color: #0e0e0e; /* 클릭 시 변경할 색상 설정 */
-  color: #2d4059;
+.MyButton_white {
+  background-color: #ffffff;
+  color: #0e0e0e;
+}
+.MyButton_black {
+  background-color: #0e0e0e;
+  color: #ffffff;
+}
+.MyButton_grey {
+  background-color: #7a7a7a;
+  color: #fcfcfd;
+}
+.MyButton_orange {
+  background-color: #f07b3f;
+  color: #fcfcfd;
+}
+.MyButton_green {
+  background-color: #64c964;
+  color: #fcfcfd;
 }
 
 /* Notification */
 .Notification {
-  height: 2.5rem;
+  height: 2.8rem;
   width: 8rem;
 
   border: none;
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
-  background-color: #7a7a7a;
-  transition: background-color 0.1s;
 
+  transition: background-color 0.1s;
   font-weight: bold;
   font-size: 1.3rem;
-  color: #fcfcfd;
+  &:active {
+    background-color: rgba(178, 178, 178, 0.581) !important;
+  }
 }
-.Notification:active {
-  background-color: #ffffff; /* 클릭 시 변경할 색상 설정 */
-  color: #2d4059;
-}
+
 .Notification_left {
+  margin-right: auto;
   border-radius: 0 1rem 1rem 0;
 }
 .Notification_right {
+  margin-left: auto;
   border-radius: 1rem 0 0 1rem;
+}
+.Notification_grey {
+  background-color: #7a7a7a;
+  color: #fcfcfd;
+}
+.Notification_orange {
+  background-color: #f07b3f;
+  color: #fcfcfd;
+}
+.Notification_green {
+  background-color: #64c964;
+  color: #fcfcfd;
+}
+
+/* Options menu (slide up) */
+.options {
+  bottom: 0;
+  display: flex;
+
+  width: 100%;
+  /* height: 40rem; */
+  max-width: 100%;
+  max-height: 100%;
+  position: absolute;
+
+  transition: transform 0.5s ease-in-out;
+}
+.slide_up {
+  transform: translateY(0%);
+}
+.slide_out {
+  transform: translateY(100%);
+}
+.option_header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-width: 19.5rem;
+  border-bottom: 3px solid #ececec;
+
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 /* Home */
@@ -73,7 +137,6 @@ body {
   height: auto;
 }
 .Home .MyButton {
-  background-color: rgb(255, 255, 255);
   width: 19.5rem;
   height: 2.5rem;
   margin-top: 2rem;
@@ -82,9 +145,7 @@ body {
   font-weight: bold;
   font-size: 1.3rem;
 }
-.Home .MyButton:active {
-  background-color: #7d7d7d; /* 클릭 시 변경할 색상 설정 */
-}
+
 .Home .Notification {
   position: absolute;
   top: 2rem;
@@ -102,7 +163,6 @@ body {
   height: auto;
 }
 .Login .MyButton {
-  background-color: rgb(255, 255, 255);
   width: 13.5rem;
   height: 2.5rem;
   margin-top: 2rem;
@@ -111,13 +171,11 @@ body {
   font-weight: bold;
   font-size: 1.3rem;
 }
-.Login .MyButton:active {
-  background-color: #7d7d7d; /* 클릭 시 변경할 색상 설정 */
-}
+
 .Login input {
   margin-bottom: 0.5rem;
   height: 2rem;
-  width: 13.125;
+  width: 13.125rem;
   border: 0.1875rem solid
     rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
@@ -237,10 +295,12 @@ body {
   justify-content: space-between;
 }
 .SearchDetail .Notification {
+  height: 2.8rem;
   margin-right: auto;
   margin-top: 1rem;
   margin-bottom: 2rem;
 }
+
 .SearchDetail .building_info_wrapper {
   margin-top: 1.5rem;
   margin-bottom: 1rem;
@@ -273,6 +333,8 @@ body {
   margin: 0;
 }
 
+/* HouseInfo */
+
 .HouseInfo {
   min-width: 17.5rem;
   min-height: 5rem;
@@ -297,6 +359,515 @@ body {
   margin-right: 0.5rem;
 }
 
+/* Connection */
+
+.Connection {
+  background-color: #484747;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: space-between; */
+}
+.Connection h2 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0rem;
+}
+.Connection h4 {
+  color: #838383;
+  margin: 0;
+}
+
+.Connection .header {
+  margin-top: 1.5rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  margin-bottom: 3.5rem;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+}
+.Connection .building_info_wrapper {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  word-break: keep-all;
+}
+.Connection .connection_method_wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+.Connection .connection_method_wrapper img {
+  border-radius: 0.25rem;
+  transition: background-color 0.1s;
+}
+.Connection .connection_method_wrapper img:active {
+  background-color: #aeaeae; /* 클릭 시 변경할 색상 설정 */
+}
+.Connection .camera_frame {
+  margin: 1.5rem;
+}
+.Connection .MyButton {
+  border-radius: 0rem;
+  height: 3.5rem;
+  width: 100%;
+
+  margin-top: auto;
+
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* SerialNumberRecognition */
+
+.SerialNumberRecognition {
+  height: 40rem;
+
+  border: none;
+  border-radius: 2rem 2rem 0 0;
+  background-color: #ffffff;
+
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+}
+.SerialNumberRecognition h2 {
+  /* text-align: center; */
+  color: black;
+}
+.SerialNumberRecognition .img_turtlebot {
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+}
+
+.SerialNumberRecognition input {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  height: 2.3rem;
+  width: 19.3rem;
+  border: 0.1875rem solid
+    rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+
+  text-indent: 1rem;
+  font-size: 1rem;
+}
+.SerialNumberRecognition input:focus {
+  outline-color: #ea5455; /* 포커스 색상 변경 */
+}
+
+.SerialNumberRecognition .MyButton {
+  margin-top: 3rem;
+
+  border-radius: 1rem;
+  height: 2.7rem;
+  width: 19.5rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* ConnectionResult */
+
+.ConnectionResult {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.ConnectionResult .building_info_wrapper {
+  display: flex;
+  justify-content: center;
+  box-shadow: 0rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  background-color: white;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  width: 100%;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.ConnectionResult .building_info_wrapper h1 {
+  color: #2d4059;
+}
+.ConnectionResult .building_info {
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+}
+
+.ConnectionResult .connect_info_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+}
+.ConnectionResult .connect_info_wrapper h1,
+h2 {
+  color: #ececec;
+  margin: 0;
+}
+.ConnectionResult .button_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+
+  gap: 1rem;
+}
+.ConnectionResult h1 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.3rem;
+}
+.ConnectionResult h3 {
+  color: #838383;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* HouseList */
+.HouseList {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+.HouseList .building_info_wrapper {
+  display: flex;
+  justify-content: center;
+  box-shadow: 0rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  background-color: white;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  width: 100%;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.HouseList .building_info_wrapper h1 {
+  color: #2d4059;
+}
+.HouseList .building_info {
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+}
+.HouseList h1 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.3rem;
+}
+.HouseList h3 {
+  color: #838383;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.HouseList .house_card_wrapper {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: scroll;
+  justify-content: center;
+}
+::-webkit-scrollbar {
+  display: none; /* 스크롤바 숨김 */
+}
+
+.HouseList .MyButton {
+  height: 2.5rem;
+
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.HouseList .building_title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* HouseCard */
+.HouseCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  margin: 0.5rem;
+  width: 10rem;
+  background-color: white;
+
+  transition: background-color 0.1s;
+  &:active {
+    background-color: rgba(178, 178, 178, 0.581) !important;
+  }
+}
+.HouseCard h2 {
+  color: #2d4059;
+}
+.HouseCard .title {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.HouseCard .work_name {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.add_card_btn {
+  height: 14rem;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+.blank {
+  margin: 0.5rem;
+  width: 10rem;
+  height: 14rem;
+  visibility: hidden;
+  background-color: white;
+}
+
+/* HouseDetail */
+.HouseDetail {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.HouseDetail .building_info_wrapper {
+  display: flex;
+  justify-content: center;
+  box-shadow: 0rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  background-color: white;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  width: 100%;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.HouseDetail .building_info_wrapper h1 {
+  color: #2d4059;
+}
+.HouseDetail .building_info {
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+}
+.HouseDetail .building_title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.HouseDetail .proecss_percentge {
+  color: #f07b3f !important;
+}
+.HouseDetail h1 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.3rem;
+}
+.HouseDetail h3 {
+  color: #838383;
+  font-size: 1rem;
+  margin: 0;
+}
+.HouseDetail .map_wrapper {
+  width: 19.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+}
+.HouseDetail .map_wrapper img {
+  margin: 0.5rem;
+  height: 15rem;
+  width: auto;
+}
+.HouseDetail .carousel {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.5rem;
+  overflow: scroll;
+
+  background-color: white;
+  width: 18.5rem;
+  height: 16rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  color: black;
+}
+.HouseDetail .carousel img {
+  height: 15rem;
+}
+
+.HouseDetail .button_wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+.HouseDetail .MyButton {
+  width: 19.5rem;
+  height: 2.5rem;
+
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+/* HouseTodoList */
+.HouseTodoList {
+  height: 42.5rem;
+  border: none;
+  border-radius: 2rem 2rem 0 0;
+  background-color: #ffffff;
+
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+}
+.HouseTodoList .user_request {
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+  border-bottom: 3px solid #ececec;
+}
+.HouseTodoList .user_request p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+
+  color: black;
+}
+.HouseTodoList h3 {
+  color: #2d4059;
+  margin-top: 0.5rem;
+}
+.HouseTodoList input {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  height: 2.3rem;
+  width: 19.3rem;
+  border: 0.1875rem solid
+    rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+
+  text-indent: 1rem;
+  font-size: 1rem;
+}
+.HouseTodoList input:focus {
+  outline-color: #ea5455; /* 포커스 색상 변경 */
+}
+
+.HouseTodoList .MyButton {
+  margin-top: 3rem;
+
+  border-radius: 1rem;
+  height: 2.7rem;
+  width: 19.5rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.HouseResult {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.HouseResult img {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  width: 10rem;
+  height: auto;
+}
+.HouseResult .building_info_wrapper {
+  width: 19.5rem;
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  word-break: keep-all;
+}
+.HouseResult .building_info_wrapper h2 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0rem;
+}
+.HouseResult .building_info_wrapper h4 {
+  color: #838383;
+  margin: 0;
+}
+.HouseResult .result_list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: scroll;
+
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  background-color: #ececec;
+
+  width: 19.5rem;
+  height: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.HouseResult .result_dummy h2 {
+  margin: 1rem;
+  color: black;
+}
+.HouseResult .button_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: auto;
+  margin-bottom: 2rem;
+}
+
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
 /* MyCamera */
 .MyCamera video {
   width: 300px;

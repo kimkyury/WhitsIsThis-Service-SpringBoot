@@ -13,18 +13,33 @@ import HouseResult from "./pages/HouseResult";
 import Search from "./pages/Search";
 import SearchDetail from "./pages/SearchDetail";
 
+// testpage
+import TestPage from "./test/TestPage";
+
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
+          {/* startregion: this is test page */}
+          <Route path="/test" element={<TestPage />} />
+          {/* endregion */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/connection" element={<Connection />} />
-          <Route path="/connectionresult" element={<ConnectionResult />} />
-          <Route path="/house/:id" element={<HouseDetail />} />
-          <Route path="/houselist" element={<HouseList />} />
-          <Route path="/house/:id/result" element={<HouseResult />} />
+          <Route
+            path="/connection/:buildingId/:houseId"
+            element={<Connection />}
+          />
+          <Route
+            path="/connection/:buildingId/:houseId/result"
+            element={<ConnectionResult />}
+          />
+          <Route path="/house/:buildingId/:houseId" element={<HouseDetail />} />
+          <Route path="/houselist/:buildingId" element={<HouseList />} />
+          <Route
+            path="/house/:buildingId/:houseId/result"
+            element={<HouseResult />}
+          />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:id" element={<SearchDetail />} />
         </Routes>
