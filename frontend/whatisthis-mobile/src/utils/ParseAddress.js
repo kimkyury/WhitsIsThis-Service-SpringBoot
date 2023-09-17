@@ -8,8 +8,6 @@ export const getBuildingName = (address) => {
     if(words.length>0){
         const lastWord = words[words.length-1];
         if(isNumeric(lastWord)){
-            console.log(lastWord);
-            
             return 'Building'
         }else{
             return lastWord

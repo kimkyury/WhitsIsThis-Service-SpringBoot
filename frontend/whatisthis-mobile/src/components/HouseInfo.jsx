@@ -1,11 +1,10 @@
-const HouseInfo = ({ houseInfo }) => {
+const HouseInfo = ({ houseInfo, onClick }) => {
   const houseStatus = ["done", "todo"].includes(houseInfo.status)
     ? houseInfo.status
     : "todo";
 
-  console.log(houseInfo);
   return (
-    <div className="HouseInfo">
+    <div className="HouseInfo" onClick={onClick}>
       <h1>
         {houseInfo.dong}동 {houseInfo.ho}호
       </h1>
