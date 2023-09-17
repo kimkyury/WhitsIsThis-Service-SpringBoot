@@ -47,7 +47,7 @@ const SerialNumberRecognition = ({ addr, isOpen, buildingId, houseId }) => {
         onChange={handleChangeSnum}
         placeholder="ex) 00-12345 의 8자 문자열입력"
       />
-      <MyButton text={"연결하기"} onClick={connect} />
+      <MyButton color={"black"} text={"연결하기"} onClick={connect} />
     </div>
   );
 };

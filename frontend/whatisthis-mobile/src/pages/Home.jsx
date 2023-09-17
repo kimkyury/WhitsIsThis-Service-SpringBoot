@@ -45,8 +45,12 @@ const Home = () => {
         <MyButton text={"로그인"} onClick={() => navigate("/login")} />
       ) : (
         <>
-          <MyButton text={"검색"} onClick={() => navigate("/search")} />
-          <MyButton text={"로그아웃"} onClick={logout} />
+          <MyButton
+            color={"white"}
+            text={"검색"}
+            onClick={() => navigate("/search")}
+          />
+          <MyButton color={"white"} text={"로그아웃"} onClick={logout} />
         </>
       )}
     </div>

@@ -34,6 +34,7 @@ const Search = () => {
   );
 };
 
-// 나중에 디폴트 값 설정해두기
-
+Search.defaultProps = {
+  buildingList: [],
+};
 export default Search;

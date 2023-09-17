@@ -37,6 +37,26 @@ body {
     background-color: rgba(178, 178, 178, 0.581) !important;
   }
 }
+.MyButton_white {
+  background-color: #ffffff;
+  color: #0e0e0e;
+}
+.MyButton_black {
+  background-color: #0e0e0e;
+  color: #ffffff;
+}
+.MyButton_grey {
+  background-color: #7a7a7a;
+  color: #fcfcfd;
+}
+.MyButton_orange {
+  background-color: #f07b3f;
+  color: #fcfcfd;
+}
+.MyButton_green {
+  background-color: #64c964;
+  color: #fcfcfd;
+}
 
 /* Notification */
 .Notification {
@@ -81,7 +101,7 @@ body {
   display: flex;
 
   width: 100%;
-  height: 40rem;
+  /* height: 40rem; */
   max-width: 100%;
   max-height: 100%;
   position: absolute;
@@ -117,7 +137,6 @@ body {
   height: auto;
 }
 .Home .MyButton {
-  background-color: white;
   width: 19.5rem;
   height: 2.5rem;
   margin-top: 2rem;
@@ -144,7 +163,6 @@ body {
   height: auto;
 }
 .Login .MyButton {
-  background-color: rgb(255, 255, 255);
   width: 13.5rem;
   height: 2.5rem;
   margin-top: 2rem;
@@ -405,6 +423,8 @@ body {
 /* SerialNumberRecognition */
 
 .SerialNumberRecognition {
+  height: 40rem;
+
   border: none;
   border-radius: 2rem 2rem 0 0;
   background-color: #ffffff;
@@ -443,9 +463,6 @@ body {
 }
 
 .SerialNumberRecognition .MyButton {
-  background-color: black;
-  color: white;
-
   margin-top: 3rem;
 
   border-radius: 1rem;
@@ -558,16 +575,15 @@ h2 {
   flex-direction: row;
   flex-wrap: wrap;
   overflow: scroll;
+  justify-content: center;
 }
 ::-webkit-scrollbar {
   display: none; /* 스크롤바 숨김 */
 }
 
 .HouseList .MyButton {
-  background-color: #f07b3f;
   height: 2.5rem;
 
-  color: white;
   font-weight: bold;
   font-size: 1.3rem;
 }
@@ -577,6 +593,7 @@ h2 {
   align-items: center;
 }
 
+/* HouseCard */
 .HouseCard {
   display: flex;
   flex-direction: column;
@@ -608,6 +625,244 @@ h2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
+.add_card_btn {
+  height: 14rem;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+.blank {
+  margin: 0.5rem;
+  width: 10rem;
+  height: 14rem;
+  visibility: hidden;
+  background-color: white;
+}
+
+/* HouseDetail */
+.HouseDetail {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.HouseDetail .building_info_wrapper {
+  display: flex;
+  justify-content: center;
+  box-shadow: 0rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  background-color: white;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  width: 100%;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.HouseDetail .building_info_wrapper h1 {
+  color: #2d4059;
+}
+.HouseDetail .building_info {
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+}
+.HouseDetail .building_title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.HouseDetail .proecss_percentge {
+  color: #f07b3f !important;
+}
+.HouseDetail h1 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.3rem;
+}
+.HouseDetail h3 {
+  color: #838383;
+  font-size: 1rem;
+  margin: 0;
+}
+.HouseDetail .map_wrapper {
+  width: 19.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+}
+.HouseDetail .map_wrapper img {
+  margin: 0.5rem;
+  height: 15rem;
+  width: auto;
+}
+.HouseDetail .carousel {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.5rem;
+  overflow: scroll;
+
+  background-color: white;
+  width: 18.5rem;
+  height: 16rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  color: black;
+}
+.HouseDetail .carousel img {
+  height: 15rem;
+}
+
+.HouseDetail .button_wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+.HouseDetail .MyButton {
+  width: 19.5rem;
+  height: 2.5rem;
+
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+/* HouseTodoList */
+.HouseTodoList {
+  height: 42.5rem;
+  border: none;
+  border-radius: 2rem 2rem 0 0;
+  background-color: #ffffff;
+
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+}
+.HouseTodoList .user_request {
+  min-width: 19.5rem;
+  max-width: 19.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+  border-bottom: 3px solid #ececec;
+}
+.HouseTodoList .user_request p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+
+  color: black;
+}
+.HouseTodoList h3 {
+  color: #2d4059;
+  margin-top: 0.5rem;
+}
+.HouseTodoList input {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  height: 2.3rem;
+  width: 19.3rem;
+  border: 0.1875rem solid
+    rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
+  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+
+  text-indent: 1rem;
+  font-size: 1rem;
+}
+.HouseTodoList input:focus {
+  outline-color: #ea5455; /* 포커스 색상 변경 */
+}
+
+.HouseTodoList .MyButton {
+  margin-top: 3rem;
+
+  border-radius: 1rem;
+  height: 2.7rem;
+  width: 19.5rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.HouseResult {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.HouseResult img {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  width: 10rem;
+  height: auto;
+}
+.HouseResult .building_info_wrapper {
+  width: 19.5rem;
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  word-break: keep-all;
+}
+.HouseResult .building_info_wrapper h2 {
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0rem;
+}
+.HouseResult .building_info_wrapper h4 {
+  color: #838383;
+  margin: 0;
+}
+.HouseResult .result_list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: scroll;
+
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+
+  background-color: #ececec;
+
+  width: 19.5rem;
+  height: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.HouseResult .result_dummy h2 {
+  margin: 1rem;
+  color: black;
+}
+.HouseResult .button_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: auto;
+  margin-bottom: 2rem;
+}
+
 /*  */
 /*  */
 /*  */

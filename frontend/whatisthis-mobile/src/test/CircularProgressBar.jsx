@@ -13,7 +13,7 @@ function CircularProgressBar({ percentage }) {
   return (
     <svg width={radius * 2} height={radius * 2} viewBox={viewBox}>
       {/* <g transform={`rotate(${rotation}, ${radius}, ${radius})`}> */}
-      <g transform={`rotate( ${radius}, ${radius})`}>
+      <g transform={`rotate(0, ${radius}, ${radius})`}>
         <circle
           className="progress-ring__circle"
           stroke="gray" // 원의 색상

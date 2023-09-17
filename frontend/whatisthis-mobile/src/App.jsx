@@ -34,7 +34,7 @@ function App() {
             path="/connection/:buildingId/:houseId/result"
             element={<ConnectionResult />}
           />
-          <Route path="/house/:buildingId/:id" element={<HouseDetail />} />
+          <Route path="/house/:buildingId/:houseId" element={<HouseDetail />} />
           <Route path="/houselist/:buildingId" element={<HouseList />} />
           <Route
             path="/house/:buildingId/:houseId/result"

@@ -28,14 +28,17 @@ const HouseList = () => {
   if (!data) {
     return <div className="HouseList">로딩중입니다...</div>;
   } else {
-    console.log(data);
     return (
       <div className="HouseList container">
         <div className="building_info_wrapper">
           <div className="building_info">
             <div className="building_title">
               <h1>{getBuildingName(data.addr)}</h1>
-              <MyButton text={"목록으로"} onClick={() => navigate(-1)} />
+              <MyButton
+                color={"orange"}
+                text={"목록으로"}
+                onClick={() => navigate(`/search/${buildingId}`)}
+              />
             </div>
             <h3>{data.addr}</h3>
           </div>
@@ -43,8 +46,21 @@ const HouseList = () => {
         <div className="house_card_wrapper">
           {/* dummy houseCardList */}
           {data.houses.map((it, idx) => {
-            return <HouseCard houseInfo={it} />;
+            return (
+              <HouseCard
+                key={idx}
+                houseInfo={it}
+                onClick={() => navigate(`/house/${buildingId}/${it.id}`)}
+              />
+            );
           })}
+          <div
+            className="HouseCard add_card_btn"
+            onClick={() => navigate(`/search/${buildingId}`)}
+          >
+            <img src="/assets/plus_circle.png" alt="add_card" />
+          </div>
+          {data.houses.length % 2 === 0 && <div className="blank"></div>}
         </div>
       </div>
     );

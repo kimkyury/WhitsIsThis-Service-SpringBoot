@@ -57,7 +57,7 @@ const Connection = () => {
       <div className="Connection container">
         <div className="header">
           <div className="building_info_wrapper">
-            <h2>{getBuildingName(addr)}</h2>
+            <h1>{getBuildingName(addr)}</h1>
             <h4>{addr}</h4>
           </div>
           <div className="connection_method_wrapper">
@@ -84,7 +84,11 @@ const Connection = () => {
 
         <h2>기기의 QR을 인식</h2>
 
-        <MyButton text={"돌아가기"} onClick={() => navigate(-1)} />
+        <MyButton
+          color={"black"}
+          text={"돌아가기"}
+          onClick={() => navigate(-1)}
+        />
         {
           <SerialNumberRecognition
             isOpen={isSnum}
