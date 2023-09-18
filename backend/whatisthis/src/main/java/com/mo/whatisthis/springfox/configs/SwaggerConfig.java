@@ -71,10 +71,10 @@ public class SwaggerConfig {
             = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("access_token", authorizationScopes));
+        return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("access_token", "access_token", "header");
+        return new ApiKey("Authorization", "access_token", "header");
     }
 }
