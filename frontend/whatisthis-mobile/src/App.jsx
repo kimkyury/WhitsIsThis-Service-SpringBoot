@@ -17,8 +17,10 @@ import SearchDetail from "./pages/SearchDetail";
 import TestPage from "./test/TestPage";
 
 function App() {
+  const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
+
   return (
-    <BrowserRouter basename="/mobile">
+    <BrowserRouter basename={BASE_NAME}>
       <div className="App">
         <Routes>
           {/* startregion: this is test page */}
