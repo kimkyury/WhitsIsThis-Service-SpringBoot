@@ -10,6 +10,5 @@ public class JacksonConfig {
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
-        // you can configure the object mapper here if needed
     }
 }
