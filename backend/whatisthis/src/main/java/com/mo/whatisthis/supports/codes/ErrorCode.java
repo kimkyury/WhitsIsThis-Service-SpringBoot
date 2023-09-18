@@ -20,6 +20,10 @@ public enum ErrorCode {
 
     TOKEN_EXPIRED(401, "Token is expired"),
     TOKEN_INVALID(401, "토큰이 올바르지 않거나 만료되어 거부되었습니다. "),
+
+    NOT_INCLUDE_REFRESH_TOKEN(401, "Header에 RefreshToken이 첨부되지 않았습니다. " ),
+    NOT_INCLUDE_ACCESS_TOKEN(401, "Cookie에 AccessToken이 첨부되지 않았습니다. "),
+
     UNAUTHORIZED(401, "Unauthorized"),
 
     FORBIDDEN(403, "Forbidden"),
