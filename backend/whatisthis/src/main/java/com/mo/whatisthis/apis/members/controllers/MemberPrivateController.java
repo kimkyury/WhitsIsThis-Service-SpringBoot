@@ -41,16 +41,16 @@ public class MemberPrivateController {
     @PatchMapping(value = "/employees", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateEmployeeInitInfo(
+    public ResponseEntity<SuccessResponse<String>> updateEmployeeInitInfo(
         @Valid @RequestPart EmployeeUpdateRequest employeeUpdateRequest,
         @RequestPart("profileImage") MultipartFile profileImage) {
 
-        System.out.println(employeeUpdateRequest);
-        // TODO: getLoginId() Exception Handling
+        // TODO: Swagger에서 동작시, JSON파일을 application/octet-stream 으로 인식하는 문제 발생
+        // TODO: profileImage에 대하여 S3 저장, Redis에 imageURL 저장 필요
         memberService.registerEmployee(SecurityUtil.getLoginId()
                                                    .get(), employeeUpdateRequest, profileImage);
 
-        return ResponseEntity.ok("EMPLOYEE 초기 정보 등록 성공");
+        return createSuccessResponse(SuccessCode.NO_CONTENT, "직원의 최초 정보가 업데이트 되었습니다. ");
     }
 
     @PostMapping("/devices/register")

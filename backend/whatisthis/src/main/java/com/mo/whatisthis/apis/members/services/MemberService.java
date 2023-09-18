@@ -62,12 +62,15 @@ public class MemberService {
 
         String name = employeeRegisterRequest.getName();
         String phone = employeeRegisterRequest.getPhone();
-        String profileImgURL = "/Img/testImgURL.png";
+        String password = passwordEncoder.encode(employeeRegisterRequest.getPassword());
+
+        // TODO: Modify testURL (feat. S3)
+        String profileImgURL = "/img/testImgURL.png";
 
         Optional<MemberEntity> employee = memberRepository.findById(loginId);
         employee.ifPresent(selectEmployee -> {
-            selectEmployee.setInitialInfo(name, phone, profileImgURL);
+            selectEmployee.setInitialInfo(name, phone, password, profileImgURL);
+            memberRepository.save(selectEmployee);
         });
-
     }
 }
