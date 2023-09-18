@@ -26,20 +26,11 @@ function App() {
           {/* endregion */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/connection/:buildingId/:houseId"
-            element={<Connection />}
-          />
-          <Route
-            path="/connection/:buildingId/:houseId/result"
-            element={<ConnectionResult />}
-          />
+          <Route path="/connection/:buildingId/:houseId" element={<Connection />} />
+          <Route path="/connection/:buildingId/:houseId/result" element={<ConnectionResult />} />
           <Route path="/house/:buildingId/:houseId" element={<HouseDetail />} />
           <Route path="/houselist/:buildingId" element={<HouseList />} />
-          <Route
-            path="/house/:buildingId/:houseId/result"
-            element={<HouseResult />}
-          />
+          <Route path="/house/:buildingId/:houseId/result" element={<HouseResult />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:id" element={<SearchDetail />} />
         </Routes>

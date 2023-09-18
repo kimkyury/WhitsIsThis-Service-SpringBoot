@@ -22,9 +22,7 @@ const Connection = () => {
 
   useEffect(() => {
     if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find(
-        (it) => parseInt(it.id) === parseInt(buildingId)
-      );
+      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
       if (targetBuilding) {
         if (targetBuilding.houses.length >= 1) {
           const targetHouse = targetBuilding.houses.find(
@@ -64,11 +62,7 @@ const Connection = () => {
             <h4>{addr}</h4>
           </div>
           <div className="connection_method_wrapper">
-            <img
-              src="/assets/qr.png"
-              alt="QR"
-              onClick={() => handleConnectionMethodTymeClick()}
-            />
+            <img src="/assets/qr.png" alt="QR" onClick={() => handleConnectionMethodTymeClick()} />
             <img
               src="/assets/snum.png"
               alt="SNUM"
@@ -78,20 +72,12 @@ const Connection = () => {
         </div>
         {/* camera container */}
         <div>
-          <img
-            className="camera_frame"
-            src="/assets/camera_frame_small.png"
-            alt=""
-          />
+          <img className="camera_frame" src="/assets/camera_frame_small.png" alt="" />
         </div>
 
         <h2>기기의 QR을 인식</h2>
 
-        <MyButton
-          color={"black"}
-          text={"돌아가기"}
-          onClick={() => navigate(-1)}
-        />
+        <MyButton color={"black"} text={"돌아가기"} onClick={() => navigate(-1)} />
         {
           <SerialNumberRecognition
             isOpen={isSnum}
