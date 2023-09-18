@@ -52,9 +52,10 @@ public class MemberEntity {
         this.role = role;
     }
 
-    public void setInitialInfo(String name, String phone, String imageUrl) {
+    public void setInitialInfo(String name, String phone, String password, String imageUrl) {
         this.name = name;
         this.phone = phone;
+        this.password = password;
         this.imageUrl = imageUrl;
     }
 

@@ -21,4 +21,8 @@ public class EmployeeUpdateRequest {
     @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "xxx-xxxx-xxxx")
     private String phone;
 
+    @NotNull
+    @NotEmpty
+    private String password;
+
 }
