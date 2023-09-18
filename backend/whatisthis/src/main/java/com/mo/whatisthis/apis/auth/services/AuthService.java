@@ -2,15 +2,28 @@ package com.mo.whatisthis.apis.auth.services;
 
 
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
+import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse.EmployeeInfo;
 import com.mo.whatisthis.apis.members.entities.MemberEntity;
+import com.mo.whatisthis.apis.members.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.members.repositories.MemberRepository;
+import com.mo.whatisthis.exception.CustomException;
+import com.mo.whatisthis.exception.NotIncludeRefreshToken;
 import com.mo.whatisthis.jwt.dtos.TokenDto;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.security.service.UserDetailsImpl;
 import com.mo.whatisthis.security.utils.SecurityUtil;
+import com.mo.whatisthis.supports.codes.ErrorCode;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.security.Security;
+import java.security.SignatureException;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -53,7 +66,6 @@ public class AuthService {
                                                .next()
                                                .getAuthority();
 
-
         System.out.println(employeeNo + " " + employAuthority);
 
         return issueTokens(employeeNo, employAuthority);
@@ -61,13 +73,15 @@ public class AuthService {
 
     public TokenDto issueTokens(String memberNo, String role) {
         TokenDto tokenDto = jwtTokenProvider.createToken(memberNo, role);
-        redisService.saveRefreshToken(memberNo, tokenDto.getRefreshToken());
+        redisService.saveRefreshToken("member:" + memberNo + ":refreshToken",
+            tokenDto.getRefreshToken());
         return tokenDto;
     }
 
     public int isInitLoginUser() {
 
-        if (SecurityUtil.getPhone().isEmpty()) {
+        if (SecurityUtil.getPhone()
+                        .isEmpty()) {
             System.out.println(SecurityUtil.getPhone());
             return 1;
         }
@@ -76,18 +90,36 @@ public class AuthService {
 
     public EmployeeInfo findEmployeeInfoUseSCH() {
 
-        Integer id = SecurityUtil.getLoginId().get();
-        MemberEntity  employeeEntity =  memberRepository.findById(id).get();
+        Integer id = SecurityUtil.getLoginId()
+                                 .get();
+        MemberEntity employeeEntity = memberRepository.findById(id)
+                                                      .get();
 
         EmployeeInfo employeeInfo = EmployeeInfo.builder()
-            .id(employeeEntity.getId())
-            .username(employeeEntity.getUsername())
-            .name(employeeEntity.getName())
-            .phone(employeeEntity.getPhone())
-            .role(employeeEntity.getRole().name())
-            .imageUrl(employeeEntity.getImageUrl())
-            .build();
+                                                .id(employeeEntity.getId())
+                                                .username(employeeEntity.getUsername())
+                                                .name(employeeEntity.getName())
+                                                .phone(employeeEntity.getPhone())
+                                                .role(employeeEntity.getRole()
+                                                                    .name())
+                                                .imageUrl(employeeEntity.getImageUrl())
+                                                .build();
 
         return employeeInfo;
+    }
+
+    public Optional<String> reissueAccessToken(String refreshToken) {
+
+        String memberNo = jwtTokenProvider.getClaimsFromRefreshToken(refreshToken)
+                                          .get("memberNo")
+                                          .toString();
+
+        Role memberRole = memberRepository.findByUsername(memberNo)
+                                          .get()
+                                          .getRole();
+
+        String accessTokenValue = jwtTokenProvider.createAccessToken(memberNo, memberRole.name());
+
+        return Optional.ofNullable(accessTokenValue);
     }
 }
