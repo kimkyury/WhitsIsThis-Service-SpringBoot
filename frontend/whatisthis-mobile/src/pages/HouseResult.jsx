@@ -17,9 +17,7 @@ const HouseResult = () => {
 
   useEffect(() => {
     if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find(
-        (it) => parseInt(it.id) === parseInt(buildingId)
-      );
+      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
       if (targetBuilding) {
         if (targetBuilding.houses.length >= 1) {
           const targetHouse = targetBuilding.houses.find(

@@ -27,6 +27,11 @@ const Home = () => {
     setIsLogin(false);
   };
 
+  const moveToWorkInProgress = () => {
+    //진행중인 작업이 있으면 활성화 하고 해당 houselist 로 보내벌임
+    navigate("/houselist");
+  };
+
   return (
     <div className="Home container">
       {/* 현재 작업중인 업무가 있는 경우 */}
@@ -36,20 +41,16 @@ const Home = () => {
           type={"right"}
           text={"작업 진행중"}
           color={"grey"}
-          onClick={() => navigate("/houselist")}
+          onClick={moveToWorkInProgress}
         />
       )}
 
       <img src="/assets/logo_white.png" alt="Logo" />
       {!isLogin ? (
-        <MyButton text={"로그인"} onClick={() => navigate("/login")} />
+        <MyButton color={"white"} text={"로그인"} onClick={() => navigate("/login")} />
       ) : (
         <>
-          <MyButton
-            color={"white"}
-            text={"검색"}
-            onClick={() => navigate("/search")}
-          />
+          <MyButton color={"white"} text={"검색"} onClick={() => navigate("/search")} />
           <MyButton color={"white"} text={"로그아웃"} onClick={logout} />
         </>
       )}

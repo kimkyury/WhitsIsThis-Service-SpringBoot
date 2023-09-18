@@ -25,9 +25,7 @@ const HouseDetail = () => {
 
   useEffect(() => {
     if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find(
-        (it) => parseInt(it.id) === parseInt(buildingId)
-      );
+      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
       if (targetBuilding) {
         if (targetBuilding.houses.length >= 1) {
           const targetHouse = targetBuilding.houses.find(
@@ -82,11 +80,7 @@ const HouseDetail = () => {
         </div>
 
         <div className="button_wrapper">
-          <MyButton
-            text={"추가정보 입력"}
-            color={"orange"}
-            onClick={() => handleOpenTodoList()}
-          />
+          <MyButton text={"추가정보 입력"} color={"orange"} onClick={() => handleOpenTodoList()} />
           <MyButton
             text={"점검완료"}
             color={"green"}
@@ -94,12 +88,7 @@ const HouseDetail = () => {
           />
         </div>
 
-        {
-          <HouseTodoList
-            isOpen={isOpenTodoList}
-            handleOpenTodoList={handleOpenTodoList}
-          />
-        }
+        {<HouseTodoList isOpen={isOpenTodoList} handleOpenTodoList={handleOpenTodoList} />}
       </div>
     );
   }
