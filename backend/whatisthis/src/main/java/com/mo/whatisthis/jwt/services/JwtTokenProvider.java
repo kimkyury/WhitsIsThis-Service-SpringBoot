@@ -1,7 +1,9 @@
 package com.mo.whatisthis.jwt.services;
 
+import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.dtos.TokenDto;
 import com.mo.whatisthis.redis.services.RedisService;
+import com.mo.whatisthis.supports.codes.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +11,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import java.security.SignatureException;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
@@ -46,10 +49,35 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public TokenDto createToken(String memberNo, String role) {
-        //      2. 토큰 생성 메소드
+
         Long now = System.currentTimeMillis();
-        Date validityAccess = new Date(now + accessTokenTTL * 1000);
+
+        String accessToken = createAccessToken(memberNo, role);
+        String refreshToken = createRefreshToken(memberNo);
+
+        return new TokenDto(accessToken, refreshToken);
+    }
+
+    public String createRefreshToken(String memberNo){
+
+        long now = System.currentTimeMillis();
         Date validityRefresh = new Date(now + refreshTokenTTL * 1000);
+
+        String refreshToken = Jwts.builder()
+                                  .setHeaderParam("typ", "JWT")
+                                  .setHeaderParam("alg", "HS256")
+                                  .setExpiration(validityRefresh)
+                                  .setSubject("refresh-token")
+                                  .claim(MEMBER_NO_KEY, memberNo)
+                                  .signWith(signingKey, SignatureAlgorithm.HS256)
+                                  .compact();
+
+        return refreshToken;
+    }
+
+    public String createAccessToken(String memberNo, String role){
+        long now = System.currentTimeMillis();
+        Date validityAccess = new Date(now + accessTokenTTL * 1000);
 
         String accessToken = Jwts.builder()
                                  .setHeaderParam("typ", "JWT")
@@ -61,15 +89,7 @@ public class JwtTokenProvider implements InitializingBean {
                                  .signWith(signingKey, SignatureAlgorithm.HS256)
                                  .compact();
 
-        String refreshToken = Jwts.builder()
-                                  .setHeaderParam("typ", "JWT")
-                                  .setHeaderParam("alg", "HS256")
-                                  .setExpiration(validityRefresh)
-                                  .setSubject("refresh-token")
-                                  .signWith(signingKey, SignatureAlgorithm.HS256)
-                                  .compact();
-
-        return new TokenDto(accessToken, refreshToken);
+        return accessToken;
     }
 
     public boolean validateAccessToken(String accessToken) {
@@ -87,6 +107,26 @@ public class JwtTokenProvider implements InitializingBean {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public Claims getClaimsFromRefreshToken(String refreshToken){
+        try {
+            // 토큰 파싱하여 Claims 반환
+            Claims claims = Jwts.parserBuilder()
+                                .setSigningKey(signingKey)
+                                .build()
+                                .parseClaimsJws(refreshToken)
+                                .getBody();
+
+            // 만료 시간 확인
+            Date expiration = claims.getExpiration();
+            if (expiration.before(new Date())) {
+                throw new CustomException(ErrorCode.TOKEN_EXPIRED);
+            }
+            return claims;
+        } catch (ExpiredJwtException e) {
+            throw new CustomException(ErrorCode.TOKEN_EXPIRED);
         }
     }
 
