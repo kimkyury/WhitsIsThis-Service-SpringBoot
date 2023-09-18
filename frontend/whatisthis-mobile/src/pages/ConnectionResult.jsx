@@ -27,10 +27,7 @@ const ConnectionResult = () => {
         </div>
       </div>
       <div className="connect_info_wrapper">
-        <img
-          src={`/assets/${connectState ? "check_big" : "uncheck_big"}.png`}
-          alt="chkimg"
-        />
+        <img src={`/assets/${connectState ? "check_big" : "uncheck_big"}.png`} alt="chkimg" />
         <h1>[ {serialNumber} ]</h1>
         {connectState ? <h2>기기연결 성공!</h2> : <h2>기기연결 실패..</h2>}
       </div>
@@ -38,12 +35,7 @@ const ConnectionResult = () => {
       <div className="button_wrapper">
         {connectState ? (
           <>
-            <Notification
-              text={"점검시작"}
-              type={"right"}
-              color={"green"}
-              onClick={startWorking}
-            />
+            <Notification text={"점검시작"} type={"right"} color={"green"} onClick={startWorking} />
             <Notification
               text={"기기변경"}
               type={"right"}
@@ -70,9 +62,7 @@ const ConnectionResult = () => {
             <Notification
               text={"뒤로가기"}
               type={"left"}
-              onClick={() =>
-                navigate(`/search/${buildingId}`, { replace: true })
-              }
+              onClick={() => navigate(`/search/${buildingId}`, { replace: true })}
             />
           </>
         )}

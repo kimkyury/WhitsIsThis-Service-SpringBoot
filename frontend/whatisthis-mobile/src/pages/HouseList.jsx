@@ -14,9 +14,7 @@ const HouseList = () => {
 
   useEffect(() => {
     if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find(
-        (it) => parseInt(it.id) === parseInt(buildingId)
-      );
+      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
       if (targetBuilding) {
         setData(targetBuilding);
       } else {
@@ -54,10 +52,7 @@ const HouseList = () => {
               />
             );
           })}
-          <div
-            className="HouseCard add_card_btn"
-            onClick={() => navigate(`/search/${buildingId}`)}
-          >
+          <div className="HouseCard add_card_btn" onClick={() => navigate(`/search/${buildingId}`)}>
             <img src="/assets/plus_circle.png" alt="add_card" />
           </div>
           {data.houses.length % 2 === 0 && <div className="blank"></div>}

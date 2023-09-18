@@ -17,29 +17,22 @@ import SearchDetail from "./pages/SearchDetail";
 import TestPage from "./test/TestPage";
 
 function App() {
+  const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={BASE_NAME}>
       <div className="App">
         <Routes>
           {/* startregion: this is test page */}
           <Route path="/test" element={<TestPage />} />
           {/* endregion */}
-          <Route path="/" element={<Home />} />
+          <Route path="" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/connection/:buildingId/:houseId"
-            element={<Connection />}
-          />
-          <Route
-            path="/connection/:buildingId/:houseId/result"
-            element={<ConnectionResult />}
-          />
+          <Route path="/connection/:buildingId/:houseId" element={<Connection />} />
+          <Route path="/connection/:buildingId/:houseId/result" element={<ConnectionResult />} />
           <Route path="/house/:buildingId/:houseId" element={<HouseDetail />} />
           <Route path="/houselist/:buildingId" element={<HouseList />} />
-          <Route
-            path="/house/:buildingId/:houseId/result"
-            element={<HouseResult />}
-          />
+          <Route path="/house/:buildingId/:houseId/result" element={<HouseResult />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:id" element={<SearchDetail />} />
         </Routes>

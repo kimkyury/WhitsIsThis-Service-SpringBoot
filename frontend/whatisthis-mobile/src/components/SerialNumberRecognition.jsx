@@ -2,12 +2,18 @@ import { useRef, useState } from "react";
 import MyButton from "./MyButton";
 import { useNavigate } from "react-router-dom";
 
-const SerialNumberRecognition = ({ addr, isOpen, buildingId, houseId }) => {
+const SerialNumberRecognition = ({
+  addr,
+  isOpen,
+  buildingId,
+  houseId,
+  handleOpenSnumRecognition,
+}) => {
   const navigate = useNavigate();
 
   const [serialNumber, setSerialNumber] = useState("");
 
-  const modalStatus = isOpen ? "slide_up" : "slide_out";
+  const modalStatus = isOpen ? "slide_up" : "slide_down";
 
   const serialNumberInput = useRef();
 
@@ -31,14 +37,10 @@ const SerialNumberRecognition = ({ addr, isOpen, buildingId, houseId }) => {
 
   return (
     <div className={`SerialNumberRecognition options ${modalStatus}`}>
-      <div className="option_header">
+      <div className="option_header" onClick={handleOpenSnumRecognition}>
         <img src="/assets/stick_small.png" alt="" />
       </div>
-      <img
-        className="img_turtlebot"
-        src="/assets/turtlebot.png"
-        alt="turtlebot"
-      />
+      <img className="img_turtlebot" src="/assets/turtlebot.png" alt="turtlebot" />
       <h2>시리얼넘버 입력</h2>
       <input
         ref={serialNumberInput}

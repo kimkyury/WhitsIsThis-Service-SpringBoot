@@ -16,9 +16,7 @@ const SearchDetail = () => {
 
   useEffect(() => {
     if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find(
-        (it) => parseInt(it.id) === parseInt(id)
-      );
+      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(id));
       if (targetBuilding) {
         setData(targetBuilding);
       } else {
@@ -52,13 +50,7 @@ const SearchDetail = () => {
         </div>
         <div className="house_info_list_wrapper">
           {data.houses.map((it, idx) => {
-            return (
-              <HouseInfo
-                key={idx}
-                houseInfo={it}
-                onClick={() => handleHouseInfoClick(it)}
-              />
-            );
+            return <HouseInfo key={idx} houseInfo={it} onClick={() => handleHouseInfoClick(it)} />;
           })}
         </div>
         <Notification
