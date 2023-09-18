@@ -18,13 +18,13 @@ import TestPage from "./test/TestPage";
 
 function App() {
   return (
-    <BrowserRouter basename="/mobile">
+    <BrowserRouter basename="/">
       <div className="App">
         <Routes>
           {/* startregion: this is test page */}
           <Route path="/test" element={<TestPage />} />
           {/* endregion */}
-          <Route path="" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/connection/:buildingId/:houseId" element={<Connection />} />
           <Route path="/connection/:buildingId/:houseId/result" element={<ConnectionResult />} />

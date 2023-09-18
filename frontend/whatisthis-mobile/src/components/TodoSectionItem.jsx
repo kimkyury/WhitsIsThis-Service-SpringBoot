@@ -1,4 +1,4 @@
-const TodoSection = ({ sectionName, isFinish, onClick, type }) => {
+const TodoSectionItem = ({ sectionName, isFinish, onClick, type }) => {
   const btnType = ["default", "add"].includes(type) ? type : "default";
   const imageVisibility = btnType === "default" ? true : false;
 
@@ -15,9 +15,9 @@ const TodoSection = ({ sectionName, isFinish, onClick, type }) => {
   );
 };
 
-TodoSection.defaultProps = {
+TodoSectionItem.defaultProps = {
   isFinish: false,
   type: "default",
 };
 
-export default TodoSection;
+export default TodoSectionItem;

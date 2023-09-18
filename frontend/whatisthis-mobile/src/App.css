@@ -739,46 +739,19 @@ h2 {
   border: none;
   border-radius: 2rem 2rem 0 0;
   background-color: #ffffff;
+  overflow: hidden;
 
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
 }
 .HouseTodoList .section_list {
+  height: 90%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   overflow: scroll;
-}
-
-.HouseTodoList input {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  padding-left: 0rem;
-  padding-right: 0rem;
-
-  height: 2.3rem;
-  width: 19.3rem;
-  border: 0.1875rem solid rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
-  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
-  border-radius: 1rem;
-
-  text-indent: 1rem;
-  font-size: 1rem;
-}
-.HouseTodoList input:focus {
-  outline-color: #ea5455; /* 포커스 색상 변경 */
-}
-
-.HouseTodoList .MyButton {
-  margin-top: 3rem;
-
-  border-radius: 1rem;
-  height: 2.7rem;
-  width: 19.5rem;
-  font-weight: bold;
-  font-size: 1.5rem;
 }
 
 /* TodoListMain - main */
@@ -793,11 +766,17 @@ h2 {
   position: absolute;
   transition: transform 0.5s ease-in-out;
 }
-.slide_in {
+.slide_in_right {
   transform: translateX(0%);
 }
-.slide_out {
+.slide_out_right {
   transform: translateX(100%);
+}
+.slide_in_left {
+  transform: translateX(0%);
+}
+.slide_out_left {
+  transform: translateX(-100%);
 }
 
 .TodoListMain .user_request {
@@ -866,6 +845,97 @@ h2 {
   margin-bottom: 1rem;
 }
 
+/* SectionDetail */
+.SectionDetail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+
+  top: 3rem;
+  width: 100%;
+  position: absolute;
+  transition: transform 0.5s ease-in-out;
+}
+.TodoListItem {
+  width: 19.5rem;
+
+  /* 임시 */
+
+  border-bottom: 3px solid #ececec;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.TodoListItem .header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-top: 0.5rem;
+}
+.TodoListItem .header h2,
+h3 {
+  color: #2d4059;
+  font-weight: bold;
+  margin-right: auto;
+}
+.TodoListItem .header input {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 1rem;
+}
+.TodoListItem .image_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #2d4059;
+  border-radius: 0.5rem;
+  width: 3rem;
+
+  transition: background-color 0.1s;
+  &:active {
+    background-color: rgba(194, 194, 194, 0.852) !important;
+  }
+}
+.TodoListItem .description {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  height: 1.5rem;
+  width: 19.3rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.5rem;
+
+  text-indent: 1rem;
+  font-size: 1rem;
+}
+.TodoListItem .image_list {
+  height: 6rem;
+  width: 19.5rem;
+
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  transition: background-color 0.1s;
+}
+.TodoListItem .image_list img {
+  width: 6rem;
+  height: auto;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  /* width: auto; */
+}
 /* HouseResult */
 
 .HouseResult {

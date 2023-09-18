@@ -88,6 +88,7 @@ const HouseDetail = () => {
           />
         </div>
 
+        {/* 닫겼다가 다시 열릴때 새 페이지를 보여줄까 아니면 기존 상태 그대로 보여주는게 나을까 */}
         {<HouseTodoList isOpen={isOpenTodoList} handleOpenTodoList={handleOpenTodoList} />}
       </div>
     );
