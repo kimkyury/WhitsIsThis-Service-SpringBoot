@@ -58,7 +58,7 @@ public class JwtTokenProvider implements InitializingBean {
         return new TokenDto(accessToken, refreshToken);
     }
 
-    public String createRefreshToken(String memberNo){
+    public String createRefreshToken(String memberNo) {
 
         long now = System.currentTimeMillis();
         Date validityRefresh = new Date(now + refreshTokenTTL * 1000);
@@ -75,7 +75,7 @@ public class JwtTokenProvider implements InitializingBean {
         return refreshToken;
     }
 
-    public String createAccessToken(String memberNo, String role){
+    public String createAccessToken(String memberNo, String role) {
         long now = System.currentTimeMillis();
         Date validityAccess = new Date(now + accessTokenTTL * 1000);
 
@@ -94,32 +94,34 @@ public class JwtTokenProvider implements InitializingBean {
 
     public boolean validateAccessToken(String accessToken) {
         try {
-            //TODO: accessToken 자체를 유효시간을 부여
             if (redisService.getValue(accessToken) != null) {
                 return false;
             }
-            Jwts.parserBuilder()
-                .setSigningKey(signingKey)
-                .build()
-                .parseClaimsJws(accessToken);
-            return true;
-        } catch (ExpiredJwtException e) {
+
+            Claims claims = Jwts.parserBuilder()
+                                .setSigningKey(signingKey)
+                                .build()
+                                .parseClaimsJws(accessToken)
+                                .getBody();
+
+            Date expiration = claims.getExpiration();
+            if (expiration.before(new Date())) {
+                throw new CustomException(ErrorCode.TOKEN_EXPIRED);
+            }
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public Claims getClaimsFromRefreshToken(String refreshToken){
+    public Claims getClaimsFromRefreshToken(String refreshToken) {
         try {
-            // 토큰 파싱하여 Claims 반환
             Claims claims = Jwts.parserBuilder()
                                 .setSigningKey(signingKey)
                                 .build()
                                 .parseClaimsJws(refreshToken)
                                 .getBody();
 
-            // 만료 시간 확인
             Date expiration = claims.getExpiration();
             if (expiration.before(new Date())) {
                 throw new CustomException(ErrorCode.TOKEN_EXPIRED);
