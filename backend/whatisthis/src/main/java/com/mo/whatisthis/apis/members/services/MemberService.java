@@ -51,6 +51,7 @@ public class MemberService {
 
     public void registerDevice(DeviceRegisterRequest deviceRegisterRequest) {
 
+        System.out.println("00000000000000000");
         String serialNumber = deviceRegisterRequest.getSerialNumber();
 
         MemberEntity newDeviceEntity = new MemberEntity(serialNumber, "TURTLE", Role.ROLE_DEVICE);
