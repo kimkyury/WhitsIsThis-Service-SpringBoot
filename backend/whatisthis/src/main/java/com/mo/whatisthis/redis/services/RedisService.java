@@ -36,8 +36,8 @@ public class RedisService {
         redisTemplate.delete(key);
     }
 
-    public String getRefreshTokenKey(String username) {
-        String returnValue = "member:" + username + ":refreshToken";
+    public String getRefreshTokenKey(String memberNo) {
+        String returnValue = "member:" + memberNo + ":refreshToken";
         return returnValue;
     }
 }
