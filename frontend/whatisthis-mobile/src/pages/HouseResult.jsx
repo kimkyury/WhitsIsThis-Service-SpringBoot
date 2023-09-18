@@ -17,9 +17,7 @@ const HouseResult = () => {
 
   useEffect(() => {
     if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find(
-        (it) => parseInt(it.id) === parseInt(buildingId)
-      );
+      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
       if (targetBuilding) {
         if (targetBuilding.houses.length >= 1) {
           const targetHouse = targetBuilding.houses.find(
@@ -30,19 +28,19 @@ const HouseResult = () => {
             setData(targetHouse);
           } else {
             alert("없는 세대입니다.");
-            navigate("/search", { replace: true });
+            navigate("/mobile/search", { replace: true });
           }
         }
       } else {
         alert("없는 건물입니다.");
-        navigate("/search", { replace: true });
+        navigate("/mobile/search", { replace: true });
       }
     }
   }, [houseId, houseList]);
 
   const handleAcceptClick = () => {
     //승인 했을 때 발생될 로직
-    navigate(`/houselist/${buildingId}`, { replace: true });
+    navigate(`/mobile/houselist/${buildingId}`, { replace: true });
   };
 
   if (!data) {

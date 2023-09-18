@@ -16,14 +16,12 @@ const SearchDetail = () => {
 
   useEffect(() => {
     if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find(
-        (it) => parseInt(it.id) === parseInt(id)
-      );
+      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(id));
       if (targetBuilding) {
         setData(targetBuilding);
       } else {
         alert("없는 건물입니다.");
-        navigate("/search", { replace: true });
+        navigate("/mobile/search", { replace: true });
       }
     }
   }, [id, buildingList]);
@@ -31,12 +29,12 @@ const SearchDetail = () => {
   const handleHouseInfoClick = (info) => {
     if (info.status === "done") {
       console.log("done");
-      navigate(`/house/${data.id}/${info.id}/result`);
+      navigate(`/mobile/house/${data.id}/${info.id}/result`);
     } else {
       if (info.isConnected) {
-        navigate(`/houselist/${data.id}`);
+        navigate(`/mobile/houselist/${data.id}`);
       } else if (!info.isConnected) {
-        navigate(`/connection/${data.id}/${info.id}`);
+        navigate(`/mobile/connection/${data.id}/${info.id}`);
       }
     }
   };
@@ -52,20 +50,14 @@ const SearchDetail = () => {
         </div>
         <div className="house_info_list_wrapper">
           {data.houses.map((it, idx) => {
-            return (
-              <HouseInfo
-                key={idx}
-                houseInfo={it}
-                onClick={() => handleHouseInfoClick(it)}
-              />
-            );
+            return <HouseInfo key={idx} houseInfo={it} onClick={() => handleHouseInfoClick(it)} />;
           })}
         </div>
         <Notification
           type={"left"}
           text={"뒤로가기"}
           color={"orange"}
-          onClick={() => navigate(`/search`)}
+          onClick={() => navigate(`/mobile/search`)}
         />
       </div>
     );

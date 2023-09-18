@@ -36,7 +36,7 @@ const Login = () => {
 
     localStorage.setItem("userId", JSON.stringify(state.userId));
 
-    navigate("/");
+    navigate("/mobile");
 
     setState({
       author: "",
@@ -61,7 +61,7 @@ const Login = () => {
           onChange={handleChangeState}
         />
       </div>
-      <MyButton text={"로그인"} onClick={handleSubmit} />
+      <MyButton color={"white"} text={"로그인"} onClick={handleSubmit} />
     </div>
   );
 };

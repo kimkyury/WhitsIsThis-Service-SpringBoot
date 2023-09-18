@@ -26,7 +26,7 @@ const SerialNumberRecognition = ({
       serialNumberInput.current.focus();
       return;
     }
-    navigate(`/connection/${buildingId}/${houseId}/result`, {
+    navigate(`/mobile/connection/${buildingId}/${houseId}/result`, {
       state: {
         addr: addr,
         serialNumber: serialNumber,

@@ -25,7 +25,7 @@ const Search = () => {
             <Building
               key={idx}
               buildingData={it}
-              onClick={() => navigate(`/search/${it.id}`)}
+              onClick={() => navigate(`/mobile/search/${it.id}`)}
             />
           );
         })}

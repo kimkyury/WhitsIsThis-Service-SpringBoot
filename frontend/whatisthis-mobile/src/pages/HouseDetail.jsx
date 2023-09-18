@@ -25,9 +25,7 @@ const HouseDetail = () => {
 
   useEffect(() => {
     if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find(
-        (it) => parseInt(it.id) === parseInt(buildingId)
-      );
+      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
       if (targetBuilding) {
         if (targetBuilding.houses.length >= 1) {
           const targetHouse = targetBuilding.houses.find(
@@ -38,12 +36,12 @@ const HouseDetail = () => {
             setData(targetHouse);
           } else {
             alert("없는 세대입니다.");
-            navigate("/search", { replace: true });
+            navigate("/mobile/search", { replace: true });
           }
         }
       } else {
         alert("없는 건물입니다.");
-        navigate("/search", { replace: true });
+        navigate("/mobile/search", { replace: true });
       }
     }
   }, [houseId, houseList]);
@@ -82,24 +80,15 @@ const HouseDetail = () => {
         </div>
 
         <div className="button_wrapper">
-          <MyButton
-            text={"추가정보 입력"}
-            color={"orange"}
-            onClick={() => handleOpenTodoList()}
-          />
+          <MyButton text={"추가정보 입력"} color={"orange"} onClick={() => handleOpenTodoList()} />
           <MyButton
             text={"점검완료"}
             color={"green"}
-            onClick={() => navigate(`/house/${buildingId}/${houseId}/result`)}
+            onClick={() => navigate(`/mobile/house/${buildingId}/${houseId}/result`)}
           />
         </div>
 
-        {
-          <HouseTodoList
-            isOpen={isOpenTodoList}
-            handleOpenTodoList={handleOpenTodoList}
-          />
-        }
+        {<HouseTodoList isOpen={isOpenTodoList} handleOpenTodoList={handleOpenTodoList} />}
       </div>
     );
   }

@@ -29,7 +29,7 @@ const Home = () => {
 
   const moveToWorkInProgress = () => {
     //진행중인 작업이 있으면 활성화 하고 해당 houselist 로 보내벌임
-    navigate("/houselist");
+    navigate("/mobile/houselist");
   };
 
   return (
@@ -47,14 +47,10 @@ const Home = () => {
 
       <img src="/assets/logo_white.png" alt="Logo" />
       {!isLogin ? (
-        <MyButton text={"로그인"} onClick={() => navigate("/login")} />
+        <MyButton color={"white"} text={"로그인"} onClick={() => navigate("/mobile/login")} />
       ) : (
         <>
-          <MyButton
-            color={"white"}
-            text={"검색"}
-            onClick={() => navigate("/search")}
-          />
+          <MyButton color={"white"} text={"검색"} onClick={() => navigate("/mobile/search")} />
           <MyButton color={"white"} text={"로그아웃"} onClick={logout} />
         </>
       )}

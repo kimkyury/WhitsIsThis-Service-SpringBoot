@@ -14,14 +14,12 @@ const HouseList = () => {
 
   useEffect(() => {
     if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find(
-        (it) => parseInt(it.id) === parseInt(buildingId)
-      );
+      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
       if (targetBuilding) {
         setData(targetBuilding);
       } else {
         alert("없는 건물입니다.");
-        navigate("/search", { replace: true });
+        navigate("/mobile/search", { replace: true });
       }
     }
   }, [buildingId, buildingList]);
@@ -37,7 +35,7 @@ const HouseList = () => {
               <MyButton
                 color={"orange"}
                 text={"목록으로"}
-                onClick={() => navigate(`/search/${buildingId}`)}
+                onClick={() => navigate(`/mobile/search/${buildingId}`)}
               />
             </div>
             <h3>{data.addr}</h3>
@@ -50,13 +48,13 @@ const HouseList = () => {
               <HouseCard
                 key={idx}
                 houseInfo={it}
-                onClick={() => navigate(`/house/${buildingId}/${it.id}`)}
+                onClick={() => navigate(`/mobile/house/${buildingId}/${it.id}`)}
               />
             );
           })}
           <div
             className="HouseCard add_card_btn"
-            onClick={() => navigate(`/search/${buildingId}`)}
+            onClick={() => navigate(`/mobile/search/${buildingId}`)}
           >
             <img src="/assets/plus_circle.png" alt="add_card" />
           </div>
