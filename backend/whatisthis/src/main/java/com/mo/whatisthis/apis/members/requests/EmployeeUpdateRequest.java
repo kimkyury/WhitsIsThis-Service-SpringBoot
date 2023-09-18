@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class EmployeeRegisterRequest {
+public class EmployeeUpdateRequest {
 
     @NotNull
     @NotEmpty

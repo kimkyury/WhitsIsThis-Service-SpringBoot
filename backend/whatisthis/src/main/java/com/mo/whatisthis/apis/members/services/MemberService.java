@@ -4,14 +4,11 @@ import com.mo.whatisthis.apis.members.entities.MemberEntity;
 import com.mo.whatisthis.apis.members.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.members.repositories.MemberRepository;
 import com.mo.whatisthis.apis.members.requests.DeviceRegisterRequest;
-import com.mo.whatisthis.apis.members.requests.EmployeeRegisterRequest;
+import com.mo.whatisthis.apis.members.requests.EmployeeUpdateRequest;
 import com.mo.whatisthis.apis.members.responses.MemberCreateResponse;
 import com.mo.whatisthis.supports.utils.UUIDUtil;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -60,7 +57,7 @@ public class MemberService {
         memberRepository.save(newDeviceEntity);
     }
 
-    public void registerEmployee(Integer loginId, EmployeeRegisterRequest employeeRegisterRequest,
+    public void registerEmployee(Integer loginId, EmployeeUpdateRequest employeeRegisterRequest,
         MultipartFile profileImage) {
 
         String name = employeeRegisterRequest.getName();
