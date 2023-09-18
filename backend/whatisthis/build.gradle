@@ -55,6 +55,7 @@ dependencies {
 
 	// Serialization
 	implementation 'org.springframework.boot:spring-boot-starter-json'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
 
 	// junit
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
