@@ -36,7 +36,7 @@ const Login = () => {
 
     localStorage.setItem("userId", JSON.stringify(state.userId));
 
-    navigate("");
+    navigate("/");
 
     setState({
       author: "",
