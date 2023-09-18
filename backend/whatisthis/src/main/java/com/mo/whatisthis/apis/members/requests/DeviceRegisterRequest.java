@@ -1,16 +1,14 @@
 package com.mo.whatisthis.apis.members.requests;
 
-
-import com.sun.istack.NotNull;
-import javax.validation.constraints.NotEmpty.List;
-import lombok.AllArgsConstructor;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class DeviceRegisterRequest {
 
     @NotNull
+    @NotEmpty
     private String serialNumber;
 
 }
