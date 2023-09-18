@@ -49,6 +49,9 @@ const Connection = () => {
     // 카메라 멈추고 시리얼넘버 컴포넌트 스폰 토글..
     setIsSnum(!isSnum);
   };
+  const handleOpenSnumRecognition = () => {
+    setIsSnum(!isSnum);
+  };
 
   if (!data) {
     return <div className="Connection">로딩중입니다...</div>;
@@ -95,6 +98,7 @@ const Connection = () => {
             addr={addr}
             buildingId={buildingId}
             houseId={houseId}
+            handleOpenSnumRecognition={handleOpenSnumRecognition}
           />
         }
       </div>
