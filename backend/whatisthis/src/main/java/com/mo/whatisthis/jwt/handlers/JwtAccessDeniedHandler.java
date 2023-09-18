@@ -1,5 +1,6 @@
 package com.mo.whatisthis.jwt.handlers;
 
+import com.mo.whatisthis.supports.codes.ErrorCode;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,8 +15,9 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response,
         AccessDeniedException accessDeniedException) throws IOException {
 
-//        response.setCharacterEncoding("utf-8");
-//        response.sendError(ErrorCode.UNAUTHORIZED_ERROR.getStatus(),
-//            ErrorCode.UNAUTHORIZED_ERROR.getMessage());
+        // TODO: 만료시점과 올바르지 않음을 구분할 수 있다면 구분할 것
+        response.setCharacterEncoding("utf-8");
+        response.sendError(ErrorCode.TOKEN_INVALID.getStatus(),
+            ErrorCode.TOKEN_INVALID.getMessage());
     }
 }

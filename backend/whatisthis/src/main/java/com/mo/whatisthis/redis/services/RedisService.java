@@ -16,7 +16,7 @@ public class RedisService {
     private Long accessTokenTTL;
 
     private final RedisTemplate<String, String> redisTemplate;
-    
+
     public String getValue(String key) {
         return redisTemplate.opsForValue()
                             .get(key);
@@ -34,5 +34,10 @@ public class RedisService {
 
     public void deleteValue(String key) {
         redisTemplate.delete(key);
+    }
+
+    public String getRefreshTokenKey(String memberNo) {
+        String returnValue = "member:" + memberNo + ":refreshToken";
+        return returnValue;
     }
 }
