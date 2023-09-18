@@ -1,0 +1,86 @@
+.customreceivediv {
+
+  margin-top:5vh;
+  width: 80vw;
+  height: 175vh;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+
+.cinput {
+  width:53vw;
+  height:4vh;
+  border-radius: 0.8vw;
+}
+.customgridx {
+  margin-top: 2vh;
+  display: flex;
+  flex-direction: row; /* 가로로 정렬 */
+  align-items: center; /* 수직 가운데 정렬 (선택 사항) */
+  justify-content: space-between;
+  /* width: 35vw; */
+}
+.customgrid {
+  display:flex;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+}
+
+.middlemodal {
+  display:flex;
+  justify-content: center;
+}
+
+.custommodaltitle {
+  color: #2D4059;
+  font-size: 7vw;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+
+}
+
+.button {
+  background-color: #2D4059;
+  color: white;
+  font-weight: bold;
+  border-radius: 40vw;
+}
+
+.input {
+  background-color: #ECF0F3;
+  border-radius: 0.8vw;
+  box-shadow: 0.01vw 0.15vw 0px rgba(0, 0, 0, 0.5);
+  border: none;
+  font-size: 1.6vw;
+  padding-left:0.8vw;
+
+}
+
+.minititle {
+  font-size: 4vw;
+  font-weight: bold;
+  /* margin-left: 5%; */
+}
+
+.minibutton {
+  width:15vw;
+  height:4vh;
+  font-size: 0.8vw;
+}
+
+.bigbutton {
+  width: 40vw;
+  height: 8vh;
+  font-size: 5vw;
+  margin-top:7vh
+}
+
+.button:hover {
+  background-image: linear-gradient(to right, #2D4059, #2D4080);
+}

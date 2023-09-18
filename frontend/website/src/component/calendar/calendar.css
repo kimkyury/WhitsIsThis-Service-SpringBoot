@@ -5,13 +5,13 @@
   align-items: center;
   border: 1px solid gray;
   border-radius: 4px;
-  background-color: black;
+  background-color: #2D4059;
   box-sizing: border-box;
-  width: 15vw;
-  height: 4vh;
+  width: 40vw;
+  height: 3vh;
   color: white;
   text-align: center;
-  padding-right: 14px;
-
+  /* padding-right: 14px; */
+  margin-left:5vw;
 
 }
