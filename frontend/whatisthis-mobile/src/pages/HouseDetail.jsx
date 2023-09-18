@@ -36,12 +36,12 @@ const HouseDetail = () => {
             setData(targetHouse);
           } else {
             alert("없는 세대입니다.");
-            navigate("/mobile/search", { replace: true });
+            navigate("/search", { replace: true });
           }
         }
       } else {
         alert("없는 건물입니다.");
-        navigate("/mobile/search", { replace: true });
+        navigate("/search", { replace: true });
       }
     }
   }, [houseId, houseList]);
@@ -84,7 +84,7 @@ const HouseDetail = () => {
           <MyButton
             text={"점검완료"}
             color={"green"}
-            onClick={() => navigate(`/mobile/house/${buildingId}/${houseId}/result`)}
+            onClick={() => navigate(`/house/${buildingId}/${houseId}/result`)}
           />
         </div>
 

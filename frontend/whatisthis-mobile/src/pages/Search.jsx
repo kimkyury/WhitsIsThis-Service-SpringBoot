@@ -22,11 +22,7 @@ const Search = () => {
       <div className="building_wrapper">
         {buildingList.map((it, idx) => {
           return (
-            <Building
-              key={idx}
-              buildingData={it}
-              onClick={() => navigate(`/mobile/search/${it.id}`)}
-            />
+            <Building key={idx} buildingData={it} onClick={() => navigate(`/search/${it.id}`)} />
           );
         })}
       </div>

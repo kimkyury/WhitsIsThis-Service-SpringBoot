@@ -33,12 +33,12 @@ const Connection = () => {
             setData(targetHouse);
           } else {
             alert("없는 세대입니다.");
-            navigate("/mobile/search", { replace: true });
+            navigate("/search", { replace: true });
           }
         }
       } else {
         alert("없는 건물입니다.");
-        navigate("/mobile/search", { replace: true });
+        navigate("/search", { replace: true });
       }
     }
   }, [houseId, houseList]);

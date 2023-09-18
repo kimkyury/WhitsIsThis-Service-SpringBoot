@@ -28,19 +28,19 @@ const HouseResult = () => {
             setData(targetHouse);
           } else {
             alert("없는 세대입니다.");
-            navigate("/mobile/search", { replace: true });
+            navigate("/search", { replace: true });
           }
         }
       } else {
         alert("없는 건물입니다.");
-        navigate("/mobile/search", { replace: true });
+        navigate("/search", { replace: true });
       }
     }
   }, [houseId, houseList]);
 
   const handleAcceptClick = () => {
     //승인 했을 때 발생될 로직
-    navigate(`/mobile/houselist/${buildingId}`, { replace: true });
+    navigate(`/houselist/${buildingId}`, { replace: true });
   };
 
   if (!data) {

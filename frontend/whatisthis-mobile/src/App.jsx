@@ -18,24 +18,21 @@ import TestPage from "./test/TestPage";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/mobile">
       <div className="App">
         <Routes>
           {/* startregion: this is test page */}
-          <Route path="/mobile/test" element={<TestPage />} />
+          <Route path="/test" element={<TestPage />} />
           {/* endregion */}
-          <Route path="/mobile" element={<Home />} />
-          <Route path="/mobile/login" element={<Login />} />
-          <Route path="/mobile/connection/:buildingId/:houseId" element={<Connection />} />
-          <Route
-            path="/mobile/connection/:buildingId/:houseId/result"
-            element={<ConnectionResult />}
-          />
-          <Route path="/mobile/house/:buildingId/:houseId" element={<HouseDetail />} />
-          <Route path="/mobile/houselist/:buildingId" element={<HouseList />} />
-          <Route path="/mobile/house/:buildingId/:houseId/result" element={<HouseResult />} />
-          <Route path="/mobile/search" element={<Search />} />
-          <Route path="/mobile/search/:id" element={<SearchDetail />} />
+          <Route path="" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/connection/:buildingId/:houseId" element={<Connection />} />
+          <Route path="/connection/:buildingId/:houseId/result" element={<ConnectionResult />} />
+          <Route path="/house/:buildingId/:houseId" element={<HouseDetail />} />
+          <Route path="/houselist/:buildingId" element={<HouseList />} />
+          <Route path="/house/:buildingId/:houseId/result" element={<HouseResult />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/search/:id" element={<SearchDetail />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -15,7 +15,7 @@ const ConnectionResult = () => {
   const startWorking = () => {
     // houselist 추가하는 로직
 
-    navigate(`/mobile/houselist/${buildingId}`, { replace: true });
+    navigate(`/houselist/${buildingId}`, { replace: true });
   };
 
   return (
@@ -41,7 +41,7 @@ const ConnectionResult = () => {
               type={"right"}
               color={"orange"}
               onClick={() =>
-                navigate(`/mobile/connection/${buildingId}/${houseId}`, {
+                navigate(`/connection/${buildingId}/${houseId}`, {
                   replace: true,
                 })
               }
@@ -54,7 +54,7 @@ const ConnectionResult = () => {
               type={"left"}
               color={"orange"}
               onClick={() =>
-                navigate(`/mobile/connection/${buildingId}/${houseId}`, {
+                navigate(`/connection/${buildingId}/${houseId}`, {
                   replace: true,
                 })
               }
@@ -62,7 +62,7 @@ const ConnectionResult = () => {
             <Notification
               text={"뒤로가기"}
               type={"left"}
-              onClick={() => navigate(`/mobile/search/${buildingId}`, { replace: true })}
+              onClick={() => navigate(`/search/${buildingId}`, { replace: true })}
             />
           </>
         )}

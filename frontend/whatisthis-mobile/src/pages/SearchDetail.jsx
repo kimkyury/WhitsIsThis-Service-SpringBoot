@@ -21,7 +21,7 @@ const SearchDetail = () => {
         setData(targetBuilding);
       } else {
         alert("없는 건물입니다.");
-        navigate("/mobile/search", { replace: true });
+        navigate("/search", { replace: true });
       }
     }
   }, [id, buildingList]);
@@ -29,12 +29,12 @@ const SearchDetail = () => {
   const handleHouseInfoClick = (info) => {
     if (info.status === "done") {
       console.log("done");
-      navigate(`/mobile/house/${data.id}/${info.id}/result`);
+      navigate(`/house/${data.id}/${info.id}/result`);
     } else {
       if (info.isConnected) {
-        navigate(`/mobile/houselist/${data.id}`);
+        navigate(`/houselist/${data.id}`);
       } else if (!info.isConnected) {
-        navigate(`/mobile/connection/${data.id}/${info.id}`);
+        navigate(`/connection/${data.id}/${info.id}`);
       }
     }
   };
@@ -57,7 +57,7 @@ const SearchDetail = () => {
           type={"left"}
           text={"뒤로가기"}
           color={"orange"}
-          onClick={() => navigate(`/mobile/search`)}
+          onClick={() => navigate(`/search`)}
         />
       </div>
     );

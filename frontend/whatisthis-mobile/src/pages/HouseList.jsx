@@ -19,7 +19,7 @@ const HouseList = () => {
         setData(targetBuilding);
       } else {
         alert("없는 건물입니다.");
-        navigate("/mobile/search", { replace: true });
+        navigate("/search", { replace: true });
       }
     }
   }, [buildingId, buildingList]);
@@ -35,7 +35,7 @@ const HouseList = () => {
               <MyButton
                 color={"orange"}
                 text={"목록으로"}
-                onClick={() => navigate(`/mobile/search/${buildingId}`)}
+                onClick={() => navigate(`/search/${buildingId}`)}
               />
             </div>
             <h3>{data.addr}</h3>
@@ -48,14 +48,11 @@ const HouseList = () => {
               <HouseCard
                 key={idx}
                 houseInfo={it}
-                onClick={() => navigate(`/mobile/house/${buildingId}/${it.id}`)}
+                onClick={() => navigate(`/house/${buildingId}/${it.id}`)}
               />
             );
           })}
-          <div
-            className="HouseCard add_card_btn"
-            onClick={() => navigate(`/mobile/search/${buildingId}`)}
-          >
+          <div className="HouseCard add_card_btn" onClick={() => navigate(`/search/${buildingId}`)}>
             <img src="/assets/plus_circle.png" alt="add_card" />
           </div>
           {data.houses.length % 2 === 0 && <div className="blank"></div>}

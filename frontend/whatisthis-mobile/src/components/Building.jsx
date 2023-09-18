@@ -6,7 +6,7 @@ const Building = ({ buildingData, onClick }) => {
   const navigate = useNavigate();
 
   const handleBuildingClick = () => {
-    navigate(`/mobile/search/${buildingData.id}`);
+    navigate(`/search/${buildingData.id}`);
   };
 
   return (
