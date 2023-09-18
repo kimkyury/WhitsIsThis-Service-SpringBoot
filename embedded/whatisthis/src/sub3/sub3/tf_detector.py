@@ -47,11 +47,11 @@ params_lidar = {
     "Range" : 90, #min & max range of lidar azimuths
     "CHANNEL" : int(1), #verticla channel of a lidar
     "localIP": "127.0.0.1",
-    "localPort": 9094,
+    "localPort": 2368,
     "Block_SIZE": int(1206),
-    "X": 0, # meter
+    "X": -0.02, # meter
     "Y": 0,
-    "Z": 0.6,
+    "Z": 0.19,
     "YAW": 0, # deg
     "PITCH": 0,
     "ROLL": 0
@@ -59,17 +59,17 @@ params_lidar = {
 
 
 params_cam = {
-    "WIDTH": 320, # image width
-    "HEIGHT": 240, # image height
+    "WIDTH": 640, # image width
+    "HEIGHT": 320, # image height
     "FOV": 60, # Field of view
     "localIP": "127.0.0.1",
     "localPort": 1232,
     "Block_SIZE": int(65000),
-    "X": 0, # meter
+    "X": 0.05, # meter
     "Y": 0,
-    "Z": 1,
+    "Z":  0.18,
     "YAW": 0, # deg
-    "PITCH": 5,
+    "PITCH": 0.0,
     "ROLL": 0
 }
 
@@ -179,7 +179,7 @@ def main(args=None):
     
     pkg_path =os.getcwd()
     # back_folder='catkin_ws\\src\\ros2_smart_home\\sub3'
-    back_folder='Desktop\\test_ws\\src\\ssafy_smarthome\\sub3'
+    back_folder='sub3'
 
     CWD_PATH = os.path.join(pkg_path, back_folder,'sub3')
     
@@ -188,9 +188,10 @@ def main(args=None):
     PATH_TO_WEIGHT = os.path.join(CWD_PATH, 'model_weights', \
         MODEL_NAME, 'frozen_inference_graph.pb')
 
-    print(PATH_TO_WEIGHT)
+    # print(PATH_TO_WEIGHT)
     PATH_TO_LABELS = os.path.join(CWD_PATH, 'model_weights', \
         'data', 'mscoco_label_map.pbtxt')
+    # print(PATH_TO_LABELS)
 
     NUM_CLASSES = 90
 
@@ -261,6 +262,8 @@ def main(args=None):
 
     iter_step = 0
 
+    time.sleep(5)
+
     while rclpy.ok():
 
         time.sleep(0.05)
@@ -314,7 +317,44 @@ def main(args=None):
 
         """
 
-            
+        if len(boxes_detect) != 0:
+
+            ih = img_bgr.shape[0]
+            iw = img_bgr.shape[1]
+
+            boxes_np = boxes_detect * np.array([ih, iw, ih, iw])
+
+            x = boxes_np[:, 1]
+            y = boxes_np[:, 0]
+            w = boxes_np[:, 3] - boxes_np[:, 1]
+            h = boxes_np[:, 2] - boxes_np[:, 0]
+
+            bbox = np.vstack([
+                x.astype(np.int32).tolist(),
+                y.astype(np.int32).tolist(),
+                w.astype(np.int32).tolist(),
+                h.astype(np.int32).tolist()
+            ]).T            
+
+            ostate_list = []
+
+            for i in range(bbox.shape[0]):
+                x = int(bbox[i, 0])
+                y = int(bbox[i, 1])
+                w = int(bbox[i, 2])
+                h = int(bbox[i, 3])
+
+                cx = x + w // 2
+                cy = y + h // 2
+                
+                xyv = xyii[np.where((xyii[:, 0] >= x) & (xyii[:, 0] <= x + w) & (xyii[:, 1] >= y) & (xyii[:, 1] <= y + h))]
+
+                ## bbox 안에 들어가는 라이다 포인트들의 대표값(예:평균)을 뽑는다
+                ostate = np.mean(xyv[:, 2:], axis=0)
+
+                ## 대표값이 존재하면 
+                if not np.isnan(ostate[0]):
+                    ostate_list.append(ostate)
         """
 
             # 로직 13. 인식된 물체의 위치 추정
@@ -346,6 +386,7 @@ def main(args=None):
 
             print(ostate_list)
         """
+            
         visualize_images(image_process, infer_time)
 
     g_node.destroy_node()
