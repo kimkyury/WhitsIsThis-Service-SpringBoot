@@ -38,7 +38,8 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
             .tags(new Tag("0. Testing", "연결 테스트용 APIs"),
                 new Tag("1. Auth", "사용자 권한 APIs"),
-                new Tag("2. Member", "사용자 APIs" ))
+                new Tag("2. Member", "사용자 APIs" ),
+                new Tag("3. InspectionRequest", "점검요청 APIs" ))
             .servers(local)
             .consumes(getConsumeContentTypes())
             .produces(getProduceContentTypes())
