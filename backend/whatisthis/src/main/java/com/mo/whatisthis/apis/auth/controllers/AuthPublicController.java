@@ -12,6 +12,10 @@ import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
 import com.sun.net.httpserver.Authenticator.Success;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,16 +33,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "1. Auth")
 public class AuthPublicController {
 
     @Value("${jwt.refresh-token-ttl}")
     private long refreshTokenTTL;
 
-    @Value("${jwt.access-token-ttl}")
-    private long accessTokenTTL;
-
     private final AuthService authService;
 
+    @Operation(summary = "직원 로그인", tags = {"1. Auth"})
     @PostMapping("/employees/login")
     public ResponseEntity<SuccessResponse<EmployeeLoginResponse>> employeeLogin(
         @RequestBody EmployeeLoginRequest employeeLoginRequest) {
@@ -66,7 +69,7 @@ public class AuthPublicController {
                                                                        .build()));
     }
 
-
+    @Operation(summary = "AccessToken 재발급", tags = {"1. Auth"})
     @PostMapping("/reissue")
     public ResponseEntity<SuccessResponse<ReissueTokenResponse>> reissue(
         @CookieValue(name = "refresh-token") String refreshTokenCookie) {
