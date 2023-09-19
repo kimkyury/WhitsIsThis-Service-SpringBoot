@@ -1,11 +1,11 @@
-package com.mo.whatisthis.apis.members.services;
+package com.mo.whatisthis.apis.member.services;
 
-import com.mo.whatisthis.apis.members.entities.MemberEntity;
-import com.mo.whatisthis.apis.members.entities.MemberEntity.Role;
-import com.mo.whatisthis.apis.members.repositories.MemberRepository;
-import com.mo.whatisthis.apis.members.requests.DeviceRegisterRequest;
-import com.mo.whatisthis.apis.members.requests.EmployeeUpdateRequest;
-import com.mo.whatisthis.apis.members.responses.MemberCreateResponse;
+import com.mo.whatisthis.apis.member.entities.MemberEntity;
+import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
+import com.mo.whatisthis.apis.member.repositories.MemberRepository;
+import com.mo.whatisthis.apis.member.requests.DeviceRegisterRequest;
+import com.mo.whatisthis.apis.member.requests.EmployeeUpdateRequest;
+import com.mo.whatisthis.apis.member.responses.MemberCreateResponse;
 import com.mo.whatisthis.supports.utils.UUIDUtil;
 import java.time.LocalDate;
 import java.util.Optional;

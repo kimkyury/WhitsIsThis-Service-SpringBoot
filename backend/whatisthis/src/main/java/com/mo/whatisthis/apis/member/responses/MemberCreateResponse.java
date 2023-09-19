@@ -1,4 +1,4 @@
-package com.mo.whatisthis.apis.members.responses;
+package com.mo.whatisthis.apis.member.responses;
 
 import lombok.Builder;
 import lombok.Getter;
