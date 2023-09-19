@@ -1,4 +1,4 @@
-package com.mo.whatisthis.apis.members.requests;
+package com.mo.whatisthis.apis.member.requests;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

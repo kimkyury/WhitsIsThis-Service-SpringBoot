@@ -1,8 +1,7 @@
 package com.mo.whatisthis.security.service;
 
-import com.mo.whatisthis.apis.members.entities.MemberEntity;
-import com.mo.whatisthis.apis.members.entities.MemberEntity.Role;
-import com.mo.whatisthis.apis.members.repositories.MemberRepository;
+import com.mo.whatisthis.apis.member.entities.MemberEntity;
+import com.mo.whatisthis.apis.member.repositories.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
