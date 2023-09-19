@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/private/auth")
-@RequiredArgsConstructor
 @Tag(name = "1. Auth")
+@RequiredArgsConstructor
 public class AuthPrivateController {
 
     private final AuthService authService;
 
-    @Operation(summary = "로그아웃", tags = {"1. Auth"})
+    @Operation(summary = "로그아웃", tags = {"1. Auth"}, description = "Authorization에 token을 첨부해주세요.")
     @PostMapping("/logout")
     public ResponseEntity<SuccessResponse> logout(
         @RequestHeader("Authorization") String requestAccessToken) {

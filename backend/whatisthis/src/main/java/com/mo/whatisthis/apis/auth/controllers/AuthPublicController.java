@@ -32,8 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
 @Tag(name = "1. Auth")
+@RequiredArgsConstructor
 public class AuthPublicController {
 
     @Value("${jwt.refresh-token-ttl}")
@@ -69,7 +69,7 @@ public class AuthPublicController {
                                                                        .build()));
     }
 
-    @Operation(summary = "AccessToken 재발급", tags = {"1. Auth"})
+    @Operation(summary = "AccessToken 재발급", tags = {"1. Auth"}, description = "Cookie에 RefreshToken을 첨부해주세요.")
     @PostMapping("/reissue")
     public ResponseEntity<SuccessResponse<ReissueTokenResponse>> reissue(
         @CookieValue(name = "refresh-token") String refreshTokenCookie) {

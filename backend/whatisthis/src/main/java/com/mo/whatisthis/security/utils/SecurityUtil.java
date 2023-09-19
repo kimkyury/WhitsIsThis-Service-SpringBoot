@@ -1,6 +1,6 @@
 package com.mo.whatisthis.security.utils;
 
-import com.mo.whatisthis.apis.members.entities.MemberEntity.Role;
+import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.security.service.UserDetailsImpl;
 import java.util.Optional;
 import org.springframework.security.core.context.SecurityContextHolder;

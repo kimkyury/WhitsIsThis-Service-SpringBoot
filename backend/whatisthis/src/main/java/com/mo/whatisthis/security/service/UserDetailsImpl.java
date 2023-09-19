@@ -1,6 +1,6 @@
 package com.mo.whatisthis.security.service;
 
-import com.mo.whatisthis.apis.members.entities.MemberEntity;
+import com.mo.whatisthis.apis.member.entities.MemberEntity;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;

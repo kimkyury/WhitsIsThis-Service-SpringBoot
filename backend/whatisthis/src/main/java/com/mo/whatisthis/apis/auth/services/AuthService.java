@@ -2,35 +2,20 @@ package com.mo.whatisthis.apis.auth.services;
 
 
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
-import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse.EmployeeInfo;
-import com.mo.whatisthis.apis.members.entities.MemberEntity;
-import com.mo.whatisthis.apis.members.entities.MemberEntity.Role;
-import com.mo.whatisthis.apis.members.repositories.MemberRepository;
-import com.mo.whatisthis.exception.CustomException;
-import com.mo.whatisthis.exception.NotIncludeRefreshToken;
+import com.mo.whatisthis.apis.member.entities.MemberEntity;
+import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
+import com.mo.whatisthis.apis.member.repositories.MemberRepository;
 import com.mo.whatisthis.jwt.dtos.TokenDto;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
-import com.mo.whatisthis.security.service.UserDetailsImpl;
 import com.mo.whatisthis.security.utils.SecurityUtil;
-import com.mo.whatisthis.supports.codes.ErrorCode;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import java.security.Security;
-import java.security.SignatureException;
-import java.util.Collection;
-import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,13 +34,11 @@ public class AuthService {
             new UsernamePasswordAuthenticationToken(
                 employeeLoginRequest.getUsername(), employeeLoginRequest.getPassword());
 
-        System.out.println("----------- Done Make Token");
         // DB에 존재하는지 확인, 성공할시 사용자의 세부 정보과 권한 정보를 갖고 있음
 
         Authentication authentication = authenticationManagerBuilder.getObject()
                                                                     .authenticate(
                                                                         authenticationToken);
-        System.out.println("----------- Done Make Token22222");
         // 인증된 사용자의 정보 저장소
         SecurityContextHolder.getContext()
                              .setAuthentication(authentication);
