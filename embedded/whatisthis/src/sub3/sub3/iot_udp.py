@@ -60,6 +60,9 @@ class iot_udp(Node):
         self.parsed_data=[]
         
         # 로직 2. 멀티스레드를 이용한 데이터 수신
+        # print('a')
+        # self.recv_udp_data()
+        # print('b')
         thread = threading.Thread(target=self.recv_udp_data)
         thread.daemon = True 
         thread.start() 
@@ -68,70 +71,57 @@ class iot_udp(Node):
 
         os.system('cls')
         while True:
-            pass
-            '''
-            로직 5. 사용자 메뉴 생성
             print('Select Menu [0: scan, 1: connect, 2:control, 3:disconnect, 4:all_procedures ] ')
-            menu=??
+            menu=int(input())
 
-            if menu == ?? :
-                채워 넣기
-            
-
-            '''
+            if menu == 0:
+                self.scan()
+            elif menu == 1:
+                self.connect()
+            elif menu == 2:
+                self.control()
+            elif menu == 3:
+                self.disconnect()
+            elif menu == 4:
+                self.all_procedures()
 
 
     def data_parsing(self,raw_data) :
-        print(raw_data)
-        
-        '''
-        로직 3. 수신 데이터 파싱
+        header=raw_data[0:19].decode()
+        data_length=struct.unpack('i',raw_data[19:23])
+        aux_data=struct.unpack('iii',raw_data[23:35])
 
-        header=?
-        data_length=?
-        aux_data=?
-
-
-        if header == ?? and data_length[0] == ??:
-            uid_pack=??
+        if header == "#Appliances-Status$" and data_length[0] == 20:
+            uid_pack=raw_data[35:51]
             uid=self.packet_to_uid(uid_pack)
-        
-            network_status=??
-            device_status=??
+
+            network_status=params_status[tuple(int(v, 16) for v in [hex(b) for b in raw_data[51:53]])]
+            device_status=params_status[tuple(int(v, 16) for v in [hex(b) for b in raw_data[53:55]])]
             
             self.is_recv_data=True
             self.recv_data=[uid,network_status,device_status]
-        '''
- 
-    def send_data(self,uid,cmd):
-        
-        pass
-        '''
-        로직 4. 데이터 송신 함수 생성
 
  
-        header=?
-        data_length=?
-        aux_data=?
-        self.upper=?
-        self.tail=?
+    def send_data(self,uid,cmd):
+        header="#Ctrl-command$".encode()
+        data_length=struct.pack('i',18)
+        aux_data=struct.pack('iii',0,0,0)
+
+        self.upper=header+data_length+aux_data
+        self.tail='\r\n'.encode()
 
         uid_pack=self.uid_to_packet(uid)
         cmd_pack=bytes([cmd[0],cmd[1]])
 
         send_data=self.upper+uid_pack+cmd_pack+self.tail
+        # print(send_data)
         self.sock.sendto(send_data,(self.ip,self.send_port))
-        '''
 
 
     def recv_udp_data(self):
         while True :
             raw_data, sender = self.sock.recvfrom(self.data_size)
             self.data_parsing(raw_data)
-            
-
-
-            
         
             
     def uid_to_packet(self,uid):
@@ -155,35 +145,24 @@ class iot_udp(Node):
         
         print('SCANNING NOW.....')
         print('BACK TO MENU : Ctrl+ C')
-        '''
-        로직 6. iot scan
-
-        주변에 들어오는 iot 데이터(uid,network status, device status)를 출력하세요.
-
-        '''
-        
+        print(self.recv_data[0],self.recv_data[1],self.recv_data[2])
                    
 
     def connect(self):
-        pass
-        '''
-        로직 7. iot connect
-
-        iot 네트워크 상태를 확인하고, CONNECTION_LOST 상태이면, RESET 명령을 보내고,
-        나머지 상태일 때는 TRY_TO_CONNECT 명령을 보내서 iot에 접속하세요.
-
-        '''
+        if self.recv_data[1] == "CONNECTION_LOST":
+            self.send_data(self.recv_data[0],params_control_cmd["RESET"])
+            
+        else:
+            self.send_data(self.recv_data[0],params_control_cmd["TRY_TO_CONNECT"])
 
     
     def control(self):
+        if self.recv_data[2] == "ON":
+            self.send_data(self.recv_data[0],params_control_cmd["SWITCH_OFF"])
+            
+        elif self.recv_data[2] == "OFF":
+            self.send_data(self.recv_data[0],params_control_cmd["SWITCH_ON"])
 
-        pass
-        '''
-        로직 8. iot control
-        
-        iot 디바이스 상태를 확인하고, ON 상태이면 OFF 명령을 보내고, OFF 상태면 ON 명령을 보내서,
-        현재 상태를 토글시켜주세요.
-        '''
 
     def disconnect(self):
         if self.is_recv_data==True :
