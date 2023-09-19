@@ -1,14 +1,12 @@
-package com.mo.whatisthis.apis.members.controllers;
+package com.mo.whatisthis.apis.member.controllers;
 
-import com.mo.whatisthis.apis.members.requests.DeviceRegisterRequest;
-import com.mo.whatisthis.apis.members.requests.EmployeeUpdateRequest;
-import com.mo.whatisthis.apis.members.responses.MemberCreateResponse;
-import com.mo.whatisthis.apis.members.services.MemberService;
+import com.mo.whatisthis.apis.member.requests.DeviceRegisterRequest;
+import com.mo.whatisthis.apis.member.requests.EmployeeUpdateRequest;
+import com.mo.whatisthis.apis.member.responses.MemberCreateResponse;
+import com.mo.whatisthis.apis.member.services.MemberService;
 import com.mo.whatisthis.security.utils.SecurityUtil;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
