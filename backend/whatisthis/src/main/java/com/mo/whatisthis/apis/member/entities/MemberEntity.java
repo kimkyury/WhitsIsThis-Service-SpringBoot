@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Entity
+@Table(name = "members")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Table(name = "\"Members\"")
 @ToString
 public class MemberEntity {
 
