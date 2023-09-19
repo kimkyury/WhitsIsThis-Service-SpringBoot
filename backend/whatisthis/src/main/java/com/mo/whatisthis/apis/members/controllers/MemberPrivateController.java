@@ -44,7 +44,7 @@ public class MemberPrivateController {
             memberCreateResponse);
     }
 
-    @Operation(summary = "최초 로그인 직원의 정보 기입", tags = {"2. Member"})
+    @Operation(summary = "직원의 최초 로그인시 정보 기입", tags = {"2. Member"})
     @PatchMapping(value = "/employees", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
