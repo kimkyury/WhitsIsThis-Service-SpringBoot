@@ -15,6 +15,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Server;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -35,6 +36,9 @@ public class SwaggerConfig {
         Server local = new Server("local", "http://localhost:8080", "for local usages",
             Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
+            .tags(new Tag("0. Testing", "연결 테스트용 APIs"),
+                new Tag("1. Auth", "사용자 권한 APIs"),
+                new Tag("2. Member", "사용자 APIs" ))
             .servers(local)
             .consumes(getConsumeContentTypes())
             .produces(getProduceContentTypes())
