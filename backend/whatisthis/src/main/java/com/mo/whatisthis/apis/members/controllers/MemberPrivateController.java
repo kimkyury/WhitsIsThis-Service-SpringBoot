@@ -7,6 +7,10 @@ import com.mo.whatisthis.apis.members.services.MemberService;
 import com.mo.whatisthis.security.utils.SecurityUtil;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
+@Tag(name = "2. Member")
 @RestController
 @RequestMapping("/api/v1/private/members")
 @RequiredArgsConstructor
@@ -29,6 +34,7 @@ public class MemberPrivateController {
 
     public final MemberService memberService;
 
+    @Operation(summary = "직원 계정 생성", tags = {"2. Member"})
     @PostMapping("/employees/register")
     public ResponseEntity<SuccessResponse<MemberCreateResponse>> createEmployee() {
 
@@ -38,6 +44,7 @@ public class MemberPrivateController {
             memberCreateResponse);
     }
 
+    @Operation(summary = "최초 로그인 직원의 정보 기입", tags = {"2. Member"})
     @PatchMapping(value = "/employees", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -53,12 +60,13 @@ public class MemberPrivateController {
         return createSuccessResponse(SuccessCode.NO_CONTENT, "직원의 최초 정보가 업데이트 되었습니다. ");
     }
 
+    @Operation(summary = "직원의 터틀봇 등록", tags = {"2. Member"})
     @PostMapping("/devices/register")
     public ResponseEntity<?> registerDevice(
         @Valid @RequestBody DeviceRegisterRequest deviceRegisterRequest) {
 
         memberService.registerDevice(deviceRegisterRequest);
 
-        return ResponseEntity.ok("Device 등록 성공");
+        return ResponseEntity.ok("Success Device Register");
     }
 }
