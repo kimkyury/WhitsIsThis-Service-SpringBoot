@@ -362,6 +362,7 @@ body {
   background-color: #484747;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
   /* justify-content: space-between; */
 }
 .Connection h2 {
@@ -378,7 +379,6 @@ body {
   margin-top: 1.5rem;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
-  margin-bottom: 3.5rem;
   display: flex;
   align-items: flex-start;
   flex-direction: row;
@@ -403,8 +403,33 @@ body {
 .Connection .connection_method_wrapper img:active {
   background-color: #aeaeae; /* 클릭 시 변경할 색상 설정 */
 }
+.Connection .camera_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 22.5rem;
+  height: 22.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.Connection .camera_container img {
+  position: absolute;
+  border-radius: 1rem;
+  z-index: 1;
+  width: 22.5rem;
+  height: 22.5rem;
+}
 .Connection .camera_frame {
-  margin: 1.5rem;
+  width: 22rem;
+  height: 22rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #ffffff;
+  border-radius: 1rem;
 }
 .Connection .MyButton {
   border-radius: 0rem;
@@ -429,6 +454,8 @@ body {
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
+
+  z-index: 1;
 }
 .SerialNumberRecognition h2 {
   /* text-align: center; */

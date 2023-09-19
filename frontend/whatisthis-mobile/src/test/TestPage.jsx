@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import CircularProgressBar from "./CircularProgressBar";
+import QRCodeScanner from "./QRCodeScanner";
+import Test from "./Test";
+import Test2 from "./Test2";
 
 const TestPage = () => {
   const [percentage, setPercentage] = useState(0);
@@ -16,7 +19,9 @@ const TestPage = () => {
 
   return (
     <div className="App">
-      <CircularProgressBar percentage={percentage} />
+      {/* <CircularProgressBar percentage={percentage} /> */}
+      {/* <Test /> */}
+      <Test2 />
     </div>
   );
 };
