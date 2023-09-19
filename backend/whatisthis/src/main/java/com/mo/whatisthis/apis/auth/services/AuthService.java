@@ -34,13 +34,11 @@ public class AuthService {
             new UsernamePasswordAuthenticationToken(
                 employeeLoginRequest.getUsername(), employeeLoginRequest.getPassword());
 
-        System.out.println("----------- Done Make Token");
         // DB에 존재하는지 확인, 성공할시 사용자의 세부 정보과 권한 정보를 갖고 있음
 
         Authentication authentication = authenticationManagerBuilder.getObject()
                                                                     .authenticate(
                                                                         authenticationToken);
-        System.out.println("----------- Done Make Token22222");
         // 인증된 사용자의 정보 저장소
         SecurityContextHolder.getContext()
                              .setAuthentication(authentication);
