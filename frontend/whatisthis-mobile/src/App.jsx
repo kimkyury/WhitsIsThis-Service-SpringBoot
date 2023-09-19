@@ -12,7 +12,6 @@ import HouseList from "./pages/HouseList";
 import HouseResult from "./pages/HouseResult";
 import Search from "./pages/Search";
 import SearchDetail from "./pages/SearchDetail";
-import EnvProfile from "./pages/EnvProfile";
 import Health from "./pages/Health";
 
 // testpage
@@ -41,7 +40,6 @@ function App() {
           <Route path="/house/:buildingId/:houseId/result" element={<HouseResult />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:id" element={<SearchDetail />} />
-          <Route path="/env/profile" element={<EnvProfile />} />
         </Routes>
       </BrowserRouter>
     </div>
