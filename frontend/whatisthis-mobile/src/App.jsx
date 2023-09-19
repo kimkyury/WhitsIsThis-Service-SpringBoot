@@ -15,6 +15,7 @@ import SearchDetail from "./pages/SearchDetail";
 
 // testpage
 import TestPage from "./test/TestPage";
+import Camera from "./pages/Camera";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/house/:buildingId/:houseId/result" element={<HouseResult />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:id" element={<SearchDetail />} />
+          <Route path="/camera" element={<Camera />} />
         </Routes>
       </div>
     </BrowserRouter>

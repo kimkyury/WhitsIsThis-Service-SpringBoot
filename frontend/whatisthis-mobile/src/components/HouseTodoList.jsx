@@ -36,6 +36,14 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
     setIsSectionDetail(!isSectionDetail);
   };
 
+  // const handleCameraOpen = () => {
+  //   setIsAddSection(false);
+  //   setIsListMain(true);
+  //   setIsSectionDetail(false);
+  //   // 카메라 열렸을 때 창 전환
+  //   isOpen = false;
+  // };
+
   return (
     <div className={`HouseTodoList options ${modalStatus}`}>
       <div className="option_header" onClick={handleOpenTodoList}>

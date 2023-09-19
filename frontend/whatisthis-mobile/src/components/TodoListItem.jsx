@@ -1,10 +1,14 @@
-const TodoListItem = () => {
+import { useNavigate } from "react-router-dom";
+
+const TodoListItem = ({}) => {
+  const navigate = useNavigate();
+
   return (
     <div className="TodoListItem">
       <div className="header">
         <input type="checkbox" />
         <h2>체크리스트</h2>
-        <div className="image_wrapper">
+        <div className="image_wrapper" onClick={() => navigate(`/camera`)}>
           <img src="/assets/camera.png" alt="" />
         </div>
       </div>

@@ -4,6 +4,8 @@ import { QrReader } from "react-qr-reader";
 const QRrecognition = ({ connect }) => {
   const handleScan = (result, error) => {
     if (!!result) {
+      // 시리얼 넘버 형식이 아닐 경우 리턴하는 로직
+
       connect(result?.text);
     }
 
