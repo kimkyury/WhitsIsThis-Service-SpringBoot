@@ -1,8 +1,9 @@
 .minititles {
-  font-size: 1.6vw;
+  font-size: 3vw;
   font-weight: bold;
   /* margin-left: 5%; */
 }
+
 
 .inputs {
   background-color: #ECF0F3;
@@ -11,6 +12,7 @@
   border: none;
   font-size: 1.4vw;
   padding-left:0.8vw;
+  height: 3vh;
 
 }
 
@@ -19,6 +21,20 @@
   margin-top:5vh;
   width: 52vw;
   height: 95vh;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+
+.customreceivedivm {
+
+  margin-top:5vh;
+  width: 80vw;
+  height: 55vh;
 
   background-color: white;
   opacity: 90%;

@@ -2,7 +2,7 @@
 
   margin-top:5vh;
   width: 80vw;
-  height: 175vh;
+  height: 120vh;
 
   background-color: white;
   opacity: 90%;
@@ -25,6 +25,24 @@
   justify-content: space-between;
   /* width: 35vw; */
 }
+
+
+.customreceivedivsuc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top:5vh;
+  width: 80%;
+  height: 30%;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+
 .customgrid {
   display:flex;
   grid-template-columns: 1fr 1fr;
@@ -34,6 +52,20 @@
 .middlemodal {
   display:flex;
   justify-content: center;
+  
+}
+
+
+.middlemodalbox {
+  display:flex;
+  justify-content: center;
+  margin-top:-5%;
+}
+.middlemodalreturn {
+  display:flex;
+  justify-content: center;
+  margin-top:-7%;
+  
 }
 
 .custommodaltitle {
@@ -61,6 +93,25 @@
   padding-left:0.8vw;
 
 }
+.address-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  z-index: 1000;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  max-width: 80%; /* 모달의 최대 너비를 설정하세요 */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
 
 .minititle {
   font-size: 4vw;
@@ -75,8 +126,8 @@
 }
 
 .bigbutton {
-  width: 40vw;
-  height: 8vh;
+  width: 30vw;
+  height: 5vh;
   font-size: 5vw;
   margin-top:7vh
 }

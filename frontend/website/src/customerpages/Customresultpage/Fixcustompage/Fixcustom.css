@@ -12,23 +12,45 @@
   background-repeat: no-repeat;
 }
 
+.customreceivedivwait {
+
+  margin-top:5vh;
+  width: 80vw;
+  height: 60vh;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+
 .boxpage {
-  width: 60vw;
-  height: 16vh;
+  margin-top: 7vh;
+  width: 70vw;
+  height: 19vh;
   border-radius: 1vw;
   border: 2px solid black;
 }
 
 .circle {
   border-radius: 100%;
-  width:20vw;
-  height: 20vw;
+  width:19vw;
+  height: 19vw;
   background-color: #ECECEC;
   text-align: center;
 }
 
 .line {
   width:7.5vw;
+  border: 0.05vw solid black;
+
+}
+
+
+.lines {
+  width: 20vw;
   border: 0.05vw solid black;
 
 }

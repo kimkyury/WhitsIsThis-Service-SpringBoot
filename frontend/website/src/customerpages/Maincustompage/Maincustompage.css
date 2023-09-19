@@ -1,18 +1,18 @@
 .gridbuttonbox {
   display:grid;
   grid-template-columns: 1fr 1fr;
-  width: 35vw;
+  width: 60vw;
 }
 
 .cmainbutton {
-  width: 12.5vw;
-  height: 12.5vw;
+  width: 30vw;
+  height: 30vw;
   background-color: transparent;
   border: 7px solid #2D4059;
   border: none;
   border-radius: 0.8vw;
   color: #F07B3F;
-  font-size: 2vw;
+  font-size: 5vw;
   font-weight: bold;
   /* opacity: 90%; */
 }

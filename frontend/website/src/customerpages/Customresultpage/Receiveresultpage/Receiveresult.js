@@ -23,7 +23,7 @@ function Receiveresult() {
         </div>
         </div>
       <div className="middlebox">
-        <button className="button middlebutton">다음</button>
+        <button className="button middlebutton">확인</button>
         <button className="button middlebutton">신청취소</button>
         </div>
         </div>
@@ -31,5 +31,7 @@ function Receiveresult() {
 
   )
 }
-
+// 계좌에 따라서 가상계좌 나옴 => 계좌 바꿀때마다 get요청
+// (후순위)신청취소를 누르면 => 환불페이지 => 환불신청을 할때 
+// => post하면서 계좌조회 api get요청 확인 후 잘못되었습니다. 환불요청이 접수되었습니다. or 환불이 되었습니다.
 export default Receiveresult;

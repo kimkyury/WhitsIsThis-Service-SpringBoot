@@ -24,7 +24,7 @@ function customHeader(props) {
           >
             점검결과
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to={`/CustomMain/Moneyreturn`}
             className='customheader'
           >
@@ -35,7 +35,7 @@ function customHeader(props) {
             className='customheader'
           >
             입금대기
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to={`/CustomMain/Receiveresult`}
             className='customheader'

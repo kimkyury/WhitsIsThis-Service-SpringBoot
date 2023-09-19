@@ -3,7 +3,7 @@ import './Moneywait.css';
 function Moneywait() {
   return (
     <div className="roomimg resrecpage">
-    <div className="customreceivedivfix">
+    <div className="customreceivedivwait">
     
     <div className="custommodaltitle ">
       <p>입금 대기</p>
@@ -14,7 +14,7 @@ function Moneywait() {
       <p className="circle"><p className="listline">대기</p></p>
     </div>
   </span>
-  <p className="line"></p>
+  <p className="lines"></p>
   <span>
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <p className="circle"><p className="listline">완료</p></p>

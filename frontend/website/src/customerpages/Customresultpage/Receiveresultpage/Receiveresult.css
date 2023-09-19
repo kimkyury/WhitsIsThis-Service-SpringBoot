@@ -1,8 +1,8 @@
 .customreceivedivs {
 
   margin-top:5vh;
-  width: 52vw;
-  height: 60vh;
+  width: 80vw;
+  height: 40vh;
 
   background-color: white;
   opacity: 90%;
@@ -11,6 +11,21 @@
   border-radius: 2.6vw;
   background-repeat: no-repeat;
 }
+
+.customreceivedivconfirm {
+
+  margin-top:5vh;
+  width: 80vw;
+  height: 35vh;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  /* margin-bottom: 5vh; */
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+
 
 .resrecpage {
   height:100vh;
@@ -21,11 +36,12 @@
 
 
 .recrestitle {
-  font-size: 1.6vw;
+  font-size: 5vw;
+  font-weight: bold;
 }
 
 .middlebutton {
-  font-size: 1.8vw;
+  font-size: 5vw;
 
 }
 
@@ -34,14 +50,14 @@
   flex-direction: row; /* 가로로 정렬 */
   align-items: center; /* 수직 가운데 정렬 (선택 사항) */
   justify-content: space-between;
-  width: 35vw;
+  width: 60vw;
 }
 
 .middlebox {
   display: flex;
   justify-content: center;
   gap:1.5vw;
-  margin-top: 5vh;
+  margin-top: 3vh;
 
 }
 .middlemodals {
