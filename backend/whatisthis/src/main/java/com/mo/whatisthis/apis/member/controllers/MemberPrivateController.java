@@ -32,7 +32,7 @@ public class MemberPrivateController {
 
     public final MemberService memberService;
 
-    @Operation(summary = "직원 계정 생성", tags = {"2. Member"})
+    @Operation(summary = "직원 계정 생성", tags = {"2. Member"}, description = "Authorization에 token을 첨부해주세요.")
     @PostMapping("/employees/register")
     public ResponseEntity<SuccessResponse<MemberCreateResponse>> createEmployee() {
 
@@ -42,7 +42,7 @@ public class MemberPrivateController {
             memberCreateResponse);
     }
 
-    @Operation(summary = "직원의 최초 로그인시 정보 기입", tags = {"2. Member"})
+    @Operation(summary = "직원의 최초 로그인시 정보 기입", tags = {"2. Member"}, description = "Authorization에 token을 첨부해주세요.")
     @PatchMapping(value = "/employees", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -58,7 +58,7 @@ public class MemberPrivateController {
         return createSuccessResponse(SuccessCode.NO_CONTENT, "직원의 최초 정보가 업데이트 되었습니다. ");
     }
 
-    @Operation(summary = "직원의 터틀봇 등록", tags = {"2. Member"})
+    @Operation(summary = "직원의 터틀봇 등록", tags = {"2. Member"}, description = "Authorization에 token을 첨부해주세요.")
     @PostMapping("/devices/register")
     public ResponseEntity<?> registerDevice(
         @Valid @RequestBody DeviceRegisterRequest deviceRegisterRequest) {
