@@ -21,12 +21,16 @@ function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
 
   return (
-    <BrowserRouter basename={BASE_NAME}>
-      <div className="App">
+    <div className="App">
+      <BrowserRouter>
         <Routes>
-          {/* startregion: this is test page */}
+          <Route path="/env/profile" element={<EnvProfile />} />
+        </Routes>
+      </BrowserRouter>
+
+      <BrowserRouter basename={BASE_NAME}>
+        <Routes>
           <Route path="/test" element={<TestPage />} />
-          {/* endregion */}
           <Route path="" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/connection/:buildingId/:houseId" element={<Connection />} />
@@ -36,10 +40,9 @@ function App() {
           <Route path="/house/:buildingId/:houseId/result" element={<HouseResult />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:id" element={<SearchDetail />} />
-          <Route path="/env/profile" element={<EnvProfile />} />
         </Routes>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </div>
   );
 }
 
