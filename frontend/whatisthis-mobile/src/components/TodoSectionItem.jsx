@@ -1,4 +1,4 @@
-const TodoSection = ({ sectionName, isFinish, onClick, type }) => {
+const TodoSectionItem = ({ sectionName, isFinish, onClick, type }) => {
   const btnType = ["default", "add"].includes(type) ? type : "default";
   const imageVisibility = btnType === "default" ? true : false;
 
@@ -7,17 +7,17 @@ const TodoSection = ({ sectionName, isFinish, onClick, type }) => {
       <p>{sectionName}</p>
       {imageVisibility &&
         (isFinish ? (
-          <img src="/assets/check_green_small.png" alt="status" />
+          <img src={process.env.PUBLIC_URL + `/assets/check_green_small.png`} alt="status" />
         ) : (
-          <img src="/assets/check_red_small.png" alt="status" />
+          <img src={process.env.PUBLIC_URL + `/assets/check_red_small.png`} alt="status" />
         ))}
     </div>
   );
 };
 
-TodoSection.defaultProps = {
+TodoSectionItem.defaultProps = {
   isFinish: false,
   type: "default",
 };
 
-export default TodoSection;
+export default TodoSectionItem;

@@ -2,11 +2,15 @@ import { useState } from "react";
 import TodoSectionItem from "./TodoSectionItem";
 
 // 닫기는게 왼쪽 열리는게 오른쪽 디폴트는 고정
-const TodoListMain = ({ sectionList }) => {
+const TodoListMain = ({ isListMain, sectionList, handleAddClick, handleSectionOpen }) => {
   const [isFinish, setIsFinish] = useState(false);
 
+  // return (
+
   return (
-    <div className="TodoListMain slide_in">
+    <div
+      className={`TodoListMain section_list ${isListMain ? "slide_in_left" : "slide_out_left"} `}
+    >
       <div className="user_request">
         <h3>사용자 요청사항</h3>
         <p>
@@ -14,15 +18,19 @@ const TodoListMain = ({ sectionList }) => {
           용자요 청
         </p>
       </div>
-      <div className="section_list">
-        {/* section list map 적용해서 출력 */}
-        <TodoSectionItem sectionName={"구역N"} />
-        <TodoSectionItem sectionName={"구역N"} />
-        <TodoSectionItem sectionName={"구역N"} />
-        <TodoSectionItem sectionName={"구역N"} />
-        <div className="TodoSectionItem">
-          <img className="add_section_btn" src="/assets/plus_circle_grey.png" alt="add" />
-        </div>
+      {/* section list map 적용해서 출력 */}
+      <TodoSectionItem sectionName={"구역1"} onClick={() => handleSectionOpen("1")} />
+      <TodoSectionItem sectionName={"구역2"} onClick={() => handleSectionOpen("2")} />
+      <TodoSectionItem sectionName={"구역3"} onClick={() => handleSectionOpen("3")} />
+      <TodoSectionItem sectionName={"구역4"} onClick={() => handleSectionOpen("4")} />
+      <TodoSectionItem sectionName={"구역5"} onClick={() => handleSectionOpen("5")} />
+
+      <div className="TodoSectionItem" onClick={handleAddClick}>
+        <img
+          className="add_section_btn"
+          src={process.env.PUBLIC_URL + `/assets/plus_circle_grey.png`}
+          alt="add"
+        />
       </div>
     </div>
   );

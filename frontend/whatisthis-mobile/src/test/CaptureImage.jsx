@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 
 import MyCamera from "./MyCamera";
-import MyButton from "./MyButton";
+import MyButton from "../components/MyButton";
 
 const CaptureImage = () => {
   const canvasRef = useRef(null);
@@ -33,8 +33,8 @@ const CaptureImage = () => {
   //   };
 
   const captureScreen = () => {
-    if (capturedImage.length === 5) {
-      alert("이미지는 최대 5개만 촬영가능");
+    if (capturedImage.length === 3) {
+      alert("이미지는 최대 3개만 촬영가능");
       return;
     }
 
@@ -44,13 +44,7 @@ const CaptureImage = () => {
       const context = canvasElement.getContext("2d");
 
       // 비디오 화면을 캔버스에 그립니다.
-      context.drawImage(
-        cameraElement,
-        0,
-        0,
-        canvasElement.width,
-        canvasElement.height
-      );
+      context.drawImage(cameraElement, 0, 0, canvasElement.width, canvasElement.height);
 
       // 캔버스의 이미지 데이터를 가져와서 이미지 URL로 변환합니다.
       const capturedImageUrl = canvasElement.toDataURL("image/jpeg");
@@ -64,17 +58,26 @@ const CaptureImage = () => {
       {/* <MyButton text={"on"} onClick={playCamera} /> */}
       {/* <MyButton text={"pause"} onClick={pauseCamera} /> */}
       <MyCamera cameraRef={cameraRef} />
-      <MyButton text={"capture"} onClick={captureScreen} />
-      <canvas
-        ref={canvasRef}
-        style={{ display: "none" }}
-        width="320"
-        height="240"
-      />
-      {capturedImage &&
-        capturedImage.map((it, idx) => {
-          return <img key={idx} src={it} alt="Captured" />;
-        })}
+      <div style={{ marginBottom: "1rem" }}>
+        <MyButton text={"capture"} onClick={captureScreen} />
+      </div>
+      <canvas ref={canvasRef} style={{ display: "none" }} width="320" height="240" />
+      <div
+        className="image_container"
+        style={{
+          width: "19.5rem",
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          flexDirection: "row",
+          overflow: "scroll",
+        }}
+      >
+        {capturedImage &&
+          capturedImage.map((it, idx) => {
+            return <img key={idx} src={it} alt="Captured" />;
+          })}
+      </div>
     </div>
   );
 };
