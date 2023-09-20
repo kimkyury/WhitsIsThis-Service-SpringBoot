@@ -7,7 +7,7 @@ import Moneywait from "./customerpages/Customresultpage/Moneywaitpage/Moneywait"
 import Receiveresult from "./customerpages/Customresultpage/Receiveresultpage/Receiveresult";
 import Customheader from "./customcomponent/customheader/customheader";
 import Resultconfirm from "./customerpages/Customresultpage/resultconfirm/Resultconfirm";
-import Health from "./pages/Health.jsx";
+import Health from "./customerpages/Health.jsx";
 
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
