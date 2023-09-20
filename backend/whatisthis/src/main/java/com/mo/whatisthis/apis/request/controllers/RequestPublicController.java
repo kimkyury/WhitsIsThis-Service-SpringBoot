@@ -45,7 +45,7 @@ public class RequestPublicController {
         return createSuccessResponse(SuccessCode.CREATED, "Create Customer's Inspection Request");
     }
 
-    @Operation(summary = "비회원의 점검요청 확인(요청 상태에 따라 Output 다름)", tags = {"3. InspectionRequest"})
+    @Operation(summary = "비회원의 점검요청 확인", tags = {"3. InspectionRequest"})
     @GetMapping("/verification")
     public ResponseEntity<SuccessResponse<RequestFindByCustomerResponse>> getRequestByPhone(
         @RequestParam String requesterPhone) {
@@ -57,7 +57,7 @@ public class RequestPublicController {
         return createSuccessResponse(SuccessCode.OK, requestFindByCustomerResponse);
     }
 
-    @Operation(summary = "비회원의 점검요청 취소(요청 상태에 따라 Output 다름)", tags = {"3. InspectionRequest"})
+    @Operation(summary = "비회원의 점검요청 취소", tags = {"3. InspectionRequest"})
     @PatchMapping("/{id}/cancel")
     public ResponseEntity<SuccessResponse<String>> cancelRequest(
         @PathVariable("id") Long requestId) {
