@@ -4,6 +4,7 @@ import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.State;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
 import com.mo.whatisthis.apis.request.requests.RequestRegisterRequest;
+import com.mo.whatisthis.apis.request.responses.RequestFindByCustomerResponse;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.DateUtil;
@@ -60,18 +61,16 @@ public class RequestService {
 
     }
 
-    public void findRequestForCustomer(String requesterPhone) {
+    public RequestFindByCustomerResponse findRequestForCustomer(String requesterPhone) {
 
-        String str = String.format("%s-%s-%s",
-            requesterPhone.substring(0, 3),
-            requesterPhone.substring(3, 7),
-            requesterPhone.substring(7, 10));
-
-        RequestEntity requestEntityByPhone = requestRepository.findByRequesterPhone(str)
+        RequestEntity requestEntityByPhone = requestRepository.findByRequesterPhone(requesterPhone)
                                                               .orElseThrow(
                                                                   () -> new CustomException(
                                                                       ErrorCode.NOT_FOUND));
 
+        RequestFindByCustomerResponse requestFindByCustomerResponse = new RequestFindByCustomerResponse();
+        requestFindByCustomerResponse.of(requestEntityByPhone);
 
+        return requestFindByCustomerResponse;
     }
 }

@@ -3,6 +3,7 @@ package com.mo.whatisthis.apis.request.controllers;
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
 import com.mo.whatisthis.apis.request.requests.RequestRegisterRequest;
+import com.mo.whatisthis.apis.request.responses.RequestFindByCustomerResponse;
 import com.mo.whatisthis.apis.request.services.RequestService;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
@@ -32,7 +33,7 @@ public class RequestPublicController {
     private final RequestService requestService;
 
     @Operation(summary = "비회원의 점검요청 신청", tags = {"3. InspectionRequest"})
-    @PostMapping(value="", consumes = {
+    @PostMapping(value = "", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<SuccessResponse<Object>> createRequest(
@@ -48,20 +49,17 @@ public class RequestPublicController {
     @GetMapping("/verification")
     public ResponseEntity<SuccessResponse<Object>> getRequestByPhone(
         @RequestParam String requesterPhone) {
-        // api/v1/guest/request/verification?requesterPhone=01000000000
 
-        // 1. 해당 전화번호가 DB에 애초에 저장하지 않으면 404 Error처리
+        RequestFindByCustomerResponse requestFindByCustomerResponse = requestService.findRequestForCustomer(
+            requesterPhone);
 
-        requestService.findRequestForCustomer(requesterPhone);
-
-        return createSuccessResponse(SuccessCode.OK, "조회");
+        return createSuccessResponse(SuccessCode.OK, requestFindByCustomerResponse);
     }
 
     @Operation(summary = "비회원의 점검요청 취소(요청 상태에 따라 Output 다름)", tags = {"3. InspectionRequest"})
     @PatchMapping("/{id}/cancel")
     public ResponseEntity<SuccessResponse<Object>> cancelRequest(
         @PathVariable("id") Long requestId) {
-        // id == 점검요청에 대한 id
 
         requestService.cancelRequest(requestId);
 
