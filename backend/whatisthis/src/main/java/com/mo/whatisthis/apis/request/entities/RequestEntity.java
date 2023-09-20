@@ -52,6 +52,7 @@ public class RequestEntity {
     private String requesterPhone;
 
     @Column(nullable = true)
+    @Setter
     private String requestContent;
 
     @Column(nullable = false)
@@ -78,13 +79,12 @@ public class RequestEntity {
 
     @Builder
     public RequestEntity(String address, String addressDetail, String requesterName,
-        String requesterPhone, String requestContent, LocalDate inspectionStart,
+        String requesterPhone, LocalDate inspectionStart,
         LocalDate inspectionEnd) {
         this.address = address;
         this.addressDetail = addressDetail;
         this.requesterName = requesterName;
         this.requesterPhone = requesterPhone;
-        this.requestContent = requestContent;
         this.inspectionStart = inspectionStart;
         this.inspectionEnd = inspectionEnd;
     }
