@@ -48,7 +48,7 @@ const HouseResult = () => {
   } else {
     return (
       <div className="HouseResult container">
-        <img src="/assets/check_big.png" alt="" />
+        <img src={process.env.PUBLIC_URL + `/assets/check_big.png`} alt="" />
         <div className="building_info_wrapper">
           <h2>
             {data.dong}동{data.ho}호

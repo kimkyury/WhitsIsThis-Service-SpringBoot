@@ -1,36 +1,24 @@
-import React from "react";
-import QrReader from "react-qr-scanner";
+import React, { useState } from "react";
+import { QrReader } from "react-qr-reader";
 
-class QRrecognition extends React.Component {
-  state = {
-    delay: 100,
-    result: "No result",
+const QRrecognition = ({ connect }) => {
+  const handleScan = (result, error) => {
+    if (!!result) {
+      // 시리얼 넘버 형식이 아닐 경우 리턴하는 로직
+
+      connect(result?.text);
+    }
+
+    if (!!error) {
+      console.info(error);
+    }
   };
 
-  handleScan = (data) => {
-    this.setState({
-      result: data,
-    });
-  };
-
-  handleError = (err) => {
-    console.error(err);
-  };
-
-  render() {
-    return (
-      <div>
-        <h1>QRreader</h1>
-        <QrReader
-          delay={this.state.delay}
-          //style={previewStyle}
-          onError={this.handleError}
-          onScan={this.handleScan}
-        />
-        <p>here: {this.state.result}</p>
-      </div>
-    );
-  }
-}
+  return (
+    <>
+      <QrReader className="camera_frame" onResult={(result, error) => handleScan(result, error)} />
+    </>
+  );
+};
 
 export default QRrecognition;

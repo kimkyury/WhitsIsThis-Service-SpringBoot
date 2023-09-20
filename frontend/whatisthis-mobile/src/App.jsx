@@ -16,6 +16,7 @@ import Health from "./pages/Health";
 
 // testpage
 import TestPage from "./test/TestPage";
+import Camera from "./pages/Camera";
 
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
@@ -40,6 +41,7 @@ function App() {
           <Route path="/house/:buildingId/:houseId/result" element={<HouseResult />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:id" element={<SearchDetail />} />
+          <Route path="/camera" element={<Camera />} />
         </Routes>
       </BrowserRouter>
     </div>

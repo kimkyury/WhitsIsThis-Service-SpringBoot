@@ -61,7 +61,7 @@ body {
 /* Notification */
 .Notification {
   height: 2.8rem;
-  width: 8rem;
+  width: 10rem;
 
   border: none;
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
@@ -362,6 +362,7 @@ body {
   background-color: #484747;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
   /* justify-content: space-between; */
 }
 .Connection h2 {
@@ -378,7 +379,6 @@ body {
   margin-top: 1.5rem;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
-  margin-bottom: 3.5rem;
   display: flex;
   align-items: flex-start;
   flex-direction: row;
@@ -403,8 +403,33 @@ body {
 .Connection .connection_method_wrapper img:active {
   background-color: #aeaeae; /* 클릭 시 변경할 색상 설정 */
 }
+.Connection .camera_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 22.5rem;
+  height: 22.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.Connection .camera_container img {
+  position: absolute;
+  border-radius: 1rem;
+  z-index: 1;
+  width: 22.5rem;
+  height: 22.5rem;
+}
 .Connection .camera_frame {
-  margin: 1.5rem;
+  width: 22rem;
+  height: 22rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #ffffff;
+  border-radius: 1rem;
 }
 .Connection .MyButton {
   border-radius: 0rem;
@@ -429,6 +454,8 @@ body {
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
+
+  z-index: 1;
 }
 .SerialNumberRecognition h2 {
   /* text-align: center; */
@@ -739,46 +766,19 @@ h2 {
   border: none;
   border-radius: 2rem 2rem 0 0;
   background-color: #ffffff;
+  overflow: hidden;
 
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
 }
 .HouseTodoList .section_list {
+  height: 90%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   overflow: scroll;
-}
-
-.HouseTodoList input {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  padding-left: 0rem;
-  padding-right: 0rem;
-
-  height: 2.3rem;
-  width: 19.3rem;
-  border: 0.1875rem solid rgba(19.616405591368675, 20.411754213273525, 22.31249962002039, 1);
-  box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
-  border-radius: 1rem;
-
-  text-indent: 1rem;
-  font-size: 1rem;
-}
-.HouseTodoList input:focus {
-  outline-color: #ea5455; /* 포커스 색상 변경 */
-}
-
-.HouseTodoList .MyButton {
-  margin-top: 3rem;
-
-  border-radius: 1rem;
-  height: 2.7rem;
-  width: 19.5rem;
-  font-weight: bold;
-  font-size: 1.5rem;
 }
 
 /* TodoListMain - main */
@@ -793,11 +793,17 @@ h2 {
   position: absolute;
   transition: transform 0.5s ease-in-out;
 }
-.slide_in {
+.slide_in_right {
   transform: translateX(0%);
 }
-.slide_out {
+.slide_out_right {
   transform: translateX(100%);
+}
+.slide_in_left {
+  transform: translateX(0%);
+}
+.slide_out_left {
+  transform: translateX(-100%);
 }
 
 .TodoListMain .user_request {
@@ -864,6 +870,153 @@ h2 {
   height: 2.85rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+/* SectionDetail */
+.SectionDetail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+
+  top: 3rem;
+  width: 100%;
+  position: absolute;
+  transition: transform 0.5s ease-in-out;
+}
+.TodoListItem {
+  width: 19.5rem;
+
+  /* 임시 */
+
+  border-bottom: 3px solid #ececec;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.TodoListItem .header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-top: 0.5rem;
+}
+.TodoListItem .header h2,
+h3 {
+  color: #2d4059;
+  font-weight: bold;
+  margin-right: auto;
+}
+.TodoListItem .header input {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 1rem;
+}
+.TodoListItem .image_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #2d4059;
+  border-radius: 0.5rem;
+  width: 3rem;
+
+  transition: background-color 0.1s;
+  &:active {
+    background-color: rgba(194, 194, 194, 0.852) !important;
+  }
+}
+.TodoListItem .description {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  height: 1.5rem;
+  width: 19.3rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.5rem;
+
+  text-indent: 1rem;
+  font-size: 1rem;
+}
+.TodoListItem .image_list {
+  height: 6rem;
+  width: 19.5rem;
+
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  transition: background-color 0.1s;
+}
+.TodoListItem .image_list img {
+  width: 6rem;
+  height: auto;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  /* width: auto; */
+}
+
+/* Camera */
+.Camera {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.Camera .camera_container {
+  margin: 1rem;
+}
+.Camera .result_wrapper {
+  border-radius: 0.5rem;
+  box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 19.5rem;
+  height: 15rem;
+  background-color: #ececec;
+}
+.Camera .result_wrapper h2 {
+  color: #2d4059;
+  margin-top: 0.5rem;
+}
+.Camera .result_wrapper .title {
+  width: 17.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-bottom: 3px solid #d1cdcd;
+}
+.Camera .image_container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: scroll;
+}
+.Camera .image_container img {
+  margin: 1rem;
+  height: 10rem;
+}
+.Camera .button_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: auto;
+  margin-bottom: 2rem;
 }
 
 /* HouseResult */
@@ -943,7 +1096,7 @@ h2 {
 
 /* CaptureImage */
 .CaptureImage {
-  background-color: #ececec;
+  background-color: #425e83;
   display: flex;
   flex-direction: column;
   align-items: center;

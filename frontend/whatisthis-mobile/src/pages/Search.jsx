@@ -17,7 +17,7 @@ const Search = () => {
           onChange={(e) => setSearchWord(e.target.value)}
           placeholder="ex) 부산시 남구.. , OO아파트"
         />
-        <img src={`${process.env.PUBLIC_URL}/assets/search2.png`} alt="search" />
+        <img src={process.env.PUBLIC_URL + `/assets/search2.png`} alt="search" />
       </div>
       <div className="building_wrapper">
         {buildingList.map((it, idx) => {

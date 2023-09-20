@@ -53,7 +53,7 @@ const HouseList = () => {
             );
           })}
           <div className="HouseCard add_card_btn" onClick={() => navigate(`/search/${buildingId}`)}>
-            <img src="/assets/plus_circle.png" alt="add_card" />
+            <img src={process.env.PUBLIC_URL + `/assets/plus_circle.png`} alt="add_card" />
           </div>
           {data.houses.length % 2 === 0 && <div className="blank"></div>}
         </div>
