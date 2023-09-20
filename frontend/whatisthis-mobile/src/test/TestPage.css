@@ -1,0 +1,94 @@
+.card {
+  width: 10rem;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  /* position: relative;
+  display: flex; */
+  justify-content: center;
+  align-items: center;
+  perspective: 600px;
+}
+
+.card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card__face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  color: white;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.card__face--front {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: red;
+}
+
+.card__face--back {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: blue;
+  transform: rotateY(180deg);
+}
+/* ///////////////////////////////////////////////////////// */
+
+.card-container {
+  width: 200px;
+  height: 260px;
+  -webkit-perspective: 800px; /* ? */
+  perspective: 800px;
+  margin: 25px;
+}
+
+label.card {
+  display: block;
+  position: relative; /* #card figure is set to position: absolute. DC*/
+  width: 100%;
+  height: 100%;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transition: -webkit-transform 1s; /* Not sure if this is the correct syntax. DC */
+  transition: transform 1s;
+  cursor: pointer;
+  border: 3px solid white;
+  border-radius: 5px;
+}
+
+label.card div {
+  position: absolute;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 2px;
+}
+
+.front {
+  background: #61dafb;
+}
+
+.back {
+  background: gray;
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+input[type="checkbox"] {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+/* Or [id*='card']:checked ~ label.card  */
+input[type="checkbox"]:checked ~ label.card {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
