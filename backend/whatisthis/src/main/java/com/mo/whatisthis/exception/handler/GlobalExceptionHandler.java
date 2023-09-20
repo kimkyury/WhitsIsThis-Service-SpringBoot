@@ -5,7 +5,7 @@ import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createErrorRespon
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
+import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.responses.ErrorResponse;
 import java.io.IOException;
@@ -112,5 +112,11 @@ public class GlobalExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {
         log.error("Exception", ex);
         return createErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR, ex.getMessage());
+    }
+
+    @ExceptionHandler(CustomException.class)
+    protected final ResponseEntity<ErrorResponse> handleCustomExceptions(CustomException ex) {
+        log.error("CustomException", ex);
+        return createErrorResponse(ex.getErrorCode(), ex.getMessage());
     }
 }
