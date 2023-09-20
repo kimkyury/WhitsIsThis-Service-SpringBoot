@@ -7,19 +7,19 @@ function customHeader(props) {
     <div className='customheadersdiv'>
       <div className="customheaders">
           <NavLink
-            to={`/CustomMain`}
+            to={`/`}
             className='customheader'
           >
             홈
           </NavLink>
           <NavLink
-            to={`/CustomMain/Customreceive`}
+            to={`/customreceive`}
             className='customheader'
           >
             신청페이지
           </NavLink>
           <NavLink
-            to={`/CustomMain/Fixcustom`}
+            to={`/fixcustom`}
             className='customheader'
           >
             점검결과
@@ -37,13 +37,13 @@ function customHeader(props) {
             입금대기
           </NavLink> */}
           <NavLink
-            to={`/CustomMain/Receiveresult`}
+            to={`/receiveresult`}
             className='customheader'
           >
             신청결과
           </NavLink>
           <NavLink
-            to={`/CustomMain/Resultconfirm`}
+            to={`/resultconfirm`}
             className='customheader'
           >
             결과확인

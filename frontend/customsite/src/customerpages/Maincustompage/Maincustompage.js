@@ -16,7 +16,7 @@ function CustomMain() {
       <div className="gridbuttonbox">
       
         <Link 
-          to={'/CustomMain/Customreceive'}>
+          to={'/customreceive'}>
           <button className="cmainbutton">
           신청하기
           </button>
@@ -24,7 +24,7 @@ function CustomMain() {
   
       
         <Link 
-          to={'/CustomMain/Resultconfirm'}>
+          to={'/resultconfirm'}>
             <button className="cmainbutton">
             결과확인
             </button>
