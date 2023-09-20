@@ -61,7 +61,7 @@ function Address({selectedAddress, setSelectedAddress}) {
           onChange={(e) => setSearchText(e.target.value)}
           onKeyPress={handleKeyPress} // Enter 키 이벤트 처리
         />
-        <button onClick={handleSearch}>검색</button>
+        {/* <button onClick={handleSearch}>검색</button> */}
       </div>
       <div style={{ display: "flex", alignItems: "center" }}>
         <p className="searchbox">총 검색 건수: {searchResults.length}건</p>

@@ -1,8 +1,8 @@
 .customreceivediv {
 
   margin-top:5vh;
-  width: 80vw;
-  height: 120vh;
+  width: 80%;
+  height: 100%;
 
   background-color: white;
   opacity: 90%;
@@ -70,7 +70,7 @@
 
 .custommodaltitle {
   color: #2D4059;
-  font-size: 7vw;
+  font-size: 2.5rem;
   display: flex;
   justify-content: center;
   font-weight: bold;
@@ -89,7 +89,7 @@
   border-radius: 0.8vw;
   box-shadow: 0.01vw 0.15vw 0px rgba(0, 0, 0, 0.5);
   border: none;
-  font-size: 1.6vw;
+  font-size: 1rem;
   padding-left:0.8vw;
 
 }
@@ -114,7 +114,7 @@
 }
 
 .minititle {
-  font-size: 4vw;
+  font-size: 1.1rem;
   font-weight: bold;
   /* margin-left: 5%; */
 }
@@ -122,14 +122,14 @@
 .minibutton {
   width:15vw;
   height:4vh;
-  font-size: 0.8vw;
+  font-size: 0.5rem;
 }
 
 .bigbutton {
   width: 30vw;
   height: 5vh;
-  font-size: 5vw;
-  margin-top:7vh
+  font-size: 1.2rem;
+  margin-top:0.6rem
 }
 
 .button:hover {
