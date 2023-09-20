@@ -7,7 +7,7 @@ const HouseCard = ({ houseInfo, onClick }) => {
   useEffect(() => {
     const timer = setInterval(() => {
       if (progressPercentage < 70) {
-        setProgressPercentage((prevPercentage) => prevPercentage + 10);
+        setProgressPercentage((prevPercentage) => prevPercentage + 1);
       }
     });
 

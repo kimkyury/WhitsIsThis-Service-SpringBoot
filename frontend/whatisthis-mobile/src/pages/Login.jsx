@@ -46,7 +46,7 @@ const Login = () => {
 
   return (
     <div className="Login container">
-      <img src="/assets/pavicon_white.png" alt="Logo" />
+      <img src={process.env.PUBLIC_URL + `/assets/pavicon_white.png`} alt="Logo" />
       <h2>Loginnnnn</h2>
       <div>
         <h5>ID</h5>

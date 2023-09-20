@@ -45,7 +45,7 @@ const Home = () => {
         />
       )}
 
-      <img src="/assets/logo_white.png" alt="Logo" />
+      <img src={process.env.PUBLIC_URL + `/assets/logo_white.png`} alt="Logo" />
       {!isLogin ? (
         <MyButton color={"white"} text={"로그인"} onClick={() => navigate("/login")} />
       ) : (
