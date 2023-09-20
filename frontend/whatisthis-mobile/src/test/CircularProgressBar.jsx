@@ -12,8 +12,8 @@ function CircularProgressBar({ percentage }) {
 
   return (
     <svg width={radius * 2} height={radius * 2} viewBox={viewBox}>
-      {/* <g transform={`rotate(${rotation}, ${radius}, ${radius})`}> */}
-      <g transform={`rotate(0, ${radius}, ${radius})`}>
+      <g>
+        {/* <g transform={`rotate(0, ${radius}, ${radius})`}> */}
         <circle
           className="progress-ring__circle"
           stroke="gray" // 원의 색상
@@ -24,6 +24,7 @@ function CircularProgressBar({ percentage }) {
           cy={radius}
         />
         <circle
+          transform={`rotate(${rotation}, ${radius}, ${radius})`}
           className="progress-ring__circle"
           stroke="#ea5455" // 프로그레스 바의 색상
           strokeWidth={strokeWidth}
@@ -40,8 +41,11 @@ function CircularProgressBar({ percentage }) {
         <text
           x={radius}
           y={radius}
+          textAnchor="middle"
+          dominantBaseline="middle"
           style={{
-            textAlign: "center",
+            fontSize: "2rem",
+            fontWeight: "bold",
           }}
           className="progress-ring__text"
         >

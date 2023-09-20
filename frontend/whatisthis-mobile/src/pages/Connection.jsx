@@ -8,6 +8,7 @@ import SerialNumberRecognition from "../components/SerialNumberRecognition";
 
 import { dummyBuildingData } from "../utils/DummyData";
 import { dummyHouseData } from "../utils/DummyData";
+import QRrecognition from "../components/QRrecognition";
 const Connection = () => {
   const { buildingId } = useParams();
   const { houseId } = useParams();
@@ -51,6 +52,18 @@ const Connection = () => {
     setIsSnum(!isSnum);
   };
 
+  const connect = (serialNumber) => {
+    //시리얼 넘버가 유효한지 확인하는 로직 필요
+
+    navigate(`/connection/${buildingId}/${houseId}/result`, {
+      state: {
+        addr: addr,
+        serialNumber: serialNumber,
+      },
+      replace: true,
+    });
+  };
+
   if (!data) {
     return <div className="Connection">로딩중입니다...</div>;
   } else {
@@ -62,17 +75,22 @@ const Connection = () => {
             <h4>{addr}</h4>
           </div>
           <div className="connection_method_wrapper">
-            <img src="/assets/qr.png" alt="QR" onClick={() => handleConnectionMethodTymeClick()} />
             <img
-              src="/assets/snum.png"
+              src={process.env.PUBLIC_URL + `/assets/qr.png`}
+              alt="QR"
+              onClick={() => handleConnectionMethodTymeClick()}
+            />
+            <img
+              src={process.env.PUBLIC_URL + `/assets/snum.png`}
               alt="SNUM"
               onClick={() => handleConnectionMethodTymeClick()}
             />
           </div>
         </div>
         {/* camera container */}
-        <div>
-          <img className="camera_frame" src="/assets/camera_frame_small.png" alt="" />
+        <div className="camera_container">
+          <img src={process.env.PUBLIC_URL + `/assets/camera_frame_small.png`} alt="" />
+          <QRrecognition connect={connect} />
         </div>
 
         <h2>기기의 QR을 인식</h2>
