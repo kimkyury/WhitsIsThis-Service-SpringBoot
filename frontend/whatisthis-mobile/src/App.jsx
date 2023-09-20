@@ -12,20 +12,27 @@ import HouseList from "./pages/HouseList";
 import HouseResult from "./pages/HouseResult";
 import Search from "./pages/Search";
 import SearchDetail from "./pages/SearchDetail";
+import Health from "./pages/Health";
 
 // testpage
 import TestPage from "./test/TestPage";
 import Camera from "./pages/Camera";
 
 function App() {
+  const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
+
   return (
-    <BrowserRouter basename="/">
-      <div className="App">
+    <div className="App">
+      <BrowserRouter>
         <Routes>
-          {/* startregion: this is test page */}
+          <Route path="/health" element={<Health />} />
+        </Routes>
+      </BrowserRouter>
+
+      <BrowserRouter basename={BASE_NAME}>
+        <Routes>
           <Route path="/test" element={<TestPage />} />
-          {/* endregion */}
-          <Route path="/" element={<Home />} />
+          <Route path="" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/connection/:buildingId/:houseId" element={<Connection />} />
           <Route path="/connection/:buildingId/:houseId/result" element={<ConnectionResult />} />
@@ -36,8 +43,8 @@ function App() {
           <Route path="/search/:id" element={<SearchDetail />} />
           <Route path="/camera" element={<Camera />} />
         </Routes>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </div>
   );
 }
 
