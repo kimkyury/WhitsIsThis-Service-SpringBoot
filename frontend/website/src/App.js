@@ -11,17 +11,17 @@ import Mypass from '../src/component/Inmypage/Mypassword/Mypassword';
 // import PrivateRoute from './components/PrivateRoute';
 function App() {
   return (
-    <div className="App">
-      <Router>
+    <div>
+      <Router basename='/webmain'>
 
         <Routes>
-          <Route path='/WebMain' element={[<Header/>, <WebMain/>]}/>
+          <Route path='/' element={[<Header/>, <WebMain/>]}/>
           {/* <Route path='/WebMain/Custom' element={[<Custom/>]}/> */}
-          <Route path='/WebMain/List' element={[<Header/>, <List/>]}/>
-          <Route path='/WebMain/ResultList' element={[<Header/>, <ResultList/>]}/>
-          <Route path='/WebMain/Mypage' element={[<Header/>, <Mypage/>]}/>
-          <Route path='/WebMain/Request' element={[<Header/>, <Request/>]}/>
-          <Route path='/WebMain/pass' element={[<Header/>, <Mypass/>]}/>
+          <Route path='/list' element={[<Header/>, <List/>]}/>
+          <Route path='/resultlist' element={[<Header/>, <ResultList/>]}/>
+          <Route path='/mypage' element={[<Header/>, <Mypage/>]}/>
+          <Route path='/request' element={[<Header/>, <Request/>]}/>
+          <Route path='/pass' element={[<Header/>, <Mypass/>]}/>
 
           {/* <Route path="/CreateRoomModal" element={<PrivateRoute authenticated={access} component={<CreateRoomModal/>} />}/> */}
         </Routes>
