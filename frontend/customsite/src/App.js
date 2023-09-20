@@ -12,15 +12,15 @@ import Resultconfirm from './customerpages/Customresultpage/resultconfirm/Result
 function App() {
   return (
     <div>
-            <Router>
+      <Router basename="/custommain">
         <Routes>
-          <Route path='/CustomMain' element={[<Customheader/>, <Maincustompage/>]}/>
-          <Route path='/CustomMain/Customreceive' element={[<Customheader/>, <Customreceivepage/>]}/>
-          <Route path='/CustomMain/Fixcustom' element={[<Customheader/>, <Fixcustom/>]}/>
-          <Route path='/CustomMain/Moneyreturn' element={[<Customheader/>, <Moneyreturn/>]}/>
-          <Route path='/CustomMain/Moneywait' element={[<Customheader/>, <Moneywait/>]}/>
-          <Route path='/CustomMain/Receiveresult' element={[<Customheader/>, <Receiveresult/>]}/>
-          <Route path='/CustomMain/Resultconfirm' element={[<Customheader/>, <Resultconfirm/>]}/>
+          <Route path='/' element={[<Customheader/>, <Maincustompage/>]}/>
+          <Route path='/customreceive' element={[<Customheader/>, <Customreceivepage/>]}/>
+          <Route path='/fixcustom' element={[<Customheader/>, <Fixcustom/>]}/>
+          <Route path='/moneyreturn' element={[<Customheader/>, <Moneyreturn/>]}/>
+          <Route path='/moneywait' element={[<Customheader/>, <Moneywait/>]}/>
+          <Route path='/receiveresult' element={[<Customheader/>, <Receiveresult/>]}/>
+          <Route path='/resultconfirm' element={[<Customheader/>, <Resultconfirm/>]}/>
     </Routes>
   </Router>
     </div>
