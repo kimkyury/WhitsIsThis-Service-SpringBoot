@@ -94,8 +94,8 @@ public class AuthPublicController {
 
     // TODO: 반환 Object 변경
     @Operation(summary = "휴대폰 인증을 위한 메시지 전송", tags = {"1. Auth"}, description = "인증번호를 받기 위한 핸드폰 번호를 기입해주세요")
-    @PostMapping("/phone/sns")
-    public ResponseEntity<SuccessResponse<Object>> sendMessageToAuthCode(){
+    @PostMapping("/phone/sms")
+    public ResponseEntity<SuccessResponse<String>> sendMessageToAuthCode(){
 
         // 1. 인증코드 생성
         // 2. 인증코드 Redis 저장
@@ -105,9 +105,9 @@ public class AuthPublicController {
     }
 
     // TODO: 반환 Object 변경
-    @Operation(summary = "휴대폰 인증을 위한 메시지 전송", tags = {"1. Auth"}, description = "휴대폰 인증 메시지 전송 API이용 후, 안내받은 Message내의 인증번호를 입력하세요. ")
+    @Operation(summary = "휴대폰 인증 번호 검사", tags = {"1. Auth"}, description = "휴대폰 인증 메시지 전송 API이용 후, 안내받은 Message내의 인증번호를 입력하세요. ")
     @PostMapping("/phone/verification")
-    public ResponseEntity<SuccessResponse<Object>> verifyAuthCode(){
+    public ResponseEntity<SuccessResponse<String>> verifyAuthCode(){
 
 
         return createSuccessResponse(SuccessCode.OK, "Sent message to verify Phone");
