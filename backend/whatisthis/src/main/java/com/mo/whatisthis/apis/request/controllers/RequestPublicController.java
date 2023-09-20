@@ -36,7 +36,7 @@ public class RequestPublicController {
     @PostMapping(value = "", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<SuccessResponse<Object>> createRequest(
+    public ResponseEntity<SuccessResponse<String>> createRequest(
         @Valid @RequestPart RequestRegisterRequest requestRegisterRequest,
         @RequestPart("warrant") MultipartFile warrantFile) {
 
@@ -47,9 +47,10 @@ public class RequestPublicController {
 
     @Operation(summary = "비회원의 점검요청 확인(요청 상태에 따라 Output 다름)", tags = {"3. InspectionRequest"})
     @GetMapping("/verification")
-    public ResponseEntity<SuccessResponse<Object>> getRequestByPhone(
+    public ResponseEntity<SuccessResponse<RequestFindByCustomerResponse>> getRequestByPhone(
         @RequestParam String requesterPhone) {
 
+        //TODO: 확인필요 - 해당 로직이 직원이 조회할 때도 동일할 수 있음
         RequestFindByCustomerResponse requestFindByCustomerResponse = requestService.findRequestForCustomer(
             requesterPhone);
 
@@ -58,7 +59,7 @@ public class RequestPublicController {
 
     @Operation(summary = "비회원의 점검요청 취소(요청 상태에 따라 Output 다름)", tags = {"3. InspectionRequest"})
     @PatchMapping("/{id}/cancel")
-    public ResponseEntity<SuccessResponse<Object>> cancelRequest(
+    public ResponseEntity<SuccessResponse<String>> cancelRequest(
         @PathVariable("id") Long requestId) {
 
         requestService.cancelRequest(requestId);
