@@ -4,8 +4,10 @@ import com.sun.istack.NotNull;
 import java.time.LocalDate;
 import javax.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class RequestRegisterRequest {
 
     @NotNull
@@ -27,11 +29,9 @@ public class RequestRegisterRequest {
     private String requestContent;
 
     @NotNull
-    @NotEmpty
     private LocalDate inspectionStart;
 
     @NotNull
-    @NotEmpty
     private LocalDate inspectionEnd;
 
 }

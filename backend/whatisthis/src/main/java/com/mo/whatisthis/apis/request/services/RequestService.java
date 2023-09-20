@@ -1,8 +1,11 @@
 package com.mo.whatisthis.apis.request.services;
 
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
+import com.mo.whatisthis.apis.request.entities.RequestEntity.State;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
 import com.mo.whatisthis.apis.request.requests.RequestRegisterRequest;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +25,13 @@ public class RequestService {
             requestRegisterRequest.getInspectionEnd()
         );
 
-        String requestContent = requestEntity.getRequestContent();
-        if (!requestContent.isEmpty() && !requestContent.isBlank()) {
+        String requestContent = requestRegisterRequest.getRequestContent();
+        if (!requestContent.isEmpty() || !requestContent.isBlank()) {
             requestEntity.setRequestContent(requestContent);
         }
+
+        requestEntity.setStatus(State.WAITING_FOR_PAY);
+        requestEntity.setRequestedAt(LocalDateTime.now());
 
         requestRepository.save(requestEntity);
     }

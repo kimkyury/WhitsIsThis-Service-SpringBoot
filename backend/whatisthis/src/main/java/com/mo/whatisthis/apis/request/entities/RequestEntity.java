@@ -71,6 +71,7 @@ public class RequestEntity {
     private State status; // 초기값: WAITING_FOR_PAY
 
     @Column(nullable = false)
+    @Setter
     private LocalDateTime requestedAt;
 
     @Column(nullable = true)
