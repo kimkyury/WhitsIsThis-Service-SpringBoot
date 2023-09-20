@@ -19,10 +19,10 @@ function Header(props) {
   return (
     <div>
       <div className="header">
-        <img style={{ width: '10vw' }} src={`${process.env.PUBLIC_URL}/images/logo.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
+        <img style={{ width: '9vw', height:'8vh' }} src={`${process.env.PUBLIC_URL}/images/logo.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
         <div style={{ display: 'flex', width: '28vw',height:'3.3vh', marginRight: '3%' }}>
           <NavLink
-            to={`/WebMain`}
+            to={`/`}
             exact
             style={activeLink === '홈' ? { ...linkStyle, color: 'orange' } : linkStyle}
             onClick={() => handleLinkClick('홈')}
@@ -30,7 +30,7 @@ function Header(props) {
             홈
           </NavLink>
           <NavLink
-            to={`/WebMain/List`}
+            to={`/list`}
             className='item'
             style={activeLink === '접수 목록' ? { ...linkStyle,               
             color: '#F07B3F', 
@@ -42,7 +42,7 @@ function Header(props) {
             접수 목록
           </NavLink>
           <NavLink
-            to={`/WebMain/ResultList`}
+            to={`/resultList`}
             className='item'
             style={activeLink === '결과 목록' ? { ...linkStyle,               
             color: '#F07B3F', 
@@ -54,7 +54,7 @@ function Header(props) {
             결과 목록
           </NavLink>
           <NavLink
-            to={`/WebMain/Mypage`}
+            to={`/mypage`}
             className='item'
             style={activeLink === '내 정보' ? { ...linkStyle,               
             color: '#F07B3F',

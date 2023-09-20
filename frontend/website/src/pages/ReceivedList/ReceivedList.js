@@ -38,7 +38,35 @@ function List() {
       Daddress: '삼정그린코아 1201동 1203호',
     },
   ]);
-  const [myApplicant, setMyApplicant] = useState([]);
+  const [myApplicant, setMyApplicant] = useState([
+    {
+      id: '4',
+      consumer:'김길동',
+      phonenumber: '010-0010-0000',
+      address: '부산광역시 강북구 공동동',
+      request: '이렇게 절허게',
+      warrent:'mywarrentUrl',
+      Daddress:'송정그린코아 1301동 1203호', 
+    },
+    {
+      id: '5',
+      consumer:'김길은',
+      phonenumber: '010-0010-0000',
+      address: '부산광역시 강북구 공동동',
+      request: '이렇게 절허게',
+      warrent:'mywarrentUrl',
+      Daddress:'송정그린코아 1301동 1203호', 
+    },
+    {
+      id: '110',
+      consumer:'김길은',
+      phonenumber: '010-0010-0000',
+      address: '부산광역시 강북구 공동동',
+      request: '이렇게 절허게',
+      warrent:'mywarrentUrl',
+      Daddress:'송정그린코아 1301동 1203호', 
+    }
+  ]);
 
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
@@ -111,7 +139,7 @@ function List() {
                 <span
                   className='recspan'
                 >
-                  접수대기
+                  내 접수
                 </span>
                 <div
                   className='Dropbox'
@@ -145,19 +173,19 @@ function List() {
               <div className="left">
                 <span
                   className='recspan'
-                >
-                  내 접수
+                  >
+                  접수대기
                 </span>
                 <div
                   className='Dropbox'
                   style={{ paddingTop: '1.5vw' }}
-                >
+                  >
                   <Droppable droppableId='myApplicant'>
                     {(provided) => (
                       <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className='myApplicant-container'
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className='myApplicant-container'
                       >
                         {myApplicant.map((data, index) => (
                           <Draggable key={data.id} draggableId={data.id} index={index}>
@@ -187,7 +215,8 @@ function List() {
               </div>
             </div>
           )}
-        </Droppable>
+          </Droppable>
+
       </DragDropContext>
       {showModal && (
         <div className="modal-container">

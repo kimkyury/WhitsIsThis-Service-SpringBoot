@@ -199,7 +199,8 @@
   height: 62vh;
   background-color: whitesmoke;
   border-radius: 0.4vw;
-
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .recinputtag {

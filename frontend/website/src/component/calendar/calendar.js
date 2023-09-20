@@ -21,6 +21,7 @@ function Calendar() {
       onChange={(update) => {
         setDateRange(update)
       }}
+
       withPortal
       className='datePicker'
       />
