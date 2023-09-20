@@ -46,14 +46,14 @@ function CustomreceiveModal() {
         <div>
           <p className="minititle">신청자명</p>
           <input
-            style={{ width: "70vw", height: "4.6vh" }}
+            style={{ width: "18rem", height: "2.3rem" }}
             className="input"
             placeholder="이름을 입력해주십시오."
           />
           <p className="minititle">요청 사항</p>
           <input
             className="input"
-            style={{ width: "70vw", height: "8.1vh" }}
+            style={{ width: "18rem", height: "4.2rem" }}
             placeholder="요청 사항을 입력해주십시오."
           />
           <p className="minititle">연락처</p>
@@ -64,11 +64,11 @@ function CustomreceiveModal() {
             />
             <button className="button minibutton">인증하기</button>
           </div>
-          <p className="minititle" style={{ width: "33.4vw", height: "4.6vh" }}>
+          <p className="minititle" style={{ width: "16rem", height: "2rem" }}>
             비밀번호
           </p>
           <input
-            style={{ width: "70vw", height: "4.6vh" }}
+            style={{ width: "18rem", height: "2.3rem" }}
             className="input"
             placeholder="비밀번호를 입력해주십시오."
           />
@@ -79,7 +79,7 @@ function CustomreceiveModal() {
           </div>
           <p
             className="minititle"
-            style={{ width: "33.4vw", height: "4.6vh" }}
+            style={{ width: "16rem", height: "2.3rem" }}
           >
             주소
           </p>
@@ -99,7 +99,7 @@ function CustomreceiveModal() {
           </div>
           <p className="minititle">상세주소</p>
           <input
-            style={{ width: "70vw", height: "4.6vh" }}
+            style={{ width: "18rem", height: "2.3rem" }}
             className="input"
             placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"
           />

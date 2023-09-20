@@ -3,7 +3,7 @@ import './Fixcustom.css';
 function Fixcustom() {
   
   return (
-    <div className="roomimg resrecpage" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/images/room.svg)`}}>
+    <div className="roomimg resrecpage" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/assets/room.svg)`}}>
     <div className="customreceivedivfix">
     
     <div className="custommodaltitle ">
@@ -39,7 +39,7 @@ function Fixcustom() {
       </div>
       </div>
       <div className='middlemodal'>
-      <button className="button bigbutton">확인하기</button>
+      <button className="button bigbuttons">확인하기</button>
     </div>
       </div>
   </div>

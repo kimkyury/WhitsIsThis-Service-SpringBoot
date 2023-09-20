@@ -8,7 +8,7 @@ function CustomMain() {
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
-      backgroundImage:`url(${process.env.PUBLIC_URL}/images/room.svg)`
+      backgroundImage:`url(${process.env.PUBLIC_URL}/assets/room.svg)`
       
       }}
       className="roomimg">

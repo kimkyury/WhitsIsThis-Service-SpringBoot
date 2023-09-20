@@ -81,7 +81,7 @@ function Resultconfirm() {
   };
 
   return (
-    <div className="roomimg resrecpage" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/images/room.svg)`}}>
+    <div className="roomimg resrecpage" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/assets/room.svg)`}}>
       <div className="customreceivedivconfirm">
         <div className="custommodaltitle ">
           <p>결과확인</p>

@@ -1,24 +1,24 @@
 .customreceivediv {
 
-  margin-top:5vh;
-  width: 80%;
-  height: 100%;
+  margin-top:1rem;
+  width: 20rem;
+  height: 65rem;
 
   background-color: white;
   opacity: 90%;
-  border: 2px solid white;
-  margin-bottom: 5vh;
-  border-radius: 2.6vw;
+  border: 0.2rem solid white;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
   background-repeat: no-repeat;
 }
 
 .cinput {
-  width:53vw;
-  height:4vh;
-  border-radius: 0.8vw;
+  width:14rem;
+  height:2rem;
+  border-radius: 0.2rem;
 }
 .customgridx {
-  margin-top: 2vh;
+  margin-top: 1rem;
   display: flex;
   flex-direction: row; /* 가로로 정렬 */
   align-items: center; /* 수직 가운데 정렬 (선택 사항) */
@@ -31,9 +31,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top:5vh;
-  width: 80%;
-  height: 30%;
+  margin-top:2rem;
+  width: 45rem;
+  height: 14rem;
 
   background-color: white;
   opacity: 90%;
@@ -81,16 +81,16 @@
   background-color: #2D4059;
   color: white;
   font-weight: bold;
-  border-radius: 40vw;
+  border-radius: 10rem;
 }
 
 .input {
   background-color: #ECF0F3;
-  border-radius: 0.8vw;
-  box-shadow: 0.01vw 0.15vw 0px rgba(0, 0, 0, 0.5);
+  border-radius: 0.4rem;
+  box-shadow: 0px 0.15rem 0px rgba(0, 0, 0, 0.5);
   border: none;
   font-size: 1rem;
-  padding-left:0.8vw;
+  padding-left:0.4rem;
 
 }
 .address-modal {
@@ -102,14 +102,14 @@
   z-index: 1000;
   border: 1px solid #ccc;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  max-width: 80%; /* 모달의 최대 너비를 설정하세요 */
+  padding: 1.2rem;
+  max-width: 70rem; /* 모달의 최대 너비를 설정하세요 */
 }
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0.8rem;
+  right: 0.8rem;
   cursor: pointer;
 }
 
@@ -120,18 +120,25 @@
 }
 
 .minibutton {
-  width:15vw;
-  height:4vh;
+  width:3.8rem;
+  height:2.3rem;
   font-size: 0.5rem;
 }
 
 .bigbutton {
-  width: 30vw;
-  height: 5vh;
+  width: 8rem;
+  height: 3rem;
   font-size: 1.2rem;
-  margin-top:0.6rem
+  margin-top:5rem
 }
 
 .button:hover {
   background-image: linear-gradient(to right, #2D4059, #2D4080);
+}
+
+.bigbuttons {
+  width: 8rem;
+  height: 3rem;
+  font-size: 1.2rem;
+  margin-top:2rem
 }

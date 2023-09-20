@@ -4,7 +4,7 @@ import Rule from "../../../customcomponent/moneyreturnrule/moneyreturnrule";
 import { BiErrorCircle } from "react-icons/bi";
 function Moneyreturn() {
   return (
-    <div className="roomimg resrecpage" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/images/room.svg)`}}>
+    <div className="roomimg resrecpage" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/assets/room.svg)`}}>
     <div className="customreceivedivm">
     
     <div className="custommodaltitle ">
