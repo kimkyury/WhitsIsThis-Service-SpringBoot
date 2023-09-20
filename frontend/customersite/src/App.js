@@ -12,10 +12,10 @@ import Resultconfirm from './customerpages/Customresultpage/resultconfirm/Result
 function App() {
   return (
     <div>
-      <Router basename="/custommain">
+      <Router basename="/customermain">
         <Routes>
           <Route path='/' element={[<Customheader/>, <Maincustompage/>]}/>
-          <Route path='/customreceive' element={[<Customheader/>, <Customreceivepage/>]}/>
+          <Route path='/customerreceive' element={[<Customheader/>, <Customreceivepage/>]}/>
           <Route path='/fixcustom' element={[<Customheader/>, <Fixcustom/>]}/>
           <Route path='/moneyreturn' element={[<Customheader/>, <Moneyreturn/>]}/>
           <Route path='/moneywait' element={[<Customheader/>, <Moneywait/>]}/>
