@@ -29,9 +29,9 @@ public class RequestRegisterRequest {
     private String requestContent;
 
     @NotNull
-    private LocalDate inspectionStart;
+    private String inspectionStart;
 
     @NotNull
-    private LocalDate inspectionEnd;
+    private String inspectionEnd;
 
 }
