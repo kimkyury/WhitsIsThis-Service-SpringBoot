@@ -28,7 +28,6 @@ const SearchDetail = () => {
 
   const handleHouseInfoClick = (info) => {
     if (info.status === "done") {
-      console.log("done");
       navigate(`/house/${data.id}/${info.id}/result`);
     } else {
       if (info.isConnected) {
