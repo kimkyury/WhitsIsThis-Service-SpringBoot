@@ -9,5 +9,6 @@ public interface RequestRepository extends JpaRepository<RequestEntity, Long> {
 
     Optional<RequestEntity> findById(Long id);
     Optional<List<RequestEntity>> findByEmployeeId(Integer employeeId);
+    Optional<RequestEntity> findByRequesterPhone(String phone);
 
 }
