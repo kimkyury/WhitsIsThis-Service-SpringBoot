@@ -38,9 +38,13 @@ const SerialNumberRecognition = ({
   return (
     <div className={`SerialNumberRecognition options ${modalStatus}`}>
       <div className="option_header" onClick={handleOpenSnumRecognition}>
-        <img src="/assets/stick_small.png" alt="" />
+        <img src={process.env.PUBLIC_URL + `/assets/stick_small.png `} alt="" />
       </div>
-      <img className="img_turtlebot" src="/assets/turtlebot.png" alt="turtlebot" />
+      <img
+        className="img_turtlebot"
+        src={process.env.PUBLIC_URL + `/assets/turtlebot.png`}
+        alt="turtlebot"
+      />
       <h2>시리얼넘버 입력</h2>
       <input
         ref={serialNumberInput}

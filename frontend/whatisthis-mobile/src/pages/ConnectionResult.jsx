@@ -27,7 +27,10 @@ const ConnectionResult = () => {
         </div>
       </div>
       <div className="connect_info_wrapper">
-        <img src={`/assets/${connectState ? "check_big" : "uncheck_big"}.png`} alt="chkimg" />
+        <img
+          src={process.env.PUBLIC_URL + `/assets/${connectState ? "check_big" : "uncheck_big"}.png`}
+          alt="chkimg"
+        />
         <h1>[ {serialNumber} ]</h1>
         {connectState ? <h2>기기연결 성공!</h2> : <h2>기기연결 실패..</h2>}
       </div>

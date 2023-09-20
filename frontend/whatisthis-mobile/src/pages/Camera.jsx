@@ -6,7 +6,7 @@ const Camera = () => {
   return (
     <div className="Camera container">
       <div className="camera_container">
-        <img src="/assets/camera_frame_big.png" alt="frame" />
+        <img src={process.env.PUBLIC_URL + `/assets/camera_frame_big.png`} alt="frame" />
         {/* 카메라 */}
       </div>
 
@@ -16,7 +16,7 @@ const Camera = () => {
         </div>
         <div className="image_container">
           {/* map.. */}
-          <img src="/assets/image_none.png" alt="img" />
+          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="img" />
         </div>
       </div>
 

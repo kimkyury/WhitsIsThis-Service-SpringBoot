@@ -7,9 +7,9 @@ const TodoSectionItem = ({ sectionName, isFinish, onClick, type }) => {
       <p>{sectionName}</p>
       {imageVisibility &&
         (isFinish ? (
-          <img src="/assets/check_green_small.png" alt="status" />
+          <img src={process.env.PUBLIC_URL + `/assets/check_green_small.png`} alt="status" />
         ) : (
-          <img src="/assets/check_red_small.png" alt="status" />
+          <img src={process.env.PUBLIC_URL + `/assets/check_red_small.png`} alt="status" />
         ))}
     </div>
   );

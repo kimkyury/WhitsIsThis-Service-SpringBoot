@@ -75,9 +75,13 @@ const Connection = () => {
             <h4>{addr}</h4>
           </div>
           <div className="connection_method_wrapper">
-            <img src="/assets/qr.png" alt="QR" onClick={() => handleConnectionMethodTymeClick()} />
             <img
-              src="/assets/snum.png"
+              src={process.env.PUBLIC_URL + `/assets/qr.png`}
+              alt="QR"
+              onClick={() => handleConnectionMethodTymeClick()}
+            />
+            <img
+              src={process.env.PUBLIC_URL + `/assets/snum.png`}
               alt="SNUM"
               onClick={() => handleConnectionMethodTymeClick()}
             />
@@ -85,9 +89,8 @@ const Connection = () => {
         </div>
         {/* camera container */}
         <div className="camera_container">
-          <img src="/assets/camera_frame_small.png" alt="" />
+          <img src={process.env.PUBLIC_URL + `/assets/camera_frame_small.png`} alt="" />
           <QRrecognition connect={connect} />
-          {/* <img className="camera_frame" src="/assets/camera_frame_small.png" alt="" /> */}
         </div>
 
         <h2>기기의 QR을 인식</h2>

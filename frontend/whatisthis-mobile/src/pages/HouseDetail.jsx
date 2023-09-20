@@ -68,15 +68,15 @@ const HouseDetail = () => {
         </div>
 
         <div className="map_wrapper">
-          <img src="/assets/image_none.png" alt="map" />
+          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
         </div>
         <div className="carousel">
-          <img src="/assets/image_none.png" alt="map" />
-          <img src="/assets/image_none.png" alt="map" />
-          <img src="/assets/image_none.png" alt="map" />
-          <img src="/assets/image_none.png" alt="map" />
-          <img src="/assets/image_none.png" alt="map" />
-          <img src="/assets/image_none.png" alt="map" />
+          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
+          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
+          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
+          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
+          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
+          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
         </div>
 
         <div className="button_wrapper">

@@ -47,7 +47,7 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
   return (
     <div className={`HouseTodoList options ${modalStatus}`}>
       <div className="option_header" onClick={handleOpenTodoList}>
-        <img src="/assets/stick_small.png" alt="" />
+        <img src={process.env.PUBLIC_URL + `/assets/stick_small.png`} alt="" />
       </div>
 
       <TodoListMain

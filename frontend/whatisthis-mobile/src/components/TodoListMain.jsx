@@ -26,7 +26,11 @@ const TodoListMain = ({ isListMain, sectionList, handleAddClick, handleSectionOp
       <TodoSectionItem sectionName={"구역5"} onClick={() => handleSectionOpen("5")} />
 
       <div className="TodoSectionItem" onClick={handleAddClick}>
-        <img className="add_section_btn" src="/assets/plus_circle_grey.png" alt="add" />
+        <img
+          className="add_section_btn"
+          src={process.env.PUBLIC_URL + `/assets/plus_circle_grey.png`}
+          alt="add"
+        />
       </div>
     </div>
   );
