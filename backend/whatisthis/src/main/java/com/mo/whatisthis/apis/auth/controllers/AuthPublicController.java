@@ -1,6 +1,8 @@
 package com.mo.whatisthis.apis.auth.controllers;
 
 
+import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
+
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse.EmployeeInfo;
@@ -88,5 +90,26 @@ public class AuthPublicController {
                                  ReissueTokenResponse.builder()
                                                      .accessToken("Bearer " + accessToken.get())
                                                      .build()));
+    }
+
+    // TODO: 반환 Object 변경
+    @Operation(summary = "휴대폰 인증을 위한 메시지 전송", tags = {"1. Auth"}, description = "인증번호를 받기 위한 핸드폰 번호를 기입해주세요")
+    @PostMapping("/phone/sns")
+    public ResponseEntity<SuccessResponse<Object>> sendMessageToAuthCode(){
+
+        // 1. 인증코드 생성
+        // 2. 인증코드 Redis 저장
+        // 3. 사용자에게 Message로 안내
+
+        return createSuccessResponse(SuccessCode.OK, "Sent message to verify Phone");
+    }
+
+    // TODO: 반환 Object 변경
+    @Operation(summary = "휴대폰 인증을 위한 메시지 전송", tags = {"1. Auth"}, description = "휴대폰 인증 메시지 전송 API이용 후, 안내받은 Message내의 인증번호를 입력하세요. ")
+    @PostMapping("/phone/verification")
+    public ResponseEntity<SuccessResponse<Object>> verifyAuthCode(){
+
+
+        return createSuccessResponse(SuccessCode.OK, "Sent message to verify Phone");
     }
 }
