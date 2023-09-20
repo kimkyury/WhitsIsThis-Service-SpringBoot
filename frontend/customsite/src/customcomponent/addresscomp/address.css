@@ -1,34 +1,34 @@
 .addressbox {
-  margin-top: 3vh;
-  margin-bottom: 3vh;
-  width: 80vw;
-  height: 84vh;
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
+  width: 20rem;
+  height: 45rem;
   background-color: #ECECEC;
-  border-radius: 2vw;
+  border-radius: 0.4rem;
   /* border: 2px solid black; */
 }
 .textinput {
-  border-radius: 2vw;
-  width: 70vw;
-  height: 6.25vh;
-  padding-left:3vw;
+  border-radius: 0.4rem;
+  width: 16rem;
+  height: 3rem;
+  padding-left:0.6rem;
   background-color: white;
   border: none;
-  box-shadow: 0px 0.4vw 0.1vw rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0.1rem 0px rgba(0, 0, 0, 0.5);
 }
 .addresstitle {
   display: flex;
   justify-content: center;
   align-items: center;
-  width:32vw;
-  height: 4.5vh;
+  width:6rem;
+  height: 2rem;
 
   background-color: #2D4059;
   color: white;
   font-weight: bold;
-  font-size: 5vw;
+  font-size: 1rem;
   text-align:center;
-  border-radius: 2vw;
+  border-radius: 0.4rem;
   margin-left: 3vw;
 }
 
