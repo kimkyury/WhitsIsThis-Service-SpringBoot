@@ -1,0 +1,38 @@
+.gridbuttonbox {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  width: 60vw;
+}
+
+.cmainbutton {
+  width: 30vw;
+  height: 30vw;
+  background-color: transparent;
+  border: 7px solid #2D4059;
+  border: none;
+  border-radius: 0.8vw;
+  color: #F07B3F;
+  font-size: 5vw;
+  font-weight: bold;
+  /* opacity: 90%; */
+}
+.roomimg {
+  /* background-image: url(`${process.env.PUBLIC_URL}/images/room.svg`); */
+  opacity: 0.8; /* 80%의 투명도를 나타내려면 0.8로 설정합니다. */
+  background-size: cover;
+}
+
+.cmainbutton:hover {
+  background-image: linear-gradient(to right, #2D4059, #2D4080);
+
+}
+
+.cbox {
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:'100%'
+
+
+}
