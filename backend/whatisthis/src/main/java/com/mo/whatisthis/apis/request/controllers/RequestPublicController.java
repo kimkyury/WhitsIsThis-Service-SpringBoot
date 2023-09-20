@@ -49,9 +49,12 @@ public class RequestPublicController {
 
     @Operation(summary = "비회원의 점검요청 취소(요청 상태에 따라 Output 다름)", tags = {"3. InspectionRequest"})
     @PatchMapping("/{id}/cancel")
-    public ResponseEntity<SuccessResponse<Object>> cancelRequest(@PathVariable("id") Long id) {
+    public ResponseEntity<SuccessResponse<Object>> cancelRequest(@PathVariable("id") Long requestId) {
         // id == 점검요청에 대한 id
-        return createSuccessResponse(SuccessCode.OK, "취소됨");
+
+        requestService.cancelRequest(requestId);
+
+        return createSuccessResponse(SuccessCode.OK, "Update Inspection Request to Cancel by Customer");
     }
 
 

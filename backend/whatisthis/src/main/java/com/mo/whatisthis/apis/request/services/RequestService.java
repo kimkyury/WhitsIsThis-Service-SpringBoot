@@ -7,6 +7,7 @@ import com.mo.whatisthis.apis.request.requests.RequestRegisterRequest;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Request;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,4 +37,14 @@ public class RequestService {
         requestRepository.save(requestEntity);
     }
 
+    public void cancelRequest(Long requestId) {
+
+        requestRepository.findById(requestId).ifPresent(
+            (selectRequest) -> {
+                selectRequest.setStatus(State.CANCELED);
+                requestRepository.save(selectRequest);
+            }
+        );
+
+    }
 }
