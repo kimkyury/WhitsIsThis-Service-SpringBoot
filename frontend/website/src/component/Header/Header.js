@@ -19,7 +19,7 @@ function Header(props) {
   return (
     <div>
       <div className="header">
-        <img style={{ width: '9vw', height:'8vh' }} src={`${process.env.PUBLIC_URL}/images/logo.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
+        <img style={{ width: '9vw', height:'8vh' }} src={`${process.env.PUBLIC_URL}/assets/logo.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
         <div style={{ display: 'flex', width: '28vw',height:'3.3vh', marginRight: '3%' }}>
           <NavLink
             to={`/`}
