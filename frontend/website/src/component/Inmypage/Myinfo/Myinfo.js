@@ -15,14 +15,7 @@ function Myinfo() {
     <div className='InfomMy'>
       <p className='Myinform'>내 정보</p>
       <div className='gridboxss' 
-      style={{ 
-        marginLeft: '10%', 
-        borderRadius: '0.42vw', 
-        border: '0.15vw solid black', 
-        width: '31vw', 
-        height: '13vh', 
-        alignItems: 'center' 
-        }}>
+>
         <img className='imgbox' 
         style={{ 
           position: 'sticky', 
@@ -38,7 +31,11 @@ function Myinfo() {
           alignItems:'center'
           }} 
           >
-          <div style={{display:'grid', gridTemplateRows:'1fr 1fr'}}>
+          <div 
+          style={{
+            display:'grid', 
+            gridTemplateRows:'1fr 1fr'
+            }}>
           <p className='updatebox'>
             <span>{consumer}</span>
             {/* <button
