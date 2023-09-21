@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/private/rooms")
-@Tag(name = "5. Room")
+@Tag(name = "5. Common code")
 @RequiredArgsConstructor
 public class RoomPrivateController {
 
     private final RoomService roomService;
 
     @GetMapping("")
-    @Operation(summary = "모든 방 종류 가져오기", tags = {"5. Room"})
+    @Operation(summary = "모든 방 종류 가져오기", tags = {"5. Common code"})
     public ResponseEntity<SuccessResponse<List<RoomResponse>>> getRooms() {
         return createSuccessResponse(SuccessCode.OK, "모든 방 정보 조회", roomService.getRooms());
     }
