@@ -1,9 +1,9 @@
-package com.mo.whatisthis.apis.room.controllers;
+package com.mo.whatisthis.apis.bank.controllers;
 
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
-import com.mo.whatisthis.apis.room.responses.RoomResponse;
-import com.mo.whatisthis.apis.room.services.RoomService;
+import com.mo.whatisthis.apis.bank.responses.BankResponse;
+import com.mo.whatisthis.apis.bank.services.BankService;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/private/rooms")
+@RequestMapping("/api/v1/private/banks")
 @Tag(name = "5. Common code")
 @RequiredArgsConstructor
-public class RoomPrivateController {
+public class BankPrivateController {
 
-    private final RoomService roomService;
+    private final BankService bankService;
 
     @GetMapping("")
-    @Operation(summary = "모든 방 종류 가져오기", tags = {"5. Common code"})
-    public ResponseEntity<SuccessResponse<List<RoomResponse>>> getRooms() {
-        return createSuccessResponse(SuccessCode.OK, "모든 방 정보 조회", roomService.getRooms());
+    @Operation(summary = "모든 은행 가져오기", tags = {"5. Common code"})
+    public ResponseEntity<SuccessResponse<List<BankResponse>>> getBanks() {
+        return createSuccessResponse(SuccessCode.OK, "전체 은행 조회", bankService.getBanks());
     }
 }
