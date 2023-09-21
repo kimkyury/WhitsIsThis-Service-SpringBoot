@@ -94,7 +94,7 @@ public class NaverSmsService {
     }
 
 
-    public SmsResponse sendAuthCode(SmsRequest smsRequest)
+    public SmsResponse sendSmsRequest(SmsRequest smsRequest)
         throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         
         Long time = System.currentTimeMillis();
