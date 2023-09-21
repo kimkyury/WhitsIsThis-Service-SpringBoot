@@ -8,7 +8,7 @@ function Customreceive() {
   return (
     <div>
 
-      <div className="modalbox roomimg" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/assets/room.svg)`}}>
+      <div className="modalbox roomimg backgr">
       <CustomreceiveModal/>
       {/* <Receivesuc/> */}
       {/* <Address/> */}

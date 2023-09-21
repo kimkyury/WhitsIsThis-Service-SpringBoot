@@ -3,7 +3,7 @@ import './Fixcustom.css';
 function Fixcustom() {
   
   return (
-    <div className="roomimg resrecpage" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/assets/room.svg)`}}>
+    <div className="roomimg resrecpage backgr">
     <div className="customreceivedivfix">
     
     <div className="custommodaltitle ">

@@ -2,7 +2,7 @@ import React from "react";
 import './Moneywait.css';
 function Moneywait() {
   return (
-    <div className="roomimg resrecpage" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/assets/room.svg)`}}>
+    <div className="roomimg resrecpage backgr" >
     <div className="customreceivedivwait">
     
     <div className="custommodaltitle ">

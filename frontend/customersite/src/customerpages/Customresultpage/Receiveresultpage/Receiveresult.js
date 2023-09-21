@@ -3,7 +3,7 @@ import './Receiveresult.css';
 // import Calendar from "../../../component/calendar/calendar";
 function Receiveresult() {
   return (
-    <div className="roomimg resrecpage" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/assets/room.svg)`}}>
+    <div className="roomimg resrecpage backgr" >
       <div className="customreceivedivs">
       
       <div className="custommodaltitle ">

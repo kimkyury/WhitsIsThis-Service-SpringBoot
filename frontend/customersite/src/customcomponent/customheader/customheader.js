@@ -13,7 +13,7 @@ function customHeader(props) {
             홈
           </NavLink>
           <NavLink
-            to={`/customreceive`}
+            to={`/customerreceive`}
             className='customheader'
           >
             신청페이지
