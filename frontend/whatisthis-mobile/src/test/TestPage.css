@@ -6,7 +6,7 @@
   margin: 0.5rem;
 }
 
-label.card {
+.HouseCard label.card {
   display: block;
   position: relative; /* #card figure is set to position: absolute. DC*/
   width: 100%;
@@ -17,7 +17,7 @@ label.card {
   transition: transform 1s;
 }
 
-label.card div {
+.HouseCard label.card div {
   position: absolute;
   margin: 0;
   width: 100%;
@@ -26,19 +26,19 @@ label.card div {
   backface-visibility: hidden;
 }
 
-.back {
+.HouseCard .back {
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
 
-input[type="checkbox"] {
+.HouseCard input[type="checkbox"] {
   position: absolute;
   top: -9999px;
   left: -9999px;
 }
 
 /* Or [id*='card']:checked ~ label.card  */
-input[type="checkbox"]:checked ~ label.card {
+.HouseCard input[type="checkbox"]:checked ~ label.card {
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
