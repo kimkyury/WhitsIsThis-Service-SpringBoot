@@ -4,6 +4,7 @@ package com.mo.whatisthis.apis.auth.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
 import com.mo.whatisthis.apis.auth.requests.SendAuthMessageRequest;
+import com.mo.whatisthis.apis.auth.requests.VerifyAuthCodeRequest;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse.EmployeeInfo;
 import com.mo.whatisthis.apis.member.entities.MemberEntity;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
@@ -153,5 +154,22 @@ public class AuthService {
         }
 
         return key.toString();
+    }
+
+    public void confirmAuthCode(VerifyAuthCodeRequest verifyAuthCodeRequest) {
+        String inputAuthCodeKey = verifyAuthCodeRequest.getPhone();
+        String inputAuthCodeValue = verifyAuthCodeRequest.getAuthCode();
+
+        String redisAuthCodeValue = redisService.getValue(inputAuthCodeKey);
+
+        if (redisAuthCodeValue.isEmpty()) {
+            throw new CustomException(ErrorCode.PHONE_INVALID);
+        }
+
+        if (inputAuthCodeValue != redisAuthCodeValue) {
+            throw new CustomException(ErrorCode.AUTHCODE_INVALID);
+        }
+
+        redisService.deleteValue(inputAuthCodeKey);
     }
 }
