@@ -7,7 +7,7 @@ import './Customreceivepage.css'
 function Customreceive() {
   return (
     <div>
-      신청페이지
+
       <div className="modalbox roomimg" style={{backgroundImage:`url(${process.env.PUBLIC_URL}/assets/room.svg)`}}>
       <CustomreceiveModal/>
       {/* <Receivesuc/> */}

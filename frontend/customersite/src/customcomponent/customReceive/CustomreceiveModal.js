@@ -110,7 +110,7 @@ function CustomreceiveModal() {
         </div>
       </div>
       <div className="middlemodal">
-        <button className="button bigbutton" onClick={handleApply}>
+        <button className="button bigbuttons" onClick={handleApply}>
           신청하기
         </button>
       </div>
