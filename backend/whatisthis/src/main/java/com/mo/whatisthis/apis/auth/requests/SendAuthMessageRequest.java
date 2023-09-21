@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class DeviceLoginRequest {
+public class SendAuthMessageRequest {
 
     @NotNull
     @NotEmpty
-    private String username; // 기기 일련번호
+    private String phone;
 
 }
