@@ -22,6 +22,16 @@ public class RedisService {
                             .get(key);
     }
 
+    public void saveData(String key, String value){
+        redisTemplate.opsForValue()
+                     .set(key, value);
+    }
+
+    public void saveDataWithTimeout(String key, String value, Long timeout){
+        redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+    }
+
+
     public void saveRefreshToken(String key, String value) {
         redisTemplate.opsForValue()
                      .set(key, value, refreshTokenTTL, TimeUnit.SECONDS);
