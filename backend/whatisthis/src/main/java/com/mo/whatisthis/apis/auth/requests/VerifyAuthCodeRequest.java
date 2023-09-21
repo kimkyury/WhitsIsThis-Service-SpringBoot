@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class PhoneAuthRequest {
+public class VerifyAuthCodeRequest {
 
     @NotNull
     @NotEmpty
-    private String phone;
+    private String authCode;
 
 }
