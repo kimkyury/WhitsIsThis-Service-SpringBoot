@@ -4,12 +4,14 @@ package com.mo.whatisthis.apis.auth.controllers;
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
+import com.mo.whatisthis.apis.auth.requests.SendAuthMessageRequest;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse.EmployeeInfo;
 import com.mo.whatisthis.apis.auth.responses.ReissueTokenResponse;
 import com.mo.whatisthis.apis.auth.services.AuthService;
 import com.mo.whatisthis.exception.RefreshTokenExpirationException;
 import com.mo.whatisthis.jwt.dtos.TokenDto;
+import com.mo.whatisthis.sms.responses.SmsResponse;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
@@ -19,6 +21,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpCookie;
@@ -95,11 +98,11 @@ public class AuthPublicController {
     // TODO: 반환 Object 변경
     @Operation(summary = "휴대폰 인증을 위한 메시지 전송", tags = {"1. Auth"}, description = "인증번호를 받기 위한 핸드폰 번호를 기입해주세요")
     @PostMapping("/phone/sms")
-    public ResponseEntity<SuccessResponse<String>> sendMessageToAuthCode(){
+    public ResponseEntity<SuccessResponse<String>> sendMessageToAuthCode(
+        @Valid @RequestBody SendAuthMessageRequest sendAuthMessageRequest
+    ){
 
-        // 1. 인증코드 생성
-        // 2. 인증코드 Redis 저장
-        // 3. 사용자에게 Message로 안내
+        authService.sendMessageProcedure(sendAuthMessageRequest);
 
         return createSuccessResponse(SuccessCode.OK, "Sent message to verify Phone");
     }
