@@ -1,16 +1,29 @@
 package com.mo.whatisthis.apis.auth.services;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
+import com.mo.whatisthis.apis.auth.requests.SendAuthMessageRequest;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse.EmployeeInfo;
 import com.mo.whatisthis.apis.member.entities.MemberEntity;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.member.repositories.MemberRepository;
+import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.dtos.TokenDto;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.security.utils.SecurityUtil;
+import com.mo.whatisthis.sms.requests.SmsRequest;
+import com.mo.whatisthis.sms.requests.SmsRequest.MessageDto;
+import com.mo.whatisthis.sms.responses.SmsResponse;
+import com.mo.whatisthis.sms.services.NaverSmsService;
+import com.mo.whatisthis.supports.codes.ErrorCode;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,6 +39,8 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisService redisService;
     private final MemberRepository memberRepository;
+    private final NaverSmsService naverSmsService;
+
 
     public TokenDto loginEmployee(EmployeeLoginRequest employeeLoginRequest) {
 
@@ -104,5 +119,49 @@ public class AuthService {
         String accessTokenValue = jwtTokenProvider.createAccessToken(memberNo, memberRole.name());
 
         return Optional.ofNullable(accessTokenValue);
+    }
+
+    public SmsResponse sendMessageProcedure(SendAuthMessageRequest sendAuthMessageRequest) {
+
+        // 1. 인증코드 생성
+        String authCode = createAuthCode();
+
+        // 2. 인증코드의 만료시간을 생성하여 Redis에 저장한다
+        redisService.saveDataWithTimeout(sendAuthMessageRequest.getPhone(), authCode, (long) 500);
+
+        // 3. 보낼 문자열 생성
+        String authMessageContent = "[인증번호] : " + authCode;
+
+        // 2. MessageDto 생성
+        MessageDto authMessageDto = naverSmsService.makeMessageDto(
+            sendAuthMessageRequest.getPhone(), authMessageContent);
+
+        // 3. smsSendRequest 생성
+        SmsRequest authSmsRequest = naverSmsService.makeSmsRequest(authMessageDto);
+
+        // 4. sendMessage 이용
+        SmsResponse smsResponse = null;
+        try {
+            smsResponse = naverSmsService.sendSmsRequest(authSmsRequest);
+        } catch (URISyntaxException | JsonProcessingException e) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+        System.out.println(smsResponse);
+
+        return smsResponse;
+    }
+
+    public static String createAuthCode() {
+        StringBuffer key = new StringBuffer();
+        Random rnd = new Random();
+
+        for (int i = 0; i < 6; i++) { // 인증코드 6자리
+            key.append((rnd.nextInt(10)));
+        }
+
+        return key.toString();
     }
 }
