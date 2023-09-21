@@ -93,7 +93,6 @@ public class AuthService {
                                                       .get();
 
         EmployeeInfo employeeInfo = EmployeeInfo.builder()
-                                                .id(employeeEntity.getId())
                                                 .username(employeeEntity.getUsername())
                                                 .name(employeeEntity.getName())
                                                 .phone(employeeEntity.getPhone())
@@ -122,23 +121,17 @@ public class AuthService {
 
     public SmsResponse sendMessageProcedure(SendAuthMessageRequest sendAuthMessageRequest) {
 
-        // 1. 인증코드 생성
         String authCode = createAuthCode();
 
-        // 2. 인증코드의 만료시간을 생성하여 Redis에 저장한다
         redisService.saveDataWithTimeout(sendAuthMessageRequest.getPhone(), authCode, (long) 500);
 
-        // 3. 보낼 문자열 생성
-        String authMessageContent = "[인증번호] : " + authCode;
+        String authMessageContent = "[이게MO야] 인증번호 : " + authCode;
 
-        // 2. MessageDto 생성
         MessageDto authMessageDto = naverSmsService.makeMessageDto(
             sendAuthMessageRequest.getPhone(), authMessageContent);
 
-        // 3. smsSendRequest 생성
         SmsRequest authSmsRequest = naverSmsService.makeSmsRequest(authMessageDto);
 
-        // 4. sendMessage 이용
         SmsResponse smsResponse = null;
         try {
             smsResponse = naverSmsService.sendSmsRequest(authSmsRequest);
@@ -147,8 +140,6 @@ public class AuthService {
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-
-        System.out.println(smsResponse);
 
         return smsResponse;
     }

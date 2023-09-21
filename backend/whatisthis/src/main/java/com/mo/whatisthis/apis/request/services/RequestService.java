@@ -6,12 +6,12 @@ import com.mo.whatisthis.apis.request.repositories.RequestRepository;
 import com.mo.whatisthis.apis.request.requests.RequestRegisterRequest;
 import com.mo.whatisthis.apis.request.responses.RequestFindByCustomerResponse;
 import com.mo.whatisthis.exception.CustomException;
+import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.DateUtil;
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,9 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class RequestService {
 
     private final RequestRepository requestRepository;
+    private final S3Service s3Service;
 
     public void createRequest(RequestRegisterRequest requestRegisterRequest,
-        MultipartFile warrant) {
+        MultipartFile warrant) throws IOException {
 
         RequestEntity requestEntity = new RequestEntity(
             requestRegisterRequest.getAddress(),
@@ -38,9 +39,8 @@ public class RequestService {
             requestEntity.setRequestContent(requestContent);
         }
 
-        String warrantFileUrl;
         if (!warrant.isEmpty()) {
-            warrantFileUrl = "temporary/warrant_test.pdf";
+            String warrantFileUrl = s3Service.saveFile(warrant);
             requestEntity.setWarrantUrl(warrantFileUrl);
         }
         requestEntity.setStatus(State.WAITING_FOR_PAY);

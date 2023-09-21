@@ -13,14 +13,14 @@ public class EmployeeLoginResponse {
 
     private String accessToken;
 
-    private int isInitLoginUser;
+    private Integer isInitLoginUser;
 
     private EmployeeInfo employeeinfo;
 
     @Data
     @Builder
-    public static class EmployeeInfo{
-        private Integer id;
+    public static class EmployeeInfo {
+
         private String username;
         private String name;
         private String phone;
