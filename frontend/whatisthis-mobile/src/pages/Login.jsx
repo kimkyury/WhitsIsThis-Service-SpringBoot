@@ -22,7 +22,8 @@ const Login = () => {
   const userPasswordInput = useRef();
 
   const handleSubmit = () => {
-    if (state.userId.length < 1) {
+    if (state.userId.length < 12) {
+      alert("아이디(사번 12글자) 입력!");
       userIdInput.current.focus();
       return;
     }
