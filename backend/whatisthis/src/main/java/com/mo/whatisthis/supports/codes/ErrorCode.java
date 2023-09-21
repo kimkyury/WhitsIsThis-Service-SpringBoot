@@ -17,6 +17,9 @@ public enum ErrorCode {
     VALIDATION_ERROR(400, "Validation Exception"),
     MISSING_HEADER(400, "Header data missing"),
 
+    AUTHCODE_INVALID(400, "승인코드가 일치하지 않거나 만료되었습니다. "),
+    PHONE_INVALID(400, "핸드폰 번호가 존재하지 않습니다. "),
+
 
     TOKEN_EXPIRED(401, "Token is expired"),
     TOKEN_INVALID(401, "토큰이 올바르지 않거나 만료되어 거부되었습니다. "),

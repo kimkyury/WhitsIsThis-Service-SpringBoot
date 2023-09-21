@@ -5,6 +5,7 @@ import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResp
 
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
 import com.mo.whatisthis.apis.auth.requests.SendAuthMessageRequest;
+import com.mo.whatisthis.apis.auth.requests.VerifyAuthCodeRequest;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse.EmployeeInfo;
 import com.mo.whatisthis.apis.auth.responses.ReissueTokenResponse;
@@ -74,7 +75,8 @@ public class AuthPublicController {
                                                                        .build()));
     }
 
-    @Operation(summary = "AccessToken 재발급", tags = {"1. Auth"}, description = "Cookie에 RefreshToken을 첨부해주세요.")
+    @Operation(summary = "AccessToken 재발급", tags = {
+        "1. Auth"}, description = "Cookie에 RefreshToken을 첨부해주세요.")
     @PostMapping("/reissue")
     public ResponseEntity<SuccessResponse<ReissueTokenResponse>> reissue(
         @CookieValue(name = "refresh-token") String refreshTokenCookie) {
@@ -95,24 +97,26 @@ public class AuthPublicController {
                                                      .build()));
     }
 
-    // TODO: 반환 Object 변경
-    @Operation(summary = "휴대폰 인증을 위한 메시지 전송", tags = {"1. Auth"}, description = "인증번호를 받기 위한 핸드폰 번호를 기입해주세요")
+    @Operation(summary = "휴대폰 인증을 위한 메시지 전송", tags = {
+        "1. Auth"}, description = "인증번호를 받기 위한 핸드폰 번호를 기입해주세요 (유효기간이 5분이므로, 5분 이내에 인증을 하셔야 합니다.) ")
     @PostMapping("/phone/sms")
     public ResponseEntity<SuccessResponse<String>> sendMessageToAuthCode(
         @Valid @RequestBody SendAuthMessageRequest sendAuthMessageRequest
-    ){
+    ) {
 
         authService.sendMessageProcedure(sendAuthMessageRequest);
 
         return createSuccessResponse(SuccessCode.OK, "Sent message to verify Phone");
     }
 
-    // TODO: 반환 Object 변경
-    @Operation(summary = "휴대폰 인증 번호 검사", tags = {"1. Auth"}, description = "휴대폰 인증 메시지 전송 API이용 후, 안내받은 Message내의 인증번호를 입력하세요. ")
+    @Operation(summary = "휴대폰 인증 번호 검사", tags = {
+        "1. Auth"}, description = "휴대폰 인증 메시지 전송 API이용 후, 메시지를 받은 phone 번호와 안내받은 Message 내의 인증번호를 입력하세요. ")
     @PostMapping("/phone/verification")
-    public ResponseEntity<SuccessResponse<String>> verifyAuthCode(){
+    public ResponseEntity<SuccessResponse<String>> verifyAuthCode(
+        @Valid @RequestBody VerifyAuthCodeRequest verifyAuthCodeRequest
+    ) {
+        authService.confirmAuthCode(verifyAuthCodeRequest);
 
-
-        return createSuccessResponse(SuccessCode.OK, "Sent message to verify Phone");
+        return createSuccessResponse(SuccessCode.OK, "AuthCode is Accept");
     }
 }
