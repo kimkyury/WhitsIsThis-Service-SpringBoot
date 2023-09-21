@@ -16,10 +16,13 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration cors = new CorsConfiguration();
 
+        cors.addAllowedOrigin("https://j9e203.p.ssafy.io");
+        cors.addAllowedOrigin("http://localhost");
         cors.setAllowCredentials(true);
-        cors.addAllowedOrigin("*");
+
         cors.addAllowedHeader("*");
-        cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PETCH", "DELETE", "OPTIONS"));
+        cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+
         source.registerCorsConfiguration("/api/**", cors);
 
         return new CorsFilter(source);
