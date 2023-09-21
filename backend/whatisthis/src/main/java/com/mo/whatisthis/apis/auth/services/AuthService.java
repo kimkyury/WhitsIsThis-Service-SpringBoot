@@ -94,7 +94,6 @@ public class AuthService {
                                                       .get();
 
         EmployeeInfo employeeInfo = EmployeeInfo.builder()
-                                                .id(employeeEntity.getId())
                                                 .username(employeeEntity.getUsername())
                                                 .name(employeeEntity.getName())
                                                 .phone(employeeEntity.getPhone())

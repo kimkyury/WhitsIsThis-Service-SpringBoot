@@ -6,7 +6,9 @@ import com.mo.whatisthis.apis.member.repositories.MemberRepository;
 import com.mo.whatisthis.apis.member.requests.DeviceRegisterRequest;
 import com.mo.whatisthis.apis.member.requests.EmployeeUpdateRequest;
 import com.mo.whatisthis.apis.member.responses.MemberCreateResponse;
+import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.utils.UUIDUtil;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final S3Service s3Service;
 
     public MemberCreateResponse createEmployee() {
 
@@ -59,14 +62,13 @@ public class MemberService {
     }
 
     public void registerEmployee(Integer loginId, EmployeeUpdateRequest employeeRegisterRequest,
-        MultipartFile profileImage) {
+        MultipartFile profileImage) throws IOException {
 
         String name = employeeRegisterRequest.getName();
         String phone = employeeRegisterRequest.getPhone();
         String password = passwordEncoder.encode(employeeRegisterRequest.getPassword());
 
-        // TODO: Modify testURL (feat. S3)
-        String profileImgURL = "/img/testImgURL.png";
+        String profileImgURL = s3Service.saveFile(profileImage);
 
         Optional<MemberEntity> employee = memberRepository.findById(loginId);
         employee.ifPresent(selectEmployee -> {
