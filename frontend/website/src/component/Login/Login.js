@@ -3,15 +3,15 @@ import axios from 'axios';
 import './Login.css'; // 스타일 파일을 가져옵니다.
 
 function Login() {
-  const [id, setId] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
   const handleLogin = async () => {
     try {
       // 로그인 요청을 보내는 Axios 코드
-      const response = await axios.post('/api/login', {
-        id,
+      const response = await axios.post('/api/v1/auth/employees/login', {
+        username,
         password,
       });
 
@@ -19,11 +19,13 @@ function Login() {
       if (response.status === 200) {
         // 로그인 성공
         setMessage('로그인 성공');
+        console.log('로그인 성공')
         // 여기에서 로그인 후의 동작을 수행하세요. 예: 페이지 이동 등
         // history.push('./list')
       } else {
         // 로그인 실패
         setMessage('로그인 실패');
+        console.log('로그인 실패')
       }
     } catch (error) {
       console.error('로그인 오류:', error);
@@ -38,12 +40,12 @@ function Login() {
         <div className='idbox'>
           <div >
             <input
-              type="id"
+              type="username"
               placeholder="아이디"
-              value={id}
+              value={username}
               className='IdPassTag'
               style={{marginTop:'0vh'}}
-              onChange={(e) => setId(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
             />
 
             <input

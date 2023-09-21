@@ -1,11 +1,13 @@
 import React from 'react';
 import Login from '../../component/Login/Login';
 import './login.css'
+import FirstLogin from '../../component/Login/firstLogin';
 function WebMain() {
   return (
-    <div>로그인페이지 프라이빗
+    <div>
       <div className='loginform'>
-      <Login/>
+      {/* <Login/> */}
+      <FirstLogin/>
       </div>
     </div>
   )
