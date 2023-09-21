@@ -13,35 +13,25 @@ import org.springframework.security.config.web.servlet.SecurityMarker;
 @Getter
 public class RequestFindByCustomerResponse {
 
-    private Long requestId; // 신청시 발생 정보
+    // ----------- 신청시 발생 정보
+    private Long requestId;
+    private String address;
+    private String addressDetail;
+    private String requesterName;
+    private String requesterPhone;
+    private String requestContent;
+    private LocalDate inspectionStart;
+    private LocalDate inspectionEnd;
+    private LocalDateTime requestedAt;
+    private String warrantUrl;
 
-    @Setter
+    // ------- 신청 이후 변경되는 정보들
+    private State status; // 처리 상태
     private String employeeName; // 배정된 사람의 이름
-
-    private String address; // 신청시 발생 정보
-
-    private String addressDetail; // 신청시 발생 정보
-
-    private String requesterName; // 신청시 발생 정보
-
-    private String requesterPhone; // 신청시 발생 정보
-
-    private String requestContent; // 신청시 발생 정보
-
-    private LocalDate inspectionStart; // 신청시 발생 정보
-
-    private LocalDate inspectionEnd; // 신청시 발생 정보
-
-    @Setter
     private LocalDate inspectionDate; // 배정 날짜
 
-    private State status; // 처리 상태
-
-    private LocalDateTime requestedAt; // 신청시 발생 정보
-
-    private String warrantUrl; // 신청시 발생 정보
-
     public void of(RequestEntity requestEntity) {
+
         this.requestId = requestEntity.getId();
         this.address = requestEntity.getAddress();
         this.addressDetail = requestEntity.getAddressDetail();
@@ -51,7 +41,6 @@ public class RequestFindByCustomerResponse {
         this.inspectionEnd = requestEntity.getInspectionEnd();
         this.status = requestEntity.getStatus();
         this.requestedAt = requestEntity.getRequestedAt();
-
         if (!(requestEntity.getRequestContent()!= null)) {
             this.requestContent = requestEntity.getRequestContent();
         }
