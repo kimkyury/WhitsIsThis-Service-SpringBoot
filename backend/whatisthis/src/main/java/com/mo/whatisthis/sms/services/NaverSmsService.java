@@ -73,22 +73,24 @@ public class NaverSmsService {
     public MessageDto makeMessageDto(String to, String content) {
 
         MessageDto messageDto = MessageDto.builder()
-                                          .to(to)
-                                          .content(content)
-                                          .build();
+            .to(to)
+            .content(content)
+            .build();
 
         return messageDto;
     }
 
     public SmsRequest makeSmsRequest(MessageDto messageDto) {
+        List<MessageDto> list = new ArrayList<>();
+        list.add(messageDto);
 
         SmsRequest smsRequest = SmsRequest.builder()
                                           .type("SMS")
                                           .contentType("COMM")
                                           .countryCode("82")
-                                          .from(senderPhone)
+                                          .from("01053753537")
                                           .content(messageDto.getContent())
-                                          .message(messageDto)
+                                          .messages(list)
                                           .build();
         return smsRequest;
     }
@@ -114,6 +116,7 @@ public class NaverSmsService {
         SmsResponse response = restTemplate.postForObject(
             new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + serviceId + "/messages"),
             httpBody, SmsResponse.class);
+
 
         return response;
     }

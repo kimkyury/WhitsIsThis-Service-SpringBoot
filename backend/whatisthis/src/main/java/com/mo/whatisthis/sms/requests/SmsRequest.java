@@ -1,12 +1,15 @@
 package com.mo.whatisthis.sms.requests;
 
+import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SmsRequest {
 
     private String type;
@@ -14,13 +17,13 @@ public class SmsRequest {
     private String countryCode;
     private String from;
     private String content;
-    private MessageDto message;
+    private List<MessageDto> messages;
 
     @Data
-    @NoArgsConstructor
     @Builder
-    public class MessageDto {
-
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MessageDto {
         String to;
         String content;
     }
