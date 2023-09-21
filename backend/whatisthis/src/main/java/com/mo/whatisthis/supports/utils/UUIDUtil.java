@@ -11,13 +11,12 @@ public class UUIDUtil {
     private static final char[] NUMBERS = "0123456789".toCharArray();
     private static final char[] SPECIAL_CHARACTERS = "!@#$%^&*".toCharArray();
 
-    private static final Random random = ThreadLocalRandom.current();
-
     public static void main(String[] args) {
         System.out.println(generateEfficientUUID());
     }
 
     public static String generateEfficientUUID() {
+        Random random = ThreadLocalRandom.current();
         char[] result = new char[10];
 
         // 각각의 세트에서 하나씩 확보
