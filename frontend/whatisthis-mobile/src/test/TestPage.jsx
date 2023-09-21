@@ -11,14 +11,19 @@ import HouseCard from "../components/HouseCard";
 import "./TestPage.css";
 
 const TestPage = () => {
-  const [isFlipped, setIsFlipped] = useState(false);
-
   const [progressPercentage, setProgressPercentage] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      if (progressPercentage < 70) {
+      // 저 100 을 진행상황 받아와서 설졍해야함
+      if (progressPercentage < 100) {
         setProgressPercentage((prevPercentage) => prevPercentage + 1);
+      }
+
+      if (progressPercentage === 100) {
+        setTimeout(() => {
+          document.getElementById("card-1").checked = true;
+        }, 1000);
       }
     });
 
@@ -35,46 +40,43 @@ const TestPage = () => {
         flexDirection: "column",
       }}
     >
-      {/* <CircularProgressBar percentage={percentage} /> */}
-      {/* <Test /> */}
-      {/* <Test2 /> */}
-      {/* <CaptureImage /> */}
-
-      {/* <div
-        className={["card", isFlipped ? "is-flipped" : ""].join(" ")}
-        onClick={() => setIsFlipped(!isFlipped)}
-      >
-        <div className="card__face card__face--front">
-          <div className="HouseCard">
-            <h2 className="title">앞면입니당</h2>
-            <CircularProgressBar percentage={0} />
-            <h2 className="work_name">작업이름</h2>
-          </div>
-        </div>
-        <div className="card__face card__face--back">
-          <div className="HouseCard">
-            <h2 className="title">뒷면입니당</h2>
-            <CircularProgressBar percentage={10} />
-            <h2 className="work_name">작업이름</h2>
-          </div>
-        </div>
-      </div> */}
-
       <div className="card-container">
-        <input type="checkbox" id="card-1" />
+        <input type="checkbox" id="card-1" disabled />
         <label htmlFor="card-1" className="card">
-          <div className="front">front</div>
-          <div className="back">back</div>
+          <div className="front HouseCard">
+            <h2 className="title">???</h2>
+            <CircularProgressBar percentage={progressPercentage} />
+            <h2 className="work_name">작업이름</h2>
+          </div>
+          <div
+            className="back HouseCard"
+            style={{
+              backgroundColor: "#9dd772",
+            }}
+          >
+            <h2 className="title">???</h2>
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "6.5625rem",
+              }}
+            >
+              <img
+                style={{ width: "7rem" }}
+                src={process.env.PUBLIC_URL + `/assets/check_done.png`}
+                alt=""
+              />
+            </div>
+
+            <h2 className="work_name">작업이름</h2>
+          </div>
         </label>
       </div>
 
-      <div className="HouseCard">
-        <h2 className="title">???</h2>
-        <CircularProgressBar percentage={progressPercentage} />
-        <h2 className="work_name">작업이름</h2>
-      </div>
-
-      <p>Click card to flip.</p>
+      <p>쮜바.. 집에보내줘..</p>
     </div>
   );
 };

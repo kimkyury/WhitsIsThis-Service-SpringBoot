@@ -1,50 +1,9 @@
-.card {
-  width: 10rem;
-  transition: transform 1s;
-  transform-style: preserve-3d;
-  cursor: pointer;
-  /* position: relative;
-  display: flex; */
-  justify-content: center;
-  align-items: center;
-  perspective: 600px;
-}
-
-.card.is-flipped {
-  transform: rotateY(180deg);
-}
-
-.card__face {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  color: white;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-.card__face--front {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: red;
-}
-
-.card__face--back {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: blue;
-  transform: rotateY(180deg);
-}
-/* ///////////////////////////////////////////////////////// */
-
 .card-container {
-  width: 200px;
-  height: 260px;
+  width: 10rem;
+  height: 13.9rem;
   -webkit-perspective: 800px; /* ? */
   perspective: 800px;
-  margin: 25px;
+  margin: 0.5rem;
 }
 
 label.card {
@@ -56,9 +15,6 @@ label.card {
   transform-style: preserve-3d;
   -webkit-transition: -webkit-transform 1s; /* Not sure if this is the correct syntax. DC */
   transition: transform 1s;
-  cursor: pointer;
-  border: 3px solid white;
-  border-radius: 5px;
 }
 
 label.card div {
@@ -68,15 +24,9 @@ label.card div {
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: 2px;
-}
-
-.front {
-  background: #61dafb;
 }
 
 .back {
-  background: gray;
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
