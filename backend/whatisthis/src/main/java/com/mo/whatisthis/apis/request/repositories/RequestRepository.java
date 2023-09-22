@@ -8,7 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RequestRepository extends JpaRepository<RequestEntity, Long> {
 
     Optional<RequestEntity> findById(Long id);
+
     Optional<List<RequestEntity>> findByEmployeeId(Integer employeeId);
+
     Optional<RequestEntity> findByRequesterPhone(String phone);
+
+    List<RequestEntity> findByEmployeeIdAndStatusIn(Integer employeeId,
+        List<RequestEntity.Status> statuses);
 
 }

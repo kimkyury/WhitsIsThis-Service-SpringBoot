@@ -3,7 +3,6 @@ package com.mo.whatisthis.apis.request.entities;
 import com.mo.whatisthis.apis.member.entities.MemberEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -68,7 +66,7 @@ public class RequestEntity {
     @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     @Setter
-    private State status; // 초기값: WAITING_FOR_PAY
+    private Status status; // 초기값: WAITING_FOR_PAY
 
     @Column(nullable = false)
     @Setter
@@ -90,7 +88,7 @@ public class RequestEntity {
         this.inspectionEnd = inspectionEnd;
     }
 
-    public enum State {
+    public enum Status {
         WAITING_FOR_PAY, CANCELED, WAITING_INSPECTION_DATE,
         WAITING_FOR_INSPECTION, IN_PROGRESS, DONE
     }
