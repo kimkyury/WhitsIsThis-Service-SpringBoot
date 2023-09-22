@@ -6,6 +6,7 @@ import axios from 'axios'; // Axios 라이브러리 추가
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
 
+
 function CustomreceiveModal() {
   const [showAddressModal, setShowAddressModal] = useState(false); // 주소 모달 표시 여부를 상태로 관리
   const [selectedAddress, setSelectedAddress] = useState(""); // 선택된 주소 데이터를 저장
@@ -13,7 +14,7 @@ function CustomreceiveModal() {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const [uploadedFileName, setUploadedFileName] = useState(""); // 업로드된 파일 이름 추가
-
+  const BASE_URL = 'REACT_APP_BASE_URL';
   // 주소찾기 버튼을 클릭하면 모달을 표시하는 함수
   const handleOpenAddressModal = () => {
     setShowAddressModal(true);
@@ -62,7 +63,7 @@ function CustomreceiveModal() {
 
     try {
       // 서버로 FormData를 POST 요청으로 보냅니다.
-      const response = await axios.post('/api/v1/guest/regist', formData, {
+      const response = await axios.post(`${BASE_URL}/api/v1/guest/regist`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // FormData를 사용할 때 필요한 헤더 설정
         },
