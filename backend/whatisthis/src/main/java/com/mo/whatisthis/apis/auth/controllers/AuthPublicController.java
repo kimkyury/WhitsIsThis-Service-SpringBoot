@@ -115,6 +115,7 @@ public class AuthPublicController {
     public ResponseEntity<SuccessResponse<String>> verifyAuthCode(
         @Valid @RequestBody VerifyAuthCodeRequest verifyAuthCodeRequest
     ) {
+
         authService.confirmAuthCode(verifyAuthCodeRequest);
 
         return createSuccessResponse(SuccessCode.OK, "AuthCode is Accept");
