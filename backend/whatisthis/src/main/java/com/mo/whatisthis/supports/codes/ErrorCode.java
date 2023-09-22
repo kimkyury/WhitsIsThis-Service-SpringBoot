@@ -20,11 +20,13 @@ public enum ErrorCode {
     AUTHCODE_INVALID(400, "승인코드가 일치하지 않거나 만료되었습니다. "),
     PHONE_INVALID(400, "핸드폰 번호가 존재하지 않습니다. "),
 
+    STATUS_INVALID(400, "변경할 요청의 상태가 올바르지 않습니다."),
+
 
     TOKEN_EXPIRED(401, "Token is expired"),
     TOKEN_INVALID(401, "토큰이 올바르지 않거나 만료되어 거부되었습니다. "),
 
-    NOT_INCLUDE_REFRESH_TOKEN(401, "Header에 RefreshToken이 첨부되지 않았습니다. " ),
+    NOT_INCLUDE_REFRESH_TOKEN(401, "Header에 RefreshToken이 첨부되지 않았습니다. "),
     NOT_INCLUDE_ACCESS_TOKEN(401, "Cookie에 AccessToken이 첨부되지 않았습니다. "),
 
     UNAUTHORIZED(401, "Unauthorized"),
