@@ -14,7 +14,7 @@ function CustomreceiveModal() {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const [uploadedFileName, setUploadedFileName] = useState(""); // 업로드된 파일 이름 추가
-  const BASE_URL = 'REACT_APP_BASE_URL';
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   // 주소찾기 버튼을 클릭하면 모달을 표시하는 함수
   const handleOpenAddressModal = () => {
     setShowAddressModal(true);
@@ -52,18 +52,18 @@ function CustomreceiveModal() {
   const handleApply = async () => {
     // FormData 객체를 생성하고 데이터를 추가합니다.
     const formData = new FormData();
-    formData.append('requesterName', document.querySelector('.input[placeholder="이름을 입력해주십시오."]').value);
-    formData.append('requestContent', document.querySelector('.input[placeholder="요청 사항을 입력해주십시오."]').value);
-    formData.append('warrant', uploadedFile); // 업로드된 파일 추가
     formData.append('address', selectedAddress.split(' ')[0]); // 주소
     formData.append('addressDetail', document.querySelector('.input[placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"]').value);
-    formData.append('requesterPhone', document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value);
     formData.append('inspectionEnd', endDate);
     formData.append('inspectionStart', startDate)
+    formData.append('requestContent', document.querySelector('.input[placeholder="요청 사항을 입력해주십시오."]').value);
+    formData.append('requesterPhone', document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value);
+    formData.append('requesterName', document.querySelector('.input[placeholder="이름을 입력해주십시오."]').value);
+    formData.append('warrant', uploadedFile); // 업로드된 파일 추가
 
     try {
       // 서버로 FormData를 POST 요청으로 보냅니다.
-      const response = await axios.post(`${BASE_URL}/api/v1/guest/regist`, formData, {
+      const response = await axios.post(`${BASE_URL}/api/v1/guest/requests`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // FormData를 사용할 때 필요한 헤더 설정
         },

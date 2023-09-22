@@ -7,8 +7,7 @@ function Address({selectedAddress, setSelectedAddress}) {
   const [searchText, setSearchText] = useState(""); // Input field value
   const [searchResults, setSearchResults] = useState([]); // Search results
   const [showAddressModal, setShowAddressModal] = useState(false); // 주소 모달 표시 여부를 상태로 관리
-  const KAKAO_API = `${process.env.KAKAO_API}`;
-
+  
   // 검색어 입력 필드에서 Enter 키를 눌렀을 때 검색 실행
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -16,11 +15,13 @@ function Address({selectedAddress, setSelectedAddress}) {
     }
   };
   const handleSearch = async () => {
+    const KAKAO_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
+    // const KAKAO_API = process.env.REACT_APP_KAKAO_API;
     try {
       // Replace 'YOUR_KAKAO_API_KEY_HERE' with your actual Kakao API key
       const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${searchText}`;
       const headers = {
-        Authorization: `KakaoAK ${KAKAO_API}`,
+        Authorization: `KakaoAK ${KAKAO_API_KEY}`,
       };
 
       // Send a GET request to Kakao API
