@@ -28,7 +28,7 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/v1/auth/employees/login`, {
+      const response = await axios.post(BASE_URL+`/api/v1/auth/employees/login`, {
         username: username,
         password: password,
       });
