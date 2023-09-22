@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -125,11 +127,15 @@ public class RequestService {
         requestRepository.save(requestEntity);
     }
 
-    public List<WaitingRequestResponse> getWaitingRequest() {
+    public List<WaitingRequestResponse> getWaitingRequest(Integer page) {
         List<WaitingRequestResponse> waitingRequestResponses = new ArrayList<>();
 
-        for (RequestEntity requestEntity : requestRepository.findByStatus(
-            Status.WAITING_INSPECTION_DATE)) {
+        PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+        Slice<RequestEntity> requestEntitySlice = requestRepository.findByStatus(
+            Status.WAITING_INSPECTION_DATE, pageRequest);
+
+        for (RequestEntity requestEntity : requestEntitySlice.getContent()) {
             waitingRequestResponses.add(new WaitingRequestResponse(requestEntity));
         }
 
@@ -137,11 +143,15 @@ public class RequestService {
     }
 
 
-    public List<DoneRequestResponse> getDoneRequests() {
+    public List<DoneRequestResponse> getDoneRequests(Integer page) {
         List<DoneRequestResponse> doneRequestResponses = new ArrayList<>();
 
-        for (RequestEntity requestEntity : requestRepository.findByStatus(
-            Status.DONE)) {
+        PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+        Slice<RequestEntity> requestEntitySlice = requestRepository.findByStatus(
+            Status.DONE, pageRequest);
+
+        for (RequestEntity requestEntity : requestEntitySlice.getContent()) {
             doneRequestResponses.add(new DoneRequestResponse(requestEntity));
         }
 
