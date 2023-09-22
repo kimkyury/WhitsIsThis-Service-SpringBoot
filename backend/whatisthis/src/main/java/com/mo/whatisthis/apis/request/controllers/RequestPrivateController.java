@@ -3,8 +3,10 @@ package com.mo.whatisthis.apis.request.controllers;
 
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
+import com.mo.whatisthis.apis.request.requests.SetRequestManagerRequest;
 import com.mo.whatisthis.apis.request.responses.AssignedRequestResponse;
 import com.mo.whatisthis.apis.request.responses.DoneRequestResponse;
+import com.mo.whatisthis.apis.request.responses.RequestDetailRequests;
 import com.mo.whatisthis.apis.request.responses.WaitingRequestResponse;
 import com.mo.whatisthis.apis.request.services.RequestService;
 import com.mo.whatisthis.exception.CustomException;
@@ -15,11 +17,13 @@ import com.mo.whatisthis.supports.responses.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,10 +39,13 @@ public class RequestPrivateController {
     @PatchMapping("/{id}/manager")
     @Operation(summary = "집 점검 요청 담당자 설정", tags = {
         "3. InspectionRequest"}, description = "id는 요청한 PK입니다.")
-    public ResponseEntity<SuccessResponse<Object>> assignRequest(@PathVariable Long id) {
+    public ResponseEntity<SuccessResponse<Object>> assignRequest(@PathVariable Long id,
+        @Valid @RequestBody
+        SetRequestManagerRequest setRequestManagerRequest) {
         requestService.assignRequest(id, SecurityUtil.getLoginId()
                                                      .orElseThrow(() -> new CustomException(
-                                                         ErrorCode.INTERNAL_SERVER_ERROR)));
+                                                         ErrorCode.INTERNAL_SERVER_ERROR)),
+            setRequestManagerRequest.getInspectionDate());
 
         return createSuccessResponse(SuccessCode.NO_CONTENT, "집 점검 요청 담당자를 설정했습니다.");
     }
@@ -69,6 +76,16 @@ public class RequestPrivateController {
         @RequestParam Integer page) {
         return createSuccessResponse(SuccessCode.OK, "점검이 끝난 집 점검 요청 목록 전체 조회",
             requestService.getDoneRequests(page));
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "집 점검 요청 내역 상세 조회", tags = {
+        "3. InspectionRequest"})
+    public ResponseEntity<SuccessResponse<RequestDetailRequests>> getRequestDetail(
+        @PathVariable Long id) {
+
+        return createSuccessResponse(SuccessCode.OK, "집 점검 요청 내역 상세 조회",
+            requestService.getRequestDetail(id));
     }
 
 }
