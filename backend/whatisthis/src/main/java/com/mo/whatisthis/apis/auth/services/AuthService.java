@@ -157,6 +157,7 @@ public class AuthService {
     }
 
     public void confirmAuthCode(VerifyAuthCodeRequest verifyAuthCodeRequest) {
+
         String inputAuthCodeKey = verifyAuthCodeRequest.getPhone();
         String inputAuthCodeValue = verifyAuthCodeRequest.getAuthCode();
 
@@ -166,7 +167,7 @@ public class AuthService {
             throw new CustomException(ErrorCode.PHONE_INVALID);
         }
 
-        if (inputAuthCodeValue != redisAuthCodeValue) {
+        if (!inputAuthCodeValue.equals(redisAuthCodeValue)) {
             throw new CustomException(ErrorCode.AUTHCODE_INVALID);
         }
 
