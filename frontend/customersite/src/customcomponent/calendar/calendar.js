@@ -3,11 +3,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
 import './calendar.css'
 
-function Calendar() {
+function Calendar({startDate, endDate, dateRange, setDateRange}) {
 
 
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+  
   return (
     <div style={{marginTop:'2%', display:'flex', justifyContent:'center'}}>
       <DatePicker 
