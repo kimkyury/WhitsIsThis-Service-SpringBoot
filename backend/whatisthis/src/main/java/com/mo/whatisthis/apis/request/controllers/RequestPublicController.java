@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/v1/guest/request")
+@RequestMapping("/api/v1/guest/requests")
 @Tag(name = "3. InspectionRequest")
 @RequiredArgsConstructor
 public class RequestPublicController {

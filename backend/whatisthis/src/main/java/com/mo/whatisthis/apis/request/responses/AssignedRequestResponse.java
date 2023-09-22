@@ -1,5 +1,6 @@
 package com.mo.whatisthis.apis.request.responses;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import java.time.LocalDateTime;
@@ -24,30 +25,20 @@ public class AssignedRequestResponse {
     }
 
     public void add(RequestEntity requestEntity) {
-        if (requestEntity.getRequestedAt() == null) {
-            requests.add(new Request(
-                requestEntity.getId(),
-                requestEntity.getAddressDetail(),
-                requestEntity.getStatus(),
-                requestEntity.getRequesterName(),
-                requestEntity.getRequesterPhone(),
-                requestEntity.getRequestContent()
-            ));
-        } else {
-            requests.add(new Request(
-                requestEntity.getId(),
-                requestEntity.getAddressDetail(),
-                requestEntity.getStatus(),
-                requestEntity.getRequesterName(),
-                requestEntity.getRequesterPhone(),
-                requestEntity.getRequestContent(),
-                requestEntity.getRequestedAt()
-            ));
-        }
+        requests.add(new Request(
+            requestEntity.getId(),
+            requestEntity.getAddressDetail(),
+            requestEntity.getStatus(),
+            requestEntity.getRequesterName(),
+            requestEntity.getRequesterPhone(),
+            requestEntity.getRequestContent(),
+            requestEntity.getRequestedAt()
+        ));
     }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     class Request {
 
         private Long id;
