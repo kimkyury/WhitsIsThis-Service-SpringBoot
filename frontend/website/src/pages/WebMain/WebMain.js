@@ -1,34 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // React Router의 Link 컴포넌트를 가져옵니다.
 import Login from '../../component/Login/Login';
-import './login.css'
 import FirstLogin from '../../component/Login/firstLogin';
+import './login.css';
+
 function WebMain() {
+  // 최초 로그인 여부를 로컬 스토리지에서 가져옵니다.
+  const isFirstLogin = localStorage.getItem('isFirstLogin') === 'true';
+
+  // 상태 변수를 사용하여 현재 로그인 상태를 관리합니다.
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // 만약 최초 로그인이 아니라면 로그인 상태를 설정합니다.
+  useEffect(() => {
+    if (!isFirstLogin) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  // 로그아웃 핸들러 함수
+  const handleLogout = () => {
+    // 로컬 스토리지에서 로그인 정보 제거
+    localStorage.removeItem('isFirstLogin');
+    // 로그인 상태를 false로 설정
+    setIsLoggedIn(false);
+  };
+
+  // 최초 로그인 여부에 따라 컴포넌트를 렌더링합니다.
   return (
     <div>
       <div className='loginform'>
-      <Login/>
-      {/* <FirstLogin/> */}
+        {isLoggedIn ? (
+          <div>
+            {/* 로그아웃 버튼 추가 */}
+            <button onClick={handleLogout}>Logout</button>
+            <Link to='/list'>Go to List</Link>
+          </div>
+        ) : (
+          <Login onLogin={() => setIsLoggedIn(true)} />
+        )}
       </div>
     </div>
-  )
+  );
 }
 
 export default WebMain;
-
-// const handleCardUpload = async () => {
-//   setName(document.getElementById('name').value);
-//   setSubTitle(document.getElementById('sub_Title').value);
-//   setPoint(selectedStars);
-
-{/* <form style={{ display: 'flex', flexDirection: 'column'}}
-onSubmit={onSubmitHandler}
->
-<label>Email</label>
-<input type='email' value={Email} onChange={onEmailHandler}/>
-<label>Password</label>
-<input type='password' value={Password} onChange={onPasswordHandler}/>
-<br />
-<button formAction=''>
-    Login
-</button>
-</form> */}

@@ -1,6 +1,8 @@
 import React from "react";
 import './Login.css';
 function firstLogin() {
+
+  //get axios를 통해 정보가져와서 대입 username, name, phone, isinitLoginuser
   return (
     <div className="infocha">
       <div className="infoin">
