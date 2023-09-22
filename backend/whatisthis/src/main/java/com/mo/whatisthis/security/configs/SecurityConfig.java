@@ -78,6 +78,11 @@ public class SecurityConfig {
             .antMatchers(AUTH_BLACK_LIST)
             .access("hasRole('ROLE_EMPLOYEE')")
 
+            .and()
+            .authorizeRequests()
+            .antMatchers("/ws/v1/connector")
+            .authenticated()
+
             .anyRequest()
             .permitAll();
 
