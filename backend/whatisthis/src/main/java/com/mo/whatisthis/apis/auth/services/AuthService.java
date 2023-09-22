@@ -173,4 +173,7 @@ public class AuthService {
 
         redisService.deleteValue(inputAuthCodeKey);
     }
+
+    public void logout() {
+    }
 }
