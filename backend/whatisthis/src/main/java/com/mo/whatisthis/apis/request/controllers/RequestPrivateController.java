@@ -6,6 +6,7 @@ import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResp
 import com.mo.whatisthis.apis.request.requests.SetRequestManagerRequest;
 import com.mo.whatisthis.apis.request.responses.AssignedRequestResponse;
 import com.mo.whatisthis.apis.request.responses.DoneRequestResponse;
+import com.mo.whatisthis.apis.request.responses.RequestDetailRequests;
 import com.mo.whatisthis.apis.request.responses.WaitingRequestResponse;
 import com.mo.whatisthis.apis.request.services.RequestService;
 import com.mo.whatisthis.exception.CustomException;
@@ -75,6 +76,16 @@ public class RequestPrivateController {
         @RequestParam Integer page) {
         return createSuccessResponse(SuccessCode.OK, "점검이 끝난 집 점검 요청 목록 전체 조회",
             requestService.getDoneRequests(page));
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "집 점검 요청 내역 상세 조회", tags = {
+        "3. InspectionRequest"})
+    public ResponseEntity<SuccessResponse<RequestDetailRequests>> getRequestDetail(
+        @PathVariable Long id) {
+
+        return createSuccessResponse(SuccessCode.OK, "집 점검 요청 내역 상세 조회",
+            requestService.getRequestDetail(id));
     }
 
 }
