@@ -2,13 +2,17 @@ package com.mo.whatisthis.apis.request.responses;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.mo.whatisthis.apis.history.entities.HistoryEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonInclude(Include.NON_NULL)
 public class RequestDetailRequests {
 
@@ -25,8 +29,9 @@ public class RequestDetailRequests {
     private Status status;
     private String employeeName;
     private LocalDate inspectionDate;
+    private History history;
 
-    public void of(RequestEntity requestEntity) {
+    public RequestDetailRequests(RequestEntity requestEntity) {
 
         this.id = requestEntity.getId();
         this.address = requestEntity.getAddress();
@@ -42,5 +47,23 @@ public class RequestDetailRequests {
         this.employeeName = requestEntity.getEmployee()
                                          .getName();
         this.inspectionDate = requestEntity.getInspectionDate();
+    }
+
+    public void setHistory(HistoryEntity historyEntity) {
+        this.history = new History(historyEntity);
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    class History {
+
+        private Long id;
+        private LocalDateTime inspectedAt;
+
+        public History(HistoryEntity historyEntity) {
+            this.id = historyEntity.getId();
+            this.inspectedAt = historyEntity.getInspectedAt();
+        }
     }
 }
