@@ -24,7 +24,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.Security;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +42,7 @@ public class AuthService {
     private final RedisService redisService;
     private final MemberRepository memberRepository;
     private final NaverSmsService naverSmsService;
+    private final AWSS3ResponseUtil awss3ResponseUtil;
 
 
     public TokenDto loginEmployee(EmployeeLoginRequest employeeLoginRequest) {
@@ -99,7 +99,7 @@ public class AuthService {
                                                 .phone(employeeEntity.getPhone())
                                                 .role(employeeEntity.getRole()
                                                                     .name())
-                                                .imageUrl(AWSS3ResponseUtil.concatURL(
+                                                .imageUrl(awss3ResponseUtil.concatURL(
                                                     employeeEntity.getImageUrl()))
                                                 .build();
 
@@ -177,10 +177,12 @@ public class AuthService {
 
     public void logout(String requestAccessToken) {
 
-        String username = SecurityUtil.getUsername().get();
+        String username = SecurityUtil.getUsername()
+                                      .get();
         String refreshTokenKey = redisService.getRefreshTokenKey(username);
 
         redisService.deleteValue(refreshTokenKey);
-        redisService.saveDataWithTimeout(requestAccessToken.substring(7), "blockAccessToken", (long) 900);
+        redisService.saveDataWithTimeout(requestAccessToken.substring(7), "blockAccessToken",
+            (long) 900);
     }
 }
