@@ -15,7 +15,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +50,7 @@ public class MemberPrivateController {
     }
 
     @Operation(summary = "직원의 최초 로그인시 정보 기입", tags = {
-        "2. Member"}, description = "Authorization에 token을 첨부해주세요.")
+        "2. Member"}, description = "Authorization에 token을 첨부해주세요. \n또한, Refreshtoken과 AccessToken을 초기화 했으므로 재로그인을 해주세요. ")
     @PatchMapping(value = "/employees", consumes = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -60,8 +63,16 @@ public class MemberPrivateController {
                                                    .get(), employeeUpdateRequest, profileImage);
         authService.logout(requestAccessToken);
 
-        // TODO: return Cookie 수정
-        return createSuccessResponse(SuccessCode.NO_CONTENT, "직원의 최초 정보가 업데이트 되었습니다. ");
+        ResponseCookie responseCookie = ResponseCookie.from("refresh-token", "")
+                                                      .maxAge(0)
+                                                      .path("/")
+                                                      .build();
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+            .body(SuccessResponse.ofStatusAndMessage(SuccessCode.OK, "Success Upload Init-Employee-Info, Try Re Login"))
+
     }
 
     @Operation(summary = "직원의 터틀봇 등록", tags = {
