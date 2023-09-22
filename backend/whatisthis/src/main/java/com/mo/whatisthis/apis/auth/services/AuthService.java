@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Security;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -174,6 +175,12 @@ public class AuthService {
         redisService.deleteValue(inputAuthCodeKey);
     }
 
-    public void logout() {
+    public void logout(String requestAccessToken) {
+
+        String username = SecurityUtil.getUsername().get();
+        String refreshTokenKey = redisService.getRefreshTokenKey(username);
+
+        redisService.deleteValue(refreshTokenKey);
+        redisService.saveDataWithTimeout(requestAccessToken.substring(7), "blockAccessToken", (long) 900);
     }
 }
