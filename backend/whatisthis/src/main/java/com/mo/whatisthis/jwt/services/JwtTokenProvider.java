@@ -93,8 +93,8 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public boolean validateAccessToken(String accessToken) {
-        try {
 
+        try {
             if (redisService.getValue(accessToken) != null) {
                 throw new CustomException(ErrorCode.TOKEN_INVALID); // 로그아웃으로 차단된 AccessToken
             }
