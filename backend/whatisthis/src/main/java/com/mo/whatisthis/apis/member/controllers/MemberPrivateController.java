@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.member.controllers;
 
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
+import com.mo.whatisthis.apis.auth.services.AuthService;
 import com.mo.whatisthis.apis.member.requests.DeviceRegisterRequest;
 import com.mo.whatisthis.apis.member.requests.EmployeeUpdateRequest;
 import com.mo.whatisthis.apis.member.responses.MemberCreateResponse;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberPrivateController {
 
     public final MemberService memberService;
+    public final AuthService authService;
 
     @Operation(summary = "직원 계정 생성", tags = {
         "2. Member"}, description = "Authorization에 token을 첨부해주세요.")
@@ -50,13 +53,14 @@ public class MemberPrivateController {
         MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<SuccessResponse<String>> updateEmployeeInitInfo(
         @Valid @RequestPart EmployeeUpdateRequest employeeUpdateRequest,
-        @RequestPart("profileImage") MultipartFile profileImage) throws IOException {
+        @RequestPart("profileImage") MultipartFile profileImage,
+        @RequestHeader("Authorization") String requestAccessToken) throws IOException {
 
         memberService.registerEmployee(SecurityUtil.getLoginId()
                                                    .get(), employeeUpdateRequest, profileImage);
+        authService.logout(requestAccessToken);
 
-        // TODO: 로그아웃 할 것.
-
+        // TODO: return Cookie 수정
         return createSuccessResponse(SuccessCode.NO_CONTENT, "직원의 최초 정보가 업데이트 되었습니다. ");
     }
 

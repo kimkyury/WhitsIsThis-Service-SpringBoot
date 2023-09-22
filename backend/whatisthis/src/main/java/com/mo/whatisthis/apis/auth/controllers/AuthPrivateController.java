@@ -1,10 +1,14 @@
 package com.mo.whatisthis.apis.auth.controllers;
 
 import com.mo.whatisthis.apis.auth.services.AuthService;
+import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,7 +28,16 @@ public class AuthPrivateController {
     public ResponseEntity<SuccessResponse> logout(
         @RequestHeader("Authorization") String requestAccessToken) {
 
-        authService.logout();
-        return null;
+        authService.logout(requestAccessToken);
+
+        ResponseCookie responseCookie = ResponseCookie.from("refresh-token", "")
+                                                      .maxAge(0)
+                                                      .path("/")
+                                                      .build();
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+            .body(SuccessResponse.ofStatusAndMessage(SuccessCode.OK, "Success Logout"));
     }
 }
