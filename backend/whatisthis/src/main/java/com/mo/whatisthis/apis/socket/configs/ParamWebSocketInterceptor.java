@@ -40,13 +40,13 @@ public class ParamWebSocketInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
         WebSocketHandler wsHandler, Map<String, Object> attributes) {
 
-        String role = getRoleByAccessToken(request).name();
+        Role role = getRoleByAccessToken(request);
         attributes.put("role", role);
 
         // TODO: request instanceof ServletServerHttpRequest 조건문 오류 발생시 재적용
         ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
 
-        if (role.equals(Role.ROLE_EMPLOYEE)) {
+        if (role == Role.ROLE_EMPLOYEE) {
             String historyIdStr = servletRequest.getServletRequest()
                                                 .getParameter("historyId");
             if (historyIdStr == null) {
@@ -55,7 +55,7 @@ public class ParamWebSocketInterceptor implements HandshakeInterceptor {
 
             attributes.put("historyId", Long.valueOf(historyIdStr));
 
-        } else if (role.equals(Role.ROLE_DEVICE)) {
+        } else if (role == Role.ROLE_DEVICE) {
             String serialNumber = servletRequest.getServletRequest()
                                                 .getParameter("serialNumber");
             if (serialNumber == null) {
@@ -63,7 +63,6 @@ public class ParamWebSocketInterceptor implements HandshakeInterceptor {
             }
 
             attributes.put("serialNumber", serialNumber);
-
         }
 
         return true;

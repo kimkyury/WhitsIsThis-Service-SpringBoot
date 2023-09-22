@@ -12,30 +12,31 @@ import org.springframework.web.socket.WebSocketSession;
 public class MoSocketProvider {
 
     private ConcurrentHashMap<Long, WebSocketSession> employeeByHistoryMap;
-    private ConcurrentHashMap<String, WebSocketSession> turtleSessionByTurtleNumber;
+    private ConcurrentHashMap<String, WebSocketSession> deviceSessionBySerialNumber;
 
     public MoSocketProvider() {
         this.employeeByHistoryMap = new ConcurrentHashMap<>();
-        this.turtleSessionByTurtleNumber = new ConcurrentHashMap<>();
+        this.deviceSessionBySerialNumber = new ConcurrentHashMap<>();
     }
 
     public void addEmployeeToSocket(Long historyId, WebSocketSession employeeSession) {
 
         //TODO: historyid 유효성 검사 Error처리
         employeeByHistoryMap.put(historyId, employeeSession);
-        System.out.println(">>>>>>>>>>>> Add Employee User to Map");
+        System.out.println(">>>>>>>>>>>> Add Employee to Map");
     }
 
     public void removeEmployeeToSocket(Long historyId) {
         employeeByHistoryMap.remove(historyId);
     }
 
-    public void addTurtleToSocket(String serialNumber, WebSocketSession turtleSession) {
-        turtleSessionByTurtleNumber.put(serialNumber, turtleSession);
+    public void addDeviceToSocket(String serialNumber, WebSocketSession deviceSession) {
+        deviceSessionBySerialNumber.put(serialNumber, deviceSession);
+        System.out.println(">>>>>>>>>>>> Add Device to Map");
     }
 
-    public void removeTurtleToSocket(String serialNumber) {
-        turtleSessionByTurtleNumber.remove(serialNumber);
+    public void removeDeviceToSocket(String serialNumber) {
+        deviceSessionBySerialNumber.remove(serialNumber);
     }
 
 }
