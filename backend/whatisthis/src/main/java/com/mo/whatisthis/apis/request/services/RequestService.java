@@ -6,7 +6,9 @@ import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
 import com.mo.whatisthis.apis.request.requests.RequestRegisterRequest;
 import com.mo.whatisthis.apis.request.responses.AssignedRequestResponse;
+import com.mo.whatisthis.apis.request.responses.DoneRequestResponse;
 import com.mo.whatisthis.apis.request.responses.RequestFindByCustomerResponse;
+import com.mo.whatisthis.apis.request.responses.WaitingRequestResponse;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
@@ -121,5 +123,28 @@ public class RequestService {
                                                       ErrorCode.BAD_REQUEST)));
 
         requestRepository.save(requestEntity);
+    }
+
+    public List<WaitingRequestResponse> getWaitingRequest() {
+        List<WaitingRequestResponse> waitingRequestResponses = new ArrayList<>();
+
+        for (RequestEntity requestEntity : requestRepository.findByStatus(
+            Status.WAITING_INSPECTION_DATE)) {
+            waitingRequestResponses.add(new WaitingRequestResponse(requestEntity));
+        }
+
+        return waitingRequestResponses;
+    }
+
+
+    public List<DoneRequestResponse> getDoneRequests() {
+        List<DoneRequestResponse> doneRequestResponses = new ArrayList<>();
+
+        for (RequestEntity requestEntity : requestRepository.findByStatus(
+            Status.DONE)) {
+            doneRequestResponses.add(new DoneRequestResponse(requestEntity));
+        }
+
+        return doneRequestResponses;
     }
 }
