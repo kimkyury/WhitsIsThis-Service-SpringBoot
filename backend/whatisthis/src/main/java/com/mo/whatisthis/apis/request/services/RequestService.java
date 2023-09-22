@@ -14,6 +14,7 @@ import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.DateUtil;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,14 +116,20 @@ public class RequestService {
     }
 
     @Transactional
-    public void assignRequest(Long id, Integer employeeId) {
+    public void assignRequest(Long id, Integer employeeId, LocalDate inspectionDate) {
         RequestEntity requestEntity = requestRepository.findById(id)
                                                        .orElseThrow(() -> new CustomException(
                                                            ErrorCode.BAD_REQUEST));
 
+        if (!Status.WAITING_INSPECTION_DATE.equals(requestEntity.getStatus())) {
+            throw new CustomException(ErrorCode.STATUS_INVALID);
+        }
+
         requestEntity.setEmployee(memberRepository.findById(employeeId)
                                                   .orElseThrow(() -> new CustomException(
                                                       ErrorCode.BAD_REQUEST)));
+        requestEntity.setInspectionDate(inspectionDate);
+        requestEntity.setStatus(Status.WAITING_FOR_INSPECTION);
 
         requestRepository.save(requestEntity);
     }
