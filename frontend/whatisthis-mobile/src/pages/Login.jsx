@@ -1,7 +1,9 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import { authorizedRequest } from "../utils/AxiosInterceptor";
 import MyButton from "../components/MyButton";
+import authAxios from "../utils/authAxios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,31 +19,77 @@ const Login = () => {
     });
   };
 
+  const [userInfo, setUserInfo] = useState();
+  const [accessToken, setAccessToken] = useState("");
+
   const userIdInput = useRef();
   const userPasswordInput = useRef();
 
-  const handleSubmit = () => {
-    if (state.userId.length < 12) {
-      alert("아이디(사번 12글자) 입력!");
-      userIdInput.current.focus();
-      return;
+  const handleSubmit = async () => {
+    // if (state.userId.length < 12) {
+    //   alert("아이디(사번 12글자) 입력!");
+    //   userIdInput.current.focus();
+    //   return;
+    // }
+
+    // if (state.userPassword.length < 5) {
+    //   userPasswordInput.current.focus();
+    //   return;
+    // }
+    try {
+      const response = await axios.post(`/api/v1/auth/employees/login`, {
+        username: "202300000006",
+        password: "ssafy0003",
+      });
+      // username: state.userId,
+      // password: state.userPassword,
+
+      console.log(response);
+      console.log(response.data.data);
+      console.log(response.data.data.employeeinfo);
+      console.log(response.data.data.accessToken);
+
+      setUserInfo(response.data.data.employeeinfo);
+      setAccessToken(response.data.data.accessToken);
+    } catch (e) {
+      console.error(e);
     }
 
-    if (state.userPassword.length < 5) {
-      userPasswordInput.current.focus();
-      return;
-    }
+    localStorage.setItem("key", accessToken);
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
-    // auth 통신로직
+    console.log(userInfo);
 
-    localStorage.setItem("userId", JSON.stringify(state.userId));
-
-    navigate("/");
+    // navigate("/");
 
     setState({
-      author: "",
-      content: "",
+      userId: "",
+      userPassword: "",
     });
+  };
+
+  const test = async () => {
+    try {
+      // const response = await axios({
+      //   headers: {
+      //     Authorization: accessToken,
+      //   },
+      //   method: "get",
+      //   url: `/api/v1/private/rooms`,
+      // });
+      // const response = await authorizedRequest({
+      //   method: "get",
+      //   url: `/rooms`,
+      // });
+      const response = await authAxios({
+        method: "get",
+        url: `/rooms`,
+      });
+
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -50,18 +98,20 @@ const Login = () => {
       <h2>Loginnnnn</h2>
       <div>
         <h5>ID</h5>
-        <input ref={userIdInput} name="userId" onChange={handleChangeState} />
+        <input ref={userIdInput} value={state.userId} name="userId" onChange={handleChangeState} />
       </div>
       <div>
         <h5>Password</h5>
         <input
           ref={userPasswordInput}
+          value={state.userPassword}
           type="password"
           name="userPassword"
           onChange={handleChangeState}
         />
       </div>
       <MyButton color={"white"} text={"로그인"} onClick={handleSubmit} />
+      <MyButton color={"white"} text={"testtest"} onClick={test} />
     </div>
   );
 };
