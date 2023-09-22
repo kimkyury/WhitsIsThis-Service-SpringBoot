@@ -1,5 +1,7 @@
 package com.mo.whatisthis.apis.request.services;
 
+import com.mo.whatisthis.apis.history.entities.HistoryEntity;
+import com.mo.whatisthis.apis.history.repositories.HistoryRepository;
 import com.mo.whatisthis.apis.member.repositories.MemberRepository;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
@@ -7,6 +9,7 @@ import com.mo.whatisthis.apis.request.repositories.RequestRepository;
 import com.mo.whatisthis.apis.request.requests.RequestRegisterRequest;
 import com.mo.whatisthis.apis.request.responses.AssignedRequestResponse;
 import com.mo.whatisthis.apis.request.responses.DoneRequestResponse;
+import com.mo.whatisthis.apis.request.responses.RequestDetailRequests;
 import com.mo.whatisthis.apis.request.responses.RequestFindByCustomerResponse;
 import com.mo.whatisthis.apis.request.responses.WaitingRequestResponse;
 import com.mo.whatisthis.exception.CustomException;
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +37,7 @@ public class RequestService {
 
     private final RequestRepository requestRepository;
     private final MemberRepository memberRepository;
+    private final HistoryRepository historyRepository;
     private final S3Service s3Service;
 
     public void createRequest(RequestRegisterRequest requestRegisterRequest,
@@ -130,8 +135,10 @@ public class RequestService {
                                                       ErrorCode.BAD_REQUEST)));
         requestEntity.setInspectionDate(inspectionDate);
         requestEntity.setStatus(Status.WAITING_FOR_INSPECTION);
-
         requestRepository.save(requestEntity);
+
+        HistoryEntity historyEntity = new HistoryEntity(requestEntity.getId());
+        historyRepository.save(historyEntity);
     }
 
     public List<WaitingRequestResponse> getWaitingRequest(Integer page) {
@@ -163,5 +170,20 @@ public class RequestService {
         }
 
         return doneRequestResponses;
+    }
+
+    public RequestDetailRequests getRequestDetail(Long id) {
+        RequestEntity requestEntity = requestRepository.findById(id)
+                                                       .orElseThrow(() -> new CustomException(
+                                                           ErrorCode.BAD_REQUEST));
+
+        RequestDetailRequests requestDetailRequests = new RequestDetailRequests(requestEntity);
+
+        Optional<HistoryEntity> historyEntity = historyRepository.findByRequestId(
+            requestEntity.getId());
+
+        historyEntity.ifPresent(requestDetailRequests::setHistory);
+
+        return requestDetailRequests;
     }
 }
