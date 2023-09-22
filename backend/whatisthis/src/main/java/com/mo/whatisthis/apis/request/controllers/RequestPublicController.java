@@ -38,7 +38,8 @@ public class RequestPublicController {
         MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<SuccessResponse<String>> createRequest(
         @Valid @RequestPart RequestRegisterRequest requestRegisterRequest,
-        @RequestPart("warrant") MultipartFile warrantFile) throws IOException {
+        @RequestPart(name = "warrant", required = false) MultipartFile warrantFile)
+        throws IOException {
 
         requestService.createRequest(requestRegisterRequest, warrantFile);
 

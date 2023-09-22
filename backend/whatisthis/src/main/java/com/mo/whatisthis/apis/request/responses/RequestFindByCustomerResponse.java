@@ -1,14 +1,10 @@
 package com.mo.whatisthis.apis.request.responses;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
-import com.mo.whatisthis.apis.request.entities.RequestEntity.State;
+import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import org.springframework.security.config.web.servlet.SecurityMarker;
 
 @Getter
 public class RequestFindByCustomerResponse {
@@ -26,7 +22,7 @@ public class RequestFindByCustomerResponse {
     private String warrantUrl;
 
     // ------- 신청 이후 변경되는 정보들
-    private State status; // 처리 상태
+    private Status status; // 처리 상태
     private String employeeName; // 배정된 사람의 이름
     private LocalDate inspectionDate; // 배정 날짜
 
@@ -41,19 +37,20 @@ public class RequestFindByCustomerResponse {
         this.inspectionEnd = requestEntity.getInspectionEnd();
         this.status = requestEntity.getStatus();
         this.requestedAt = requestEntity.getRequestedAt();
-        if (!(requestEntity.getRequestContent()!= null)) {
+        if (requestEntity.getRequestContent() != null) {
             this.requestContent = requestEntity.getRequestContent();
         }
 
-        if (!(requestEntity.getWarrantUrl() != null)) {
+        if (requestEntity.getWarrantUrl() != null) {
             this.warrantUrl = requestEntity.getWarrantUrl();
         }
 
-        if (!(requestEntity.getEmployee() == null) ) {
-            this.employeeName = requestEntity.getEmployee().getName();
+        if (requestEntity.getEmployee() != null) {
+            this.employeeName = requestEntity.getEmployee()
+                                             .getName();
         }
 
-        if (!(requestEntity.getInspectionDate() == null)) {
+        if (requestEntity.getInspectionDate() != null) {
             this.inspectionDate = requestEntity.getInspectionDate();
         }
     }
