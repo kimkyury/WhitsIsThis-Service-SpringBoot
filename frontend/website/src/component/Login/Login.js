@@ -1,31 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Login.css'; // 스타일 파일을 가져옵니다.
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
+  // 토큰을 상태로 관리
+  const [token, setToken] = useState('');
+
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 
   const handleLogin = async () => {
     try {
-      // 로그인 요청을 보내는 Axios 코드
-      const response = await axios.post('/api/v1/auth/employees/login', {
-        username,
-        password,
+      const response = await axios.post(`${BASE_URL}/api/v1/auth/employees/login`, {
+        username: username,
+        password: password,
       });
 
-      // 서버 응답 확인
       if (response.status === 200) {
-        // 로그인 성공
         setMessage('로그인 성공');
-        console.log('로그인 성공')
-        // 여기에서 로그인 후의 동작을 수행하세요. 예: 페이지 이동 등
-        // history.push('./list')
+        const authToken = response.data.token;
+        // 토큰을 상태로 저장
+        setToken(authToken);
+
+        // 로컬 스토리지에도 토큰 저장 (옵션)
+        localStorage.setItem('authToken', authToken);
+
+        // 페이지 이동
+        navigate('/list');
       } else {
-        // 로그인 실패
         setMessage('로그인 실패');
-        console.log('로그인 실패')
       }
     } catch (error) {
       console.error('로그인 오류:', error);
@@ -33,18 +41,29 @@ function Login() {
     }
   };
 
+  // 컴포넌트가 마운트될 때 로컬 스토리지에서 토큰 가져오기 (옵션)
+  useEffect(() => {
+    const storedToken = localStorage.getItem('authToken');
+    if (storedToken) {
+      // 로컬 스토리지에서 토큰을 가져와서 상태로 저장
+      setToken(storedToken);
+    }
+  }, []);
+
+  // ... (토큰 관련 코드 등)
+
   return (
     <div className='LoginForm'>
-      <form>
+      {/* <form> */}
         <h2 className='LoginTag'>로그인</h2>
         <div className='idbox'>
-          <div >
+          <div>
             <input
               type="username"
               placeholder="아이디"
               value={username}
               className='IdPassTag'
-              style={{marginTop:'0vh'}}
+              style={{ marginTop: '0vh' }}
               onChange={(e) => setUsername(e.target.value)}
             />
 
@@ -58,10 +77,12 @@ function Login() {
           </div>
         </div>
         <div className='LoginButtonDiv'>
-          <button className='LoginButton' onClick={handleLogin}>로그인</button>
+          <button className='LoginButton' onClick={handleLogin}>
+            로그인
+          </button>
           <p>{message}</p>
         </div>
-      </form>
+      {/* </form> */}
     </div>
   );
 }
