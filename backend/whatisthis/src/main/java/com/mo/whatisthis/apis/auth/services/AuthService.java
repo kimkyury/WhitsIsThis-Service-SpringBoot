@@ -19,6 +19,7 @@ import com.mo.whatisthis.sms.requests.SmsRequest.MessageDto;
 import com.mo.whatisthis.sms.responses.SmsResponse;
 import com.mo.whatisthis.sms.services.NaverSmsService;
 import com.mo.whatisthis.supports.codes.ErrorCode;
+import com.mo.whatisthis.supports.utils.AWSS3ResponseUtil;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
@@ -64,8 +65,6 @@ public class AuthService {
                                                .next()
                                                .getAuthority();
 
-        System.out.println(employeeNo + " " + employAuthority);
-
         return issueTokens(employeeNo, employAuthority);
     }
 
@@ -99,7 +98,8 @@ public class AuthService {
                                                 .phone(employeeEntity.getPhone())
                                                 .role(employeeEntity.getRole()
                                                                     .name())
-                                                .imageUrl(employeeEntity.getImageUrl())
+                                                .imageUrl(AWSS3ResponseUtil.concatURL(
+                                                    employeeEntity.getImageUrl()))
                                                 .build();
 
         return employeeInfo;
