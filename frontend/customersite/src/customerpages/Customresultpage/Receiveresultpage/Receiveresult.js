@@ -1,37 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import './Receiveresult.css';
-// import Calendar from "../../../component/calendar/calendar";
+
 function Receiveresult() {
+  // State to store the cancellation status
+  const [cancellationStatus, setCancellationStatus] = useState(null);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+  // Function to handle cancellation button click
+  const handleCancellation = async () => {
+    try {
+      // Replace {id} with the actual ID you want to cancel
+      const id = 1; // Replace with the actual ID
+      const response = await fetch(`${BASE_URL}/api/v1/guest/request/${id}/cancel`, {
+        method: 'PATCH', // Specify the HTTP method as 'PATCH'
+        // Add any necessary headers, such as authorization headers
+      });
+
+      if (response.ok) {
+        // Cancellation request was successful
+        console.log("Cancellation request was successful.");
+      } else {
+        // Cancellation request failed
+        console.log("Cancellation request failed.");
+      }
+    } catch (error) {
+      // Handle any network or other errors
+      console.error("An error occurred while processing your request:", error);
+    }
+  };
+
   return (
-    <div className="roomimg resrecpage backgr" >
+    <div className="roomimg resrecpage backgr">
       <div className="customreceivedivs">
-      
-      <div className="custommodaltitle ">
-        <p>신청 결과</p>
+        <div className="custommodaltitle">
+          <p>신청 결과</p>
+        </div>
+        <div className="middlemodals">
+          <div>
+            <div className="customgrids">
+              <p className="recrestitle">은행명 :</p>
+              <p>계좌명</p>
+            </div>
+            <p className="recrestitle">가상계좌 :</p>
+            <p>가상계좌들어갈곳</p>
+          </div>
+        </div>
+        <div className="middlebox">
+          <button className="button middlebutton" onClick={handleCancellation}>
+            신청취소
+          </button>
+          <button className="button middlebutton">확인</button>
+        </div>
       </div>
-      <div className="middlemodals">
-        <div>
-
-        <div className="customgrids">
-        <p className="recrestitle">은행명 :</p>
-        <p>계좌명</p>
+      {cancellationStatus && (
+        <div className="cancellation-status">
+          {cancellationStatus}
         </div>
-
-        <p className="recrestitle">가상계좌 :</p>
-        <p>가상계좌들어갈곳</p>
-
-        </div>
-        </div>
-      <div className="middlebox">
-        <button className="button middlebutton">확인</button>
-        <button className="button middlebutton">신청취소</button>
-        </div>
-        </div>
+      )}
     </div>
-
-  )
+  );
 }
-// 계좌에 따라서 가상계좌 나옴 => 계좌 바꿀때마다 get요청
-// (후순위)신청취소를 누르면 => 환불페이지 => 환불신청을 할때 
-// => post하면서 계좌조회 api get요청 확인 후 잘못되었습니다. 환불요청이 접수되었습니다. or 환불이 되었습니다.
+
 export default Receiveresult;

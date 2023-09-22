@@ -3,40 +3,48 @@ import "./address.css";
 import Addresscomp from "./addresscomp";
 import axios from "axios";
 
-function Address({selectedAddress, setSelectedAddress}) {
-  const [searchText, setSearchText] = useState(""); // Input field value
-  const [searchResults, setSearchResults] = useState([]); // Search results
-  const [showAddressModal, setShowAddressModal] = useState(false); // 주소 모달 표시 여부를 상태로 관리
-  
-  // 검색어 입력 필드에서 Enter 키를 눌렀을 때 검색 실행
+function Address({ selectedAddress, setSelectedAddress }) {
+  const [searchText, setSearchText] = useState(""); // 입력 필드 값
+  const [searchResults, setSearchResults] = useState([]); // 검색 결과
+  const [showAddressModal, setShowAddressModal] = useState(false); // 주소 모달 표시 여부
+
+  // Enter 키를 눌렀을 때 검색 실행
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       handleSearch();
     }
   };
+
   const handleSearch = async () => {
     const KAKAO_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
-    // const KAKAO_API = process.env.REACT_APP_KAKAO_API;
+
+    if (!searchText) {
+      console.error("검색어를 입력하세요.");
+      return;
+    }
+
     try {
-      // Replace 'YOUR_KAKAO_API_KEY_HERE' with your actual Kakao API key
-      const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${searchText}`;
+      const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(searchText)}`;
       const headers = {
         Authorization: `KakaoAK ${KAKAO_API_KEY}`,
       };
 
-      // Send a GET request to Kakao API
+      // Kakao API에 GET 요청 보내기
       const response = await axios.get(apiUrl, { headers });
 
-      // Update the search results with the data from the response
+      // 응답 데이터로 검색 결과 업데이트
       setSearchResults(response.data.documents);
     } catch (error) {
-      console.error("Error while making API request:", error);
+      console.error("API 요청 중 오류 발생:", error);
+      if (error.response) {
+        console.error("API 응답 데이터:", error.response.data); // API 응답 데이터 로그에 출력
+      }
     }
   };
 
-  // 주소를 선택하고 입력하기 버튼을 클릭할 때 호출되는 함수
+  // 주소 선택 및 "입력하기" 버튼 클릭 시 호출되는 함수
   const handleInputAddress = (address) => {
-    // 주소 객체에서 필요한 정보를 추출하여 문자열로 변환
+    // 주소 객체에서 필요한 정보 추출하여 문자열로 변환
     const formattedAddress = `${address.address_name} ${
       address.road_address && address.road_address.building_name
         ? `- ${address.road_address.building_name}`
@@ -62,13 +70,12 @@ function Address({selectedAddress, setSelectedAddress}) {
           onChange={(e) => setSearchText(e.target.value)}
           onKeyPress={handleKeyPress} // Enter 키 이벤트 처리
         />
-        {/* <button onClick={handleSearch}>검색</button> */}
       </div>
       <div style={{ display: "flex", alignItems: "center" }}>
         <p className="searchbox">총 검색 건수: {searchResults.length}건</p>
       </div>
       <div className="divdiv">
-        {/* Map over search results and render Addresscomp for each item */}
+        {/* 검색 결과를 매핑하고 각 항목에 대해 Addresscomp를 렌더링합니다 */}
         <div>
           {searchResults.map((result, index) => (
             <Addresscomp
@@ -77,7 +84,8 @@ function Address({selectedAddress, setSelectedAddress}) {
               onSelect={handleInputAddress}
               selectedAddress={selectedAddress}
               setSelectedAddress={setSelectedAddress}
-            ></Addresscomp>
+              setShowAddressModal={setShowAddressModal} // setShowAddressModal 함수 전달
+            />
           ))}
         </div>
       </div>
@@ -88,7 +96,7 @@ function Address({selectedAddress, setSelectedAddress}) {
           <button className="close-button" onClick={() => setShowAddressModal(false)}>
             닫기
           </button>
-          <Address onSelect={handleInputAddress} />
+          <Address showAddressModal={showAddressModal} setShowAddressModal={setShowAddressModal} onSelect={handleInputAddress} />
         </div>
       )}
 

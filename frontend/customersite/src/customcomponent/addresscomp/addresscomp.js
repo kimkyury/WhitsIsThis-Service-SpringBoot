@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-function Addresscomp({ result, onSelect }) {
+function Addresscomp({ result, onSelect, showAddressModal, setShowAddressModal }) {
   const [showInputButton, setShowInputButton] = useState(false);
   const containerRef = useRef(null);
 
@@ -9,6 +9,9 @@ function Addresscomp({ result, onSelect }) {
       onSelect(result);
     }
     setShowInputButton(false);
+
+    // 모달을 닫기 위해 setShowAddressModal 함수 호출
+    // setShowAddressModal(false);
   };
 
   const handleCompClick = () => {
