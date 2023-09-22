@@ -4,6 +4,8 @@ package com.mo.whatisthis.apis.request.controllers;
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
 import com.mo.whatisthis.apis.request.responses.AssignedRequestResponse;
+import com.mo.whatisthis.apis.request.responses.DoneRequestResponse;
+import com.mo.whatisthis.apis.request.responses.WaitingRequestResponse;
 import com.mo.whatisthis.apis.request.services.RequestService;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.security.utils.SecurityUtil;
@@ -49,4 +51,21 @@ public class RequestPrivateController {
                                                           .orElseThrow(() -> new CustomException(
                                                               ErrorCode.INTERNAL_SERVER_ERROR))));
     }
+
+    @GetMapping("/waiting")
+    @Operation(summary = "점검 날짜를 받기 전인 집 점검 요청 목록 전체 조회", tags = {
+        "3. InspectionRequest"})
+    public ResponseEntity<SuccessResponse<List<WaitingRequestResponse>>> getWaitingRequests() {
+        return createSuccessResponse(SuccessCode.OK, "점검 날짜를 받기 전인 집 점검 요청 목록 전체 조회",
+            requestService.getWaitingRequest());
+    }
+
+    @GetMapping("/done")
+    @Operation(summary = "점검이 끝난 집 점검 요청 목록 전체 조회", tags = {
+        "3. InspectionRequest"})
+    public ResponseEntity<SuccessResponse<List<DoneRequestResponse>>> getDoneRequests() {
+        return createSuccessResponse(SuccessCode.OK, "점검이 끝난 집 점검 요청 목록 전체 조회",
+            requestService.getDoneRequests());
+    }
+
 }
