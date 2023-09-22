@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -178,12 +179,11 @@ public class RequestService {
 
         RequestDetailRequests requestDetailRequests = new RequestDetailRequests(requestEntity);
 
-        if (historyRepository.findByRequestId(requestEntity.getId())
-                             .isPresent()) {
-            requestDetailRequests.setHistory(
-                historyRepository.findByRequestId(requestEntity.getId())
-                                 .get());
-        }
-        return new RequestDetailRequests(requestEntity);
+        Optional<HistoryEntity> historyEntity = historyRepository.findByRequestId(
+            requestEntity.getId());
+
+        historyEntity.ifPresent(requestDetailRequests::setHistory);
+
+        return requestDetailRequests;
     }
 }
