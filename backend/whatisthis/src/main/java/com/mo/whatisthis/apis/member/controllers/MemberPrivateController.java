@@ -71,7 +71,7 @@ public class MemberPrivateController {
         return ResponseEntity
             .status(HttpStatus.OK)
             .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-            .body(SuccessResponse.ofStatusAndMessage(SuccessCode.OK, "Success Upload Init-Employee-Info, Try Re Login"))
+            .body(SuccessResponse.ofStatusAndMessage(SuccessCode.OK, "Success Upload Init-Employee-Info, Try Re Login"));
 
     }
 
