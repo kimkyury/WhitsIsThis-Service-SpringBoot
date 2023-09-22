@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -54,18 +55,20 @@ public class RequestPrivateController {
 
     @GetMapping("/waiting")
     @Operation(summary = "점검 날짜를 받기 전인 집 점검 요청 목록 전체 조회", tags = {
-        "3. InspectionRequest"})
-    public ResponseEntity<SuccessResponse<List<WaitingRequestResponse>>> getWaitingRequests() {
+        "3. InspectionRequest"}, description = "page는 1부터 시작합니다.")
+    public ResponseEntity<SuccessResponse<List<WaitingRequestResponse>>> getWaitingRequests(
+        @RequestParam Integer page) {
         return createSuccessResponse(SuccessCode.OK, "점검 날짜를 받기 전인 집 점검 요청 목록 전체 조회",
-            requestService.getWaitingRequest());
+            requestService.getWaitingRequest(page));
     }
 
     @GetMapping("/done")
     @Operation(summary = "점검이 끝난 집 점검 요청 목록 전체 조회", tags = {
-        "3. InspectionRequest"})
-    public ResponseEntity<SuccessResponse<List<DoneRequestResponse>>> getDoneRequests() {
+        "3. InspectionRequest"}, description = "page는 1부터 시작합니다.")
+    public ResponseEntity<SuccessResponse<List<DoneRequestResponse>>> getDoneRequests(
+        @RequestParam Integer page) {
         return createSuccessResponse(SuccessCode.OK, "점검이 끝난 집 점검 요청 목록 전체 조회",
-            requestService.getDoneRequests());
+            requestService.getDoneRequests(page));
     }
 
 }
