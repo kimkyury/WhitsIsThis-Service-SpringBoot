@@ -20,7 +20,6 @@ import Camera from "./pages/Camera";
 
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
-
   return (
     <div className="App">
       <BrowserRouter>

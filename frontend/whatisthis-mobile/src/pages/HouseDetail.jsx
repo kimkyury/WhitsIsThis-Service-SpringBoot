@@ -26,6 +26,10 @@ const HouseDetail = () => {
   // 맵을 만드는지 확인 상태변수
   const [isCreatingMap, setIsCreatingMap] = useState(false);
 
+  // 모든 검사를 마쳤는지 확인
+  // 값 받아와서 설정해주기
+  const [isFinish, setIsFinish] = useState(true);
+
   useEffect(() => {
     if (buildingList.length >= 1) {
       const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
@@ -125,6 +129,7 @@ const HouseDetail = () => {
             text={"점검완료"}
             color={"green"}
             onClick={() => navigate(`/house/${buildingId}/${houseId}/result`)}
+            isFinish={isFinish}
           />
         </div>
 

@@ -47,6 +47,10 @@ body {
     background-color: rgba(178, 178, 178, 0.581) !important;
   }
 }
+.MyButton_disable {
+  background-color: rgba(91, 91, 91, 0.4) !important;
+  color: #929292 !important;
+}
 .MyButton_white {
   background-color: #ffffff;
   color: #0e0e0e;

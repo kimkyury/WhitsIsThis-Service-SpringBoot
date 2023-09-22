@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import TodoListMain from "./TodoListMain";
 import TodoAddSection from "./TodoAddSection";
 import SectionDetail from "./SectionDetail";
+
+import { dummySections } from "../utils/DummyData";
 
 const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
   const modalStatus = isOpen ? "slide_up" : "slide_down";
@@ -12,22 +14,33 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
   const [isAddSection, setIsAddSection] = useState(false);
   const [isListMain, setIsListMain] = useState(true);
   const [isSectionDetail, setIsSectionDetail] = useState(false);
-  const [targetSectionId, setTargetSectionId] = useState(0);
+  const [targetSection, setTargetSection] = useState({});
 
-  const handleAddClick = (sectionId) => {
+  useEffect(() => {
+    // axios로 리스트 가져오는 등..
+    setSectionList(dummySections);
+  }, []);
+
+  const handleAddClick = (newSection) => {
     if (isListMain) {
       setIsListMain(!isListMain);
       setIsAddSection(!isAddSection);
       return;
     }
+
     // sectionId 추가
+    setSectionList((prevData) => [...prevData, newSection]);
     setIsListMain(!isListMain);
     setIsAddSection(!isAddSection);
   };
 
   const handleSectionOpen = (sectionId) => {
     if (setIsListMain) {
-      setTargetSectionId(sectionId);
+      const target = sectionList.find((it) => parseInt(it.sectionId) === parseInt(sectionId));
+      if (target) {
+        setTargetSection(target);
+      }
+
       setIsListMain(!isListMain);
       setIsSectionDetail(!isSectionDetail);
       return;
@@ -58,7 +71,7 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
       />
       <TodoAddSection isAddSection={isAddSection} handleAddClick={handleAddClick} />
       <SectionDetail
-        sectionId={targetSectionId}
+        targetSection={targetSection}
         isSectionDetail={isSectionDetail}
         handleSectionOpen={handleSectionOpen}
       />

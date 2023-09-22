@@ -1,6 +1,8 @@
 import TodoSectionItem from "./TodoSectionItem";
 
 // 닫기는게 오른쪽 열리는게 왼쪽
+import { dummySectionList } from "../utils/DummyData";
+
 const TodoAddSection = ({ isAddSection, handleAddClick }) => {
   return (
     <div
@@ -9,11 +11,16 @@ const TodoAddSection = ({ isAddSection, handleAddClick }) => {
       }`}
     >
       {/* section list map 적용해서 출력 */}
-      <TodoSectionItem sectionName={"거실"} type={"add"} onClick={() => handleAddClick(1)} />
-      <TodoSectionItem sectionName={"주방"} type={"add"} onClick={() => handleAddClick(2)} />
-      <TodoSectionItem sectionName={"베란다"} type={"add"} onClick={() => handleAddClick(3)} />
-      <TodoSectionItem sectionName={"화장실"} type={"add"} onClick={() => handleAddClick(4)} />
-      <TodoSectionItem sectionName={"방"} type={"add"} onClick={() => handleAddClick(5)} />
+      {dummySectionList.map((it, idx) => {
+        return (
+          <TodoSectionItem
+            key={idx}
+            sectionName={it.sectionName}
+            type={"add"}
+            onClick={() => handleAddClick(it)}
+          />
+        );
+      })}
     </div>
   );
 };

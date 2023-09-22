@@ -1,9 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Notification from "../components/Notification";
 import { useEffect, useRef, useState } from "react";
 
 const Camera = () => {
   const navigate = useNavigate();
+  // location이 아니라 axios 로 받아와야할듯
+  const location = useLocation();
 
   const canvasRef = useRef(null);
   const cameraRef = useRef(null);
@@ -12,6 +14,8 @@ const Camera = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    setCapturedImage(location.state);
+
     const getCameraPermission = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -97,12 +101,7 @@ const Camera = () => {
       </div>
 
       <div className="button_wrapper">
-        <Notification
-          text={"뒤로가기"}
-          type={"left"}
-          color={"orange"}
-          onClick={() => navigate(-1)}
-        />
+        <Notification text={"저장 후 닫기"} type={"left"} color={"orange"} onClick={saveAndBack} />
         <Notification text={"촬영"} type={"right"} color={"grey"} onClick={captureScreen} />
       </div>
     </div>

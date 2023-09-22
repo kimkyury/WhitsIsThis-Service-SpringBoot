@@ -1,10 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { getBuildingName } from "../utils/ParseAddress";
 
-import { dummyBuildingData } from "../utils/DummyData";
 import { useEffect, useState } from "react";
 import MyButton from "../components/MyButton";
 import HouseCard from "../components/HouseCard";
+
+import { dummyBuildingData } from "../utils/DummyData";
 
 const HouseList = () => {
   const { buildingId } = useParams();
