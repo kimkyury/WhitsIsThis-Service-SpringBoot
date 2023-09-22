@@ -94,8 +94,9 @@ public class JwtTokenProvider implements InitializingBean {
 
     public boolean validateAccessToken(String accessToken) {
         try {
+
             if (redisService.getValue(accessToken) != null) {
-                return false;
+                throw new CustomException(ErrorCode.TOKEN_INVALID); // 로그아웃으로 차단된 AccessToken
             }
 
             Claims claims = Jwts.parserBuilder()
