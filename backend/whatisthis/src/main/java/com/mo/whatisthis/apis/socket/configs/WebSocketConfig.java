@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.socket.configs;
 
 import com.mo.whatisthis.apis.socket.handlers.ConnectWebSocketHandler;
 import com.mo.whatisthis.apis.socket.services.MoSocketProvider;
+import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
     private final MoSocketProvider moSocketProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final ParamWebSocketInterceptor paramWebSocketInterceptor;
 
     @Override
@@ -28,7 +30,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Bean
     public TextWebSocketHandler connectorHandler() {
-        return new ConnectWebSocketHandler(moSocketProvider);
+        return new ConnectWebSocketHandler(moSocketProvider, jwtTokenProvider);
     }
 
 }

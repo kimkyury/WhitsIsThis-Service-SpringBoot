@@ -80,8 +80,6 @@ public class SecurityConfig {
 
             .and()
             .authorizeRequests()
-            .antMatchers("/ws/v1/connector")
-            .authenticated()
 
             .anyRequest()
             .permitAll();
