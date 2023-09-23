@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.auth.services;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mo.whatisthis.apis.auth.requests.DeviceLoginRequest;
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
 import com.mo.whatisthis.apis.auth.requests.SendAuthMessageRequest;
 import com.mo.whatisthis.apis.auth.requests.VerifyAuthCodeRequest;
@@ -52,6 +53,8 @@ public class AuthService {
             new UsernamePasswordAuthenticationToken(
                 employeeLoginRequest.getUsername(), employeeLoginRequest.getPassword());
 
+        System.out.println(authenticationToken);
+
         // DB에 존재하는지 확인, 성공할시 사용자의 세부 정보과 권한 정보를 갖고 있음
         Authentication authentication = authenticationManagerBuilder.getObject()
                                                                     .authenticate(
@@ -69,6 +72,32 @@ public class AuthService {
         return issueTokens(employeeNo, employAuthority);
     }
 
+    public String loginDevice(DeviceLoginRequest deviceLoginRequest) {
+
+        String serialNumber = deviceLoginRequest.getSerialNumber();
+        // 1. Redis에 존재하는가
+        if (redisService.getValue("device:" + serialNumber + ":history") == null) {
+            throw new CustomException(ErrorCode.SERIALNUMBER_INVALID);
+        }
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(
+                serialNumber, "TURTLE");
+
+        Authentication authentication = authenticationManagerBuilder.getObject()
+                                                                    .authenticate(
+                                                                        authenticationToken);
+
+        String deviceAuthority = authentication.getAuthorities()
+                                               .iterator()
+                                               .next()
+                                               .getAuthority();
+
+        String accessToken = jwtTokenProvider.createAccessToken(serialNumber, deviceAuthority);
+
+        return accessToken;
+    }
+
     public TokenDto issueTokens(String memberNo, String role) {
         TokenDto tokenDto = jwtTokenProvider.createToken(memberNo, role);
         redisService.saveRefreshToken("member:" + memberNo + ":refreshToken",
@@ -80,7 +109,6 @@ public class AuthService {
 
         if (SecurityUtil.getPhone()
                         .isEmpty()) {
-            System.out.println(SecurityUtil.getPhone());
             return 1;
         }
         return 0;
@@ -185,4 +213,6 @@ public class AuthService {
         redisService.saveDataWithTimeout(requestAccessToken.substring(7), "blockAccessToken",
             (long) 900);
     }
+
+
 }
