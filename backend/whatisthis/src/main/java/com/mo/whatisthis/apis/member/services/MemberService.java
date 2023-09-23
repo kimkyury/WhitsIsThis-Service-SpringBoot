@@ -7,8 +7,10 @@ import com.mo.whatisthis.apis.member.requests.DeviceRegisterRequest;
 import com.mo.whatisthis.apis.member.requests.DeviceRegisterToHistoryRequest;
 import com.mo.whatisthis.apis.member.requests.EmployeeUpdateRequest;
 import com.mo.whatisthis.apis.member.responses.MemberCreateResponse;
+import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.s3.services.S3Service;
+import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.UUIDUtil;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -60,7 +62,8 @@ public class MemberService {
         String serialNumber = deviceRegisterRequest.getSerialNumber();
         String encodedDevicePassword = passwordEncoder.encode("TURTLE");
 
-        MemberEntity newDeviceEntity = new MemberEntity(serialNumber, encodedDevicePassword, Role.ROLE_DEVICE);
+        MemberEntity newDeviceEntity = new MemberEntity(serialNumber, encodedDevicePassword,
+            Role.ROLE_DEVICE);
         memberRepository.save(newDeviceEntity);
     }
 
@@ -80,16 +83,17 @@ public class MemberService {
         });
     }
 
-    public void registerDeviceToHistory(DeviceRegisterToHistoryRequest deviceRegisterToHistoryRequest) {
-
+    public void registerDeviceToHistory(
+        DeviceRegisterToHistoryRequest deviceRegisterToHistoryRequest) {
 
         String serialNumber = deviceRegisterToHistoryRequest.getSerialNumber();
-        // TODO: serialNumber가 DB에 존재하는 것인지 확인
 
+        memberRepository.findByUsername(serialNumber)
+                        .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
 
         String historyId = deviceRegisterToHistoryRequest.getHistoryId();
 
-        // TODO: redis에 저장된 이 데이터는 삭제되는 시점이 있어야함 (후보: 보고서 생성시점, Socket 통신 중 turtle봇의 종료 신호)
+        // TODO: redis에 저장된 이 데이터는 삭제되는 시점이 있어야함 (후보: Socket 통신 중 turtle봇의 종료 신호)
         redisService.saveData("device:" + serialNumber + ":history", historyId);
     }
 }
