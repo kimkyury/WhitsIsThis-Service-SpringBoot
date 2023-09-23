@@ -30,12 +30,14 @@ public class ParamWebSocketInterceptor implements HandshakeInterceptor {
 
         String historyIdStr = httpServletRequest.getParameter("historyId");
         if (historyIdStr != null) {
+            attributes.put("role", Role.ROLE_EMPLOYEE);
             attributes.put("historyId", Long.valueOf(historyIdStr));
             return true;
         }
 
         String serialNumber = httpServletRequest.getParameter("serialNumber");
         if (serialNumber != null) {
+            attributes.put("role", Role.ROLE_DEVICE);
             attributes.put("serialNumber", serialNumber);
             return true;
         }

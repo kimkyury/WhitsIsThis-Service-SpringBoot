@@ -3,6 +3,7 @@ package com.mo.whatisthis.apis.socket.configs;
 import com.mo.whatisthis.apis.socket.handlers.ConnectWebSocketHandler;
 import com.mo.whatisthis.apis.socket.services.MoSocketProvider;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
+import com.mo.whatisthis.redis.services.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     private final MoSocketProvider moSocketProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final ParamWebSocketInterceptor paramWebSocketInterceptor;
+    private final RedisService redisService;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
@@ -30,7 +32,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Bean
     public TextWebSocketHandler connectorHandler() {
-        return new ConnectWebSocketHandler(moSocketProvider, jwtTokenProvider);
+        return new ConnectWebSocketHandler(moSocketProvider, jwtTokenProvider, redisService);
     }
 
 }

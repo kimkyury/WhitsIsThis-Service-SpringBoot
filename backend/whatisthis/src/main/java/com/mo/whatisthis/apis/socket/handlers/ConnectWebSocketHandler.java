@@ -9,13 +9,15 @@ import com.mo.whatisthis.apis.socket.dto.MessageDto.MessageType;
 import com.mo.whatisthis.apis.socket.services.MoSocketProvider;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
+import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.security.service.UserDetailsImpl;
 import com.mo.whatisthis.supports.codes.ErrorCode;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.apache.catalina.filters.ExpiresFilter.XHttpServletResponse;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -27,6 +29,7 @@ public class ConnectWebSocketHandler extends TextWebSocketHandler {
 
     private final MoSocketProvider moSocketProvider;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService redisService;
 
 
     @Override
@@ -48,27 +51,51 @@ public class ConnectWebSocketHandler extends TextWebSocketHandler {
         } else if (type.equals(MessageType.DRAWING)) {
 
         } else if (type.equals(MessageType.STATUS)) {
+            String status = dataMap.get(MessageDataType.state.name());
+            statusHandler(session, status);
 
         } else if (type.equals(MessageType.COMMAND)) {
 
+            String command = dataMap.get(MessageDataType.command.name());
+            String target = dataMap.get(MessageDataType.target.name());
+            commandHandler(session, command, target);
         } else if (type.equals(MessageType.AUTH)) {
+
             String accessToken = dataMap.get(MessageDataType.accessToken.name());
-            System.out.println("AUTH>>>>>>> " + accessToken);
             authHandler(session, accessToken.substring(7));
         }
+    }
+
+    public void statusHandler(WebSocketSession session, String status){
+
+        String serialNumber = (String) session.getAttributes() .get("serialNumber");
+        redisService.getValue("device:" + serialNumber + ":history");
+//        ConcurrentHashMap<Long, WebSocketSession> employeeByHistoryMap = moSocketProvider.getEmployeeByHistoryMap();
+
+
+
+    }
+
+    public void commandHandler(WebSocketSession session, String command, String target) {
+
+
+        Optional<WebSocketSession> targetSession = moSocketProvider.getDeviceSessionBySerialNumber(target);
+
+        if (targetSession.isEmpty()) {
+            moSocketProvider.sendTextMessage(session, "기기가 Socket에 접속되지 않았습니다. ");
+            return;
+        }
+
+        moSocketProvider.sendTextMessage(targetSession.get(), command);
     }
 
     public void authHandler(WebSocketSession session, String accessToken) {
 
         jwtTokenProvider.validateAccessToken(accessToken);
-        UserDetailsImpl userDetails = (UserDetailsImpl) jwtTokenProvider
-            .getAuthentication(accessToken)
-            .getPrincipal();
+        //accessToken -> UserDetails -> Role 로 가져오는 게 더 안정성 있을지
+        Role role = (Role)session.getAttributes().get("role");
 
-        String role = userDetails.getRole()
-                                 .name();
-
-        if (role.equals(Role.ROLE_EMPLOYEE.name())) {
+        if (role == Role.ROLE_EMPLOYEE) {
             moSocketProvider.addEmployeeToSocket((Long) session.getAttributes()
                                                                .get("historyId"), session);
         } else {
@@ -80,27 +107,24 @@ public class ConnectWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
 
-//        System.out.println("this is AfetConnection ");
-//
-//        // 클라이언트가 WebSocket에 연결될 때 실행되는 코드
-//        Role role = (Role) session.getAttributes()
-//                                  .get("role");
-//
-//        if (role == Role.ROLE_EMPLOYEE) {
-//            Long historyId = (Long) session.getAttributes()
-//                                           .get("historyId");
-//            moSocketProvider.addEmployeeToSocket(historyId, session);
-//
-//        } else if (role == Role.ROLE_DEVICE) {
-//            String serialNumber = (String) session.getAttributes()
-//                                                  .get("serialNumber");
-//            moSocketProvider.addDeviceToSocket(serialNumber, session);
-//        }
+        Role role = (Role)session.getAttributes().get("role");
 
+        if ( role == Role.ROLE_DEVICE){
+            String serialNumber = (String)session.getAttributes().get("serialNumber");
+            String historyId = redisService.getValue("device:" +serialNumber+ ":history");
+
+            System.out.println(historyId);
+
+            WebSocketSession employeeSession = moSocketProvider.getEmployeeSessionByHistory(Long.valueOf(historyId)).get();
+            moSocketProvider.sendTextMessage(employeeSession, "CONNECT DEVICE");
+
+        }
     }
 
-
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+
+        // TODO: Turtle봇 종료시, 데이터의 터틀봇 관련도 삭제할 것
+
         // 클라이언트 연결이 종료될 때 실행되는 코드
 //        System.out.println(">>>>>> Connector Socket EXIT");
 //

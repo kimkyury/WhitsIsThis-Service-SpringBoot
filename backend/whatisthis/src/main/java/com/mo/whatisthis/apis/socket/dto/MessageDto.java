@@ -24,7 +24,7 @@ public class MessageDto {
         AUTH, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS;
     }
     public enum MessageDataType {
-        accessToken, image, x, y, category, state
+        accessToken, image, x, y, category, state, command, target
     }
 
 }
