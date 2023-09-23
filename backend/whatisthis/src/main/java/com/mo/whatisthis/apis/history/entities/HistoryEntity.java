@@ -37,4 +37,20 @@ public class HistoryEntity {
     public HistoryEntity(Long requestId) {
         this.requestId = requestId;
     }
+
+    public void setReportUrl(String reportUrl) {
+        this.reportUrl = reportUrl;
+    }
+
+    public void setDrawingUrl(String drawingUrl) {
+        this.drawingUrl = drawingUrl;
+    }
+
+    public void setZipUrl(String zipUrl) {
+        this.zipUrl = zipUrl;
+    }
+
+    public void setInspectedAt(LocalDateTime inspectedAt) {
+        this.inspectedAt = inspectedAt;
+    }
 }
