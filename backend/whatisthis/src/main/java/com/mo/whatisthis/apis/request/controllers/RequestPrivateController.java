@@ -3,10 +3,8 @@ package com.mo.whatisthis.apis.request.controllers;
 
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
-import com.mo.whatisthis.apis.request.requests.CreateTodolistRequest;
 import com.mo.whatisthis.apis.request.requests.SetRequestManagerRequest;
 import com.mo.whatisthis.apis.request.responses.AssignedRequestResponse;
-import com.mo.whatisthis.apis.request.responses.CreateTodolistResponse;
 import com.mo.whatisthis.apis.request.responses.DoneRequestResponse;
 import com.mo.whatisthis.apis.request.responses.RequestDetailRequests;
 import com.mo.whatisthis.apis.request.responses.WaitingRequestResponse;
@@ -26,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -92,17 +89,5 @@ public class RequestPrivateController {
 
         return createSuccessResponse(SuccessCode.OK, "집 점검 요청 내역 상세 조회",
             requestService.getRequestDetail(id));
-    }
-
-    @PostMapping("/{id}/todolists")
-    @Operation(summary = "방 선택 후 투두리스트 생성", tags = {
-        "6. Inspection"})
-    public ResponseEntity<SuccessResponse<List<CreateTodolistResponse>>> createTodolist(
-        @PathVariable Long id,
-        @Valid @RequestBody
-        CreateTodolistRequest createTodolistRequest) {
-
-        return createSuccessResponse(SuccessCode.CREATED, "선택한 방에 대한 투두리스트 생성",
-            todolistService.createTodolist(id, createTodolistRequest.getRoomId()));
     }
 }
