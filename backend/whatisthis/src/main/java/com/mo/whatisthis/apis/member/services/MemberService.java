@@ -94,6 +94,6 @@ public class MemberService {
         String historyId = deviceRegisterToHistoryRequest.getHistoryId();
 
         // TODO: redis에 저장된 이 데이터는 삭제되는 시점이 있어야함 (후보: Socket 통신 중 turtle봇의 종료 신호)
-        redisService.saveData("device:" + serialNumber + ":history", historyId);
+        redisService.saveData("historyId:" + historyId + ":device", serialNumber);
     }
 }
