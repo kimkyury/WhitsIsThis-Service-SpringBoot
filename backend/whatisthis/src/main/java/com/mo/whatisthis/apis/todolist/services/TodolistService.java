@@ -30,12 +30,12 @@ public class TodolistService {
     private final AWSS3ResponseUtil awss3ResponseUtil;
 
     @Transactional
-    public List<CreateTodolistResponse> createTodolist(Long requestId, Integer roomId) {
+    public List<CreateTodolistResponse> createTodolist(Long historyId, Integer roomId) {
         List<TodolistEntity> todolistEntities = new ArrayList<>();
 
         for (TodolistOptionEntity todolistOptionEntity : todolistOptionsRepository.findAllByRoomId(
             roomId)) {
-            todolistEntities.add(new TodolistEntity(requestId, todolistOptionEntity));
+            todolistEntities.add(new TodolistEntity(historyId, todolistOptionEntity));
         }
 
         List<CreateTodolistResponse> createTodolistResponses = new ArrayList<>();
