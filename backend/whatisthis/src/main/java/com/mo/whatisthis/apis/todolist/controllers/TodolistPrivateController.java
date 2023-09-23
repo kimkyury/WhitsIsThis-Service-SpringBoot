@@ -8,14 +8,18 @@ import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/private/todolists")
@@ -34,5 +38,13 @@ public class TodolistPrivateController {
             updateStatusRequest.getSignificant());
 
         return createSuccessResponse(SuccessCode.NO_CONTENT, "변경되었습니다.");
+    }
+
+    @PostMapping("/{id}/image")
+    @Operation(summary = "투두리스트의 사진 업로드", tags = {"6. Inspection"})
+    public ResponseEntity<SuccessResponse<String>> uploadTodolistImage(@PathVariable Long id,
+        @RequestPart("image") MultipartFile multipartFile) throws IOException {
+        return createSuccessResponse(SuccessCode.OK, "업로드 성공",
+            todolistService.uploadTodolistImage(id, multipartFile));
     }
 }
