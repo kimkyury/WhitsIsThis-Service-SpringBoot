@@ -25,7 +25,7 @@ public class TodolistEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Long requestId;
+    private Long historyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "todolist_option_id", nullable = false)
@@ -38,8 +38,8 @@ public class TodolistEntity {
     @Setter
     private String significant;
 
-    public TodolistEntity(Long requestId, TodolistOptionEntity todolistOption) {
-        this.requestId = requestId;
+    public TodolistEntity(Long historyId, TodolistOptionEntity todolistOption) {
+        this.historyId = historyId;
         this.todolistOption = todolistOption;
         this.isChecked = false;
     }

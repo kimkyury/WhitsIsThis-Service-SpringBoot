@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.history.services;
 
 import com.mo.whatisthis.apis.history.entities.HistoryEntity;
 import com.mo.whatisthis.apis.history.repositories.HistoryRepository;
+import com.mo.whatisthis.apis.history.responses.IntegratedHistoryResponse;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
@@ -25,6 +26,10 @@ public class HistoryService {
     private final HistoryRepository historyRepository;
 
     private final RequestRepository requestRepository;
+
+    private final DamagedHistoryService damagedHistoryService;
+
+    private final DeviceHistoryService deviceHistoryService;
 
     public ResponseEntity<byte[]> downloadReport(Long id)
         throws CustomException, IOException {
@@ -103,6 +108,15 @@ public class HistoryService {
         historyEntity.setDrawingUrl(url);
 
         historyRepository.save(historyEntity);
+    }
+
+    public IntegratedHistoryResponse getIntegratedHistory(Long id) {
+        HistoryEntity historyEntity = historyRepository.findById(id)
+                                                       .orElseThrow(() -> new CustomException(
+                                                           ErrorCode.BAD_REQUEST));
+
+        return new IntegratedHistoryResponse(damagedHistoryService.getDamagedHistories(id),
+            deviceHistoryService.getDeviceHistories(id), historyEntity.getDrawingUrl());
     }
 
 }
