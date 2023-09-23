@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.socket.handlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.socket.dto.MessageDto;
 import com.mo.whatisthis.apis.socket.dto.MessageDto.MessageDataType;
@@ -11,17 +12,15 @@ import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.s3.services.S3Service;
-import com.mo.whatisthis.security.service.UserDetailsImpl;
 import com.mo.whatisthis.supports.codes.ErrorCode;
+import com.mo.whatisthis.supports.utils.WebSocketUtils;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.ExpiresFilter.XHttpServletResponse;
-import org.springframework.util.CustomizableThreadCreator;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -29,13 +28,15 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 
+@Component
 @RequiredArgsConstructor
-public class ConnectWebSocketHandler extends TextWebSocketHandler {
+public class CustomWebSocketHandler extends TextWebSocketHandler {
 
     private final MoSocketProvider moSocketProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
     private final S3Service s3Service;
+    private final HistoryService historyService;
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -83,20 +84,31 @@ public class ConnectWebSocketHandler extends TextWebSocketHandler {
 
     public void drawingHandler(WebSocketSession session, String imageBinaryStr) {
 
-        byte[] decodedBytes = Base64.getDecoder()
-                                    .decode(imageBinaryStr);
+        Long historyId = getHistoryIdBySerialNumber(session);
+        byte[] bytes = Base64.getDecoder()
+                             .decode(imageBinaryStr);
+        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(bytes);
 
-//        MultipartFile multipartFile;
-//        String imageUrl = s3Service.saveFile();
+        String s3URL = "";
+        try {
+            s3URL = historyService.uploadDrawing(historyId, multipartFile);
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+        String messageStr = convertMessageToString(MessageType.DRAWING, MessageDataType.image,
+            s3URL);
+
+        WebSocketSession targetSession = moSocketProvider.getEmployeeSessionByHistory(historyId)
+                                                         .get();
+        moSocketProvider.sendTextMessage(targetSession, messageStr);
 
 
     }
 
     public void statusHandler(WebSocketSession session, String status) {
 
-        String serialNumber = (String) session.getAttributes()
-                                              .get("serialNumber");
-        Long historyId = Long.valueOf(redisService.getHistoryBySerialNumber(serialNumber));
+        Long historyId = getHistoryIdBySerialNumber(session);
 
         String messageStr = convertMessageToString(MessageType.STATUS, MessageDataType.state,
             status);
@@ -125,7 +137,6 @@ public class ConnectWebSocketHandler extends TextWebSocketHandler {
     public void authHandler(WebSocketSession session, String accessToken) {
 
         jwtTokenProvider.validateAccessToken(accessToken);
-        //accessToken -> UserDetails -> Role 로 가져오는 게 더 안정성 있을지
         Role role = (Role) session.getAttributes()
                                   .get("role");
 
@@ -135,29 +146,6 @@ public class ConnectWebSocketHandler extends TextWebSocketHandler {
         } else {
             moSocketProvider.addDeviceToSocket((String) session.getAttributes()
                                                                .get("serialNumber"), session);
-        }
-    }
-
-    @Override
-    public void afterConnectionEstablished(WebSocketSession session) {
-
-        Role role = (Role) session.getAttributes()
-                                  .get("role");
-
-        if (role == Role.ROLE_DEVICE) {
-            String serialNumber = (String) session.getAttributes()
-                                                  .get("serialNumber");
-            String historyId = redisService.getHistoryBySerialNumber(serialNumber);
-
-            WebSocketSession employeeSession = moSocketProvider
-                .getEmployeeSessionByHistory(Long.valueOf(historyId))
-                .get();
-
-            String str = convertMessageToString(MessageType.STATUS, MessageDataType.state,
-                "CONNECT");
-
-            moSocketProvider.sendTextMessage(employeeSession, str);
-
         }
     }
 
@@ -181,6 +169,37 @@ public class ConnectWebSocketHandler extends TextWebSocketHandler {
         }
 
         return str;
+    }
+
+    public Long getHistoryIdBySerialNumber(WebSocketSession session) {
+        String serialNumber = (String) session.getAttributes()
+                                              .get("serialNumber");
+        Long historyId = Long.valueOf(redisService.getHistoryBySerialNumber(serialNumber));
+
+        return historyId;
+    }
+
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) {
+
+        Role role = (Role) session.getAttributes()
+                                  .get("role");
+
+        if (role == Role.ROLE_DEVICE) {
+            String serialNumber = (String) session.getAttributes()
+                                                  .get("serialNumber");
+            String historyId = redisService.getHistoryBySerialNumber(serialNumber);
+
+            WebSocketSession employeeSession = moSocketProvider
+                .getEmployeeSessionByHistory(Long.valueOf(historyId))
+                .get();
+
+            String str = convertMessageToString(MessageType.STATUS, MessageDataType.state,
+                "CONNECT");
+
+            moSocketProvider.sendTextMessage(employeeSession, str);
+
+        }
     }
 
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
