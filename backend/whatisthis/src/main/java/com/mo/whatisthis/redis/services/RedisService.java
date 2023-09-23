@@ -22,6 +22,10 @@ public class RedisService {
                             .get(key);
     }
 
+    public String getHistoryBySerialNumber(String serialNumber){
+        return redisTemplate.opsForValue().get("device:" + serialNumber + ":history");
+    }
+
     public void saveData(String key, String value){
         redisTemplate.opsForValue()
                      .set(key, value);
