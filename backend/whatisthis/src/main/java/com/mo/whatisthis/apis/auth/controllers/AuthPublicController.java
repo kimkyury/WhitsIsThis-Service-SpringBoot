@@ -75,7 +75,7 @@ public class AuthPublicController {
 
     @Operation(summary = "Device 로그인 (터틀봇 등록 확인, EMB 전용)",
         tags = {"1. Auth"}, description = "Device에게 accessToken이 발급됩니다.")
-    @PostMapping("/device/login")
+    @PostMapping("/devices/login")
     public ResponseEntity<SuccessResponse<DeviceLoginResponse>> deviceLogin(
         @RequestBody DeviceLoginRequest deviceLoginRequest) {
 
