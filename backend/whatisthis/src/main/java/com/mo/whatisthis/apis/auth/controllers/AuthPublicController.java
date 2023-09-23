@@ -3,9 +3,11 @@ package com.mo.whatisthis.apis.auth.controllers;
 
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
+import com.mo.whatisthis.apis.auth.requests.DeviceLoginRequest;
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
 import com.mo.whatisthis.apis.auth.requests.SendAuthMessageRequest;
 import com.mo.whatisthis.apis.auth.requests.VerifyAuthCodeRequest;
+import com.mo.whatisthis.apis.auth.responses.DeviceLoginResponse;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse;
 import com.mo.whatisthis.apis.auth.responses.EmployeeLoginResponse.EmployeeInfo;
 import com.mo.whatisthis.apis.auth.responses.ReissueTokenResponse;
@@ -75,8 +77,21 @@ public class AuthPublicController {
                                                                        .build()));
     }
 
-    @Operation(summary = "AccessToken 재발급", tags = {
-        "1. Auth"}, description = "Cookie에 RefreshToken을 첨부해주세요.")
+    @Operation(summary = "Device 로그인 (터틀봇 등록 확인, EMB 전용)",
+        tags = {"1. Auth"}, description = "Device에게 accessToken이 발급됩니다.")
+    @PostMapping("/employees/login")
+    public ResponseEntity<SuccessResponse<DeviceLoginResponse>> deviceLogin(
+        @RequestBody DeviceLoginRequest deviceLoginRequest) {
+
+        String accessToken = authService.loginDevice(deviceLoginRequest);
+
+
+
+        return null;
+    }
+
+    @Operation(summary = "AccessToken 재발급",
+        tags = {"1. Auth"}, description = "Cookie에 RefreshToken을 첨부해주세요.")
     @PostMapping("/reissue")
     public ResponseEntity<SuccessResponse<ReissueTokenResponse>> reissue(
         @CookieValue(name = "refresh-token") String refreshTokenCookie) {
@@ -120,4 +135,6 @@ public class AuthPublicController {
 
         return createSuccessResponse(SuccessCode.OK, "AuthCode is Accept");
     }
+
+
 }

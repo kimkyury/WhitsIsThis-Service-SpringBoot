@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.auth.services;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mo.whatisthis.apis.auth.requests.DeviceLoginRequest;
 import com.mo.whatisthis.apis.auth.requests.EmployeeLoginRequest;
 import com.mo.whatisthis.apis.auth.requests.SendAuthMessageRequest;
 import com.mo.whatisthis.apis.auth.requests.VerifyAuthCodeRequest;
@@ -69,6 +70,19 @@ public class AuthService {
         return issueTokens(employeeNo, employAuthority);
     }
 
+    public String loginDevice(DeviceLoginRequest deviceLoginRequest) {
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+            deviceLoginRequest.getUsername(), "TURTLE");
+
+        Authentication authentication = authenticationManagerBuilder.getObject()
+                                                                    .authenticate(
+                                                                        authenticationToken);
+
+        // TODO: Redis의 등록여부 확인하기
+        return null;
+    }
+
     public TokenDto issueTokens(String memberNo, String role) {
         TokenDto tokenDto = jwtTokenProvider.createToken(memberNo, role);
         redisService.saveRefreshToken("member:" + memberNo + ":refreshToken",
@@ -80,7 +94,6 @@ public class AuthService {
 
         if (SecurityUtil.getPhone()
                         .isEmpty()) {
-            System.out.println(SecurityUtil.getPhone());
             return 1;
         }
         return 0;
@@ -185,4 +198,6 @@ public class AuthService {
         redisService.saveDataWithTimeout(requestAccessToken.substring(7), "blockAccessToken",
             (long) 900);
     }
+
+
 }
