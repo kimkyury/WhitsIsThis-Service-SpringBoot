@@ -18,9 +18,6 @@ import com.mo.whatisthis.sms.responses.SmsResponse;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
-import com.sun.net.httpserver.Authenticator.Success;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
@@ -66,28 +63,30 @@ public class AuthPublicController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
-                             .body(SuccessResponse.ofStatusAndMessageAndData(SuccessCode.OK,
-                                 "로그인에 성공하였습니다.", EmployeeLoginResponse.builder()
-                                                                       .accessToken(
-                                                                           "Bearer "
-                                                                               + tokenDto.getAccessToken())
-                                                                       .isInitLoginUser(
-                                                                           isInitLoginUser)
-                                                                       .employeeinfo(employeeInfo)
-                                                                       .build()));
+                             .body(SuccessResponse.ofStatusAndMessageAndData(
+                                 SuccessCode.OK, "Success Employee Login.",
+                                 EmployeeLoginResponse.builder()
+                                                      .accessToken(
+                                                          "Bearer " + tokenDto.getAccessToken())
+                                                      .isInitLoginUser(isInitLoginUser)
+                                                      .employeeinfo(employeeInfo)
+                                                      .build()));
     }
 
     @Operation(summary = "Device 로그인 (터틀봇 등록 확인, EMB 전용)",
         tags = {"1. Auth"}, description = "Device에게 accessToken이 발급됩니다.")
-    @PostMapping("/employees/login")
+    @PostMapping("/device/login")
     public ResponseEntity<SuccessResponse<DeviceLoginResponse>> deviceLogin(
         @RequestBody DeviceLoginRequest deviceLoginRequest) {
 
         String accessToken = authService.loginDevice(deviceLoginRequest);
 
-
-
-        return null;
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(SuccessResponse.ofStatusAndMessageAndData(
+                                 SuccessCode.OK, "Success Device Login. ",
+                                 DeviceLoginResponse.builder()
+                                                    .accessToken("Bearer " + accessToken)
+                                                    .build()));
     }
 
     @Operation(summary = "AccessToken 재발급",
@@ -135,6 +134,4 @@ public class AuthPublicController {
 
         return createSuccessResponse(SuccessCode.OK, "AuthCode is Accept");
     }
-
-
 }

@@ -53,6 +53,8 @@ public class AuthService {
             new UsernamePasswordAuthenticationToken(
                 employeeLoginRequest.getUsername(), employeeLoginRequest.getPassword());
 
+        System.out.println(authenticationToken);
+
         // DB에 존재하는지 확인, 성공할시 사용자의 세부 정보과 권한 정보를 갖고 있음
         Authentication authentication = authenticationManagerBuilder.getObject()
                                                                     .authenticate(
@@ -72,15 +74,28 @@ public class AuthService {
 
     public String loginDevice(DeviceLoginRequest deviceLoginRequest) {
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            deviceLoginRequest.getUsername(), "TURTLE");
+        String serialNumber = deviceLoginRequest.getSerialNumber();
+        // 1. Redis에 존재하는가
+        if (redisService.getValue("device:" + serialNumber + ":history") == null) {
+            throw new CustomException(ErrorCode.SERIALNUMBER_INVALID);
+        }
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(
+                serialNumber, "TURTLE");
 
         Authentication authentication = authenticationManagerBuilder.getObject()
                                                                     .authenticate(
                                                                         authenticationToken);
 
-        // TODO: Redis의 등록여부 확인하기
-        return null;
+        String deviceAuthority = authentication.getAuthorities()
+                                               .iterator()
+                                               .next()
+                                               .getAuthority();
+
+        String accessToken = jwtTokenProvider.createAccessToken(serialNumber, deviceAuthority);
+
+        return accessToken;
     }
 
     public TokenDto issueTokens(String memberNo, String role) {

@@ -11,6 +11,6 @@ public class DeviceLoginRequest {
 
     @NotNull
     @NotEmpty
-    private String username; // 기기 일련번호
+    private String serialNumber; // 기기 일련번호
 
 }

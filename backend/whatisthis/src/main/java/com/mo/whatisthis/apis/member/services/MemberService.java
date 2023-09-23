@@ -57,10 +57,10 @@ public class MemberService {
 
     public void registerDevice(DeviceRegisterRequest deviceRegisterRequest) {
 
-        System.out.println("00000000000000000");
         String serialNumber = deviceRegisterRequest.getSerialNumber();
+        String encodedDevicePassword = passwordEncoder.encode("TURTLE");
 
-        MemberEntity newDeviceEntity = new MemberEntity(serialNumber, "TURTLE", Role.ROLE_DEVICE);
+        MemberEntity newDeviceEntity = new MemberEntity(serialNumber, encodedDevicePassword, Role.ROLE_DEVICE);
         memberRepository.save(newDeviceEntity);
     }
 
@@ -82,7 +82,11 @@ public class MemberService {
 
     public void registerDeviceToHistory(DeviceRegisterToHistoryRequest deviceRegisterToHistoryRequest) {
 
+
         String serialNumber = deviceRegisterToHistoryRequest.getSerialNumber();
+        // TODO: serialNumber가 DB에 존재하는 것인지 확인
+
+
         String historyId = deviceRegisterToHistoryRequest.getHistoryId();
 
         // TODO: redis에 저장된 이 데이터는 삭제되는 시점이 있어야함 (후보: 보고서 생성시점, Socket 통신 중 turtle봇의 종료 신호)
