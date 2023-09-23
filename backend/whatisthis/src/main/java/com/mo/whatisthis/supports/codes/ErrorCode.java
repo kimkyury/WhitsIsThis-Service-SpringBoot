@@ -19,6 +19,7 @@ public enum ErrorCode {
 
     AUTHCODE_INVALID(400, "승인코드가 일치하지 않거나 만료되었습니다. "),
     PHONE_INVALID(400, "핸드폰 번호가 존재하지 않습니다. "),
+    SERIALNUMBER_INVALID(400, "기기번호가 유효하지 않습니다. "),
 
     STATUS_INVALID(400, "변경할 요청의 상태가 올바르지 않습니다."),
 
