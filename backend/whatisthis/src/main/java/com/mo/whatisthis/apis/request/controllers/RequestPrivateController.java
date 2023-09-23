@@ -95,6 +95,8 @@ public class RequestPrivateController {
     }
 
     @PostMapping("/{id}/todolists")
+    @Operation(summary = "방 선택 후 투두리스트 생성", tags = {
+        "6. Inspection"})
     public ResponseEntity<SuccessResponse<List<CreateTodolistResponse>>> createTodolist(
         @PathVariable Long id,
         @Valid @RequestBody

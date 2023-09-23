@@ -5,6 +5,8 @@ import com.mo.whatisthis.apis.todolist.entities.TodolistEntity;
 import com.mo.whatisthis.apis.todolist.entities.TodolistOptionEntity;
 import com.mo.whatisthis.apis.todolist.repositories.TodolistOptionsRepository;
 import com.mo.whatisthis.apis.todolist.repositories.TodolistRepository;
+import com.mo.whatisthis.exception.CustomException;
+import com.mo.whatisthis.supports.codes.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -36,5 +38,21 @@ public class TodolistService {
         }
 
         return createTodolistResponses;
+    }
+
+    @Transactional
+    public void updateTodolistStatus(Long id, Boolean isChecked, String significant) {
+        TodolistEntity todolistEntity = todolistRepository.findById(id)
+                                                          .orElseThrow(() -> new CustomException(
+                                                              ErrorCode.BAD_REQUEST));
+
+        if (isChecked != null) {
+            todolistEntity.setIsChecked(isChecked);
+        }
+        if (significant != null) {
+            todolistEntity.setSignificant(significant);
+        }
+
+        todolistRepository.save(todolistEntity);
     }
 }
