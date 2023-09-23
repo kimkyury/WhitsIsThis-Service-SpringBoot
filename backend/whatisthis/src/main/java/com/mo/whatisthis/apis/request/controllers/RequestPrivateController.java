@@ -3,12 +3,15 @@ package com.mo.whatisthis.apis.request.controllers;
 
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
+import com.mo.whatisthis.apis.request.requests.CreateTodolistRequest;
 import com.mo.whatisthis.apis.request.requests.SetRequestManagerRequest;
 import com.mo.whatisthis.apis.request.responses.AssignedRequestResponse;
+import com.mo.whatisthis.apis.request.responses.CreateTodolistResponse;
 import com.mo.whatisthis.apis.request.responses.DoneRequestResponse;
 import com.mo.whatisthis.apis.request.responses.RequestDetailRequests;
 import com.mo.whatisthis.apis.request.responses.WaitingRequestResponse;
 import com.mo.whatisthis.apis.request.services.RequestService;
+import com.mo.whatisthis.apis.todolist.services.TodolistService;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.security.utils.SecurityUtil;
 import com.mo.whatisthis.supports.codes.ErrorCode;
@@ -23,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +39,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class RequestPrivateController {
 
     private final RequestService requestService;
+
+    private final TodolistService todolistService;
 
     @PatchMapping("/{id}/manager")
     @Operation(summary = "집 점검 요청 담당자 설정", tags = {
@@ -88,4 +94,13 @@ public class RequestPrivateController {
             requestService.getRequestDetail(id));
     }
 
+    @PostMapping("/{id}/todolists")
+    public ResponseEntity<SuccessResponse<List<CreateTodolistResponse>>> createTodolist(
+        @PathVariable Long id,
+        @Valid @RequestBody
+        CreateTodolistRequest createTodolistRequest) {
+
+        return createSuccessResponse(SuccessCode.CREATED, "선택한 방에 대한 투두리스트 생성",
+            todolistService.createTodolist(id, createTodolistRequest.getRoomId()));
+    }
 }
