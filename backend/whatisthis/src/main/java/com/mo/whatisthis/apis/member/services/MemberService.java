@@ -4,8 +4,10 @@ import com.mo.whatisthis.apis.member.entities.MemberEntity;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.member.repositories.MemberRepository;
 import com.mo.whatisthis.apis.member.requests.DeviceRegisterRequest;
+import com.mo.whatisthis.apis.member.requests.DeviceRegisterToHistoryRequest;
 import com.mo.whatisthis.apis.member.requests.EmployeeUpdateRequest;
 import com.mo.whatisthis.apis.member.responses.MemberCreateResponse;
+import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.utils.UUIDUtil;
 import java.io.IOException;
@@ -23,6 +25,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3Service s3Service;
+    private final RedisService redisService;
 
     public MemberCreateResponse createEmployee() {
 
@@ -75,5 +78,14 @@ public class MemberService {
             selectEmployee.setInitialInfo(name, phone, password, profileImgURL);
             memberRepository.save(selectEmployee);
         });
+    }
+
+    public void registerDeviceToHistory(DeviceRegisterToHistoryRequest deviceRegisterToHistoryRequest) {
+
+        String serialNumber = deviceRegisterToHistoryRequest.getSerialNumber();
+        String historyId = deviceRegisterToHistoryRequest.getHistoryId();
+
+        // TODO: redis에 저장된 이 데이터는 삭제되는 시점이 있어야함 (후보: 보고서 생성시점, Socket 통신 중 turtle봇의 종료 신호)
+        redisService.saveData("device:" + serialNumber + ":history", historyId);
     }
 }

@@ -4,6 +4,7 @@ import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResp
 
 import com.mo.whatisthis.apis.auth.services.AuthService;
 import com.mo.whatisthis.apis.member.requests.DeviceRegisterRequest;
+import com.mo.whatisthis.apis.member.requests.DeviceRegisterToHistoryRequest;
 import com.mo.whatisthis.apis.member.requests.EmployeeUpdateRequest;
 import com.mo.whatisthis.apis.member.responses.MemberCreateResponse;
 import com.mo.whatisthis.apis.member.services.MemberService;
@@ -71,7 +72,8 @@ public class MemberPrivateController {
         return ResponseEntity
             .status(HttpStatus.OK)
             .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-            .body(SuccessResponse.ofStatusAndMessage(SuccessCode.OK, "Success Upload Init-Employee-Info, Try Re Login"));
+            .body(SuccessResponse.ofStatusAndMessage(SuccessCode.OK,
+                "Success Upload Init-Employee-Info, Try Re Login"));
 
     }
 
@@ -84,5 +86,17 @@ public class MemberPrivateController {
         memberService.registerDevice(deviceRegisterRequest);
 
         return ResponseEntity.ok("Success Device Register");
+    }
+
+    @Operation(summary = "직원의 특정 집 점검 기록에 대한 터틀봇 등록", tags = {
+        "2. Member"}, description = "Authorization에 token을 첨부해주세요.")
+    @PostMapping("/devices")
+    public ResponseEntity<SuccessResponse<Object>> registerDeviceToHistory(
+        @Valid @RequestBody DeviceRegisterToHistoryRequest deviceRegisterToHistoryRequest) {
+
+        memberService.registerDeviceToHistory(deviceRegisterToHistoryRequest);
+
+        return createSuccessResponse(SuccessCode.CREATED,
+            "Success Create Redis Data(Device-SerialNumber And History Mapping Data");
     }
 }
