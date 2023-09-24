@@ -22,7 +22,7 @@ function Moneyreturn() {
         <input style={{width:'70vw', height:'4.6vh'}} className="inputs" placeholder="계좌번호를 입력해주십시오."/>
 
       <p className="minititles">예상 환불금액</p> 
-      <p className="inputs" style={{textAlign:'end', paddingRight:'2%'}}>환불금액들어갈곳 <BiErrorCircle/></p>
+      <p className="inputs" style={{textAlign:'end', paddingRight:'2%'}}>환불금액들어갈곳 <BiErrorCircle style={{width:'3vw', height:'3vw'}}/></p>
 
       </div>
       </div>
