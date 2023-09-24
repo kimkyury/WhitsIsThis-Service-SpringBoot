@@ -11,11 +11,11 @@ const Home = () => {
   const [workInProgress, setWorkInprogress] = useState(true);
 
   useEffect(() => {
-    const localData = localStorage.getItem("userId");
+    const localData = localStorage.getItem("userInfo");
     if (localData) {
       const userData = JSON.parse(localData);
 
-      if (userData.length >= 1) {
+      if (userData) {
         setIsLogin(true);
       }
     }
@@ -23,7 +23,11 @@ const Home = () => {
 
   const logout = () => {
     console.log("logged out");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("token");
+
+    // 쿠키삭제도 해줘야합미다
+
     setIsLogin(false);
   };
 

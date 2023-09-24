@@ -1,9 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { authorizedRequest } from "../utils/AxiosInterceptor";
 import MyButton from "../components/MyButton";
-import authAxios from "../utils/authAxios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,60 +35,42 @@ const Login = () => {
     //   return;
     // }
     try {
-      const response = await axios.post(`/api/v1/auth/employees/login`, {
-        username: "202300000006",
-        password: "ssafy0003",
-      });
-      // username: state.userId,
-      // password: state.userPassword,
-
-      console.log(response);
-      console.log(response.data.data);
-      console.log(response.data.data.employeeinfo);
-      console.log(response.data.data.accessToken);
+      const response = await axios.post(
+        process.env.REACT_APP_BASE_URL + `/api/v1/auth/employees/login`,
+        {
+          username: "1234",
+          password: "1234",
+        }
+      );
 
       setUserInfo(response.data.data.employeeinfo);
       setAccessToken(response.data.data.accessToken);
-    } catch (e) {
-      console.error(e);
-    }
+      localStorage.setItem("token", response.data.data.accessToken);
+      localStorage.setItem("userInfo", JSON.stringify(response.data.data.employeeinfo));
 
-    localStorage.setItem("key", accessToken);
-    localStorage.setItem("userInfo", JSON.stringify(userInfo));
-
-    console.log(userInfo);
-
-    // navigate("/");
-
-    setState({
-      userId: "",
-      userPassword: "",
-    });
-  };
-
-  const test = async () => {
-    try {
-      // const response = await axios({
-      //   headers: {
-      //     Authorization: accessToken,
-      //   },
-      //   method: "get",
-      //   url: `/api/v1/private/rooms`,
-      // });
-      // const response = await authorizedRequest({
-      //   method: "get",
-      //   url: `/rooms`,
-      // });
-      const response = await authAxios({
-        method: "get",
-        url: `/rooms`,
+      console.log("login success");
+      setState({
+        userId: "",
+        userPassword: "",
       });
-
-      console.log(response);
+      navigate("/");
     } catch (e) {
       console.error(e);
     }
   };
+
+  // const test = async () => {
+  //   try {
+  //     const response = await authAxios({
+  //       method: "get",
+  //       url: `/rooms`,
+  //     });
+
+  //     console.log(response);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   return (
     <div className="Login container">
@@ -111,7 +91,6 @@ const Login = () => {
         />
       </div>
       <MyButton color={"white"} text={"로그인"} onClick={handleSubmit} />
-      <MyButton color={"white"} text={"testtest"} onClick={test} />
     </div>
   );
 };

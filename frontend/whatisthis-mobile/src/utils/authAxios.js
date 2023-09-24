@@ -1,24 +1,22 @@
 import axios from "axios";
 
 const api = axios.create({
-  withCredentials: true,
-  baseURL: "/api/v1/private",
+  baseURL: process.env.REACT_APP_BASE_URL + `/api/v1/private`,
 });
 
 export const setAuthToken = (token) => {
-  localStorage.setItem("key", token);
+  localStorage.setItem("token", token);
 };
 
 const getAuthToken = () => {
-  return localStorage.getItem("key");
+  return localStorage.getItem("token");
 };
 
 const authAxios = async (config) => {
   const token = getAuthToken();
 
-  console.log(token);
-
   const headers = {
+    ...config.headers,
     Authorization: token,
   };
 
