@@ -2,6 +2,8 @@ package com.mo.whatisthis.apis.socket.handlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mo.whatisthis.apis.history.entities.DamagedHistoryEntity.Category;
+import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
 import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.socket.dto.MessageDto;
@@ -15,13 +17,16 @@ import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.WebSocketUtils;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.bridge.Message;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -37,6 +42,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     private final RedisService redisService;
     private final S3Service s3Service;
     private final HistoryService historyService;
+    private final DamagedHistoryService damagedHistoryService;
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -56,7 +62,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         Map<String, String> dataMap = messageRequest.getData();
         if (type.equals(MessageType.COORDINATE)) {
 
+            coordinateHandler(session, dataMap);
+
         } else if (type.equals(MessageType.DAMAGED)) {
+
+            damageHandler(session, dataMap);
 
         } else if (type.equals(MessageType.DRAWING)) {
 
@@ -78,8 +88,52 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
             String accessToken = dataMap.get(MessageDataType.accessToken.name());
             authHandler(session, accessToken.substring(7));
-
         }
+    }
+
+    public void coordinateHandler(WebSocketSession session, Map<String, String> dataMap){
+
+        Long historyId = getHistoryIdBySerialNumber(session);
+        String messageStr = convertMessageToString(MessageType.COORDINATE, dataMap);
+
+        WebSocketSession targetSession = moSocketProvider.getEmployeeSessionByHistory(historyId)
+                                                         .get();
+        moSocketProvider.sendTextMessage(targetSession, messageStr);
+
+    }
+
+    public void damageHandler(WebSocketSession session, Map<String, String> dataMap) {
+
+        String imageBinaryStr = dataMap.get(MessageDataType.image.name());
+        Float x = Float.valueOf(dataMap.get(MessageDataType.x.name()));
+        Float y = Float.valueOf(dataMap.get(MessageDataType.y.name()));
+        Category category = Category.valueOf(dataMap.get(MessageDataType.category.name()));
+
+        Long historyId = getHistoryIdBySerialNumber(session);
+
+        byte[] bytes = Base64.getDecoder()
+                             .decode(imageBinaryStr);
+        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(bytes);
+
+        String imgUrl = "";
+        try {
+            imgUrl = damagedHistoryService.createDamagedHistory(historyId, multipartFile, x, y,
+                category);
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+        Map<String, String> newMap = new HashMap<>();
+        dataMap.put(MessageDataType.image.name(), imgUrl);
+        dataMap.put(MessageDataType.x.name(), dataMap.get(MessageDataType.x.name()));
+        dataMap.put(MessageDataType.y.name(), dataMap.get(MessageDataType.y.name()));
+        dataMap.put(MessageDataType.category.name(), dataMap.get(MessageDataType.category.name()));
+        String messageStr = convertMessageToString(MessageType.DAMAGED, newMap);
+
+        WebSocketSession targetSession = moSocketProvider.getEmployeeSessionByHistory(historyId)
+                                                         .get();
+        moSocketProvider.sendTextMessage(targetSession, messageStr);
+
     }
 
     public void drawingHandler(WebSocketSession session, String imageBinaryStr) {
@@ -96,8 +150,9 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
-        String messageStr = convertMessageToString(MessageType.DRAWING, MessageDataType.image,
-            s3URL);
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put(MessageDataType.image.name(), s3URL);
+        String messageStr = convertMessageToString(MessageType.DRAWING, dataMap);
 
         WebSocketSession targetSession = moSocketProvider.getEmployeeSessionByHistory(historyId)
                                                          .get();
@@ -110,8 +165,9 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         Long historyId = getHistoryIdBySerialNumber(session);
 
-        String messageStr = convertMessageToString(MessageType.STATUS, MessageDataType.state,
-            status);
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put(MessageDataType.state.name(), status);
+        String messageStr = convertMessageToString(MessageType.STATUS, dataMap);
 
         WebSocketSession targetSession = moSocketProvider.getEmployeeSessionByHistory(historyId)
                                                          .get();
@@ -125,8 +181,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
             target);
 
         if (targetSession.isEmpty()) {
-            String messageStr = convertMessageToString(MessageType.STATUS, MessageDataType.state,
-                "NOT CONNECTED");
+
+            Map<String, String> dataMap = new HashMap<>();
+            dataMap.put(MessageDataType.state.name(), "NOT CONNECTED");
+
+            String messageStr = convertMessageToString(MessageType.STATUS, dataMap);
             moSocketProvider.sendTextMessage(session, messageStr);
             return;
         }
@@ -149,11 +208,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    public String convertMessageToString(MessageType messageType,
-        MessageDataType messageDataType, String messageDataContent) {
-
-        Map<String, String> dataMap = new HashMap<>();
-        dataMap.put(messageDataType.name(), messageDataContent);
+    public String convertMessageToString(MessageType messageType, Map<String, String> dataMap) {
 
         MessageDto messageDto = MessageDto.builder()
                                           .type(messageType)
@@ -161,7 +216,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
                                           .build();
 
         String str = "";
-
         try {
             str = objectMapper.writeValueAsString(messageDto);
         } catch (JsonProcessingException e) {
@@ -172,6 +226,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     }
 
     public Long getHistoryIdBySerialNumber(WebSocketSession session) {
+
         String serialNumber = (String) session.getAttributes()
                                               .get("serialNumber");
         Long historyId = Long.valueOf(redisService.getHistoryBySerialNumber(serialNumber));
@@ -194,8 +249,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
                 .getEmployeeSessionByHistory(Long.valueOf(historyId))
                 .get();
 
-            String str = convertMessageToString(MessageType.STATUS, MessageDataType.state,
-                "CONNECT");
+            Map<String, String> dataMap = new HashMap<>();
+            dataMap.put(MessageDataType.state.name(), "CONNECT");
+
+            String str = convertMessageToString(MessageType.STATUS, dataMap);
 
             moSocketProvider.sendTextMessage(employeeSession, str);
 
