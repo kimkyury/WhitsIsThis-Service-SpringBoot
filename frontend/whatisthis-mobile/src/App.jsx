@@ -56,40 +56,47 @@ function App() {
   const [buildinglist, dispatch] = useReducer(reducer, []);
 
   useEffect(() => {
-    const getBuildingList = async () => {
-      try {
-        const response = await AuthAxios({
-          method: "get",
-          url: "/requests/assigned",
-        });
-        const data = response.data.data;
-        if (data.length >= 1) {
-          dispatch({ type: "INIT", data: data });
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
+    // const getBuildingList = async () => {
+    //   try {
+    //     const response = await AuthAxios({
+    //       method: "get",
+    //       url: "/requests/assigned",
+    //     });
+    //     const data = response.data.data;
+    //     if (data.length >= 1) {
+    //       dispatch({ type: "INIT", data: data });
+    //     }
+    //     console.log(buildinglist);
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // };
     // 토큰 만료됐을때 다시 로그인하면 데이터 가져오게끔 해야함
-    const localData = localStorage.getItem("userInfo");
-    if (localData) {
-      const userData = JSON.parse(localData);
-
-      if (userData) {
-        setIsLogin(true);
-        getBuildingList();
-
-        console.log("hello");
-      }
-    } else {
-      console.log("notloggin");
-    }
+    // const localData = localStorage.getItem("userInfo");
+    // if (localData) {
+    //   const userData = JSON.parse(localData);
+    //   if (userData) {
+    //     setIsLogin(true);
+    //     // getBuildingList();
+    //     console.log("hello");
+    //   }
+    // } else {
+    //   setIsLogin(false);
+    //   console.log("notloggin");
+    // }
   }, []);
+
+  //INIT
+  const init = (data) => {
+    dispatch({
+      type: "INIT",
+      data: data,
+    });
+  };
 
   return (
     <BuildingDataContext.Provider value={buildinglist}>
-      <BuildingDispatchContext.Provider>
+      <BuildingDispatchContext.Provider value={{ init }}>
         <div className="App">
           {/* <BrowserRouter>
           <Routes>

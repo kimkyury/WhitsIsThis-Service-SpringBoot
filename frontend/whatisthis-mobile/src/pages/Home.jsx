@@ -1,22 +1,42 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 import MyButton from "../components/MyButton";
 import Notification from "../components/Notification";
+import { BuildingDispatchContext } from "../App";
+import AuthAxios from "../utils/AuthAxios";
 
 const Home = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
   const [workInProgress, setWorkInprogress] = useState(true);
 
+  const { init } = useContext(BuildingDispatchContext);
+
   useEffect(() => {
+    const getBuildingList = async () => {
+      try {
+        const response = await AuthAxios({
+          method: "get",
+          url: "/requests/assigned",
+        });
+        const data = response.data.data;
+        if (data.length >= 1) {
+          init(data);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
     const localData = localStorage.getItem("userInfo");
     if (localData) {
       const userData = JSON.parse(localData);
 
       if (userData) {
         setIsLogin(true);
+        getBuildingList();
       }
     }
   }, []);

@@ -12,12 +12,14 @@ const HouseList = () => {
   const { buildingId } = useParams();
 
   const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
-
+  console.log(targetBuilding);
   const [houseList, setHouseList] = useState();
 
   useEffect(() => {
-    setHouseList(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
-    console.log(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
+    if (targetBuilding) {
+      setHouseList(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
+      console.log(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
+    }
   }, []);
 
   const handleHouseCardClick = (houseId) => {
