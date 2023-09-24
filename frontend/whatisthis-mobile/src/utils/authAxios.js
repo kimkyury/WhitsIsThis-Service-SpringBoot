@@ -12,9 +12,8 @@ const getAuthToken = () => {
   return localStorage.getItem("token");
 };
 
-const authAxios = async (config) => {
+const AuthAxios = async (config) => {
   const token = getAuthToken();
-
   const headers = {
     ...config.headers,
     Authorization: token,
@@ -24,10 +23,11 @@ const authAxios = async (config) => {
 
   try {
     const response = await api(config);
+
     return response;
   } catch (e) {
     console.error(e);
   }
 };
 
-export default authAxios;
+export default AuthAxios;

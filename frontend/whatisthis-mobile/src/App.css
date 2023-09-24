@@ -306,6 +306,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  overflow: hidden;
 }
 .SearchDetail .Notification {
   height: 2.8rem;
@@ -395,9 +396,11 @@ body {
   margin-top: 1.5rem;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
+  width: 19.5rem;
   display: flex;
   align-items: flex-start;
   flex-direction: row;
+  justify-content: space-between;
 }
 .Connection .building_info_wrapper {
   margin-top: 3rem;
@@ -426,7 +429,7 @@ body {
 
   width: 22.5rem;
   height: 22.5rem;
-  margin-top: 1rem;
+  margin-top: 2.3rem;
   margin-bottom: 1rem;
 }
 .Connection .camera_container img {

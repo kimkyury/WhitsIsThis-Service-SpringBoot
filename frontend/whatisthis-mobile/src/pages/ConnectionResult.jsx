@@ -1,16 +1,20 @@
+import { useContext, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { getBuildingName } from "../utils/ParseAddress";
-import { useState } from "react";
 
 import Notification from "../components/Notification";
+import { BuildingDataContext } from "../App";
 
 const ConnectionResult = () => {
   const navigate = useNavigate();
   const [connectState, setConnectState] = useState(true);
 
   const { buildingId, houseId } = useParams();
-  const { serialNumber, addr } = useLocation().state;
+  const { serialNumber } = useLocation().state;
+
+  const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
+  const targetHouse = targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
 
   const startWorking = () => {
     // houselist 추가하는 로직
@@ -22,8 +26,8 @@ const ConnectionResult = () => {
     <div className="ConnectionResult container">
       <div className="building_info_wrapper">
         <div className="building_info">
-          <h1>{getBuildingName(addr)}</h1>
-          <h3>{addr}</h3>
+          <h1>{targetHouse.addressDetail}</h1>
+          <h3>{targetBuilding.address}</h3>
         </div>
       </div>
       <div className="connect_info_wrapper">

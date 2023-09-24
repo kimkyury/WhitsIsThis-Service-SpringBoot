@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { getBuildingName } from "../utils/ParseAddress";
@@ -9,40 +9,46 @@ import SerialNumberRecognition from "../components/SerialNumberRecognition";
 import { dummyBuildingData } from "../utils/DummyData";
 import { dummyHouseData } from "../utils/DummyData";
 import QRrecognition from "../components/QRrecognition";
+import { BuildingDataContext } from "../App";
 const Connection = () => {
   const { buildingId } = useParams();
   const { houseId } = useParams();
-  const buildingList = dummyBuildingData;
-  const houseList = dummyHouseData;
+
+  const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
+  const targetHouse = targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
 
   const navigate = useNavigate();
-  const [data, setData] = useState();
-  const [addr, setAddr] = useState();
+
+  // const buildingList = dummyBuildingData;
+  // const houseList = dummyHouseData;
+
+  // const [data, setData] = useState();
+  // const [addr, setAddr] = useState();
 
   const [isSnum, setIsSnum] = useState(false);
 
-  useEffect(() => {
-    if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
-      if (targetBuilding) {
-        if (targetBuilding.houses.length >= 1) {
-          const targetHouse = targetBuilding.houses.find(
-            (it) => parseInt(it.id) === parseInt(houseId)
-          );
-          setAddr(targetBuilding.addr);
-          if (targetHouse) {
-            setData(targetHouse);
-          } else {
-            alert("없는 세대입니다.");
-            navigate("/search", { replace: true });
-          }
-        }
-      } else {
-        alert("없는 건물입니다.");
-        navigate("/search", { replace: true });
-      }
-    }
-  }, [houseId, houseList]);
+  // useEffect(() => {
+  //   if (buildingList.length >= 1) {
+  //     const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
+  //     if (targetBuilding) {
+  //       if (targetBuilding.houses.length >= 1) {
+  //         const targetHouse = targetBuilding.houses.find(
+  //           (it) => parseInt(it.id) === parseInt(houseId)
+  //         );
+  //         setAddr(targetBuilding.addr);
+  //         if (targetHouse) {
+  //           setData(targetHouse);
+  //         } else {
+  //           alert("없는 세대입니다.");
+  //           navigate("/search", { replace: true });
+  //         }
+  //       }
+  //     } else {
+  //       alert("없는 건물입니다.");
+  //       navigate("/search", { replace: true });
+  //     }
+  //   }
+  // }, [houseId, houseList]);
 
   const handleConnectionMethodTymeClick = () => {
     // 카메라 멈추고 시리얼넘버 컴포넌트 스폰 토글..
@@ -54,25 +60,25 @@ const Connection = () => {
 
   const connect = (serialNumber) => {
     //시리얼 넘버가 유효한지 확인하는 로직 필요
-
     navigate(`/connection/${buildingId}/${houseId}/result`, {
       state: {
-        addr: addr,
         serialNumber: serialNumber,
       },
       replace: true,
     });
   };
 
-  if (!data) {
+  if (!targetHouse) {
     return <div className="Connection">로딩중입니다...</div>;
   } else {
     return (
       <div className="Connection container">
         <div className="header">
           <div className="building_info_wrapper">
-            <h1>{getBuildingName(addr)}</h1>
-            <h4>{addr}</h4>
+            {/* <h1>{getBuildingName(targetHouse.address)}</h1>
+            <h4>{targetHouse.address}</h4> */}
+            <h2>{targetHouse.addressDetail}</h2>
+            <h4>{targetBuilding.address}</h4>
           </div>
           <div className="connection_method_wrapper">
             <img
@@ -99,7 +105,7 @@ const Connection = () => {
         {
           <SerialNumberRecognition
             isOpen={isSnum}
-            addr={addr}
+            addr={targetHouse.address}
             buildingId={buildingId}
             houseId={houseId}
             handleOpenSnumRecognition={handleOpenSnumRecognition}

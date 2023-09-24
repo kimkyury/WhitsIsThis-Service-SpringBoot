@@ -1,12 +1,10 @@
 const HouseInfo = ({ houseInfo, onClick }) => {
-  const houseStatus = ["done", "todo"].includes(houseInfo.status) ? houseInfo.status : "todo";
+  const houseStatus = ["DONE", "todo"].includes(houseInfo.status) ? houseInfo.status : "todo";
 
   return (
     <div className="HouseInfo" onClick={onClick}>
-      <h1>
-        {houseInfo.dong}동 {houseInfo.ho}호
-      </h1>
-      {houseInfo.status === "done" && (
+      <h1>{houseInfo.addressDetail}</h1>
+      {houseInfo.status === "DONE" && (
         <img src={process.env.PUBLIC_URL + `/assets/check_green_small.png`} alt="done" />
       )}
     </div>
