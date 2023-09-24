@@ -1,72 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Receive.css';
 import Item from './Receiveditem';
 import RequestModal from './RequestModal';
-import { FaSearch } from "react-icons/fa";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { FaSearch } from 'react-icons/fa';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 function List() {
   const [showModal, setShowModal] = useState(false);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [applicant, setApplicant] = useState([
-    {
-      id: '1',
-      consumer: '홍길동',
-      phonenumber: '010-0000-0000',
-      address: '부산광역시 강서구 녹산동',
-      request: '이렇게 저렇게 해주세요',
-      warrent: 'warrentUrl',
-      Daddress: '삼정그린코아 101동 103호',
-    },
-    {
-      id: '2',
-      consumer: '홍길은',
-      phonenumber: '010-0100-0000',
-      address: '부산광역시 강북구 강북동',
-      request: '이렇게 저렇게 해주세요',
-      warrent: 'warrentUrl',
-      Daddress: '삼정그린코아 1201동 1203호',
-    },
-    {
-      id: '3',
-      consumer: '홍길금',
-      phonenumber: '010-0100-0000',
-      address: '부산광역시 강북구 강북동',
-      request: '이렇게 저렇게 해주세요',
-      warrent: 'warrentUrl',
-      Daddress: '삼정그린코아 1201동 1203호',
-    },
+    // 초기 데이터 예시
+    // ...
   ]);
-  const [myApplicant, setMyApplicant] = useState([
-    {
-      id: '4',
-      consumer:'김길동',
-      phonenumber: '010-0010-0000',
-      address: '부산광역시 강북구 공동동',
-      request: '이렇게 절허게',
-      warrent:'mywarrentUrl',
-      Daddress:'송정그린코아 1301동 1203호', 
-    },
-    {
-      id: '5',
-      consumer:'김길은',
-      phonenumber: '010-0010-0000',
-      address: '부산광역시 강북구 공동동',
-      request: '이렇게 절허게',
-      warrent:'mywarrentUrl',
-      Daddress:'송정그린코아 1301동 1203호', 
-    },
-    {
-      id: '110',
-      consumer:'김길은',
-      phonenumber: '010-0010-0000',
-      address: '부산광역시 강북구 공동동',
-      request: '이렇게 절허게',
-      warrent:'mywarrentUrl',
-      Daddress:'송정그린코아 1301동 1203호', 
-    }
-  ]);
+  const [myApplicant, setMyApplicant] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
@@ -83,66 +33,115 @@ function List() {
     setSearchQuery(event.target.value);
   };
 
+  const fetchData = (page) => {
+    setIsLoading(true);
+    // API 엔드포인트에서 지정된 페이지의 데이터를 가져옵니다.
+    fetch(`${BASE_URL}/api/v1/private/requests/waiting?page=${page}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 0) {
+          // 데이터가 정상적으로 반환되었을 때만 처리합니다.
+          const responseData = data.data;
+          
+          // 가져온 데이터로 myApplicant 상태를 업데이트합니다.
+          setMyApplicant((prevData) => [...prevData, ...responseData]);
+  
+          setCurrentPage(page);
+          setIsLoading(false);
+        } else {
+          console.error('API 오류:', data.message);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error('데이터 가져오기 오류:', error);
+        setIsLoading(false);
+      });
+  };
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 초기 페이지의 데이터를 가져옵니다.
+    fetchData(currentPage);
+  }, []);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+      !isLoading
+    ) {
+      const nextPage = currentPage + 1;
+      fetchData(nextPage);
+    }
+  };
+
+  useEffect(() => {
+    // 스크롤 이벤트 리스너를 등록합니다.
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [currentPage, isLoading]);
+
   function handleOnDragEnd(result) {
     if (!result.destination) return;
-    
+
     const sourceIndex = result.source.index;
     const destinationIndex = result.destination.index;
     const draggedItem = result.draggableId;
-    
-    if (result.source.droppableId === 'applicant' && result.destination.droppableId === 'myApplicant') {
+
+    if (
+      result.source.droppableId === 'applicant' &&
+      result.destination.droppableId === 'myApplicant'
+    ) {
       const draggedData = applicant[sourceIndex];
-    
+
       setMyApplicant((prevMyApplicant) => {
-        const updatedMyApplicant = [...prevMyApplicant]; // 복사하여 수정
-        updatedMyApplicant.splice(destinationIndex, 0, draggedData); // 드래그된 데이터를 목적지 인덱스에 추가
+        const updatedMyApplicant = [...prevMyApplicant];
+        updatedMyApplicant.splice(destinationIndex, 0, draggedData);
         return updatedMyApplicant;
       });
-    
+
       const updatedApplicant = [...applicant];
       updatedApplicant.splice(sourceIndex, 1);
       setApplicant(updatedApplicant);
-    }
-     else if (result.source.droppableId === 'myApplicant' && result.destination.droppableId === 'applicant') {
+    } else if (
+      result.source.droppableId === 'myApplicant' &&
+      result.destination.droppableId === 'applicant'
+    ) {
       const draggedData = myApplicant[sourceIndex];
-      
+
       const updatedApplicant = [...applicant];
-      updatedApplicant.splice(destinationIndex, 0, draggedData); // 드래그된 데이터를 목적지 인덱스에 추가
+      updatedApplicant.splice(destinationIndex, 0, draggedData);
       setApplicant(updatedApplicant);
-  
+
       const updatedMyApplicant = [...myApplicant];
       updatedMyApplicant.splice(sourceIndex, 1);
       setMyApplicant(updatedMyApplicant);
     }
   }
-  
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <div className='inputgrid'>
+        <div className="inputgrid">
           <input
-            className='recinputtag'
+            className="recinputtag"
             placeholder="검색"
             value={searchQuery}
             onChange={handleInputChange}
           />
-          <p className='iconsearch'>
+          <p className="iconsearch">
             <FaSearch />
           </p>
         </div>
       </div>
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId='applicant'>
+        <Droppable droppableId="applicant">
           {(provided) => (
             <div className="gridbox">
               <div className="left">
-                <span
-                  className='recspan'
-                >
-                  내 접수
-                </span>
+                <span className="recspan">내 접수</span>
                 <div
-                  className='Dropbox'
+                  className="Dropbox"
                   style={{ paddingTop: '1.5vw' }}
                   {...provided.droppableProps}
                   ref={provided.innerRef}
@@ -171,21 +170,14 @@ function List() {
                 </div>
               </div>
               <div className="left">
-                <span
-                  className='recspan'
-                  >
-                  접수대기
-                </span>
-                <div
-                  className='Dropbox'
-                  style={{ paddingTop: '1.5vw' }}
-                  >
-                  <Droppable droppableId='myApplicant'>
+                <span className="recspan">접수대기</span>
+                <div className="Dropbox" style={{ paddingTop: '1.5vw' }}>
+                  <Droppable droppableId="myApplicant">
                     {(provided) => (
                       <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className='myApplicant-container'
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className="myApplicant-container"
                       >
                         {myApplicant.map((data, index) => (
                           <Draggable key={data.id} draggableId={data.id} index={index}>
@@ -215,8 +207,7 @@ function List() {
               </div>
             </div>
           )}
-          </Droppable>
-
+        </Droppable>
       </DragDropContext>
       {showModal && (
         <div className="modal-container">
@@ -227,4 +218,4 @@ function List() {
   );
 }
 
-export default List;
+export default List

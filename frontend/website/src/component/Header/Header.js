@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import './Header.css'
 import { NavLink } from 'react-router-dom';
- // 로고 이미지 파일을 가져옵니다.
+import axios from 'axios'; // axios 라이브러리를 가져옵니다.
 
 function Header(props) {
   const [activeLink, setActiveLink] = useState('');
-
+  const BASE_URL = process.env.REACT_APP_BASE_URL
   const linkStyle = {
     color: '#2D4059', // 비활성 링크의 텍스트 색상
     marginRight: '3%',
@@ -14,6 +14,20 @@ function Header(props) {
 
   const handleLinkClick = (linkName) => {
     setActiveLink(linkName);
+  };
+
+  // 로그아웃 함수
+  const handleLogout = async () => {
+    try {
+      // 로그아웃 요청을 서버에 보냅니다.
+      await axios.post(`${BASE_URL}/api/v1/private/auth/logout`);
+
+      // 로그아웃 성공 시 로컬 스토리지에서 토큰 제거 및 페이지 새로고침
+      localStorage.removeItem('token');
+      window.location.reload();
+    } catch (error) {
+      console.error('로그아웃 에러:', error);
+    }
   };
 
   return (
@@ -65,6 +79,8 @@ function Header(props) {
           >
             내 정보
           </NavLink>
+          {/* 로그아웃 버튼 */}
+          <button onClick={handleLogout}>로그아웃</button>
         </div>
       </div>
     </div>

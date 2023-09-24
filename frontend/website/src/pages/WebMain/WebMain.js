@@ -30,15 +30,11 @@ function WebMain() {
   return (
     <div>
       <div className='loginform'>
-        {isLoggedIn ? (
-          <div>
-            {/* 로그아웃 버튼 추가 */}
-            <button onClick={handleLogout}>Logout</button>
-            <Link to='/list'>Go to List</Link>
-          </div>
-        ) : (
+ 
+          
+
           <Login onLogin={() => setIsLoggedIn(true)} />
-        )}
+
       </div>
     </div>
   );
