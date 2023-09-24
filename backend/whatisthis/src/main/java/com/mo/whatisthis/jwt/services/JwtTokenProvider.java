@@ -134,7 +134,7 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public Claims getClaims(String token) {
-        // 해당 토큰에서 Claims 영역 파싱하기
+
         try {
             return Jwts.parserBuilder()
                        .setSigningKey(signingKey)

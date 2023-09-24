@@ -1,22 +1,25 @@
 package com.mo.whatisthis.apis.socket.services;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import com.mo.whatisthis.exception.CustomException;
+import com.mo.whatisthis.supports.codes.ErrorCode;
+import java.io.IOException;
+import java.net.http.WebSocket;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import org.hibernate.Session;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 @Component
 public class MoSocketProvider {
 
     private ConcurrentHashMap<Long, WebSocketSession> employeeByHistoryMap;
-    private ConcurrentHashMap<String, WebSocketSession> deviceSessionBySerialNumber;
+    private ConcurrentHashMap<String, WebSocketSession> deviceBySerialNumberMap;
 
     public MoSocketProvider() {
         this.employeeByHistoryMap = new ConcurrentHashMap<>();
-        this.deviceSessionBySerialNumber = new ConcurrentHashMap<>();
+        this.deviceBySerialNumberMap = new ConcurrentHashMap<>();
     }
 
     public void addEmployeeToSocket(Long historyId, WebSocketSession employeeSession) {
@@ -31,12 +34,32 @@ public class MoSocketProvider {
     }
 
     public void addDeviceToSocket(String serialNumber, WebSocketSession deviceSession) {
-        deviceSessionBySerialNumber.put(serialNumber, deviceSession);
+        deviceBySerialNumberMap.put(serialNumber, deviceSession);
         System.out.println(">>>>>>>>>>>> Add Device to Map");
     }
 
     public void removeDeviceToSocket(String serialNumber) {
-        deviceSessionBySerialNumber.remove(serialNumber);
+        deviceBySerialNumberMap.remove(serialNumber);
     }
+
+    public void sendTextMessage(WebSocketSession session, String payload) {
+        try {
+            if (session.isOpen()) {
+                TextMessage message = new TextMessage(payload);
+                session.sendMessage(message);
+            }
+        }catch(IOException e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public Optional<WebSocketSession> getEmployeeSessionByHistory(Long historyId){
+        return Optional.ofNullable(employeeByHistoryMap.get(historyId));
+    }
+
+    public Optional<WebSocketSession> getDeviceSessionBySerialNumber(String serialNumber){
+        return  Optional.ofNullable(deviceBySerialNumberMap.get(serialNumber));
+    }
+
 
 }
