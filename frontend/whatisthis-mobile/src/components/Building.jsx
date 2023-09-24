@@ -1,8 +1,6 @@
 import { getBuildingName } from "../utils/ParseAddress";
 
-const Building = ({ index, buildingData, onClick }) => {
-  // console.log(index, buildingData);
-
+const Building = ({ buildingData, onClick }) => {
   const getFinishedRequest = () => {
     const doneItems = buildingData.requests.filter((it) => it.status === "DONE");
 

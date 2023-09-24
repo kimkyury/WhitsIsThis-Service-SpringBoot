@@ -1,5 +1,5 @@
 import axios from "axios";
-
+// 토큰 재발행 로직 추가 필요
 const api = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL + `/api/v1/private`,
 });

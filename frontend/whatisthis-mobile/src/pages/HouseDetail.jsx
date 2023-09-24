@@ -4,18 +4,23 @@
 // 	SectionDetail
 // 	SectionDetailCamera
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { dummyBuildingData, dummyHouseData } from "../utils/DummyData";
 import { getBuildingName } from "../utils/ParseAddress";
 
 import MyButton from "../components/MyButton";
 import HouseTodoList from "../components/HouseTodoList";
+import { BuildingDataContext } from "../App";
 
 const HouseDetail = () => {
   const navigate = useNavigate();
 
   const { buildingId, houseId } = useParams();
+
+  const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
+  const targetHouse = targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
+
   const buildingList = dummyBuildingData;
   const houseList = dummyHouseData;
 
@@ -30,34 +35,34 @@ const HouseDetail = () => {
   // 값 받아와서 설정해주기
   const [isFinish, setIsFinish] = useState(true);
 
-  useEffect(() => {
-    if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
-      if (targetBuilding) {
-        if (targetBuilding.houses.length >= 1) {
-          const targetHouse = targetBuilding.houses.find(
-            (it) => parseInt(it.id) === parseInt(houseId)
-          );
-          setAddr(targetBuilding.addr);
-          if (targetHouse) {
-            setData(targetHouse);
-          } else {
-            alert("없는 세대입니다.");
-            navigate("/search", { replace: true });
-          }
-        }
-      } else {
-        alert("없는 건물입니다.");
-        navigate("/search", { replace: true });
-      }
-    }
-  }, [houseId, houseList]);
+  // useEffect(() => {
+  //   if (buildingList.length >= 1) {
+  //     const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
+  //     if (targetBuilding) {
+  //       if (targetBuilding.houses.length >= 1) {
+  //         const targetHouse = targetBuilding.houses.find(
+  //           (it) => parseInt(it.id) === parseInt(houseId)
+  //         );
+  //         setAddr(targetBuilding.addr);
+  //         if (targetHouse) {
+  //           setData(targetHouse);
+  //         } else {
+  //           alert("없는 세대입니다.");
+  //           navigate("/search", { replace: true });
+  //         }
+  //       }
+  //     } else {
+  //       alert("없는 건물입니다.");
+  //       navigate("/search", { replace: true });
+  //     }
+  //   }
+  // }, [houseId, houseList]);
 
   const handleOpenTodoList = () => {
     setIsOpenTodoList(!isOpenTodoList);
   };
 
-  if (!data) {
+  if (!targetHouse) {
     return <div className="HouseDetail">로딩중입니다...</div>;
   } else {
     // 작업 상태가 도면을 만드는 중이면 도면을 만드는 로딩 사진 아니면 디테일 보여줌
@@ -66,12 +71,10 @@ const HouseDetail = () => {
         <div className="building_info_wrapper">
           <div className="building_info">
             <div className="building_title">
-              <h1>
-                {data.dong}동{data.ho}호
-              </h1>
+              <h1>{targetHouse.addressDetail}</h1>
               <h1 className="proecss_percentge">NN%</h1>
             </div>
-            <h3>{addr}</h3>
+            <h3>{targetBuilding.address}</h3>
           </div>
         </div>
 
@@ -104,12 +107,10 @@ const HouseDetail = () => {
         <div className="building_info_wrapper">
           <div className="building_info">
             <div className="building_title">
-              <h1>
-                {data.dong}동{data.ho}호
-              </h1>
+              <h1>{targetHouse.addressDetail}</h1>
               <h1 className="proecss_percentge">NN%</h1>
             </div>
-            <h3>{addr}</h3>
+            <h3>{targetBuilding.address}</h3>
           </div>
         </div>
 

@@ -1,13 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { getBuildingName } from "../utils/ParseAddress";
-
 import MyButton from "../components/MyButton";
 import SerialNumberRecognition from "../components/SerialNumberRecognition";
 
-import { dummyBuildingData } from "../utils/DummyData";
-import { dummyHouseData } from "../utils/DummyData";
 import QRrecognition from "../components/QRrecognition";
 import { BuildingDataContext } from "../App";
 const Connection = () => {
@@ -19,36 +15,7 @@ const Connection = () => {
 
   const navigate = useNavigate();
 
-  // const buildingList = dummyBuildingData;
-  // const houseList = dummyHouseData;
-
-  // const [data, setData] = useState();
-  // const [addr, setAddr] = useState();
-
   const [isSnum, setIsSnum] = useState(false);
-
-  // useEffect(() => {
-  //   if (buildingList.length >= 1) {
-  //     const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
-  //     if (targetBuilding) {
-  //       if (targetBuilding.houses.length >= 1) {
-  //         const targetHouse = targetBuilding.houses.find(
-  //           (it) => parseInt(it.id) === parseInt(houseId)
-  //         );
-  //         setAddr(targetBuilding.addr);
-  //         if (targetHouse) {
-  //           setData(targetHouse);
-  //         } else {
-  //           alert("없는 세대입니다.");
-  //           navigate("/search", { replace: true });
-  //         }
-  //       }
-  //     } else {
-  //       alert("없는 건물입니다.");
-  //       navigate("/search", { replace: true });
-  //     }
-  //   }
-  // }, [houseId, houseList]);
 
   const handleConnectionMethodTymeClick = () => {
     // 카메라 멈추고 시리얼넘버 컴포넌트 스폰 토글..
@@ -75,8 +42,6 @@ const Connection = () => {
       <div className="Connection container">
         <div className="header">
           <div className="building_info_wrapper">
-            {/* <h1>{getBuildingName(targetHouse.address)}</h1>
-            <h4>{targetHouse.address}</h4> */}
             <h2>{targetHouse.addressDetail}</h2>
             <h4>{targetBuilding.address}</h4>
           </div>

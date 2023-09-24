@@ -7,7 +7,6 @@ import Notification from "../components/Notification";
 import HouseInfo from "../components/HouseInfo";
 
 // buildinglist 를 context 로 받아와도 될듯
-import { dummyBuildingData } from "../utils/DummyData";
 import { BuildingDataContext } from "../App";
 
 const SearchDetail = () => {
@@ -15,24 +14,13 @@ const SearchDetail = () => {
   const navigate = useNavigate();
 
   const houseList = useContext(BuildingDataContext)[parseInt(buildingId)];
-
-  // useEffect(() => {
-  // if (buildingList.length >= 1) {
-  //   const targetBuilding = buildingList.fi1nd((it) => parseInt(it.id) === parseInt(id));
-  //   if (targetBuilding) {
-  //     setData(targetBuilding);
-  //   } else {
-  //     alert("없는 건물입니다.");
-  //     navigate("/search", { replace: true });
-  //   }
-  // }
-  // }, [id, houseList]);
+  console.log(houseList);
 
   const handleHouseInfoClick = (info) => {
     if (info.status === "DONE") {
       navigate(`/house/${buildingId}/${info.id}/result`);
     } else {
-      if (info.isConnected) {
+      if (info.status === "IN_PROGRESS") {
         navigate(`/houselist/${buildingId}`);
       } else if (!info.isConnected) {
         navigate(`/connection/${buildingId}/${info.id}`);

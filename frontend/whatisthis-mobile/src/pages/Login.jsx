@@ -59,19 +59,6 @@ const Login = () => {
     }
   };
 
-  // const test = async () => {
-  //   try {
-  //     const response = await authAxios({
-  //       method: "get",
-  //       url: `/rooms`,
-  //     });
-
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
   return (
     <div className="Login container">
       <img src={process.env.PUBLIC_URL + `/assets/pavicon_white.png`} alt="Logo" />

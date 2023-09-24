@@ -1,35 +1,30 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { getBuildingName } from "../utils/ParseAddress";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MyButton from "../components/MyButton";
 import HouseCard from "../components/HouseCard";
 
-import { dummyBuildingData } from "../utils/DummyData";
+import { BuildingDataContext } from "../App";
 
 const HouseList = () => {
-  const { buildingId } = useParams();
-  const buildingList = dummyBuildingData;
   const navigate = useNavigate();
-  const [data, setData] = useState();
+  const { buildingId } = useParams();
+
+  const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
+
+  const [houseList, setHouseList] = useState();
 
   useEffect(() => {
-    if (buildingList.length >= 1) {
-      const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
-      if (targetBuilding) {
-        setData(targetBuilding);
-      } else {
-        alert("없는 건물입니다.");
-        navigate("/search", { replace: true });
-      }
-    }
-  }, [buildingId, buildingList]);
+    setHouseList(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
+    console.log(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
+  }, []);
 
   const handleHouseCardClick = (houseId) => {
     navigate(`/house/${buildingId}/${houseId}`);
   };
 
-  if (!data) {
+  if (!targetBuilding) {
     return <div className="HouseList">로딩중입니다...</div>;
   } else {
     return (
@@ -37,33 +32,33 @@ const HouseList = () => {
         <div className="building_info_wrapper">
           <div className="building_info">
             <div className="building_title">
-              <h1>{getBuildingName(data.addr)}</h1>
+              <h1>{getBuildingName(targetBuilding.address)}</h1>
               <MyButton
                 color={"orange"}
                 text={"목록으로"}
                 onClick={() => navigate(`/search/${buildingId}`)}
               />
             </div>
-            <h3>{data.addr}</h3>
+            <h3>{targetBuilding.address}</h3>
           </div>
         </div>
         <div className="house_card_wrapper">
-          {/* dummy houseCardList */}
-          {data.houses.map((it, idx) => {
-            return (
-              <HouseCard
-                key={idx}
-                houseInfo={it}
-                currentPercentage={Math.floor(Math.random() * 100) + 1}
-                // onclick 할 때 houseinfo 등 percentage 정보를 넘겨줘서 100프로이면 바로 결과창으로 보내던지
-                onClick={() => handleHouseCardClick(it.id)}
-              />
-            );
-          })}
+          {houseList &&
+            houseList.map((it, idx) => {
+              return (
+                <HouseCard
+                  key={idx}
+                  houseInfo={it}
+                  currentPercentage={Math.floor(Math.random() * 100) + 1}
+                  // onclick 할 때 houseinfo 등 percentage 정보를 넘겨줘서 100프로이면 바로 결과창으로 보내던지
+                  onClick={() => handleHouseCardClick(it.id)}
+                />
+              );
+            })}
           <div className="HouseCard add_card_btn" onClick={() => navigate(`/search/${buildingId}`)}>
             <img src={process.env.PUBLIC_URL + `/assets/plus_circle.png`} alt="add_card" />
           </div>
-          {data.houses.length % 2 === 0 && <div className="blank"></div>}
+          {houseList && houseList.length % 2 === 0 && <div className="blank"></div>}
         </div>
       </div>
     );

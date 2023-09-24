@@ -2,15 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import Building from "../components/Building";
 import { useNavigate } from "react-router-dom";
 
-import { dummyBuildingData } from "../utils/DummyData";
-import AuthAxios from "../utils/AuthAxios";
-
 import { BuildingDataContext } from "../App";
+
+// 검색 필터 해줘야해용
 
 const Search = () => {
   const navigate = useNavigate();
   const [searchWord, setSearchWord] = useState("");
-  // const [buildingList, setBuildingList] = useState();
   const buildingList = useContext(BuildingDataContext);
   return (
     <div className="Search container">
@@ -26,12 +24,7 @@ const Search = () => {
         {buildingList &&
           buildingList.map((it, idx) => {
             return (
-              <Building
-                key={idx}
-                index={idx}
-                buildingData={it}
-                onClick={() => navigate(`/search/${idx}`)}
-              />
+              <Building key={idx} buildingData={it} onClick={() => navigate(`/search/${idx}`)} />
             );
           })}
       </div>

@@ -1,8 +1,6 @@
 import { useContext, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import { getBuildingName } from "../utils/ParseAddress";
-
 import Notification from "../components/Notification";
 import { BuildingDataContext } from "../App";
 
