@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.request.responses;
 
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
+import com.mo.whatisthis.apis.request.responses.RequestDetailRequests.History;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -20,6 +21,8 @@ public class RequestFindByCustomerResponse {
     private LocalDate inspectionEnd;
     private LocalDateTime requestedAt;
     private String warrantUrl;
+    private History history;
+    private Long paymentId;
 
     // ------- 신청 이후 변경되는 정보들
     private Status status; // 처리 상태

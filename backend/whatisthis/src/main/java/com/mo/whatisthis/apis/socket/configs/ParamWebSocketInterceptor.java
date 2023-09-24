@@ -6,6 +6,7 @@ import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.security.service.UserDetailsImpl;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.server.ServerHttpRequest;
@@ -21,56 +22,31 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 @Component
 public class ParamWebSocketInterceptor implements HandshakeInterceptor {
 
-    private final JwtTokenProvider jwtTokenProvider;
-
-    public Role getRoleByAccessToken(ServerHttpRequest request) {
-
-        String accessToken = request.getHeaders()
-                                    .getFirst("Authorization")
-                                    .substring(7);
-
-        UserDetailsImpl principal = (UserDetailsImpl) jwtTokenProvider
-            .getAuthentication(accessToken)
-            .getPrincipal();
-
-        return principal.getRole();
-    }
-
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
         WebSocketHandler wsHandler, Map<String, Object> attributes) {
 
-        Role role = getRoleByAccessToken(request);
-        attributes.put("role", role);
+        HttpServletRequest httpServletRequest = ((ServletServerHttpRequest) request).getServletRequest();
 
-        // TODO: request instanceof ServletServerHttpRequest 조건문 오류 발생시 재적용
-        ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
-
-        if (role == Role.ROLE_EMPLOYEE) {
-            String historyIdStr = servletRequest.getServletRequest()
-                                                .getParameter("historyId");
-            if (historyIdStr == null) {
-                throw new CustomException(ErrorCode.MISSING_PARAMETER);
-            }
-
+        String historyIdStr = httpServletRequest.getParameter("historyId");
+        if (historyIdStr != null) {
+            attributes.put("role", Role.ROLE_EMPLOYEE);
             attributes.put("historyId", Long.valueOf(historyIdStr));
-
-        } else if (role == Role.ROLE_DEVICE) {
-            String serialNumber = servletRequest.getServletRequest()
-                                                .getParameter("serialNumber");
-            if (serialNumber == null) {
-                throw new CustomException(ErrorCode.MISSING_PARAMETER);
-            }
-
-            attributes.put("serialNumber", serialNumber);
+            return true;
         }
 
-        return true;
+        String serialNumber = httpServletRequest.getParameter("serialNumber");
+        if (serialNumber != null) {
+            attributes.put("role", Role.ROLE_DEVICE);
+            attributes.put("serialNumber", serialNumber);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
         WebSocketHandler wsHandler, Exception exception) {
-
     }
 }
