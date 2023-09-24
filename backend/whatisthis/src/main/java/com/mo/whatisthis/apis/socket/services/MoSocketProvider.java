@@ -26,20 +26,22 @@ public class MoSocketProvider {
 
         //TODO: historyid 유효성 검사 Error처리
         employeeByHistoryMap.put(historyId, employeeSession);
-        System.out.println(">>>>>>>>>>>> Add Employee to Map");
+//        System.out.println(">>>>>>>>>>>> Add Employee to Map");
     }
 
     public void removeEmployeeToSocket(Long historyId) {
         employeeByHistoryMap.remove(historyId);
+//        System.out.println(">>>>>>>>>>>> Remove Employee to Map");
     }
 
     public void addDeviceToSocket(String serialNumber, WebSocketSession deviceSession) {
         deviceBySerialNumberMap.put(serialNumber, deviceSession);
-        System.out.println(">>>>>>>>>>>> Add Device to Map");
+//        System.out.println(">>>>>>>>>>>> Add Device to Map");
     }
 
     public void removeDeviceToSocket(String serialNumber) {
         deviceBySerialNumberMap.remove(serialNumber);
+//        System.out.println(">>>>>>>>>>>> Remove Device to Map");
     }
 
     public void sendTextMessage(WebSocketSession session, String payload) {

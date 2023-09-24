@@ -263,22 +263,21 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         // TODO: Turtle봇 종료시, 데이터의 터틀봇 관련도 삭제할 것
 
-        // 클라이언트 연결이 종료될 때 실행되는 코드
 //        System.out.println(">>>>>> Connector Socket EXIT");
-//
-//        String role = (String) session.getAttributes()
-//                                      .get("role");
-//
-//        if (role.equals(Role.ROLE_EMPLOYEE)) {
-//            Long historyId = (Long) session.getAttributes()
-//                                           .get("historyId");
-//            moSocketProvider.removeEmployeeToSocket(historyId);
-//
-//        } else if (role.equals(Role.ROLE_DEVICE)) {
-//            String serialNumber = (String) session.getAttributes()
-//                                                  .get("serialNumber");
-//            moSocketProvider.removeDeviceToSocket(serialNumber);
-//        }
+
+        Role role = (Role)  session.getAttributes()
+                                      .get("role");
+
+        if (role == Role.ROLE_EMPLOYEE) {
+            Long historyId = (Long) session.getAttributes()
+                                           .get("historyId");
+            moSocketProvider.removeEmployeeToSocket(historyId);
+
+        } else if (role == Role.ROLE_DEVICE) {
+            String serialNumber = (String) session.getAttributes()
+                                                  .get("serialNumber");
+            moSocketProvider.removeDeviceToSocket(serialNumber);
+        }
     }
 }
 
