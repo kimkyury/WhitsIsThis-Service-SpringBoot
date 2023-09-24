@@ -11,7 +11,7 @@ function Customreceive() {
       <div className="modalbox roomimg backgr">
       <CustomreceiveModal/>
       {/* <Receivesuc/> */}
-      {/* <Address/> */}
+
       </div>
     </div>
   )

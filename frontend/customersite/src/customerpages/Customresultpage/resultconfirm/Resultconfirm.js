@@ -4,42 +4,6 @@ import './Resultconfirm.css';
 
 function Resultconfirm() {
   const [customdata, setCustomdata] = useState([
-    {
-      cunsumer: '홍길동',
-      phonenumber: '01012345678',
-      request: '이렇게 저렇게 해주세요',
-      password: '1234',
-      warrent: 'warrenturl',
-      address: '부산 강서구',
-      daddress: '송정그린코아',
-      startdate: '2023-09-19',
-      enddate: '2023-10-18',
-      state: 'waiting',
-    },
-    {
-      cunsumer: '홍길은',
-      phonenumber: '01012345555',
-      request: '이렇게 저렇게 해주세요',
-      password: '1234',
-      warrent: 'warrenturl',
-      address: '부산 강서구',
-      daddress: '송정그린코아',
-      startdate: '2023-09-19',
-      enddate: '2023-10-18',
-      state: 'startfor',
-    },
-    {
-      cunsumer: '홍길금',
-      phonenumber: '01012345555',
-      request: '이렇게 저렇게 해주세요',
-      password: '1234',
-      warrent: 'warrenturl',
-      address: '부산 강서구',
-      daddress: '송정그린코아',
-      startdate: '2023-09-19',
-      enddate: '2023-10-18',
-      state: 'finishfor',
-    },
   ]);
 
   // 전화번호 입력 상태와 버튼 상태를 관리하는 상태 변수 추가

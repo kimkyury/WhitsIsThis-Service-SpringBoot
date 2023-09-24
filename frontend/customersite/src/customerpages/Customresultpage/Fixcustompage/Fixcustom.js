@@ -36,14 +36,14 @@ function Fixcustom() {
         {/* </div> */}
         <p style={{marginLeft:'5%'}}>보고서 다운로드 : 보고서 URL</p>
         <p style={{marginLeft:'5%', marginTop:'-3%'}}>사진 파일 다운로드 : 사진파일.zip</p>
+        </div>
+        </div>
+        <div className='middlemodal'>
+          <button className="button bigbuttons">확인하기</button>
+        </div>
       </div>
-      </div>
-      <div className='middlemodal'>
-      <button className="button bigbuttons">확인하기</button>
     </div>
-      </div>
-  </div>
-  )
+  );
 }
 // 비동기적으로 결과확인을 할때마다 정보 갱신 waiting인지 start인지 finish인지 
 // 확인하고 해당하는 칸 주황색과 ✔ 중앙

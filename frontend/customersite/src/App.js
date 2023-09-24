@@ -29,6 +29,7 @@ function App() {
           <Route path="/moneywait" element={[<Customheader />, <Moneywait />]} />
           <Route path="/receiveresult" element={[<Customheader />, <Receiveresult />]} />
           <Route path="/resultconfirm" element={[<Customheader />, <Resultconfirm />]} />
+
         </Routes>
       </Router>
     </div>

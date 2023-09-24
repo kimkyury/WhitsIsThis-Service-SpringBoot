@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import "./CustomreceiveModal.css";
-import Calendar from "../calendar/calendar";
 import Address from "../addresscomp/address";
 import axios from 'axios';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import '../calendar/calendar.css';
-
+import Receivesuc from "./receivesuccess";
 function CustomreceiveModal() {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -14,11 +13,12 @@ function CustomreceiveModal() {
   const [dateRange, setDateRange] = useState([null, null]);
   const [uploadedFileName, setUploadedFileName] = useState("");
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  
+  const [isApplicationSuccess, setIsApplicationSuccess] = useState(false); // 추가
+
   const handleOpenAddressModal = () => {
     setShowAddressModal(true);
   };
-  
+
   const handleCloseAddressModal = () => {
     setShowAddressModal(false);
   };
@@ -30,7 +30,7 @@ function CustomreceiveModal() {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}${month}${day}`;
   };
-  
+
   const handleInputAddress = (address) => {
     const formattedAddress = `${address.address_name} ${
       address.road_address && address.road_address.building_name
@@ -50,26 +50,45 @@ function CustomreceiveModal() {
   const handleOpenFileInput = () => {
     document.getElementById('fileInput').click();
   };
-  
+
   const handleApply = async () => {
     const formattedStartDate = formatDate(startDate);
     const formattedEndDate = formatDate(endDate);
-    
+
+    // 주소를 선택하지 않았을 때의 예외 처리 추가
+    if (!selectedAddress) {
+      console.error('주소를 선택해주세요.');
+      alert('주소를 선택해주세요.'); // 사용자에게 경고 메시지 표시
+      return;
+    }
+
+    // 다른 필수 필드들에 대한 유효성 검사
+    const addressDetail = document.querySelector('.input[placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"]').value;
+    const requestContent = document.querySelector('.input[placeholder="요청 사항을 입력해주십시오."]').value;
+    const requesterName = document.querySelector('.input[placeholder="이름을 입력해주십시오."]').value;
+    const requesterPhone = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
+
+    if (!addressDetail || !requestContent || !requesterName || !requesterPhone) {
+      console.error('필수 정보를 모두 입력해주세요.');
+      alert('필수 정보를 모두 입력해주세요.'); // 사용자에게 경고 메시지 표시
+      return;
+    }
+
     // FormData 객체를 생성하고 warrant 데이터를 추가합니다.
     const formData = new FormData();
     formData.append('warrant', uploadedFile); // warrant를 FormData로 추가
-    
+
     // JSON 형식의 데이터를 생성합니다.
     const jsonData = {
-      address: selectedAddress.split(' ')[0], // 주소
-      addressDetail: document.querySelector('.input[placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"]').value,
+      address: selectedAddress, // 주소
+      addressDetail: addressDetail,
       inspectionEnd: formattedEndDate, // 날짜 형식으로 변환된 날짜
       inspectionStart: formattedStartDate, // 날짜 형식으로 변환된 날짜
-      requestContent: document.querySelector('.input[placeholder="요청 사항을 입력해주십시오."]').value,
-      requesterName: document.querySelector('.input[placeholder="이름을 입력해주십시오."]').value,
-      requesterPhone: document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value,
+      requestContent: requestContent,
+      requesterName: requesterName,
+      requesterPhone: requesterPhone,
     };
-    
+
     // JSON 데이터를 FormData로 변환하여 추가합니다.
     formData.append('requestRegisterRequest', JSON.stringify(jsonData));
     try {
@@ -79,22 +98,22 @@ function CustomreceiveModal() {
         },
         responseType: 'blob',
       });
-  
 
-  
-        const contentDisposition = response.headers['content-disposition'];
-        const fileName = contentDisposition.split(';')[1].trim().split('=')[1];
-        const blob = new Blob([response.data], { type: 'application/octet-stream' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', fileName);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      const contentDisposition = response.headers['content-disposition'];
+      const fileName = contentDisposition.split(';')[1].trim().split('=')[1];
+      const blob = new Blob([response.data], { type: 'application/octet-stream' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
+      // 성공한 경우
+      setIsApplicationSuccess(true);
     } catch (error) {
-      console.error('신청 처리 중 오류가 발생했다.', error);
+      console.error('신청 처리 중 오류가 발생했다.', error, jsonData, formData);
     }
   };
 
@@ -163,7 +182,7 @@ function CustomreceiveModal() {
           />
           <div className="customgridx">
             <p className="minititle">점검 예정 일자 :</p>
-            <DatePicker 
+            <DatePicker
               dateFormat='yyyy.MM.dd'
               shouldCloseOnSelect
               minDate={new Date()}
@@ -191,6 +210,9 @@ function CustomreceiveModal() {
           </button>
           <Address selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress} onSelect={handleInputAddress} />
         </div>
+      )}
+      {isApplicationSuccess && (
+        <Receivesuc />
       )}
     </div>
   );

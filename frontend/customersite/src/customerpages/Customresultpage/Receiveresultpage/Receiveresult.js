@@ -1,30 +1,36 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import './Receiveresult.css';
 
 function Receiveresult() {
-  // State to store the cancellation status
   const [cancellationStatus, setCancellationStatus] = useState(null);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const navigate = useNavigate();
 
-  // Function to handle cancellation button click
   const handleCancellation = async () => {
     try {
-      // Replace {id} with the actual ID you want to cancel
-      const id = 1; // Replace with the actual ID
+      const id = 6; // Replace with the actual ID you want to cancel
       const response = await fetch(`${BASE_URL}/api/v1/guest/request/${id}/cancel`, {
-        method: 'PATCH', // Specify the HTTP method as 'PATCH'
-        // Add any necessary headers, such as authorization headers
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: "string",
+          message: "string",
+          status: 0
+        })
       });
 
       if (response.ok) {
-        // Cancellation request was successful
+        const responseData = await response.json();
+        setCancellationStatus(responseData.message);
         console.log("Cancellation request was successful.");
+        navigate("/moneyreturn");
       } else {
-        // Cancellation request failed
         console.log("Cancellation request failed.");
       }
     } catch (error) {
-      // Handle any network or other errors
       console.error("An error occurred while processing your request:", error);
     }
   };
