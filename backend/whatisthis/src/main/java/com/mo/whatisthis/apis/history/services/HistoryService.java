@@ -9,6 +9,7 @@ import com.mo.whatisthis.apis.request.repositories.RequestRepository;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
+import com.mo.whatisthis.supports.utils.AWSS3ResponseUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import javax.transaction.Transactional;
@@ -22,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class HistoryService {
 
     private final S3Service s3Service;
+
+    private final AWSS3ResponseUtil awss3ResponseUtil;
 
     private final HistoryRepository historyRepository;
 
@@ -98,7 +101,7 @@ public class HistoryService {
     }
 
     @Transactional
-    public void uploadDrawing(Long id, MultipartFile drawing) throws IOException {
+    public String uploadDrawing(Long id, MultipartFile drawing) throws IOException {
         String url = s3Service.saveFile(drawing);
 
         HistoryEntity historyEntity = historyRepository.findById(id)
@@ -108,6 +111,8 @@ public class HistoryService {
         historyEntity.setDrawingUrl(url);
 
         historyRepository.save(historyEntity);
+
+        return awss3ResponseUtil.concatURL(url);
     }
 
     public IntegratedHistoryResponse getIntegratedHistory(Long id) {
