@@ -56,10 +56,12 @@ const HouseList = () => {
                 />
               );
             })}
-          <div className="HouseCard add_card_btn" onClick={() => navigate(`/search`)}>
+
+          {/* 아마 사용 안할 것 같음  */}
+          {/* <div className="HouseCard add_card_btn" onClick={() => navigate(`/search`)}>
             <img src={process.env.PUBLIC_URL + `/assets/plus_circle.png`} alt="add_card" />
           </div>
-          {houseList && houseList.length % 2 === 0 && <div className="blank"></div>}
+          {houseList && houseList.length % 2 === 0 && <div className="blank"></div>} */}
         </div>
       </div>
     );

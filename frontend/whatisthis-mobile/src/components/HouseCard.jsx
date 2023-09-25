@@ -26,8 +26,8 @@ const HouseCard = ({ houseInfo, onClick, currentPercentage }) => {
 
   return (
     <div className="HouseCard" onClick={onClick}>
-      <input type="checkbox" id={`card-1`} disabled />
-      <label htmlFor={`card-1`} className="card ">
+      <input type="checkbox" id={`card-` + houseInfo.id} disabled />
+      <label htmlFor={`card-` + houseInfo.id} className="card ">
         <div className="front HouseCard card_wrapper">
           <CircularProgressBar percentage={progressPercentage} />
           <div className="houseInfo_wrapper ">
