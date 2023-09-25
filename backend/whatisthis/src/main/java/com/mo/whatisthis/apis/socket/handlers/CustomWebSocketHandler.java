@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.socket.handlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mo.whatisthis.apis.history.entities.DamagedHistoryEntity.Category;
 import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
 import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
@@ -16,25 +17,17 @@ import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.WebSocketUtils;
 import io.jsonwebtoken.Claims;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CustomizableThreadCreator;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +36,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     private final MoSocketProvider moSocketProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
-    private final S3Service s3Service;
     private final HistoryService historyService;
     private final DamagedHistoryService damagedHistoryService;
 
@@ -53,7 +45,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
 
         MessageDto messageRequest;
-        System.out.println(message.getPayload());
 
         try {
             messageRequest = objectMapper.readValue(message.getPayload(), MessageDto.class);
@@ -93,7 +84,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
             authHandler(session, dataMap);
         }
     }
-
 
     public void authHandler(WebSocketSession session, Map<String, String> dataMap) {
         String accessToken = dataMap.get(MessageDataType.accessToken.name());
@@ -181,7 +171,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         // BinaryString -> byte [] ->  MultipartFile
 
         byte [] byteStr = Base64.getDecoder().decode(imgBinaryStr);
-        MultipartFile multipartFile= WebSocketUtils.convertToMultipartFile(byteStr);
+        MultipartFile multipartFile= WebSocketUtils.convertToMultipartFile(byteStr, "drawing.jpg");
 
         String imgUrl = "";
         try {
@@ -208,11 +198,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         String category = dataMap.get(MessageDataType.category.name());
 
         byte [] byteStr = Base64.getDecoder().decode(imgBinaryStr);
-        MultipartFile multipartFile= WebSocketUtils.convertToMultipartFile(byteStr);
+        MultipartFile multipartFile= WebSocketUtils.convertToMultipartFile(byteStr, "damaged.jpg");
 
         String imgUrl = "";
         try {
-            imgUrl = historyService.uploadDrawing(Long.valueOf(historyId), multipartFile);
+            imgUrl = damagedHistoryService.createDamagedHistory(Long.valueOf(historyId), multipartFile, Float.valueOf(x), Float.valueOf(y), Category.valueOf(category));
         }catch(IOException e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
@@ -268,8 +258,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
-
-        System.out.println("HI, User!");
 
     }
 
