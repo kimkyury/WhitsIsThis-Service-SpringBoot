@@ -9,21 +9,21 @@ function Fixcustom() {
     <div className="custommodaltitle ">
       <p>점검 결과</p>
     </div>
-    <div style={{marginTop:'5%', display: 'flex', alignItems: 'center', justifyContent:'center' }}>
+    <div className="circlelinebox">
   <span>
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div className="flexlinebox">
       <p className="circle"><p className="listline">대기</p></p>
     </div>
   </span>
   <p className="line"></p>
   <span>
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div className="flexlinebox">
       <p className="circle"><p className="listline">진행 중</p></p>
     </div>
   </span>
   <p className="line"></p>
   <span>
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div className="flexlinebox">
       <p className="circle"><p className="listline">완료</p></p>
     </div>
   </span>

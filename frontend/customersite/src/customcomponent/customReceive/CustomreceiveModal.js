@@ -113,7 +113,8 @@ function CustomreceiveModal() {
       // 성공한 경우
       setIsApplicationSuccess(true);
     } catch (error) {
-      console.error('신청 처리 중 오류가 발생했다.', error, jsonData, formData);
+      console.error('신청 처리 중 오류가 발생했다.', error);
+      console.log(jsonData, formData)
     }
   };
 

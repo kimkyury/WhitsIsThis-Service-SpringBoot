@@ -11,7 +11,17 @@
   border-radius: 1.5rem;
   background-repeat: no-repeat;
 }
+.circlelinebox {
+    margin-top:5%; 
+    display: flex; 
+    align-items: center;
+    justify-content:center;
+}
 
+.flexlinebox {
+  display: flex;
+  align-items: center;
+}
 .customreceivedivwait {
 
   margin-top:1rem;
