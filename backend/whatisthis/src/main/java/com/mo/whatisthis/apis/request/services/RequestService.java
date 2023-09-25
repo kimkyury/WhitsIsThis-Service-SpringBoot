@@ -186,4 +186,14 @@ public class RequestService {
 
         return requestDetailRequests;
     }
+
+    public void setRequestStatus(Long id, Status status) {
+        RequestEntity requestEntity = requestRepository.findById(id)
+                                                       .orElseThrow(() -> new CustomException(
+                                                           ErrorCode.BAD_REQUEST));
+
+        requestEntity.setStatus(status);
+
+        requestRepository.save(requestEntity);
+    }
 }
