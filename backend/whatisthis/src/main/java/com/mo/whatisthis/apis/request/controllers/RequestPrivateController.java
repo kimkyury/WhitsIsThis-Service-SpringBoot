@@ -4,6 +4,7 @@ package com.mo.whatisthis.apis.request.controllers;
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
 import com.mo.whatisthis.apis.request.requests.SetRequestManagerRequest;
+import com.mo.whatisthis.apis.request.requests.StatusChangeRequest;
 import com.mo.whatisthis.apis.request.responses.AssignedRequestResponse;
 import com.mo.whatisthis.apis.request.responses.DoneRequestResponse;
 import com.mo.whatisthis.apis.request.responses.RequestDetailRequests;
@@ -89,5 +90,18 @@ public class RequestPrivateController {
 
         return createSuccessResponse(SuccessCode.OK, "집 점검 요청 내역 상세 조회",
             requestService.getRequestDetail(id));
+    }
+
+    @PatchMapping("/{id}/status")
+    @Operation(summary = "(개발용) 집 점검 요청 상태 변경", tags = {
+        "3. InspectionRequest"}, description = "WAITING_FOR_PAY, CANCELED, WAITING_INSPECTION_DATE, WAITING_FOR_INSPECTION, IN_PROGRESS, DONE")
+    public ResponseEntity<SuccessResponse<String>> setRequestStatus(
+        @PathVariable Long id, @Valid @RequestBody StatusChangeRequest statusChangeRequest
+    ) {
+        requestService.setRequestStatus(id, statusChangeRequest.getStatus());
+
+        return createSuccessResponse(SuccessCode.NO_CONTENT,
+            "집 요청 변경 -> " + statusChangeRequest.getStatus()
+                                               .toString());
     }
 }
