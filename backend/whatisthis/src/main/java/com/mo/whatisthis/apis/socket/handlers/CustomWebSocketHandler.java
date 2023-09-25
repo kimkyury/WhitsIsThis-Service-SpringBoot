@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.socket.handlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mo.whatisthis.apis.history.entities.DamagedHistoryEntity.Category;
 import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
 import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
@@ -201,7 +202,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         String imgUrl = "";
         try {
-            imgUrl = damagedHistoryService.createDamagedHistory(Long.valueOf(historyId), multipartFile, Float.valueOf(x), Float.valueOf(y), category);
+            imgUrl = damagedHistoryService.createDamagedHistory(Long.valueOf(historyId), multipartFile, Float.valueOf(x), Float.valueOf(y), Category.valueOf(category));
         }catch(IOException e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
