@@ -21,6 +21,7 @@ import com.mo.whatisthis.supports.responses.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
+import javax.servlet.http.Cookie;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,8 +56,7 @@ public class AuthPublicController {
         int isInitLoginUser = authService.isInitLoginUser();
         HttpCookie httpCookie = ResponseCookie.from("refresh-token", tokenDto.getRefreshToken())
                                               .maxAge(refreshTokenTTL)
-                                              .httpOnly(true)
-                                              .secure(true)
+//                                              .secure(true)
                                               .build();
 
         EmployeeInfo employeeInfo = authService.findEmployeeInfoUseSCH();
@@ -93,9 +93,11 @@ public class AuthPublicController {
         tags = {"1. Auth"}, description = "Cookie에 RefreshToken을 첨부해주세요.")
     @PostMapping("/reissue")
     public ResponseEntity<SuccessResponse<ReissueTokenResponse>> reissue(
-        @CookieValue(name = "refresh-token") String refreshTokenCookie) {
+        @CookieValue(name = "refresh-token") String requestRefreshToken) {
 
-        Optional<String> accessToken = authService.reissueAccessToken(refreshTokenCookie);
+        System.out.println(requestRefreshToken);
+
+        Optional<String> accessToken = authService.reissueAccessToken(requestRefreshToken);
 
         if (accessToken.isEmpty()) {
             // refreshToken도 만료되었다면 재로그인 요청
