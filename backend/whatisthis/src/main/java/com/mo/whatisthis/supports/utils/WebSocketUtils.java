@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class WebSocketUtils {
 
-    public static MultipartFile convertToMultipartFile(byte[] bytes) {
-        return new ByteArrayMultipartFile(bytes);
+    public static MultipartFile convertToMultipartFile(byte[] bytes, String name) {
+        return new ByteArrayMultipartFile(bytes, name, name);
     }
 }
