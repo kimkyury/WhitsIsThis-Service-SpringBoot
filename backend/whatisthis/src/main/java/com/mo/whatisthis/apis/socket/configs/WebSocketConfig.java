@@ -21,8 +21,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 
         registry.addHandler(customWebSocketHandler, "/ws")
-                .setAllowedOrigins("*")
-                .addInterceptors(paramWebSocketInterceptor);
+                .setAllowedOrigins("*");
     }
 
     @Bean

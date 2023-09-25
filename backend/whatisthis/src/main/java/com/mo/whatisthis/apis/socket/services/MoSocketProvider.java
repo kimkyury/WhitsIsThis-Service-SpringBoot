@@ -15,7 +15,7 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class MoSocketProvider {
 
-    private final Map<Long, WebSocketSession> employeeByHistoryMap;
+    private final Map<String, WebSocketSession> employeeByHistoryMap;
     private final Map<String, WebSocketSession> deviceBySerialNumberMap;
 
     public MoSocketProvider() {
@@ -23,10 +23,10 @@ public class MoSocketProvider {
         this.deviceBySerialNumberMap = new ConcurrentHashMap<>();
     }
 
-    public void addEmployeeToSocket(Long historyId, WebSocketSession employeeSession) {
+    public void addEmployeeToSocket(String username, WebSocketSession employeeSession) {
 
         //TODO: historyid 유효성 검사 Error처리
-        employeeByHistoryMap.put(historyId, employeeSession);
+        employeeByHistoryMap.put(username, employeeSession);
         System.out.println(">>>>>>>>>>>> Add Employee to Map");
     }
 

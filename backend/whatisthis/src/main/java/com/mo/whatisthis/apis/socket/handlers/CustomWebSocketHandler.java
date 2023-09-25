@@ -16,16 +16,18 @@ import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.WebSocketUtils;
+import io.jsonwebtoken.Claims;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
+
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.bridge.Message;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +45,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     private final MoSocketProvider moSocketProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
+    private final UserDetailsService userDetailsService;
     private final S3Service s3Service;
     private final HistoryService historyService;
     private final DamagedHistoryService damagedHistoryService;
@@ -63,6 +66,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         MessageType type = messageRequest.getType();
         Map<String, String> dataMap = messageRequest.getData();
+
         if (type.equals(MessageType.COORDINATE)) {
 
             coordinateHandler(session, dataMap);
@@ -73,145 +77,65 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         } else if (type.equals(MessageType.DRAWING)) {
 
-            String imageBinaryStr = dataMap.get(MessageDataType.image.name());
-            drawingHandler(session, imageBinaryStr);
+            drawingHandler(session, dataMap);
 
         } else if (type.equals(MessageType.STATUS)) {
 
-            String status = dataMap.get(MessageDataType.state.name());
-            statusHandler(session, status);
+            statusHandler(session, dataMap);
 
         } else if (type.equals(MessageType.COMMAND)) {
 
-            String command = dataMap.get(MessageDataType.command.name());
-            String target = dataMap.get(MessageDataType.target.name());
-            commandHandler(session, command, target);
+            commandHandler(session, dataMap);
+
+        } else if (type.equals(MessageType.INIT)) {
+            // Employee Message
+            initHandler(session, dataMap);
 
         } else if (type.equals(MessageType.AUTH)) {
 
-            String accessToken = dataMap.get(MessageDataType.accessToken.name());
-            authHandler(session, accessToken.substring(7));
+            authHandler(session, dataMap);
         }
     }
 
-    public void coordinateHandler(WebSocketSession session, Map<String, String> dataMap){
 
-        Long historyId = getHistoryIdBySerialNumber(session);
-        String messageStr = convertMessageToString(MessageType.COORDINATE, dataMap);
+    public void authHandler(WebSocketSession session, Map<String, String> dataMap) {
+        String accessToken = dataMap.get(MessageDataType.accessToken.name());
+        Claims claims = jwtTokenProvider.getClaims(accessToken.substring(7));
 
-        WebSocketSession targetSession = moSocketProvider.getEmployeeSessionByHistory(historyId)
-                                                         .get();
-        moSocketProvider.sendTextMessage(targetSession, messageStr);
+        String username = claims.get("memberNo")
+                                .toString();
+        String role = claims.get("role")
+                            .toString();
 
+        if (role.equals(Role.ROLE_EMPLOYEE.name())) {
+            moSocketProvider.addEmployeeToSocket(username, session);
+        } else {
+            moSocketProvider.addDeviceToSocket(username, session);
+        }
+    }
+
+
+    public void initHandler(WebSocketSession session, Map<String, String> dataMap) {
+    }
+
+    public void commandHandler(WebSocketSession session, Map<String, String> dataMap) {
+
+    }
+
+    public void coordinateHandler(WebSocketSession session, Map<String, String> dataMap) {
     }
 
     public void damageHandler(WebSocketSession session, Map<String, String> dataMap) {
 
-        String imageBinaryStr = dataMap.get(MessageDataType.image.name());
-        Float x = Float.valueOf(dataMap.get(MessageDataType.x.name()));
-        Float y = Float.valueOf(dataMap.get(MessageDataType.y.name()));
-        Category category = Category.valueOf(dataMap.get(MessageDataType.category.name()));
+    }
 
-        Long historyId = getHistoryIdBySerialNumber(session);
+    public void drawingHandler(WebSocketSession session, Map<String, String> imageBinaryStr) {
+    }
 
-        byte[] bytes = Base64.getDecoder()
-                             .decode(imageBinaryStr);
-        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(bytes);
-
-        String imgUrl = "";
-        try {
-            imgUrl = damagedHistoryService.createDamagedHistory(historyId, multipartFile, x, y,
-                category);
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-
-        Map<String, String> newMap = new HashMap<>();
-        dataMap.put(MessageDataType.image.name(), imgUrl);
-        dataMap.put(MessageDataType.x.name(), dataMap.get(MessageDataType.x.name()));
-        dataMap.put(MessageDataType.y.name(), dataMap.get(MessageDataType.y.name()));
-        dataMap.put(MessageDataType.category.name(), dataMap.get(MessageDataType.category.name()));
-        String messageStr = convertMessageToString(MessageType.DAMAGED, newMap);
-
-        WebSocketSession targetSession = moSocketProvider.getEmployeeSessionByHistory(historyId)
-                                                         .get();
-        moSocketProvider.sendTextMessage(targetSession, messageStr);
+    public void statusHandler(WebSocketSession session, Map<String, String> dataMap) {
 
     }
 
-    public void drawingHandler(WebSocketSession session, String imageBinaryStr) {
-
-        Long historyId = getHistoryIdBySerialNumber(session);
-
-        byte[] byteArray = Base64Utils.decodeFromString(imageBinaryStr);
-
-
-        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(byteArray);
-
-        String s3URL = "";
-        try {
-            s3URL = historyService.uploadDrawing(historyId, multipartFile);
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-
-        Map<String, String> dataMap = new HashMap<>();
-        dataMap.put(MessageDataType.image.name(), s3URL);
-        String messageStr = convertMessageToString(MessageType.DRAWING, dataMap);
-
-        WebSocketSession targetSession = moSocketProvider.getEmployeeSessionByHistory(historyId)
-                                                         .get();
-        moSocketProvider.sendTextMessage(targetSession, messageStr);
-
-
-    }
-
-    public void statusHandler(WebSocketSession session, String status) {
-
-        Long historyId = getHistoryIdBySerialNumber(session);
-
-        Map<String, String> dataMap = new HashMap<>();
-        dataMap.put(MessageDataType.state.name(), status);
-        String messageStr = convertMessageToString(MessageType.STATUS, dataMap);
-
-        WebSocketSession targetSession = moSocketProvider.getEmployeeSessionByHistory(historyId)
-                                                         .get();
-        moSocketProvider.sendTextMessage(targetSession, messageStr);
-
-    }
-
-    public void commandHandler(WebSocketSession session, String command, String target) {
-
-        Optional<WebSocketSession> targetSession = moSocketProvider.getDeviceSessionBySerialNumber(
-            target);
-
-        if (targetSession.isEmpty()) {
-
-            Map<String, String> dataMap = new HashMap<>();
-            dataMap.put(MessageDataType.state.name(), "NOT CONNECTED");
-
-            String messageStr = convertMessageToString(MessageType.STATUS, dataMap);
-            moSocketProvider.sendTextMessage(session, messageStr);
-            return;
-        }
-        // Turtle봇에게 전송하는 시작명령은 JSON형태가 아님.
-        moSocketProvider.sendTextMessage(targetSession.get(), command);
-    }
-
-    public void authHandler(WebSocketSession session, String accessToken) {
-
-        jwtTokenProvider.validateAccessToken(accessToken);
-        Role role = (Role) session.getAttributes()
-                                  .get("role");
-
-        if (role == Role.ROLE_EMPLOYEE) {
-            moSocketProvider.addEmployeeToSocket((Long) session.getAttributes()
-                                                               .get("historyId"), session);
-        } else {
-            moSocketProvider.addDeviceToSocket((String) session.getAttributes()
-                                                               .get("serialNumber"), session);
-        }
-    }
 
     public String convertMessageToString(MessageType messageType, Map<String, String> dataMap) {
 
@@ -271,8 +195,8 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
 //        System.out.println(">>>>>> Connector Socket EXIT");
 
-        Role role = (Role)  session.getAttributes()
-                                      .get("role");
+        Role role = (Role) session.getAttributes()
+                                  .get("role");
 
         if (role == Role.ROLE_EMPLOYEE) {
             Long historyId = (Long) session.getAttributes()

@@ -20,15 +20,12 @@ import lombok.NoArgsConstructor;
 public class MessageDto {
 
     private MessageType type;
-
     private Map<String, String> data;
 
-
     public enum MessageType {
-        AUTH, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS;
+        AUTH, INIT, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS;
     }
     public enum MessageDataType {
-        accessToken, image, x, y, category, state, command, target
+        accessToken, image, x, y, category, state, command, historyId, serialNumber
     }
-
 }

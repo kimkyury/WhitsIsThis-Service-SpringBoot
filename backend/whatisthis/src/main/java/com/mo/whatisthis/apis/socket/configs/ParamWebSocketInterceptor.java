@@ -25,24 +25,24 @@ public class ParamWebSocketInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
         WebSocketHandler wsHandler, Map<String, Object> attributes) {
-
-        HttpServletRequest httpServletRequest = ((ServletServerHttpRequest) request).getServletRequest();
-
-        String historyIdStr = httpServletRequest.getParameter("historyId");
-        if (historyIdStr != null) {
-            attributes.put("role", Role.ROLE_EMPLOYEE);
-            attributes.put("historyId", Long.valueOf(historyIdStr));
-            return true;
-        }
-
-        String serialNumber = httpServletRequest.getParameter("serialNumber");
-        if (serialNumber != null) {
-            attributes.put("role", Role.ROLE_DEVICE);
-            attributes.put("serialNumber", serialNumber);
-            return true;
-        }
-
-        return false;
+//
+//        HttpServletRequest httpServletRequest = ((ServletServerHttpRequest) request).getServletRequest();
+//
+//        String historyIdStr = httpServletRequest.getParameter("historyId");
+//        if (historyIdStr != null) {
+//            attributes.put("role", Role.ROLE_EMPLOYEE);
+//            attributes.put("historyId", Long.valueOf(historyIdStr));
+//            return true;
+//        }
+//
+//        String serialNumber = httpServletRequest.getParameter("serialNumber");
+//        if (serialNumber != null) {
+//            attributes.put("role", Role.ROLE_DEVICE);
+//            attributes.put("serialNumber", serialNumber);
+//            return true;
+//        }
+//       return false;
+        return true;
     }
 
     @Override
