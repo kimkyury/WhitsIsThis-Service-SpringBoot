@@ -8,7 +8,9 @@ import './Mypage.css';
 
 function Mypage() {
   const [selectedMenu, setSelectedMenu] = useState('내 정보');
-
+  const consumer = sessionStorage.getItem('name');
+  const imgurl = sessionStorage.getItem('imageurl');
+  
   return (
     <div className='mypage'>
       <div style={{ display: 'flex', gap: '5%', width: '50vw' }}>
@@ -16,13 +18,13 @@ function Mypage() {
           <div>
             <div className='mypagemenuimgbox'>
               <img
-                src={pic}
+                src={imgurl}
                 className='mypimgbox'
                 alt="사용자 사진"
               />
             </div>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <p style={{ fontSize: '1.5vw', fontWeight: 'bold' }}>홍길동</p>
+              <p style={{ fontSize: '1.5vw', fontWeight: 'bold' }}>{consumer}</p>
             </div>
           </div>
           <p

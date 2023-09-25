@@ -6,11 +6,12 @@ import Updatemodal from '../Updatedpage/Updatedpage';
 function Myinfo() {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const consumer = '홍길동';
-  const Pnumber = '010-0000-0000';
-  const id = 'qwer1234';
-  const number = '1234567';
-
+  const consumer = sessionStorage.getItem('name');
+  const Pnumber = sessionStorage.getItem('phone');
+  const id = sessionStorage.getItem('username');
+  
+  const role = sessionStorage.getItem('role')
+  const picture = sessionStorage.getItem('imageurl');
   return (
     <div className='InfomMy'>
       <p className='Myinform'>내 정보</p>
@@ -62,7 +63,7 @@ function Myinfo() {
         <div style={{ marginLeft: '10%', borderRadius: '0.42vw', border: '0.15vw solid black', width: '31vw', height: '12.5vh' }}>
           <div style={{ marginLeft: '5%', marginRight: '5%', marginTop:'-2%' }}>
             <p className='updatebox'>
-              <span>{id}</span>
+              <span>아이디 : {id}</span>
               {/* <button
                 className='UpdateBtn'
               >
@@ -71,8 +72,8 @@ function Myinfo() {
             </p>
           </div>
           <div className='updatebox' style={{marginLeft:'5%', marginTop:'-3%'}}>
-            <span>사번 : {number}</span>
-            <span style={{ marginRight: '5%' }}>역할 : 직원</span>
+            {/* <span>사번 : {number}</span> */}
+            <span style={{ marginRight: '5%' }}>역할 : {role}</span>
           </div>
         </div>
       </div>

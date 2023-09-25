@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Receive.css';
 import Item from './Receiveditem';
 import RequestModal from './RequestModal';
@@ -10,13 +10,16 @@ function List() {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [applicant, setApplicant] = useState([
-    // 초기 데이터 예시
-    // ...
-  ]);
+
+  const [applicant, setApplicant] = useState([]);
   const [myApplicant, setMyApplicant] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const getRefreshToken = () => {
+    return sessionStorage.getItem('refreshToken');
+  };
 
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
@@ -25,7 +28,7 @@ function List() {
 
   const filteredData = applicant.filter((data) =>
     Object.values(data).some((value) =>
-      value.toLowerCase().includes(searchQuery.toLowerCase())
+      typeof value === 'string' && value.toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
 
@@ -33,53 +36,70 @@ function List() {
     setSearchQuery(event.target.value);
   };
 
-  const fetchData = (page) => {
-    setIsLoading(true);
-    // API 엔드포인트에서 지정된 페이지의 데이터를 가져옵니다.
-    fetch(`${BASE_URL}/api/v1/private/requests/waiting?page=${page}`)
+  const fetchData = (page, endpoint) => {
+    setIsFetching(true);
+
+    const refreshToken = getRefreshToken();
+
+    const headers = {
+      'Authorization': `${refreshToken}`,
+    };
+
+    fetch(`${BASE_URL}/api/v1/private/requests/${endpoint}?page=${page}`, {
+      headers: headers,
+    })
       .then((response) => response.json())
       .then((data) => {
-        if (data.status === 0) {
-          // 데이터가 정상적으로 반환되었을 때만 처리합니다.
+        if (data.status === 200) {
           const responseData = data.data;
-          
-          // 가져온 데이터로 myApplicant 상태를 업데이트합니다.
-          setMyApplicant((prevData) => [...prevData, ...responseData]);
-  
-          setCurrentPage(page);
-          setIsLoading(false);
+          setMyApplicant((prevData) =>
+            page === 1 ? responseData : [...prevData, ...responseData]
+          );
+
+          // Check if there are more pages to fetch
+          if (data.hasNextPage) {
+            const nextPage = page + 1;
+            fetchData(nextPage, endpoint);
+          } else {
+            setIsFetching(false);
+          }
         } else {
           console.error('API 오류:', data.message);
-          setIsLoading(false);
+          setIsFetching(false);
+          console.log(refreshToken);
         }
       })
       .catch((error) => {
         console.error('데이터 가져오기 오류:', error);
-        setIsLoading(false);
+        setIsFetching(false);
       });
   };
+
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 초기 페이지의 데이터를 가져옵니다.
-    fetchData(currentPage);
+    fetchData(currentPage, 'waiting');
   }, []);
 
-  const handleScroll = () => {
+  // Attach a scroll event listener to the "접수대기" div
+  const applicantContainerRef = useRef(null);
+
+  const handleApplicantScroll = () => {
+    const element = applicantContainerRef.current;
     if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
-      !isLoading
+      element.scrollHeight - element.scrollTop === element.clientHeight &&
+      !isFetching &&
+      !loadingMore
     ) {
       const nextPage = currentPage + 1;
-      fetchData(nextPage);
+      fetchData(nextPage, 'waiting');
     }
   };
 
   useEffect(() => {
-    // 스크롤 이벤트 리스너를 등록합니다.
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleApplicantScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleApplicantScroll);
     };
-  }, [currentPage, isLoading]);
+  }, [currentPage, isFetching, loadingMore]);
 
   function handleOnDragEnd(result) {
     if (!result.destination) return;
@@ -147,7 +167,7 @@ function List() {
                   ref={provided.innerRef}
                 >
                   {filteredData.map((data, index) => (
-                    <Draggable key={data.id} draggableId={data.id} index={index}>
+                    <Draggable key={data.id.toString()} draggableId={data.id.toString()} index={index}>
                       {(provided, snapshot) => (
                         <div
                           onClick={() => handleItemClick(data)}
@@ -171,7 +191,12 @@ function List() {
               </div>
               <div className="left">
                 <span className="recspan">접수대기</span>
-                <div className="Dropbox" style={{ paddingTop: '1.5vw' }}>
+                <div
+                  ref={applicantContainerRef}
+                  onScroll={handleApplicantScroll}
+                  className="Dropbox myApplicant-container"
+                  style={{ paddingTop: '1.5vw' }}
+                >
                   <Droppable droppableId="myApplicant">
                     {(provided) => (
                       <div
@@ -180,7 +205,7 @@ function List() {
                         className="myApplicant-container"
                       >
                         {myApplicant.map((data, index) => (
-                          <Draggable key={data.id} draggableId={data.id} index={index}>
+                          <Draggable key={data.id.toString()} draggableId={data.id.toString()} index={index}>
                             {(provided, snapshot) => (
                               <div
                                 onClick={() => handleItemClick(data)}
@@ -214,8 +239,9 @@ function List() {
           <RequestModal selectedItem={selectedItem} setShowModal={setShowModal} />
         </div>
       )}
+      {loadingMore && <div>Loading...</div>}
     </div>
   );
 }
 
-export default List
+export default List;

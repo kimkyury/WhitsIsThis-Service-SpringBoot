@@ -1,136 +1,83 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-
   const navigate = useNavigate();
+  const [authenticated, setAuthenticated] = useState(false);
+  const handleLogin = async (e) => {
+    e.preventDefault(); // 폼 기본 제출 동작 방지
 
-  // 토큰을 상태로 관리
-  const [token, setToken] = useState('');
-
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-
-  useEffect(() => {
-    // 컴포넌트가 마운트될 때 localStorage에서 토큰을 가져옵니다.
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
-
-  const handleLogin = async () => {
     try {
-      const response = await axios.post(BASE_URL + `/api/v1/auth/employees/login`, {
-        password: password,
-        username: username,
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/employees/login`, {
+        username,
+        password,
       });
 
       if (response.status === 200) {
-        setMessage('로그인 성공');
-        const authToken = response.data.token;
+        // 성공적인 로그인 시 API가 토큰을 반환한다고 가정합니다
+        const userData = response.data.data.employeeinfo;
 
-        // 토큰을 상태로 저장
-        setToken(authToken);
-
-        // 로컬 스토리지에도 토큰 저장 (옵션)
-        localStorage.setItem('authToken', authToken);
-
-        // 페이지 이동
+        // 컴포넌트 상태에 사용자 데이터를 저장하지 않고 sessionStorage에만 저장합니다
+        sessionStorage.setItem('username', userData.username);
+        sessionStorage.setItem('imageurl', userData.imageUrl);
+        sessionStorage.setItem('role', userData.role);
+        sessionStorage.setItem('phone', userData.phone);
+        sessionStorage.setItem('name', userData.name);
+        sessionStorage.setItem('isinit', response.data.data.isInitLoginUser);
+        // sessionStorage.setItem('Token', Cookies.get('refreshToken'));
+        sessionStorage.setItem('status', response.data.status);
+        sessionStorage.setItem('refreshToken', response.data.data.accessToken);
+        // 성공적인 로그인 후 목록 페이지로 리다이렉트합니다
+        setAuthenticated(true);
         navigate('/list');
-
-        // 로그인 성공 시 토큰 검사와 갱신 로직 추가
-        checkAndRefreshToken(authToken);
-
+        console.log('로그인 성공')
       } else {
-        setMessage('로그인 실패');
+        // 상태 코드가 200이 아닌 경우에는 오류 메시지를 표시합니다.
+        setMessage('로그인 실패. 자격 정보를 확인해주세요.');
       }
     } catch (error) {
-      if (error.response) {
-        // 서버로부터 에러 응답이 도착한 경우
-        console.error('에러 응답:', error.response.status, error.response.data);
-      } else {
-        // 요청 자체에 문제가 있는 경우
-        console.error('요청 에러:', error.message);
-      }
-    }
-  };
-
-  // 컴포넌트가 마운트될 때 로컬 스토리지에서 토큰 가져오기 (옵션)
-  useEffect(() => {
-    const storedToken = localStorage.getItem('authToken');
-    if (storedToken) {
-      // 로컬 스토리지에서 토큰을 가져와서 상태로 저장
-      setToken(storedToken);
-    }
-  }, []);
-
-  // 토큰 유효성 검사와 재발급 로직을 추가합니다.
-  const checkAndRefreshToken = async (authToken) => {
-    try {
-      // 서버에 토큰 검사 요청 보내기
-      const response = await axios.post(BASE_URL + `/api/v1/auth/check-token`, {
-        token: authToken,
-      });
-
-      if (response.status === 200) {
-        // 토큰이 유효한 경우 아무 작업 필요 없음
-      } else if (response.status === 401) {
-        // 토큰이 만료된 경우 서버로부터 새로운 토큰 요청
-        const refreshTokenResponse = await axios.post(BASE_URL + `/api/v1/auth/refresh-token`, {
-          token: authToken,
-        });
-
-        if (refreshTokenResponse.status === 200) {
-          const newAuthToken = refreshTokenResponse.data.token;
-
-          // 새로운 토큰으로 상태 및 로컬 스토리지 업데이트
-          setToken(newAuthToken);
-          localStorage.setItem('authToken', newAuthToken);
-
-          // 여기에서 필요한 작업 수행 (예: 갱신된 토큰으로 다시 API 호출)
-        } else {
-          // 토큰 갱신 실패 시 로그아웃 또는 다른 조치 수행
-        }
-      }
-    } catch (error) {
-      console.error('토큰 검사 및 갱신 에러:', error.message);
+      // 로그인 오류를 처리합니다
+      setMessage('로그인 실패. 자격 정보를 확인해주세요.');
     }
   };
 
   return (
-    <div className='LoginForm'>
+    <div className="LoginForm">
       <div>
-        <h2 className='LoginTag'>로그인</h2>
-        <div className='idbox'>
-          <div>
-            <input
-              type="username"
-              placeholder="아이디"
-              value={username}
-              className='IdPassTag'
-              style={{ marginTop: '0vh' }}
-              onChange={(e) => setUsername(e.target.value)}
-            />
+        <h2 className="LoginTag">로그인</h2>
+        <form onSubmit={handleLogin}>
+          <div className="idbox">
+            <div>
+              <input
+                type="text"
+                placeholder="아이디"
+                value={username}
+                className="IdPassTag"
+                style={{ marginTop: '0vh' }}
+                onChange={(e) => setUsername(e.target.value)}
+              />
 
-            <input
-              type="password"
-              placeholder="비밀번호"
-              value={password}
-              className='IdPassTag'
-              onChange={(e) => setPassword(e.target.value)}
-            />
+              <input
+                type="password"
+                placeholder="비밀번호"
+                value={password}
+                className="IdPassTag"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
           </div>
-        </div>
-        <div className='LoginButtonDiv'>
-          <button className='LoginButton' onClick={handleLogin}>
-            로그인
-          </button>
-          <p>{message}</p>
-        </div>
+          <div className="LoginButtonDiv">
+            <button className="LoginButton" type="submit">
+              로그인
+            </button>
+          </div>
+        </form>
+        <p>{message}</p>
       </div>
     </div>
   );

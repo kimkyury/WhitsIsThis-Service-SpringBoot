@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import './Receive.css';
 
 function RequestModal({ selectedItem, setShowModal }) {
@@ -6,43 +6,64 @@ function RequestModal({ selectedItem, setShowModal }) {
     return null;
   }
 
-  const { consumer, phonenumber, address, request, warrent, Daddress } = selectedItem;
+  const {
+    requesterName,
+    requesterPhone,
+    address,
+    addressDetail,
+    inspectionStart,
+    inspectionEnd,
+    requestContent,
+  } = selectedItem;
 
   const closeModal = () => {
     setShowModal(false);
   };
 
   return (
-    <div className="Modalbox" >
+    <div className="Modalbox">
       <div>
         <div>
-          <p className="recmodalform" >
+          <p className="recmodalform">
             <span className="recfspan">신청내용</span>
             <button onClick={closeModal} className="recmodalbutton">
-          <span style={{textAlign:'center'}}>닫기</span>
-        </button>
+              <span style={{ textAlign: 'center' }}>닫기</span>
+            </button>
           </p>
           <div className="gridmodal">
             <div className="nameVtagv">
-              <p className="nametag" style={{  width:'5.3vw' }}>신청자명</p>
-              <p className="Vtag vtag">{consumer}</p>
-              <p className="nametag" style={{  width:'10vw' }}>요청사항</p>
-              <p className="Vtag vtag" >{request}</p>
-              <p className="nametag" style={{  width:'10vw' }}>연락처</p>
-              <p className="Vtag vtag" >{phonenumber}</p>
-            </div>
-            <div style={{ borderLeft: '0.1vw solid black', width: '26vw', height: '37vh' }}>
-              <p className="nametag" style={{  width:'10vw' }}>위임장 사진</p>
-              <p className='Vtag tagv' >{warrent}</p>
-              <p className="nametag" style={{  width:'10vw' }}>주소</p>
-              <p className="Vtag tagv" >{address}</p>
-              <p className="nametag" style={{  width:'10vw' }}>상세주소</p>
-              <p className='Vtag tagv' >{Daddress}</p>
+              <p className="nametag" style={{ width: '10vw' }}>
+                신청자명
+              </p>
+              <p className="Vtag vtag">{requesterName}</p>
+              <p className="nametag" style={{ width: '10vw' }}>
+                요청사항
+              </p>
+              <p className="Vtag vtag">{requestContent}</p>
+              <p className="nametag" style={{ width: '10vw' }}>
+                연락처
+              </p>
+              <p className="Vtag vtag">{requesterPhone}</p>
+              </div>
+              <div>
+              <p className="nametag" style={{ width: '10vw' }}>
+                주소
+              </p>
+              <p className="Vtag vtag">
+                {address} {addressDetail}
+              </p>
+              <p className="nametag" style={{ width: '10vw' }}>
+                검사 시작일
+              </p>
+              <p className="Vtag vtag">{inspectionStart}</p>
+              <p className="nametag" style={{ width: '10vw' }}>
+                검사 종료일
+              </p>
+              <p className="Vtag vtag">{inspectionEnd}</p>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   );
 }
