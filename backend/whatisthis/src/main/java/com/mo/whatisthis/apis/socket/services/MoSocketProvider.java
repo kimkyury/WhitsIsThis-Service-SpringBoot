@@ -5,6 +5,7 @@ import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import java.io.IOException;
 import java.net.http.WebSocket;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,8 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class MoSocketProvider {
 
-    private ConcurrentHashMap<Long, WebSocketSession> employeeByHistoryMap;
-    private ConcurrentHashMap<String, WebSocketSession> deviceBySerialNumberMap;
+    private final Map<Long, WebSocketSession> employeeByHistoryMap;
+    private final Map<String, WebSocketSession> deviceBySerialNumberMap;
 
     public MoSocketProvider() {
         this.employeeByHistoryMap = new ConcurrentHashMap<>();
