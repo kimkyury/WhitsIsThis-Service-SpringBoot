@@ -10,24 +10,29 @@ import org.springframework.web.multipart.MultipartFile;
 public class ByteArrayMultipartFile implements MultipartFile {
 
     private final byte[] bytes;
+    private final String name;
+    private final String original;
+    private final String contentType = "jpg";
 
-    public ByteArrayMultipartFile(byte[] bytes) {
+    public ByteArrayMultipartFile(byte[] bytes, String name, String original) {
         this.bytes = bytes;
+        this.name = name;
+        this.original = original;
     }
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public String getOriginalFilename() {
-        return null;
+        return original;
     }
 
     @Override
     public String getContentType() {
-        return null;
+        return contentType;
     }
 
     @Override
