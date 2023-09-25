@@ -58,6 +58,7 @@ public class AuthPublicController {
         int isInitLoginUser = authService.isInitLoginUser();
         HttpCookie httpCookie = ResponseCookie.from("refresh-token", tokenDto.getRefreshToken())
                                               .maxAge(refreshTokenTTL)
+                                              .httpOnly(true)
                                               .path("/")
                                               .secure(true)
                                               .build();
