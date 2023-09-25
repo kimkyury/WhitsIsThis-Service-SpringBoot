@@ -14,14 +14,16 @@ import com.mo.whatisthis.apis.auth.responses.ReissueTokenResponse;
 import com.mo.whatisthis.apis.auth.services.AuthService;
 import com.mo.whatisthis.exception.RefreshTokenExpirationException;
 import com.mo.whatisthis.jwt.dtos.TokenDto;
-import com.mo.whatisthis.sms.responses.SmsResponse;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,7 +58,9 @@ public class AuthPublicController {
         int isInitLoginUser = authService.isInitLoginUser();
         HttpCookie httpCookie = ResponseCookie.from("refresh-token", tokenDto.getRefreshToken())
                                               .maxAge(refreshTokenTTL)
-//                                              .secure(true)
+                                              .httpOnly(true)
+                                              .path("/")
+                                              .secure(true)
                                               .build();
 
         EmployeeInfo employeeInfo = authService.findEmployeeInfoUseSCH();
@@ -94,8 +98,6 @@ public class AuthPublicController {
     @PostMapping("/reissue")
     public ResponseEntity<SuccessResponse<ReissueTokenResponse>> reissue(
         @CookieValue(name = "refresh-token") String requestRefreshToken) {
-
-        System.out.println(requestRefreshToken);
 
         Optional<String> accessToken = authService.reissueAccessToken(requestRefreshToken);
 
@@ -135,5 +137,18 @@ public class AuthPublicController {
         authService.confirmAuthCode(verifyAuthCodeRequest);
 
         return createSuccessResponse(SuccessCode.OK, "AuthCode is Accept");
+    }
+
+    @PostMapping("/check-cookies")
+    public Map<String, String> getCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        Map<String, String> cookieMap = new HashMap<>();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookieMap.put(cookie.getName(), cookie.getValue());
+            }
+        }
+        return cookieMap;
     }
 }
