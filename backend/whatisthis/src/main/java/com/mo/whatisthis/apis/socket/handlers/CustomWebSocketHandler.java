@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.bridge.Message;
+import org.hibernate.Session;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
@@ -87,9 +88,9 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
             commandHandler(session, dataMap);
 
-        } else if (type.equals(MessageType.INIT)) {
+        } else if (type.equals(MessageType.REGISTER)) {
             // Employee Message
-            initHandler(session, dataMap);
+            registerHandler(session, dataMap);
 
         } else if (type.equals(MessageType.AUTH)) {
 
@@ -107,22 +108,66 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         String role = claims.get("role")
                             .toString();
 
+        session.getAttributes()
+               .put(SessionKey.role.name(), role);
+        session.getAttributes()
+               .put(SessionKey.username.name(), username);
+
         if (role.equals(Role.ROLE_EMPLOYEE.name())) {
             moSocketProvider.addEmployeeToSocket(username, session);
         } else {
             moSocketProvider.addDeviceToSocket(username, session);
+
+            String employeeNo = redisService.getValue("device:" + username)
+                                            .split("/")[0];
+
+            Map<String, String> sendDataMap = new HashMap<>();
+            sendDataMap.put(MessageDataType.command.name(), "CONNECTED");
+            String sendMessage = convertMessageToString(MessageType.STATUS, sendDataMap);
+
+            moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
         }
+
     }
 
+    public void registerHandler(WebSocketSession session, Map<String, String> dataMap) {
 
-    public void initHandler(WebSocketSession session, Map<String, String> dataMap) {
+        System.out.println("REGISTER>>>>>>>>>>>>>" + dataMap);
+        String historyId = dataMap.get(MessageDataType.historyId.name());
+        String serialNumber = dataMap.get(MessageDataType.serialNumber.name());
+        System.out.println("REGISTER>>>>>>>>>>>>>:" + serialNumber);
+
+        String employeeNo = (String) session.getAttributes()
+                                            .get(SessionKey.username.name());
+        redisService.saveData("device:" + serialNumber, employeeNo + "/" + historyId);
+
     }
 
     public void commandHandler(WebSocketSession session, Map<String, String> dataMap) {
 
+        String command = dataMap.get(MessageDataType.command.name());
+        String serialNumber = dataMap.get(MessageDataType.serialNumber.name());
+
+        moSocketProvider.sendMessageToDevice(serialNumber, command);
     }
 
     public void coordinateHandler(WebSocketSession session, Map<String, String> dataMap) {
+
+        String serialNumber = (String) session.getAttributes()
+                                              .get(SessionKey.username.name());
+        String[] redisData = redisService.getValue("device:" + serialNumber)
+                                         .split("/");
+
+        String x = dataMap.get(MessageDataType.x);
+        String y = dataMap.get(MessageDataType.y);
+
+        Map<String, String> sendDataMap = new HashMap<>();
+        sendDataMap.put(MessageDataType.historyId.name(), redisData[1]);
+        sendDataMap.put(MessageDataType.x.name(), x);
+        sendDataMap.put(MessageDataType.y.name(), x);
+
+        String sendMessage = convertMessageToString(MessageType.COORDINATE, sendDataMap);
+        moSocketProvider.sendMessageToEmployee(redisData[0], sendMessage);
     }
 
     public void damageHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -190,24 +235,24 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     }
 
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-
         // TODO: Turtle봇 종료시, 데이터의 터틀봇 관련도 삭제할 것
-
 //        System.out.println(">>>>>> Connector Socket EXIT");
 
-        Role role = (Role) session.getAttributes()
-                                  .get("role");
+        String role = (String) session.getAttributes()
+                                      .get(SessionKey.role.name());
+        String username = (String) session.getAttributes()
+                                          .get(SessionKey.username.name());
 
-        if (role == Role.ROLE_EMPLOYEE) {
-            Long historyId = (Long) session.getAttributes()
-                                           .get("historyId");
-            moSocketProvider.removeEmployeeToSocket(historyId);
-
-        } else if (role == Role.ROLE_DEVICE) {
-            String serialNumber = (String) session.getAttributes()
-                                                  .get("serialNumber");
-            moSocketProvider.removeDeviceToSocket(serialNumber);
+        if (role.equals(Role.ROLE_EMPLOYEE.name())) {
+            moSocketProvider.removeEmployeeToSocket(username);
+        } else {
+            moSocketProvider.removeDeviceToSocket(username);
         }
+    }
+
+
+    enum SessionKey {
+        username, historyId, role
     }
 }
 

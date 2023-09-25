@@ -23,7 +23,7 @@ public class MessageDto {
     private Map<String, String> data;
 
     public enum MessageType {
-        AUTH, INIT, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS;
+        AUTH, REGISTER, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS;
     }
     public enum MessageDataType {
         accessToken, image, x, y, category, state, command, historyId, serialNumber

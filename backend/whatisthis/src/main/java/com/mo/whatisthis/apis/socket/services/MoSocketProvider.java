@@ -30,13 +30,14 @@ public class MoSocketProvider {
         System.out.println(">>>>>>>>>>>> Add Employee to Map");
     }
 
-    public void removeEmployeeToSocket(Long historyId) {
-        employeeByHistoryMap.remove(historyId);
+    public void removeEmployeeToSocket(String employeeNo) {
+        employeeByHistoryMap.remove(employeeNo);
         System.out.println(">>>>>>>>>>>> Remove Employee to Map");
     }
 
     public void addDeviceToSocket(String serialNumber, WebSocketSession deviceSession) {
         deviceBySerialNumberMap.put(serialNumber, deviceSession);
+
         System.out.println(">>>>>>>>>>>> Add Device to Map");
     }
 
@@ -54,6 +55,31 @@ public class MoSocketProvider {
         }catch(IOException e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public void sendMessageToDevice(String serialNumber, String payload){
+        WebSocketSession session = deviceBySerialNumberMap.get(serialNumber);
+        try {
+            if (session.isOpen()) {
+                TextMessage message = new TextMessage(payload);
+                session.sendMessage(message);
+            }
+        }catch(IOException e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public void sendMessageToEmployee(String employeeNo, String payload){
+        WebSocketSession session = employeeByHistoryMap.get(employeeNo);
+        try {
+            if (session.isOpen()) {
+                TextMessage message = new TextMessage(payload);
+                session.sendMessage(message);
+            }
+        }catch(IOException e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     public Optional<WebSocketSession> getEmployeeSessionByHistory(Long historyId){
