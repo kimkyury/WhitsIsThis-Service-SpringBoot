@@ -2,13 +2,13 @@ import React from "react";
 import './Fixcustom.css';
 
 function Fixcustom() {
-  const status = sessionStorage.getItem('status');
-  // const status = 'WAITING_FOR_INSPECTION';;
+  // const status = sessionStorage.getItem('status');
+  const status = 'WAITING_FOR_INSPECTION';;
 
   // Define a function to determine the circle style based on the status
   const getCircleStyle = (circleStatus) => {
     if (status === circleStatus) {
-      return { backgroundColor: 'orange' };
+      return { backgroundColor: '#F07B3F' };
     }
     return {};
   };
