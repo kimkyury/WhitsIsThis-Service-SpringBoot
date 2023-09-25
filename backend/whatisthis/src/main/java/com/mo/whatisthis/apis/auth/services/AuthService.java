@@ -32,6 +32,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,9 +45,21 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final NaverSmsService naverSmsService;
     private final AWSS3ResponseUtil awss3ResponseUtil;
-
+    private final PasswordEncoder passwordEncoder;
 
     public TokenDto loginEmployee(EmployeeLoginRequest employeeLoginRequest) {
+
+        MemberEntity memberEntity = memberRepository.findByUsername(
+                                                        employeeLoginRequest.getUsername())
+                                                    .orElseThrow(
+                                                        () -> new CustomException(
+                                                            ErrorCode.USERNAME_INVALID)
+                                                    );
+
+        if (!passwordEncoder.matches(employeeLoginRequest.getPassword(),
+            memberEntity.getPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_INVALID);
+        }
 
         // 인증 정보를 가진 인스턴스 생성
         UsernamePasswordAuthenticationToken authenticationToken =
