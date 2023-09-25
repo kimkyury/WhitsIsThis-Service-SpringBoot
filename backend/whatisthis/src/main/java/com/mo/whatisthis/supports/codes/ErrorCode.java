@@ -23,6 +23,8 @@ public enum ErrorCode {
 
     STATUS_INVALID(400, "변경할 요청의 상태가 올바르지 않습니다."),
 
+    USERNAME_INVALID(400, "일치하는 아이디가 없습니다."),
+    PASSWORD_INVALID(400, "잘못된 비밀번호입니다."),
 
     TOKEN_EXPIRED(401, "Token is expired"),
     TOKEN_INVALID(401, "토큰이 올바르지 않거나 만료되어 거부되었습니다. "),
