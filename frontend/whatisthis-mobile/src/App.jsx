@@ -114,7 +114,7 @@ function App() {
                 element={<ConnectionResult />}
               />
               <Route path="/house/:buildingId/:houseId" element={<HouseDetail />} />
-              <Route path="/houselist/:buildingId" element={<HouseList />} />
+              <Route path="/houselist" element={<HouseList />} />
               <Route path="/house/:buildingId/:houseId/result" element={<HouseResult />} />
               <Route path="/search" element={<Search />} />
               <Route path="/search/:buildingId" element={<SearchDetail />} />

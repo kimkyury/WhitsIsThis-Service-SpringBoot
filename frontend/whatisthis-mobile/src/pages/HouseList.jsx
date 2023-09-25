@@ -9,24 +9,27 @@ import { BuildingDataContext } from "../App";
 
 const HouseList = () => {
   const navigate = useNavigate();
-  const { buildingId } = useParams();
+  // const { buildingId } = useParams();
 
-  const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
-  console.log(targetBuilding);
+  const buildingList = useContext(BuildingDataContext);
+  // console.log(targetBuilding);
   const [houseList, setHouseList] = useState();
 
   useEffect(() => {
-    if (targetBuilding) {
-      setHouseList(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
-      console.log(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
+    if (buildingList) {
+      setHouseList(buildingList.map((building) => building.requests).flat());
+      console.log(buildingList.map((building) => building.requests).flat());
+      // console.log(buildingList);
+      // setHouseList(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
+      // console.log(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
     }
   }, []);
 
   const handleHouseCardClick = (houseId) => {
-    navigate(`/house/${buildingId}/${houseId}`);
+    navigate(`/house/${houseId}`);
   };
 
-  if (!targetBuilding) {
+  if (!buildingList) {
     return <div className="HouseList">로딩중입니다...</div>;
   } else {
     return (
@@ -34,14 +37,10 @@ const HouseList = () => {
         <div className="building_info_wrapper">
           <div className="building_info">
             <div className="building_title">
-              <h1>{getBuildingName(targetBuilding.address)}</h1>
-              <MyButton
-                color={"orange"}
-                text={"목록으로"}
-                onClick={() => navigate(`/search/${buildingId}`)}
-              />
+              <h1>여기는 이미지 넣을거임</h1>
+              <MyButton color={"orange"} text={"뒤로가기"} onClick={() => navigate(`/search`)} />
             </div>
-            <h3>{targetBuilding.address}</h3>
+            <h3>여기는 이미지 넣을거임</h3>
           </div>
         </div>
         <div className="house_card_wrapper">
@@ -57,7 +56,7 @@ const HouseList = () => {
                 />
               );
             })}
-          <div className="HouseCard add_card_btn" onClick={() => navigate(`/search/${buildingId}`)}>
+          <div className="HouseCard add_card_btn" onClick={() => navigate(`/search`)}>
             <img src={process.env.PUBLIC_URL + `/assets/plus_circle.png`} alt="add_card" />
           </div>
           {houseList && houseList.length % 2 === 0 && <div className="blank"></div>}

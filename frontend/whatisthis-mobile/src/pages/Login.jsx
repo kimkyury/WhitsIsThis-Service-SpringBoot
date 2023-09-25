@@ -42,7 +42,7 @@ const Login = () => {
           password: "1234",
         }
       );
-
+      console.log(response);
       setUserInfo(response.data.data.employeeinfo);
       setAccessToken(response.data.data.accessToken);
       localStorage.setItem("token", response.data.data.accessToken);

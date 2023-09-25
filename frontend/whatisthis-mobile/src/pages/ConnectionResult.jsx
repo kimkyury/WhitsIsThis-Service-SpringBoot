@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import Notification from "../components/Notification";
 import { BuildingDataContext } from "../App";
+import AuthAxios from "../utils/AuthAxios";
 
 const ConnectionResult = () => {
   const navigate = useNavigate();
@@ -14,10 +15,21 @@ const ConnectionResult = () => {
   const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
   const targetHouse = targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
 
-  const startWorking = () => {
+  const startWorking = async () => {
     // houselist 추가하는 로직
-
-    navigate(`/houselist/${buildingId}`, { replace: true });
+    try {
+      const response = await AuthAxios({
+        method: "patch",
+        url: `/requests/${houseId}/status`,
+        data: {
+          status: "IN_PROGRESS",
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+    navigate(`/houselist`, { replace: true });
   };
 
   return (

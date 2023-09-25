@@ -8,9 +8,13 @@ import CaptureImage from "./CaptureImage";
 
 import HouseCard from "../components/HouseCard";
 
-import "./TestPage.css";
+// import "./TestPage.css";
+import MyButton from "../components/MyButton";
+import { useNavigate } from "react-router-dom";
 
 const TestPage = () => {
+  const navigate = useNavigate();
+
   const [progressPercentage, setProgressPercentage] = useState(0);
 
   useEffect(() => {
@@ -31,52 +35,33 @@ const TestPage = () => {
   }, [progressPercentage]);
 
   return (
-    <div
-      className="App"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <div className="card-container">
-        <input type="checkbox" id="card-1" disabled />
-        <label htmlFor="card-1" className="card">
-          <div className="front HouseCard">
-            <h2 className="title">???</h2>
-            <CircularProgressBar percentage={progressPercentage} />
+    <div className="HouseCard">
+      <input type="checkbox" id={`card-1`} disabled />
+      <label htmlFor={`card-1`} className="card ">
+        <div className="front HouseCard card_wrapper">
+          <CircularProgressBar percentage={progressPercentage} />
+          <div className="houseInfo_wrapper ">
+            <h2 className="title">동호</h2>
+            <h2 className="work_name">작업이름</h2>
             <h2 className="work_name">작업이름</h2>
           </div>
-          <div
-            className="back HouseCard"
-            style={{
-              backgroundColor: "#9dd772",
-            }}
-          >
-            <h2 className="title">???</h2>
-            <div
-              style={{
-                position: "relative",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "6.5625rem",
-              }}
-            >
-              <img
-                style={{ width: "7rem" }}
-                src={process.env.PUBLIC_URL + `/assets/check_done.png`}
-                alt=""
-              />
-            </div>
-
+        </div>
+        <div
+          className="back HouseCard card_wrapper"
+          style={{
+            backgroundColor: "#9dd772",
+          }}
+        >
+          <div className="image_container">
+            <img src={process.env.PUBLIC_URL + `/assets/check_done.png`} alt="" />
+          </div>
+          <div className="houseInfo_wrapper">
+            <h2 className="title">동호</h2>
+            <h2 className="work_name">작업이름</h2>
             <h2 className="work_name">작업이름</h2>
           </div>
-        </label>
-      </div>
-
-      <p>쮜바.. 집에보내줘..</p>
+        </div>
+      </label>
     </div>
   );
 };

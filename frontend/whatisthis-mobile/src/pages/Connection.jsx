@@ -11,7 +11,8 @@ const Connection = () => {
   const { houseId } = useParams();
 
   const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
-  const targetHouse = targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
+  const targetHouse =
+    targetBuilding && targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
 
   const navigate = useNavigate();
 

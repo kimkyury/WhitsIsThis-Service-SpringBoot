@@ -39,6 +39,14 @@ const Home = () => {
         getBuildingList();
       }
     }
+
+    // 쿠키 가져오기
+    const cookies = document.cookie;
+    // document.cookie = "safeCookie1=foo; SameSite=Lax";
+    // document.cookie = "safeCookie2=foo";
+    // document.cookie = "crossCookie=bar; SameSite=None; Secure";
+    // 쿠키 콘솔에 출력
+    console.log(cookies);
   }, []);
 
   const logout = () => {

@@ -26,41 +26,30 @@ const HouseCard = ({ houseInfo, onClick, currentPercentage }) => {
 
   return (
     <div className="HouseCard" onClick={onClick}>
-      <input type="checkbox" id={`card-` + houseInfo.id} disabled />
-      <label htmlFor={`card-` + houseInfo.id} className="card">
-        <div className="front HouseCard">
-          <h2 className="title">
-            {houseInfo.dong}동{houseInfo.ho}호
-          </h2>
+      <input type="checkbox" id={`card-1`} disabled />
+      <label htmlFor={`card-1`} className="card ">
+        <div className="front HouseCard card_wrapper">
           <CircularProgressBar percentage={progressPercentage} />
-          <h2 className="work_name">작업이름</h2>
+          <div className="houseInfo_wrapper ">
+            <h2 className="title">동호</h2>
+            <h2 className="work_name">작업이름</h2>
+            <h2 className="work_name">작업이름</h2>
+          </div>
         </div>
         <div
-          className="back HouseCard"
+          className="back HouseCard card_wrapper"
           style={{
             backgroundColor: "#9dd772",
           }}
         >
-          <h2 className="title">
-            {houseInfo.dong}동{houseInfo.ho}호
-          </h2>
-          <div
-            style={{
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "6.5625rem",
-            }}
-          >
-            <img
-              style={{ width: "7rem" }}
-              src={process.env.PUBLIC_URL + `/assets/check_done.png`}
-              alt=""
-            />
+          <div className="image_container">
+            <img src={process.env.PUBLIC_URL + `/assets/check_done.png`} alt="" />
           </div>
-
-          <h2 className="work_name">작업이름</h2>
+          <div className="houseInfo_wrapper">
+            <h2 className="title">동호</h2>
+            <h2 className="work_name">작업이름</h2>
+            <h2 className="work_name">작업이름</h2>
+          </div>
         </div>
       </label>
     </div>

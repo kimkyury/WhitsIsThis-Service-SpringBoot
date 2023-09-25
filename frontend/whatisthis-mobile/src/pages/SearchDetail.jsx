@@ -21,7 +21,7 @@ const SearchDetail = () => {
       navigate(`/house/${buildingId}/${info.id}/result`);
     } else {
       if (info.status === "IN_PROGRESS") {
-        navigate(`/houselist/${buildingId}`);
+        navigate(`/houselist`);
       } else if (!info.isConnected) {
         navigate(`/connection/${buildingId}/${info.id}`);
       }
