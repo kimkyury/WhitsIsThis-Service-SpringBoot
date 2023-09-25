@@ -87,7 +87,7 @@ public class AuthService {
 
         String serialNumber = deviceLoginRequest.getSerialNumber();
         // 1. Redis에 존재하는가
-        if (redisService.getValue("device:" + serialNumber + ":history") == null) {
+        if (redisService.getValue("device:" + serialNumber ) == null) {
             throw new CustomException(ErrorCode.SERIALNUMBER_INVALID);
         }
 
