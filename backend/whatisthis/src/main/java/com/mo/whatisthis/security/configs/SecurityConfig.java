@@ -50,10 +50,10 @@ public class SecurityConfig {
 
             .configurationSource(request -> {
                 CorsConfiguration cors = new CorsConfiguration();
-                cors.setAllowedOrigins(Arrays.asList("*"));
+                cors.setAllowedOrigins(Arrays.asList("https://j9e203.p.ssafy.io", "http://localhost:3000"));
                 cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 cors.setAllowedHeaders(Arrays.asList("*"));
-//                cors.setAllowCredentials(true);
+                cors.setAllowCredentials(true);
                 return cors;
             })
             .and()
