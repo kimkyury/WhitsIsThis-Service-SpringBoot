@@ -2,7 +2,6 @@ package com.mo.whatisthis.apis.socket.handlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mo.whatisthis.apis.history.entities.DamagedHistoryEntity.Category;
 import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
 import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
@@ -19,20 +18,18 @@ import com.mo.whatisthis.supports.utils.WebSocketUtils;
 import io.jsonwebtoken.Claims;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiConsumer;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.Message;
-import org.hibernate.Session;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
+import org.springframework.util.CustomizableThreadCreator;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.socket.BinaryMessage;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -46,7 +43,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     private final MoSocketProvider moSocketProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
-    private final UserDetailsService userDetailsService;
     private final S3Service s3Service;
     private final HistoryService historyService;
     private final DamagedHistoryService damagedHistoryService;
@@ -118,8 +114,17 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         } else {
             moSocketProvider.addDeviceToSocket(username, session);
 
-            String employeeNo = redisService.getValue("device:" + username)
-                                            .split("/")[0];
+            String [] redisData = redisService.getValue("device:" + username)
+                                            .split("/");
+
+            String employeeNo = redisData[0];
+            String historyId = redisData[1];
+
+            session.getAttributes()
+                   .put(SessionKey.historyId.name(), historyId);
+            session.getAttributes()
+                   .put(SessionKey.employeeNo.name(), employeeNo);
+
 
             Map<String, String> sendDataMap = new HashMap<>();
             sendDataMap.put(MessageDataType.command.name(), "CONNECTED");
@@ -132,13 +137,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
     public void registerHandler(WebSocketSession session, Map<String, String> dataMap) {
 
-        System.out.println("REGISTER>>>>>>>>>>>>>" + dataMap);
         String historyId = dataMap.get(MessageDataType.historyId.name());
         String serialNumber = dataMap.get(MessageDataType.serialNumber.name());
-        System.out.println("REGISTER>>>>>>>>>>>>>:" + serialNumber);
 
-        String employeeNo = (String) session.getAttributes()
-                                            .get(SessionKey.username.name());
+        String employeeNo = getAttributeFromSessionStorage(session, SessionKey.username.name());
         redisService.saveData("device:" + serialNumber, employeeNo + "/" + historyId);
 
     }
@@ -153,32 +155,97 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
     public void coordinateHandler(WebSocketSession session, Map<String, String> dataMap) {
 
-        String serialNumber = (String) session.getAttributes()
-                                              .get(SessionKey.username.name());
-        String[] redisData = redisService.getValue("device:" + serialNumber)
-                                         .split("/");
+        String historyId = getAttributeFromSessionStorage(session, SessionKey.historyId.name());
+        String employeeNo = getAttributeFromSessionStorage(session, SessionKey.employeeNo.name());
+        System.out.println(employeeNo);
 
-        String x = dataMap.get(MessageDataType.x);
-        String y = dataMap.get(MessageDataType.y);
+        String x = dataMap.get(MessageDataType.x.name());
+        String y = dataMap.get(MessageDataType.y.name());
 
         Map<String, String> sendDataMap = new HashMap<>();
-        sendDataMap.put(MessageDataType.historyId.name(), redisData[1]);
+        sendDataMap.put(MessageDataType.historyId.name(), historyId);
         sendDataMap.put(MessageDataType.x.name(), x);
-        sendDataMap.put(MessageDataType.y.name(), x);
+        sendDataMap.put(MessageDataType.y.name(), y);
 
         String sendMessage = convertMessageToString(MessageType.COORDINATE, sendDataMap);
-        moSocketProvider.sendMessageToEmployee(redisData[0], sendMessage);
+        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+    }
+
+    public void drawingHandler(WebSocketSession session, Map<String, String> dataMap) {
+
+        String historyId = getAttributeFromSessionStorage(session, SessionKey.historyId.name());
+        String employeeNo = getAttributeFromSessionStorage(session, SessionKey.employeeNo.name());
+
+        String imgBinaryStr = dataMap.get(MessageDataType.image.name());
+
+        // BinaryString -> byte [] ->  MultipartFile
+
+        byte [] byteStr = Base64.getDecoder().decode(imgBinaryStr);
+        MultipartFile multipartFile= WebSocketUtils.convertToMultipartFile(byteStr);
+
+        String imgUrl = "";
+        try {
+            imgUrl = historyService.uploadDrawing(Long.valueOf(historyId), multipartFile);
+        }catch(IOException e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+        Map<String, String> sendDataMap = new HashMap<>();
+        sendDataMap.put(MessageDataType.historyId.name(), historyId);
+        sendDataMap.put(MessageDataType.image.name(), imgUrl);
+
+        String sendMessage = convertMessageToString(MessageType.DRAWING, sendDataMap);
+        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
     }
 
     public void damageHandler(WebSocketSession session, Map<String, String> dataMap) {
+        String historyId = getAttributeFromSessionStorage(session, SessionKey.historyId.name());
+        String employeeNo = getAttributeFromSessionStorage(session, SessionKey.employeeNo.name());
 
-    }
+        String imgBinaryStr = dataMap.get(MessageDataType.image.name());
+        String x = dataMap.get(MessageDataType.x.name());
+        String y = dataMap.get(MessageDataType.y.name());
+        String category = dataMap.get(MessageDataType.category.name());
 
-    public void drawingHandler(WebSocketSession session, Map<String, String> imageBinaryStr) {
+        byte [] byteStr = Base64.getDecoder().decode(imgBinaryStr);
+        MultipartFile multipartFile= WebSocketUtils.convertToMultipartFile(byteStr);
+
+        String imgUrl = "";
+        try {
+            imgUrl = historyService.uploadDrawing(Long.valueOf(historyId), multipartFile);
+        }catch(IOException e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+        Map<String, String> sendDataMap = new HashMap<>();
+        sendDataMap.put(MessageDataType.historyId.name(), historyId);
+        sendDataMap.put(MessageDataType.image.name(), imgUrl);
+        sendDataMap.put(MessageDataType.x.name(), x);
+        sendDataMap.put(MessageDataType.y.name(), y);
+        sendDataMap.put(MessageDataType.category.name(), category);
+
+        String sendMessage = convertMessageToString(MessageType.DRAWING, sendDataMap);
+        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
     }
 
     public void statusHandler(WebSocketSession session, Map<String, String> dataMap) {
 
+        String historyId = getAttributeFromSessionStorage(session, SessionKey.historyId.name());
+        String employeeNo = getAttributeFromSessionStorage(session, SessionKey.employeeNo.name());
+
+        String state = dataMap.get(MessageDataType.state.name());
+        Map<String, String> sendDataMap = new HashMap<>();
+        sendDataMap.put(MessageDataType.historyId.name(), historyId);
+        sendDataMap.put(MessageDataType.state.name(), state);
+
+        String sendMessage = convertMessageToString(MessageType.STATUS, sendDataMap);
+        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+
+    }
+
+    public String getAttributeFromSessionStorage(WebSocketSession session, String sessionKey) {
+        return (String) session.getAttributes()
+                               .get(sessionKey);
     }
 
 
@@ -199,44 +266,14 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         return str;
     }
 
-    public Long getHistoryIdBySerialNumber(WebSocketSession session) {
-
-        String serialNumber = (String) session.getAttributes()
-                                              .get("serialNumber");
-        Long historyId = Long.valueOf(redisService.getHistoryBySerialNumber(serialNumber));
-
-        return historyId;
-    }
-
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
 
         System.out.println("HI, User!");
-        Role role = (Role) session.getAttributes()
-                                  .get("role");
 
-        if (role == Role.ROLE_DEVICE) {
-            String serialNumber = (String) session.getAttributes()
-                                                  .get("serialNumber");
-            String historyId = redisService.getHistoryBySerialNumber(serialNumber);
-
-            WebSocketSession employeeSession = moSocketProvider
-                .getEmployeeSessionByHistory(Long.valueOf(historyId))
-                .get();
-
-            Map<String, String> dataMap = new HashMap<>();
-            dataMap.put(MessageDataType.state.name(), "CONNECT");
-
-            String str = convertMessageToString(MessageType.STATUS, dataMap);
-
-            moSocketProvider.sendTextMessage(employeeSession, str);
-
-        }
     }
 
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        // TODO: Turtle봇 종료시, 데이터의 터틀봇 관련도 삭제할 것
-//        System.out.println(">>>>>> Connector Socket EXIT");
 
         String role = (String) session.getAttributes()
                                       .get(SessionKey.role.name());
@@ -246,13 +283,13 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         if (role.equals(Role.ROLE_EMPLOYEE.name())) {
             moSocketProvider.removeEmployeeToSocket(username);
         } else {
+            redisService.deleteValue("device:"+username);
             moSocketProvider.removeDeviceToSocket(username);
         }
     }
 
-
     enum SessionKey {
-        username, historyId, role
+        username, historyId, role, employeeNo
     }
 }
 
