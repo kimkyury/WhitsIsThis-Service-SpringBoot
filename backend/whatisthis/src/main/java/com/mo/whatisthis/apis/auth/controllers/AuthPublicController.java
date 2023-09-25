@@ -60,7 +60,7 @@ public class AuthPublicController {
                                               .maxAge(refreshTokenTTL)
                                               .httpOnly(true)
                                               .path("/")
-//                                              .secure(true)
+                                              .secure(true)
                                               .build();
 
         EmployeeInfo employeeInfo = authService.findEmployeeInfoUseSCH();
