@@ -16,7 +16,9 @@ import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.WebSocketUtils;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.HashMap;
@@ -25,6 +27,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.bridge.Message;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
@@ -46,11 +49,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
 
         MessageDto messageRequest;
+        System.out.println(message.getPayload());
 
         try {
             messageRequest = objectMapper.readValue(message.getPayload(), MessageDto.class);
@@ -139,9 +142,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     public void drawingHandler(WebSocketSession session, String imageBinaryStr) {
 
         Long historyId = getHistoryIdBySerialNumber(session);
-        byte[] bytes = Base64.getDecoder()
-                             .decode(imageBinaryStr);
-        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(bytes);
+
+        byte[] byteArray = Base64Utils.decodeFromString(imageBinaryStr);
+
+
+        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(byteArray);
 
         String s3URL = "";
         try {
@@ -237,6 +242,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
 
+        System.out.println("HI, User!");
         Role role = (Role) session.getAttributes()
                                   .get("role");
 
