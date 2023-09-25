@@ -55,8 +55,7 @@ public class AuthPublicController {
         int isInitLoginUser = authService.isInitLoginUser();
         HttpCookie httpCookie = ResponseCookie.from("refresh-token", tokenDto.getRefreshToken())
                                               .maxAge(refreshTokenTTL)
-                                              .httpOnly(true)
-                                              .secure(true)
+//                                              .secure(true)
                                               .build();
 
         EmployeeInfo employeeInfo = authService.findEmployeeInfoUseSCH();
@@ -94,6 +93,8 @@ public class AuthPublicController {
     @PostMapping("/reissue")
     public ResponseEntity<SuccessResponse<ReissueTokenResponse>> reissue(
         @CookieValue(name = "refresh-token") String refreshTokenCookie) {
+
+        System.out.println("Hello------------");
 
         Optional<String> accessToken = authService.reissueAccessToken(refreshTokenCookie);
 
