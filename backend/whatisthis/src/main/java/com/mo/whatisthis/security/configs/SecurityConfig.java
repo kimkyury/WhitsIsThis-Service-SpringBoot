@@ -12,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -50,8 +49,10 @@ public class SecurityConfig {
 
             .configurationSource(request -> {
                 CorsConfiguration cors = new CorsConfiguration();
-                cors.setAllowedOrigins(Arrays.asList("https://j9e203.p.ssafy.io", "http://localhost:3000"));
-                cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                cors.setAllowedOrigins(
+                    Arrays.asList("https://j9e203.p.ssafy.io", "http://localhost:3000"));
+                cors.setAllowedMethods(
+                    Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                 cors.setAllowedHeaders(Arrays.asList("*"));
                 cors.setAllowCredentials(true);
                 return cors;
