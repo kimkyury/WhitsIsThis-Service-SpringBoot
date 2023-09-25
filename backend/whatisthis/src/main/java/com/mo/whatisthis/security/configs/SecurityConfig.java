@@ -77,10 +77,7 @@ public class SecurityConfig {
             .and()
             .authorizeRequests()
             .antMatchers(AUTH_BLACK_LIST)
-            .access("hasRole('ROLE_EMPLOYEE')")
-
-            .and()
-            .authorizeRequests()
+            .authenticated()
 
             .anyRequest()
             .permitAll();
