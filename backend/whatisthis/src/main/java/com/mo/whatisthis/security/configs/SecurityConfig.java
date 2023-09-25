@@ -47,15 +47,15 @@ public class SecurityConfig {
 
             .and()
             .cors()
+
             .configurationSource(request -> {
                 CorsConfiguration cors = new CorsConfiguration();
                 cors.setAllowedOrigins(Arrays.asList("*"));
                 cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 cors.setAllowedHeaders(Arrays.asList("*"));
-                cors.setAllowCredentials(true);
+//                cors.setAllowCredentials(true);
                 return cors;
             })
-
             .and()
             .csrf()
             .disable()
