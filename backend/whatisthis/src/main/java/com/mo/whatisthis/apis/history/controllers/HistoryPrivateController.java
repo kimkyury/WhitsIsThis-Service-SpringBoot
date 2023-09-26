@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.history.controllers;
 
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
+import com.mo.whatisthis.apis.history.responses.AllHistoryResponse;
 import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.request.requests.CreateTodolistRequest;
 import com.mo.whatisthis.apis.request.responses.CreateTodolistResponse;
@@ -15,6 +16,7 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class HistoryPrivateController {
 
     private final TodolistService todolistService;
-    
+
     private final HistoryService historyService;
 
     @PostMapping("/{id}/todolists")
@@ -61,5 +63,10 @@ public class HistoryPrivateController {
         historyService.uploadZip(id, multipartFile);
 
         return createSuccessResponse(SuccessCode.OK, "업로드 성공");
+    }
+
+    @GetMapping("/{id}")
+    public AllHistoryResponse getAllHistory(@PathVariable Long id) {
+        return historyService.getAllHistory(id);
     }
 }

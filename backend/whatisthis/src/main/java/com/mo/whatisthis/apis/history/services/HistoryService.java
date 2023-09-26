@@ -2,10 +2,12 @@ package com.mo.whatisthis.apis.history.services;
 
 import com.mo.whatisthis.apis.history.entities.HistoryEntity;
 import com.mo.whatisthis.apis.history.repositories.HistoryRepository;
+import com.mo.whatisthis.apis.history.responses.AllHistoryResponse;
 import com.mo.whatisthis.apis.history.responses.IntegratedHistoryResponse;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
+import com.mo.whatisthis.apis.todolist.services.TodolistService;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
@@ -33,6 +35,8 @@ public class HistoryService {
     private final DamagedHistoryService damagedHistoryService;
 
     private final DeviceHistoryService deviceHistoryService;
+
+    private final TodolistService todolistService;
 
     public ResponseEntity<byte[]> downloadReport(Long id)
         throws CustomException, IOException {
@@ -122,6 +126,10 @@ public class HistoryService {
 
         return new IntegratedHistoryResponse(damagedHistoryService.getDamagedHistories(id),
             deviceHistoryService.getDeviceHistories(id), historyEntity.getDrawingUrl());
+    }
+
+    public AllHistoryResponse getAllHistory(Long id) {
+        return new AllHistoryResponse(getIntegratedHistory(id), todolistService.getTodolists(id));
     }
 
 }
