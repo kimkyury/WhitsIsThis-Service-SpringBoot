@@ -93,8 +93,10 @@ public class RequestService {
     }
 
     public List<AssignedRequestResponse> getAssignedRequest(Integer employeeId) {
-        List<RequestEntity> requestEntities = requestRepository.findByEmployeeIdAndStatusIn(
-            employeeId, List.of(Status.WAITING_FOR_INSPECTION, Status.IN_PROGRESS, Status.DONE));
+        LocalDate today = LocalDate.now();
+        List<RequestEntity> requestEntities = requestRepository.findByEmployeeIdAndStatusInAndInspectionStartLessThanEqualAndInspectionEndGreaterThanEqual(
+            employeeId,
+            List.of(Status.WAITING_FOR_INSPECTION, Status.IN_PROGRESS, Status.DONE), today, today);
 
         Map<String, AssignedRequestResponse> assignedRequestResponseMap = new HashMap<>();
 
