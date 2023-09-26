@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyButton from "../components/MyButton";
+import AuthHttp from "../utils/AuthHttp";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -53,7 +54,19 @@ const Login = () => {
         userId: "",
         userPassword: "",
       });
-      navigate("/");
+      // navigate("/");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const test = async () => {
+    try {
+      const response = await AuthHttp({
+        method: "get",
+        url: "/private/requests/assigned",
+      });
+      console.log(response);
     } catch (e) {
       console.error(e);
     }
@@ -78,6 +91,7 @@ const Login = () => {
         />
       </div>
       <MyButton color={"white"} text={"로그인"} onClick={handleSubmit} />
+      <MyButton color={"black"} text={"테스트"} onClick={test} />
     </div>
   );
 };
