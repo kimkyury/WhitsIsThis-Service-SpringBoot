@@ -32,9 +32,16 @@ function Login() {
         // sessionStorage.setItem('Token', Cookies.get('refreshToken'));
         sessionStorage.setItem('status', response.data.status);
         sessionStorage.setItem('refreshToken', response.data.data.accessToken);
+        sessionStorage.setItem('password', password)
         // 성공적인 로그인 후 목록 페이지로 리다이렉트합니다
         setAuthenticated(true);
-        navigate('/list');
+        if (response.data.data.isInitLoginUser === 1) {
+          // isinit이 0이면 "First" 페이지로 이동
+          navigate('/first');
+        } else if (response.data.data.isInitLoginUser === 0) {
+          // isinit이 1이면 "List" 페이지로 이동
+          navigate('/list');
+        }
         console.log('로그인 성공')
       } else {
         // 상태 코드가 200이 아닌 경우에는 오류 메시지를 표시합니다.
@@ -46,6 +53,47 @@ function Login() {
     }
   };
 
+  const makeApiRequest = async () => {
+    const refreshToken = sessionStorage.getItem('refreshToken')
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    try {
+      const response = await axios.get(`${BASE_URL}/api/v1/auth/reissue`, {
+        headers: {
+          'Authorization': `${refreshToken}`
+        },
+      });
+  
+      // API 요청 성공
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        // 토큰이 만료되면 401 상태 코드를 받음
+  
+        // 토큰 재발급 요청
+        const reissueResponse = await axios.post('api/v1/auth/reissue', {
+          refreshToken: sessionStorage.getItem('refreshToken'),
+        });
+  
+        // 새로운 액세스 토큰을 받음
+        const newAccessToken = reissueResponse.data.accessToken;
+  
+        // 받은 액세스 토큰을 저장
+        sessionStorage.setItem('accessToken', newAccessToken);
+  
+        // 이전 요청 재시도
+        const retryResponse = await axios.get(`${BASE_URL}/api/v1/auth/reissue`, {
+          headers: {
+            'Authorization': `Bearer ${newAccessToken}`
+          },
+        });
+  
+        return retryResponse.data;
+      } else {
+        // 다른 오류 처리
+        throw error;
+      }
+    }
+  };
   return (
     <div className="LoginForm">
       <div>

@@ -52,7 +52,7 @@ function Logout() {
 
   return (
     <div>
-      <button onClick={handleLogout}>로그아웃</button>
+      <button className='font buttonta' onClick={handleLogout}>로그아웃</button>
     </div>
   );
 }

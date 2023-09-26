@@ -23,6 +23,7 @@ function List() {
 
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
+    console.log(itemData)
     setShowModal(true);
   };
 

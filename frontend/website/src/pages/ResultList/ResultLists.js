@@ -17,20 +17,17 @@ function ResultList() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/api/v1/private/requests/done`,
+        `${process.env.REACT_APP_BASE_URL}/api/v1/private/requests/done?page=1`,
         {
-          params: {
-            page: currentPage,
-          },
           headers: {
             'Authorization': refreshToken,
           },
         }
       );
-
+        console.log(response.data.data)
       if (Array.isArray(response.data.data)) {
         setDataList(response.data.data);
-        setCurrentPage(1); // 이 부분은 삭제하거나 주석 처리합니다.
+        // setCurrentPage(1); // 이 부분은 삭제하거나 주석 처리합니다.
       } else {
         console.error('데이터 형식이 배열이 아닙니다.');
       }
@@ -49,16 +46,12 @@ function ResultList() {
   }, [currentPage]);
 
   const filteredData = Array.isArray(dataList)
-  ? dataList.filter((item) =>
-      Object.values(item).some((value) => {
-        if (typeof value === 'string') {
-          return value.toLowerCase().includes(searchQuery.toLowerCase());
-        }
-        // value가 문자열이 아닌 경우 빈 문자열로 처리
-        return false;
-      })
-    )
-  : [];
+    ? dataList.filter((item) =>
+        Object.values(item).some((value) =>
+          value.toLowerCase().includes(searchQuery)
+        )
+      )
+    : [];
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 

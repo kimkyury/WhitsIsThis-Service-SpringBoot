@@ -7,7 +7,7 @@ function Header(props) {
   const [activeLink, setActiveLink] = useState('');
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const linkStyle = {
-    color: '#2D4059',
+    color: 'white',
     marginRight: '3%',
     display: 'inline-block',
   };
@@ -23,8 +23,8 @@ function Header(props) {
   return (
     <div>
       <div className="header">
-        <img style={{ width: '9vw', height:'8vh' }} src={`${process.env.PUBLIC_URL}/assets/logo.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
-        <div style={{ display: 'flex', width: '28vw',height:'3.3vh', marginRight: '3%' }}>
+        <img style={{ marginLeft:'1rem', width: '4vw', height:'4vw' }} src={`${process.env.PUBLIC_URL}/assets/logo.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
+        <div style={{ display: 'flex', width: '40vw',height:'3.3vh', marginRight: '-7.2rem' }}>
           <NavLink
             to={`/`}
             exact
