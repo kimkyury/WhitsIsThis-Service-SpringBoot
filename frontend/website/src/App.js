@@ -18,11 +18,11 @@ function App() {
   const access = Cookies.get('refreshToken');
   return (
     <div>
-      <Router>
+      {/* <Router>
         <Routes>
           <Route path="/health" element={<Health />} />
         </Routes>
-      </Router>
+      </Router> */}
 
       <Router basename={BASE_NAME}>
         <Routes>

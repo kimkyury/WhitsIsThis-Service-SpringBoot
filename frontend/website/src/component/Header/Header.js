@@ -27,7 +27,6 @@ function Header(props) {
         <div style={{ display: 'flex', width: '40vw',height:'3.3vh', marginRight: '-7.2rem' }}>
           <NavLink
             to={`/`}
-            exact
             style={activeLink === '홈' ? { ...linkStyle, color: 'orange' } : linkStyle}
             onClick={() => handleLinkClick('홈')}
           >
