@@ -1,6 +1,8 @@
 import { useState } from "react";
 import TodoSectionItem from "./TodoSectionItem";
 
+import { dummySections } from "../utils/DummyData";
+
 // 닫기는게 왼쪽 열리는게 오른쪽 디폴트는 고정
 const TodoListMain = ({ isListMain, sectionList, handleAddClick, handleSectionOpen }) => {
   const [isFinish, setIsFinish] = useState(false);
@@ -19,11 +21,17 @@ const TodoListMain = ({ isListMain, sectionList, handleAddClick, handleSectionOp
         </p>
       </div>
       {/* section list map 적용해서 출력 */}
-      <TodoSectionItem sectionName={"구역1"} onClick={() => handleSectionOpen("1")} />
-      <TodoSectionItem sectionName={"구역2"} onClick={() => handleSectionOpen("2")} />
-      <TodoSectionItem sectionName={"구역3"} onClick={() => handleSectionOpen("3")} />
-      <TodoSectionItem sectionName={"구역4"} onClick={() => handleSectionOpen("4")} />
-      <TodoSectionItem sectionName={"구역5"} onClick={() => handleSectionOpen("5")} />
+      {sectionList.map((it, idx) => {
+        return (
+          <TodoSectionItem
+            key={idx}
+            sectionName={it.sectionName}
+            // handleSectionOpen 전달 값 변경해야함
+            onClick={() => handleSectionOpen(it.sectionId)}
+            isFinish={it.isFinish}
+          />
+        );
+      })}
 
       <div className="TodoSectionItem" onClick={handleAddClick}>
         <img
