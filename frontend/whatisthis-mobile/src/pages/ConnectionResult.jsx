@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import Notification from "../components/Notification";
 import { BuildingDataContext } from "../App";
-import AuthAxios from "../utils/AuthAxios";
+import AuthHttp from "../utils/AuthHttp";
 
 const ConnectionResult = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const ConnectionResult = () => {
   const startWorking = async () => {
     // houselist 추가하는 로직
     try {
-      const response = await AuthAxios({
+      const response = await AuthHttp({
         method: "patch",
         url: `/requests/${houseId}/status`,
         data: {
