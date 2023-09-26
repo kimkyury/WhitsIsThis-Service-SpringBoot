@@ -7,6 +7,9 @@ const HouseCard = ({ houseInfo, onClick, currentPercentage }) => {
   const checkBox = document.getElementById("card-" + houseInfo.id);
 
   useEffect(() => {
+    if (houseInfo.status === "DONE") {
+      currentPercentage = 100;
+    }
     const timer = setInterval(() => {
       if (progressPercentage < currentPercentage) {
         setProgressPercentage((prevPercentage) => prevPercentage + 1);
@@ -30,9 +33,9 @@ const HouseCard = ({ houseInfo, onClick, currentPercentage }) => {
       <label htmlFor={`card-` + houseInfo.id} className="card ">
         <div className="front HouseCard card_wrapper">
           <CircularProgressBar percentage={progressPercentage} />
-          <div className="houseInfo_wrapper ">
-            <h2 className="title">동호</h2>
-            <h2 className="work_name">작업이름</h2>
+          <div className="houseinfo_wrapper ">
+            <h2 className="title">{houseInfo.addressDetail}</h2>
+            <h3 className="address">{houseInfo.address}</h3>
             <h2 className="work_name">작업이름</h2>
           </div>
         </div>
@@ -45,10 +48,17 @@ const HouseCard = ({ houseInfo, onClick, currentPercentage }) => {
           <div className="image_container">
             <img src={process.env.PUBLIC_URL + `/assets/check_done.png`} alt="" />
           </div>
-          <div className="houseInfo_wrapper">
-            <h2 className="title">동호</h2>
-            <h2 className="work_name">작업이름</h2>
-            <h2 className="work_name">작업이름</h2>
+          <div className="houseinfo_wrapper">
+            <h2 className="title">{houseInfo.addressDetail}</h2>
+            <h3 className="address">{houseInfo.address}</h3>
+            <h2
+              className="work_name"
+              style={{
+                color: "#ea5455",
+              }}
+            >
+              완료
+            </h2>
           </div>
         </div>
       </label>

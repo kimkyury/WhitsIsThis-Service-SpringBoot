@@ -373,7 +373,7 @@ body {
   color: #2d4059;
 }
 
-.HouseInfo h1 {
+.HouseInfo h2 {
   margin-left: 1rem;
   color: black;
 }
@@ -632,7 +632,10 @@ h2 {
 }
 
 .HouseList .MyButton {
+  width: 7rem;
   height: 2.5rem;
+
+  margin-top: 1.5rem;
 
   font-weight: bold;
   font-size: 1.3rem;
@@ -642,12 +645,15 @@ h2 {
   justify-content: space-between;
   align-items: center;
 }
+.HouseList .building_title img {
+  width: 8rem;
+}
 
 /* HouseCard */
 .HouseCard {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
 
   border: none;
@@ -687,6 +693,28 @@ h2 {
   backface-visibility: hidden;
 }
 
+.HouseCard .houseinfo_wrapper {
+  width: 10rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.HouseCard .title {
+  /* margin-bottom: 0.5rem; */
+  font-size: 1.3rem;
+}
+
+.HouseCard .address {
+  text-align: end;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.HouseCard .work_name {
+  color: #f07b3f;
+}
+
 .HouseCard .back {
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
@@ -717,15 +745,7 @@ h2 {
 .HouseCard h2 {
   color: #2d4059;
 }
-.HouseCard .title {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
 
-.HouseCard .work_name {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
 .add_card_btn {
   height: 14rem;
   background-color: rgba(255, 255, 255, 0.5) !important;

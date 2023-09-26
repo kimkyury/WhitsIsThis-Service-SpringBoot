@@ -17,8 +17,44 @@ const HouseList = () => {
 
   useEffect(() => {
     if (buildingList) {
-      setHouseList(buildingList.map((building) => building.requests).flat());
-      console.log(buildingList.map((building) => building.requests).flat());
+      setHouseList(
+        buildingList
+          .map((building) => {
+            const requests = building.requests.map((request) => {
+              const newRequest = { ...request };
+              newRequest.address = building.address;
+              return newRequest;
+            });
+
+            return requests;
+          })
+          .flat()
+          .filter((request) => request.status === "IN_PROGRESS" || request.status === "DONE")
+          .sort((a, b) => {
+            // "status"가 "done"인 요소를 뒤로 이동시킵니다.
+            if (a.status === "DONE" && b.status !== "DONE") {
+              return 1;
+            } else if (a.status !== "DONE" && b.status === "DONE") {
+              return -1;
+            } else {
+              return 0;
+            }
+          })
+      );
+      console.log(
+        buildingList
+          .map((building) => {
+            const requests = building.requests.map((request) => {
+              const newRequest = { ...request };
+              newRequest.address = building.address;
+              return newRequest;
+            });
+
+            return requests;
+          })
+          .flat()
+      );
+
       // console.log(buildingList);
       // setHouseList(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
       // console.log(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
@@ -37,10 +73,9 @@ const HouseList = () => {
         <div className="building_info_wrapper">
           <div className="building_info">
             <div className="building_title">
-              <h1>여기는 이미지 넣을거임</h1>
-              <MyButton color={"orange"} text={"뒤로가기"} onClick={() => navigate(`/search`)} />
+              <img src={process.env.PUBLIC_URL + `/assets/logo_blue.png`} alt="logo" />
+              <MyButton color={"black"} text={"뒤로가기"} onClick={() => navigate(`/search`)} />
             </div>
-            <h3>여기는 이미지 넣을거임</h3>
           </div>
         </div>
         <div className="house_card_wrapper">
