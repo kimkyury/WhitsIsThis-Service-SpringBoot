@@ -19,11 +19,7 @@ import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -137,18 +133,5 @@ public class AuthPublicController {
         authService.confirmAuthCode(verifyAuthCodeRequest);
 
         return createSuccessResponse(SuccessCode.OK, "AuthCode is Accept");
-    }
-
-    @PostMapping("/check-cookies")
-    public Map<String, String> getCookies(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        Map<String, String> cookieMap = new HashMap<>();
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                cookieMap.put(cookie.getName(), cookie.getValue());
-            }
-        }
-        return cookieMap;
     }
 }
