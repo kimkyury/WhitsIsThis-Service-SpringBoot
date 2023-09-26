@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import MyButton from "../components/MyButton";
 import Notification from "../components/Notification";
 import { BuildingDispatchContext } from "../App";
-import AuthAxios from "../utils/AuthAxios";
+import AuthHttp from "../utils/AuthHttp";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Home = () => {
   useEffect(() => {
     const getBuildingList = async () => {
       try {
-        const response = await AuthAxios({
+        const response = await AuthHttp({
           method: "get",
           url: "/requests/assigned",
         });

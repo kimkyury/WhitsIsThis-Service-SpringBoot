@@ -13,7 +13,7 @@ const getAuthToken = () => {
   return localStorage.getItem("token");
 };
 
-const AuthAxios = async (config) => {
+const AuthHttp = async (config) => {
   const token = getAuthToken();
   const headers = {
     ...config.headers,
@@ -31,4 +31,4 @@ const AuthAxios = async (config) => {
   }
 };
 
-export default AuthAxios;
+export default AuthHttp;
