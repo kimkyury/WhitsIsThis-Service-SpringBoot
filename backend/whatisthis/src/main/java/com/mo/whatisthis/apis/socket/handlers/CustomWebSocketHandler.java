@@ -13,7 +13,6 @@ import com.mo.whatisthis.apis.socket.services.MoSocketProvider;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
-import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.WebSocketUtils;
 import io.jsonwebtoken.Claims;
@@ -115,11 +114,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
             session.getAttributes()
                    .put(SessionKey.employeeNo.name(), employeeNo);
 
-
             Map<String, String> sendDataMap = new HashMap<>();
             sendDataMap.put(MessageDataType.command.name(), "CONNECTED");
             String sendMessage = convertMessageToString(MessageType.STATUS, sendDataMap);
 
+            moSocketProvider.sendMessageToDevice(username, "Succeeded Verify Authorization");
             moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
         }
 
