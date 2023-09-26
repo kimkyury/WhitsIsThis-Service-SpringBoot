@@ -18,7 +18,7 @@ const SearchDetail = () => {
 
   const handleHouseInfoClick = (info) => {
     if (info.status === "DONE") {
-      navigate(`/house/${buildingId}/${info.id}/result`);
+      navigate(`/house/${info.id}/result`);
     } else {
       if (info.status === "IN_PROGRESS") {
         navigate(`/houselist`);

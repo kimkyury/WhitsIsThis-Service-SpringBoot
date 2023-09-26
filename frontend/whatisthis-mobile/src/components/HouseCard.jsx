@@ -18,7 +18,7 @@ const HouseCard = ({ houseInfo, onClick, currentPercentage }) => {
       if (progressPercentage === 100 && checkBox) {
         setTimeout(() => {
           checkBox.checked = true;
-        }, 1000);
+        }, Math.floor(Math.random() * (2500 - 1000 + 1)) + 1000);
       }
     });
 
