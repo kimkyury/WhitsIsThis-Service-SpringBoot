@@ -33,7 +33,7 @@ function WebMain() {
  
           
        
-          <Login onLogin={() => setIsLoggedIn(true)} />
+          <Login />
           {/* <FirstLogin/> */}
 
       </div>
