@@ -1,7 +1,15 @@
+@font-face {
+  font-family: "GmarketSansMedium";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 :root {
   --background-color: #2d4059;
   --background-camera: rgba(0, 0, 0, 0.7);
   --text-color: #ffffff;
+  font-family: "GmarketSansMedium";
 }
 
 body {
@@ -29,6 +37,8 @@ body {
 /* common Button */
 .MyButton {
   /* background-color: white; */
+  font-family: "GmarketSansMedium";
+
   border: none;
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
   border-radius: 1rem;
@@ -36,6 +46,10 @@ body {
   &:active {
     background-color: rgba(178, 178, 178, 0.581) !important;
   }
+}
+.MyButton_disable {
+  background-color: rgba(91, 91, 91, 0.4) !important;
+  color: #929292 !important;
 }
 .MyButton_white {
   background-color: #ffffff;
@@ -60,6 +74,8 @@ body {
 
 /* Notification */
 .Notification {
+  font-family: "GmarketSansMedium";
+
   height: 2.8rem;
   width: 10rem;
 
@@ -123,6 +139,14 @@ body {
 
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+/* Error */
+.Error {
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* Home */
@@ -290,6 +314,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  overflow: hidden;
 }
 .SearchDetail .Notification {
   height: 2.8rem;
@@ -348,7 +373,7 @@ body {
   color: #2d4059;
 }
 
-.HouseInfo h1 {
+.HouseInfo h2 {
   margin-left: 1rem;
   color: black;
 }
@@ -379,9 +404,11 @@ body {
   margin-top: 1.5rem;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
+  width: 19.5rem;
   display: flex;
   align-items: flex-start;
   flex-direction: row;
+  justify-content: space-between;
 }
 .Connection .building_info_wrapper {
   margin-top: 3rem;
@@ -410,7 +437,7 @@ body {
 
   width: 22.5rem;
   height: 22.5rem;
-  margin-top: 1rem;
+  margin-top: 2.3rem;
   margin-bottom: 1rem;
 }
 .Connection .camera_container img {
@@ -428,7 +455,7 @@ body {
   justify-content: center;
   align-items: center;
 
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.214);
   border-radius: 1rem;
 }
 .Connection .MyButton {
@@ -605,7 +632,10 @@ h2 {
 }
 
 .HouseList .MyButton {
+  width: 7rem;
   height: 2.5rem;
+
+  margin-top: 1.5rem;
 
   font-weight: bold;
   font-size: 1.3rem;
@@ -615,11 +645,14 @@ h2 {
   justify-content: space-between;
   align-items: center;
 }
+.HouseList .building_title img {
+  width: 8rem;
+}
 
 /* HouseCard */
 .HouseCard {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 
@@ -628,26 +661,91 @@ h2 {
   box-shadow: 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
 
   margin: 0.5rem;
-  width: 10rem;
+  width: 19.5rem;
+  height: 10rem;
   background-color: white;
 
   transition: background-color 0.1s;
   &:active {
     background-color: rgba(178, 178, 178, 0.581) !important;
   }
+
+  -webkit-perspective: 800px; /* ? */
+  perspective: 800px;
 }
+.HouseCard label.card {
+  display: block;
+  position: relative; /* #card figure is set to position: absolute. DC*/
+  width: 100%;
+  height: 100%;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transition: -webkit-transform 1s; /* Not sure if this is the correct syntax. DC */
+  transition: transform 1s;
+}
+
+.HouseCard label.card .card_wrapper {
+  position: absolute;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.HouseCard .houseinfo_wrapper {
+  width: 10rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.HouseCard .title {
+  /* margin-bottom: 0.5rem; */
+  font-size: 1.3rem;
+}
+
+.HouseCard .address {
+  text-align: end;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.HouseCard .work_name {
+  color: #f07b3f;
+}
+
+.HouseCard .back {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+.HouseCard .back .image_container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 6.5625rem;
+}
+.HouseCard .back img {
+  width: 7rem;
+}
+
+.HouseCard input[type="checkbox"] {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+/* Or [id*='card']:checked ~ label.card  */
+.HouseCard input[type="checkbox"]:checked ~ label.card {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
 .HouseCard h2 {
   color: #2d4059;
 }
-.HouseCard .title {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
 
-.HouseCard .work_name {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
 .add_card_btn {
   height: 14rem;
   background-color: rgba(255, 255, 255, 0.5) !important;
@@ -666,6 +764,18 @@ h2 {
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
+}
+.HouseDetail .loading_create_map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.HouseDetail .loading_create_map img {
+  width: 12rem;
+  height: auto;
+  position: absolute;
 }
 .HouseDetail .building_info_wrapper {
   display: flex;
@@ -972,8 +1082,24 @@ h3 {
   overflow: hidden;
 }
 .Camera .camera_container {
-  margin: 1rem;
+  background-color: rgba(255, 255, 255, 0.214);
+
+  width: 18.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem;
 }
+.Camera .camera_container img {
+  position: absolute;
+  z-index: 1;
+}
+.Camera .camera_container video {
+  width: 18.5rem;
+  height: 25.75rem;
+}
+
 .Camera .result_wrapper {
   border-radius: 0.5rem;
   box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
@@ -1100,4 +1226,25 @@ h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* loader */
+.loader {
+  width: 19rem;
+  height: 19rem;
+  border: 1.5rem solid #fff;
+  border-bottom-color: #ea5455;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 3s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

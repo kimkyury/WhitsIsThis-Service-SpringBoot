@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 
-function CircularProgressBar({ percentage }) {
+const CircularProgressBar = ({ percentage }) => {
   const radius = 60; // 원의 반지름
   const strokeWidth = 15; // 원의 두께
   const viewBox = `0 0 ${radius * 2} ${radius * 2}`;
@@ -16,12 +16,15 @@ function CircularProgressBar({ percentage }) {
         {/* <g transform={`rotate(0, ${radius}, ${radius})`}> */}
         <circle
           className="progress-ring__circle"
-          stroke="gray" // 원의 색상
+          stroke="#2d4059" // 원의 색상
           strokeWidth={strokeWidth}
           fill="transparent"
           r={radius - strokeWidth / 2}
           cx={radius}
           cy={radius}
+          style={{
+            border: "none",
+          }}
         />
         <circle
           transform={`rotate(${rotation}, ${radius}, ${radius})`}
@@ -33,6 +36,7 @@ function CircularProgressBar({ percentage }) {
           cx={radius}
           cy={radius}
           style={{
+            border: "none",
             strokeDasharray: circumference,
             strokeDashoffset: offset,
             transition: "stroke-dashoffset 1s ease-in-out", // 애니메이션
@@ -44,7 +48,8 @@ function CircularProgressBar({ percentage }) {
           textAnchor="middle"
           dominantBaseline="middle"
           style={{
-            fontSize: "2rem",
+            fontSize: "1.8rem",
+            color: "#2d4059",
             fontWeight: "bold",
           }}
           className="progress-ring__text"
@@ -54,6 +59,6 @@ function CircularProgressBar({ percentage }) {
       </g>
     </svg>
   );
-}
+};
 
 export default CircularProgressBar;

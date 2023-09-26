@@ -1,11 +1,11 @@
-const MyButton = ({ text, color, type, onClick }) => {
-  const btnType = ["positive", "negative"].includes(type) ? type : "default";
+const MyButton = ({ text, color, onClick, isFinish }) => {
   const btnColor = ["orange", "green", "grey", "white", "black"].includes(color) ? color : "grey";
 
   return (
     <button
-      className={["MyButton", `MyButton_${btnType}`, `MyButton_${btnColor}`].join(" ")}
+      className={["MyButton", `MyButton_${btnColor}`, isFinish ? "" : "MyButton_disable"].join(" ")}
       onClick={onClick}
+      disabled={!isFinish}
     >
       {text}
     </button>
@@ -13,8 +13,8 @@ const MyButton = ({ text, color, type, onClick }) => {
 };
 
 MyButton.defaultProps = {
-  type: "default",
   color: "grey",
+  isFinish: true,
 };
 
 export default MyButton;

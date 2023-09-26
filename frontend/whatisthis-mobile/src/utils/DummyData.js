@@ -284,3 +284,101 @@ export const dummyHouseData = [
   { id: 19, dong: 401, ho: 104, status: "done", isConnected: false },
   { id: 20, dong: 401, ho: 105, status: "done", isConnected: false },
 ];
+
+export const dummySections = [
+  {
+    sectionName: "구역 1",
+    sectionId: 1,
+    isFinish: false,
+    todoList: [
+      {
+        id: 1,
+        todoName: "구역 1 할일1",
+        isChecked: false,
+        description: "구역1-1",
+        imageList: ["/assets/image_none.png"],
+      },
+      {
+        id: 2,
+        todoName: "구역 1 할일2",
+        isChecked: true,
+        description: "구역1-2",
+        imageList: ["/assets/image_none.png", "/assets/image_none.png"],
+      },
+      {
+        id: 3,
+        todoName: "구역 1 할일3",
+        isChecked: false,
+        description: "구역1-3",
+        imageList: ["/assets/image_none.png", "/assets/image_none.png", "/assets/image_none.png"],
+      },
+    ],
+  },
+  {
+    sectionName: "구역 2",
+    sectionId: 2,
+    isFinish: false,
+    todoList: [
+      {
+        id: 1,
+        todoName: "구역 2 할일1",
+        isChecked: false,
+        description: "구역2-1",
+        imageList: ["/assets/image_none.png", "/assets/image_none.png"],
+      },
+      {
+        id: 2,
+        todoName: "구역 2 할일2",
+        isChecked: true,
+        description: "구역2-2",
+        imageList: ["/assets/image_none.png"],
+      },
+      {
+        id: 3,
+        todoName: "구역 2 할일3",
+        isChecked: false,
+        description: "구역2-3",
+        imageList: ["/assets/image_none.png", "/assets/image_none.png", "/assets/image_none.png"],
+      },
+    ],
+  },
+  {
+    sectionName: "구역 3",
+    sectionId: 3,
+    isFinish: false,
+  },
+  {
+    sectionName: "구역 4",
+    sectionId: 4,
+    isFinish: true,
+  },
+  {
+    sectionName: "구역 5",
+    sectionId: 5,
+    isFinish: true,
+  },
+];
+
+export const dummyTodoList = ["할일 1", "할일 2", "할일 3", "할일 4", "할일 5"];
+export const dummySectionList = [
+  {
+    id: 1,
+    sectionName: "더미구역 1",
+  },
+  {
+    id: 2,
+    sectionName: "더미구역 2",
+  },
+  {
+    id: 3,
+    sectionName: "더미구역 3",
+  },
+  {
+    id: 4,
+    sectionName: "더미구역 4",
+  },
+  {
+    id: 5,
+    sectionName: "더미구역 5",
+  },
+];
