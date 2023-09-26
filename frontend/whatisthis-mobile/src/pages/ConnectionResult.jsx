@@ -26,6 +26,8 @@ const ConnectionResult = () => {
         },
       });
       console.log(response);
+
+      console.log(targetHouse);
     } catch (e) {
       console.error(e);
     }

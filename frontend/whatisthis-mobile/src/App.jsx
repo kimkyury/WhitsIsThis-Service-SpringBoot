@@ -17,6 +17,7 @@ import Health from "./pages/Health";
 // testpage
 import TestPage from "./test/TestPage";
 import Camera from "./pages/Camera";
+import AuthHttp from "./utils/AuthHttp";
 
 const reducer = (state, action) => {
   let newState = [];
@@ -57,7 +58,7 @@ function App() {
   useEffect(() => {
     // const getBuildingList = async () => {
     //   try {
-    //     const response = await AuthAxios({
+    //     const response = await AuthHttp({
     //       method: "get",
     //       url: "/requests/assigned",
     //     });
@@ -83,7 +84,8 @@ function App() {
     //   setIsLogin(false);
     //   console.log("notloggin");
     // }
-  }, []);
+    // getBuildingList();
+  }, [buildinglist]);
 
   //INIT
   const init = (data) => {
@@ -112,9 +114,9 @@ function App() {
                 path="/connection/:buildingId/:houseId/result"
                 element={<ConnectionResult />}
               />
-              <Route path="/house/:buildingId/:houseId" element={<HouseDetail />} />
+              <Route path="/house/:houseId" element={<HouseDetail />} />
               <Route path="/houselist" element={<HouseList />} />
-              <Route path="/house/:buildingId/:houseId/result" element={<HouseResult />} />
+              <Route path="/house/:houseId/result" element={<HouseResult />} />
               <Route path="/search" element={<Search />} />
               <Route path="/search/:buildingId" element={<SearchDetail />} />
               <Route path="/camera" element={<Camera />} />
