@@ -6,6 +6,7 @@ import com.mo.whatisthis.apis.history.responses.AllHistoryResponse;
 import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.request.requests.CreateTodolistRequest;
 import com.mo.whatisthis.apis.request.responses.CreateTodolistResponse;
+import com.mo.whatisthis.apis.todolist.responses.TodolistResponse;
 import com.mo.whatisthis.apis.todolist.services.TodolistService;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
@@ -65,8 +66,17 @@ public class HistoryPrivateController {
         return createSuccessResponse(SuccessCode.OK, "업로드 성공");
     }
 
+    @Operation(summary = "전체 기록 조회 (손상, IoT 장비, 투두리스트)", tags = {"4. History"})
     @GetMapping("/{id}")
-    public AllHistoryResponse getAllHistory(@PathVariable Long id) {
-        return historyService.getAllHistory(id);
+    public ResponseEntity<SuccessResponse<AllHistoryResponse>> getAllHistory(
+        @PathVariable Long id) {
+        return createSuccessResponse(SuccessCode.OK, "전체 기록 조회", historyService.getAllHistory(id));
+    }
+
+    @Operation(summary = "투두리스트 조회", tags = {"6. Inspection"})
+    @GetMapping("/{id}/todolists")
+    public ResponseEntity<SuccessResponse<List<TodolistResponse>>> getTodolists(
+        @PathVariable Long id) {
+        return createSuccessResponse(SuccessCode.OK, "투두리스트 조회", historyService.getTodolists(id));
     }
 }
