@@ -21,6 +21,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.socket.CloseStatus;
@@ -70,6 +71,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
             statusHandler(session, dataMap);
 
+        } else if (type.equals(MessageType.IOT_DEVICE)){
+            
+            iotDeviceHandler(session, dataMap);
+            
         } else if (type.equals(MessageType.COMMAND)) {
 
             commandHandler(session, dataMap);
@@ -84,7 +89,33 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    private void iotDeviceHandler(WebSocketSession session, Map<String, String> dataMap) {
+
+        String historyId = getAttributeFromSessionStorage(session, SessionKey.historyId.name());
+        String employeeNo = getAttributeFromSessionStorage(session, SessionKey.employeeNo.name());
+
+        String isWorked = dataMap.get(MessageDataType.isWorked.name());
+        String x = dataMap.get(MessageDataType.x.name());
+        String y = dataMap.get(MessageDataType.y.name());
+        String category = dataMap.get(MessageDataType.category.name());
+
+        Map<String, String> sendDataMap = new HashMap<>();
+        sendDataMap.put(MessageDataType.historyId.name(), historyId);
+        sendDataMap.put(MessageDataType.isWorked.name(), isWorked);
+        sendDataMap.put(MessageDataType.x.name(), x);
+        sendDataMap.put(MessageDataType.y.name(), y);
+        sendDataMap.put(MessageDataType.category.name(), category);
+
+        String sendMessage = convertMessageToString(MessageType.IOT_DEVICE, sendDataMap);
+        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+
+        String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
+        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
+
+    }
+
     public void authHandler(WebSocketSession session, Map<String, String> dataMap) {
+
         String accessToken = dataMap.get(MessageDataType.accessToken.name());
         Claims claims = jwtTokenProvider.getClaims(accessToken.substring(7));
 
@@ -99,12 +130,15 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
                .put(SessionKey.username.name(), username);
 
         if (role.equals(Role.ROLE_EMPLOYEE.name())) {
+
             moSocketProvider.addEmployeeToSocket(username, session);
+            moSocketProvider.sendMessageToEmployee(username, "Succeeded Verify Authorization");
+
         } else {
             moSocketProvider.addDeviceToSocket(username, session);
 
-            String [] redisData = redisService.getValue("device:" + username)
-                                            .split("/");
+            String[] redisData = redisService.getValue("device:" + username)
+                                             .split("/");
 
             String employeeNo = redisData[0];
             String historyId = redisData[1];
@@ -121,7 +155,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
             moSocketProvider.sendMessageToDevice(username, "Succeeded Verify Authorization");
             moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
         }
-
     }
 
     public void registerHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -132,6 +165,8 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         String employeeNo = getAttributeFromSessionStorage(session, SessionKey.username.name());
         redisService.saveData("device:" + serialNumber, employeeNo + "/" + historyId);
 
+        moSocketProvider.sendMessageToEmployee(employeeNo, "Success Send Message");
+
     }
 
     public void commandHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -139,7 +174,16 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         String command = dataMap.get(MessageDataType.command.name());
         String serialNumber = dataMap.get(MessageDataType.serialNumber.name());
 
-        moSocketProvider.sendMessageToDevice(serialNumber, command);
+        if (command.equals("END")) {
+            moSocketProvider.sendMessageToDevice(serialNumber, "Close connection by Employee command");
+            moSocketProvider.closeConnectionDevice(serialNumber, 1000,
+                "Close connection by Employee command");
+        }else{
+            moSocketProvider.sendMessageToDevice(serialNumber, command);
+        }
+
+        String username = getAttributeFromSessionStorage(session, SessionKey.employeeNo.name());
+        moSocketProvider.sendMessageToEmployee(username, "Success Send message");
     }
 
     public void coordinateHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -158,6 +202,9 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         String sendMessage = convertMessageToString(MessageType.COORDINATE, sendDataMap);
         moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+
+        String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
+        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
     }
 
     public void drawingHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -169,13 +216,14 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         // BinaryString -> byte [] ->  MultipartFile
 
-        byte [] byteStr = Base64.getDecoder().decode(imgBinaryStr);
-        MultipartFile multipartFile= WebSocketUtils.convertToMultipartFile(byteStr, "drawing.jpg");
+        byte[] byteStr = Base64.getDecoder()
+                               .decode(imgBinaryStr);
+        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(byteStr, "drawing.jpg");
 
         String imgUrl = "";
         try {
             imgUrl = historyService.uploadDrawing(Long.valueOf(historyId), multipartFile);
-        }catch(IOException e){
+        } catch (IOException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
@@ -185,6 +233,9 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         String sendMessage = convertMessageToString(MessageType.DRAWING, sendDataMap);
         moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+
+        String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
+        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
     }
 
     public void damageHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -196,13 +247,15 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         String y = dataMap.get(MessageDataType.y.name());
         String category = dataMap.get(MessageDataType.category.name());
 
-        byte [] byteStr = Base64.getDecoder().decode(imgBinaryStr);
-        MultipartFile multipartFile= WebSocketUtils.convertToMultipartFile(byteStr, "damaged.jpg");
+        byte[] byteStr = Base64.getDecoder()
+                               .decode(imgBinaryStr);
+        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(byteStr, "damaged.jpg");
 
         String imgUrl = "";
         try {
-            imgUrl = damagedHistoryService.createDamagedHistory(Long.valueOf(historyId), multipartFile, Float.valueOf(x), Float.valueOf(y), Category.valueOf(category));
-        }catch(IOException e){
+            imgUrl = damagedHistoryService.createDamagedHistory(Long.valueOf(historyId),
+                multipartFile, Float.valueOf(x), Float.valueOf(y), Category.valueOf(category));
+        } catch (IOException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
@@ -215,6 +268,9 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         String sendMessage = convertMessageToString(MessageType.DRAWING, sendDataMap);
         moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+
+        String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
+        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
     }
 
     public void statusHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -229,6 +285,9 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         String sendMessage = convertMessageToString(MessageType.STATUS, sendDataMap);
         moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+
+        String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
+        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
 
     }
 
@@ -270,7 +329,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         if (role.equals(Role.ROLE_EMPLOYEE.name())) {
             moSocketProvider.removeEmployeeToSocket(username);
         } else {
-            redisService.deleteValue("device:"+username);
+            redisService.deleteValue("device:" + username);
             moSocketProvider.removeDeviceToSocket(username);
         }
     }

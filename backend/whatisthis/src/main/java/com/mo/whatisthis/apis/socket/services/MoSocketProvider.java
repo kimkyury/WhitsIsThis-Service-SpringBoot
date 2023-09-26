@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -59,10 +60,21 @@ public class MoSocketProvider {
         }
     }
 
+    public void closeConnectionDevice(String serialNumber, int closeCode, String reason) {
+
+        WebSocketSession deviceSession = deviceBySerialNumberMap.get(serialNumber);
+
+        try {
+            deviceSession.close(new CloseStatus(closeCode, reason));
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public void sendMessageToEmployee(String employeeNo, String payload) {
 
         WebSocketSession session = employeeByHistoryMap.get(employeeNo);
-        if (session == null){
+        if (session == null) {
             // senderSession에게 closeCode 송신
             // senderSession에게 메시지로 현재 종료 이유를 안내
         }
