@@ -7,6 +7,7 @@ import com.mo.whatisthis.apis.history.responses.IntegratedHistoryResponse;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
+import com.mo.whatisthis.apis.todolist.responses.TodolistResponse;
 import com.mo.whatisthis.apis.todolist.services.TodolistService;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.s3.services.S3Service;
@@ -14,6 +15,7 @@ import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.AWSS3ResponseUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -126,6 +128,10 @@ public class HistoryService {
 
         return new IntegratedHistoryResponse(damagedHistoryService.getDamagedHistories(id),
             deviceHistoryService.getDeviceHistories(id), historyEntity.getDrawingUrl());
+    }
+
+    public List<TodolistResponse> getTodolists(Long id) {
+        return todolistService.getTodolists(id);
     }
 
     public AllHistoryResponse getAllHistory(Long id) {
