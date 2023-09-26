@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Notification from "../components/Notification";
 import { dummyBuildingData, dummyHouseData } from "../utils/DummyData";
-import { getBuildingName } from "../utils/ParseAddress";
 
 const HouseResult = () => {
   const navigate = useNavigate();

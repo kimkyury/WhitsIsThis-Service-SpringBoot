@@ -1,0 +1,44 @@
+.card-container {
+  width: 10rem;
+  height: 13.9rem;
+  -webkit-perspective: 800px; /* ? */
+  perspective: 800px;
+  margin: 0.5rem;
+}
+
+.HouseCard label.card {
+  display: block;
+  position: relative; /* #card figure is set to position: absolute. DC*/
+  width: 100%;
+  height: 100%;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transition: -webkit-transform 1s; /* Not sure if this is the correct syntax. DC */
+  transition: transform 1s;
+}
+
+.HouseCard label.card div {
+  position: absolute;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.HouseCard .back {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+.HouseCard input[type="checkbox"] {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+/* Or [id*='card']:checked ~ label.card  */
+.HouseCard input[type="checkbox"]:checked ~ label.card {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
