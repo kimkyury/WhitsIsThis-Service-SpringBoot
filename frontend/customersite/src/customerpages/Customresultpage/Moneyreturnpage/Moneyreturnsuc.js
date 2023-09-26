@@ -1,12 +1,12 @@
 import React from "react";
 
-function receivesuc() {
+function Moneyreturnsuc() {
   return (
     <div>
 
       <div className="customreceivedivsuc">
     <div className="boxpagemoney">
-      <p style={{marginLeft:'5%'}}>✔ 접수가 완료되었습니다.<br/>
+      <p style={{marginLeft:'5%'}}>✔ 환불이 완료되었습니다.<br/>
         감사합니다.</p>
     </div>
     </div>
@@ -14,4 +14,4 @@ function receivesuc() {
   )
 }
 
-export default receivesuc;
+export default Moneyreturnsuc;

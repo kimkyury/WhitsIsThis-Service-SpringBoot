@@ -42,11 +42,26 @@
   border-radius: 2.6vw;
   background-repeat: no-repeat;
 }
+.customreceivedivconfirms {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top:2rem;
+  width: 22rem;
+  height: 5rem;
 
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
 .customgrid {
   display:flex;
   grid-template-columns: 1fr 1fr;
   justify-content: space-between;
+  height: 2.3rem;
 }
 
 .middlemodal {

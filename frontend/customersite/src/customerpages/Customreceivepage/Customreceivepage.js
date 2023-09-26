@@ -3,6 +3,8 @@ import CustomreceiveModal from "../../customcomponent/customReceive/Customreceiv
 import Receivesuc from "../../customcomponent/customReceive/receivesuccess";
 import Address from "../../customcomponent/addresscomp/address";
 import './Customreceivepage.css'
+import Phoneconfirm from "../../customcomponent/customReceive/Phoneconfirm";
+
 // import Calendar from "../../component/calendar/calendar";
 function Customreceive() {
   return (
@@ -11,6 +13,7 @@ function Customreceive() {
       <div className="modalbox roomimg backgr">
       <CustomreceiveModal/>
       {/* <Receivesuc/> */}
+      {/* <Phoneconfirm/> */}
 
       </div>
     </div>
