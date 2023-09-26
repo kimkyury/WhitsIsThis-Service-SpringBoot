@@ -14,7 +14,6 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final ParamWebSocketInterceptor paramWebSocketInterceptor;
     private final CustomWebSocketHandler customWebSocketHandler;
 
     @Override
