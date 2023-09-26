@@ -19,7 +19,7 @@ const Home = () => {
       try {
         const response = await AuthHttp({
           method: "get",
-          url: "/requests/assigned",
+          url: "/private/requests/assigned",
         });
         const data = response.data.data;
         if (data.length >= 1) {

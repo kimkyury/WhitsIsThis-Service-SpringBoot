@@ -52,6 +52,16 @@ const HouseList = () => {
             return requests;
           })
           .flat()
+          .filter((request) => request.status === "IN_PROGRESS" || request.status === "DONE")
+          .sort((a, b) => {
+            if (a.status === "DONE" && b.status !== "DONE") {
+              return 1;
+            } else if (a.status !== "DONE" && b.status === "DONE") {
+              return -1;
+            } else {
+              return 0;
+            }
+          })
       );
 
       // console.log(buildingList);
@@ -72,8 +82,12 @@ const HouseList = () => {
         <div className="building_info_wrapper">
           <div className="building_info">
             <div className="building_title">
-              <img src={process.env.PUBLIC_URL + `/assets/logo_blue.png`} alt="logo" />
-              <MyButton color={"black"} text={"뒤로가기"} onClick={() => navigate(`/search`)} />
+              <img
+                onClick={() => navigate("/")}
+                src={process.env.PUBLIC_URL + `/assets/logo_blue.png`}
+                alt="logo"
+              />
+              <MyButton color={"black"} text={"세대추가"} onClick={() => navigate(`/search`)} />
             </div>
           </div>
         </div>
