@@ -1,29 +1,61 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 import MyButton from "../components/MyButton";
 import Notification from "../components/Notification";
+import { BuildingDispatchContext } from "../App";
+import AuthAxios from "../utils/AuthAxios";
 
 const Home = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
   const [workInProgress, setWorkInprogress] = useState(true);
 
+  const { init } = useContext(BuildingDispatchContext);
+
   useEffect(() => {
-    const localData = localStorage.getItem("userId");
+    const getBuildingList = async () => {
+      try {
+        const response = await AuthAxios({
+          method: "get",
+          url: "/requests/assigned",
+        });
+        const data = response.data.data;
+        if (data.length >= 1) {
+          init(data);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const localData = localStorage.getItem("userInfo");
     if (localData) {
       const userData = JSON.parse(localData);
 
-      if (userData.length >= 1) {
+      if (userData) {
         setIsLogin(true);
+        getBuildingList();
       }
     }
+
+    // 쿠키 가져오기
+    const cookies = document.cookie;
+    // document.cookie = "safeCookie1=foo; SameSite=Lax";
+    // document.cookie = "safeCookie2=foo";
+    // document.cookie = "crossCookie=bar; SameSite=None; Secure";
+    // 쿠키 콘솔에 출력
+    console.log(cookies);
   }, []);
 
   const logout = () => {
     console.log("logged out");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("token");
+
+    // 쿠키삭제도 해줘야합미다
+
     setIsLogin(false);
   };
 
