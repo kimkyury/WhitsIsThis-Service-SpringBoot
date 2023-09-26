@@ -44,8 +44,12 @@ public class RequestDetailRequests {
         this.requestedAt = requestEntity.getRequestedAt();
         this.requestContent = requestEntity.getRequestContent();
         this.warrantUrl = requestEntity.getWarrantUrl();
-        this.employeeName = requestEntity.getEmployee()
-                                         .getName();
+
+        if (requestEntity.getEmployee() != null) {
+            this.employeeName = requestEntity.getEmployee()
+                                             .getName();
+        }
+        
         this.inspectionDate = requestEntity.getInspectionDate();
     }
 
