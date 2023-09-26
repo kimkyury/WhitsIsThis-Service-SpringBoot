@@ -25,9 +25,9 @@ const TodoListMain = ({ isListMain, sectionList, handleAddClick, handleSectionOp
         return (
           <TodoSectionItem
             key={idx}
-            sectionName={it.sectionName}
+            sectionName={it.name}
             // handleSectionOpen 전달 값 변경해야함
-            onClick={() => handleSectionOpen(it.sectionId)}
+            onClick={() => handleSectionOpen(it.id)}
             isFinish={it.isFinish}
           />
         );

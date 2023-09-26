@@ -20,7 +20,7 @@ const ConnectionResult = () => {
     try {
       const response = await AuthHttp({
         method: "patch",
-        url: `/requests/${houseId}/status`,
+        url: `/private/requests/${houseId}/status`,
         data: {
           status: "IN_PROGRESS",
         },

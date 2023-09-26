@@ -63,10 +63,14 @@ const Login = () => {
   const test = async () => {
     try {
       const response = await AuthHttp({
-        method: "get",
-        url: "/private/requests/assigned",
+        method: "patch",
+        url: `/private/requests/5/status`,
+        data: {
+          status: "WAITING_FOR_INSPECTION",
+        },
       });
       console.log(response);
+      navigate("/");
     } catch (e) {
       console.error(e);
     }

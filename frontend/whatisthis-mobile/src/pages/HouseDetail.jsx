@@ -6,34 +6,61 @@
 
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { dummyBuildingData, dummyHouseData } from "../utils/DummyData";
-import { getBuildingName } from "../utils/ParseAddress";
 
 import MyButton from "../components/MyButton";
 import HouseTodoList from "../components/HouseTodoList";
 import { BuildingDataContext } from "../App";
+import AuthHttp from "../utils/AuthHttp";
 
 const HouseDetail = () => {
   const navigate = useNavigate();
 
-  const { buildingId, houseId } = useParams();
+  const { houseId } = useParams();
 
-  const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
-  const targetHouse = targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
+  const [targetHouse, setTargetHouse] = useState();
 
-  const buildingList = dummyBuildingData;
-  const houseList = dummyHouseData;
-
-  const [addr, setAddr] = useState();
-  const [data, setData] = useState();
   const [isOpenTodoList, setIsOpenTodoList] = useState(false);
 
   // 맵을 만드는지 확인 상태변수
-  const [isCreatingMap, setIsCreatingMap] = useState(false);
+  const [isCreatingMap, setIsCreatingMap] = useState(true);
 
   // 모든 검사를 마쳤는지 확인
   // 값 받아와서 설정해주기
-  const [isFinish, setIsFinish] = useState(true);
+  const [isFinish, setIsFinish] = useState(
+    targetHouse && targetHouse.stats === "DONE" ? true : false
+  );
+
+  useEffect(() => {
+    const getTargetHouse = async () => {
+      try {
+        const response = await AuthHttp({
+          method: "get",
+          url: `/private/requests/${houseId}`,
+        });
+        // console.log(response.data.data);
+        setTargetHouse(response.data.data);
+        test(response.data.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const test = async (houseInfo) => {
+      console.log(houseInfo);
+      try {
+        const response = await AuthHttp({
+          method: "get",
+          url: `/private/histories/${houseInfo.history.id}/todolists`,
+        });
+        console.log(response.data.data);
+        // setTargetHouse(response.data.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    getTargetHouse();
+  }, []);
 
   // useEffect(() => {
   //   if (buildingList.length >= 1) {
@@ -74,7 +101,42 @@ const HouseDetail = () => {
               <h1>{targetHouse.addressDetail}</h1>
               <h1 className="proecss_percentge">NN%</h1>
             </div>
-            <h3>{targetBuilding.address}</h3>
+            <h3>{targetHouse.address}</h3>
+          </div>
+        </div>
+
+        <div className="loading_create_map">
+          <span className="loader" />
+          <img
+            src={process.env.PUBLIC_URL + `/assets/turtlebot.png`}
+            alt=""
+            // 임시로 바뀌게 해뒀습니다.
+            onClick={() => setIsCreatingMap(!isCreatingMap)}
+          />
+        </div>
+
+        <div className="button_wrapper">
+          <MyButton text={"추가정보 입력"} color={"orange"} onClick={() => handleOpenTodoList()} />
+          <MyButton
+            text={"점검완료"}
+            color={"green"}
+            onClick={() => navigate(`/house/${houseId}/result`)}
+            isFinish={isFinish}
+          />
+        </div>
+
+        {/* 닫겼다가 다시 열릴때 새 페이지를 보여줄까 아니면 기존 상태 그대로 보여주는게 나을까 */}
+        {<HouseTodoList isOpen={isOpenTodoList} handleOpenTodoList={handleOpenTodoList} />}
+      </div>
+    ) : (
+      <div className="HouseDetail container">
+        <div className="building_info_wrapper">
+          <div className="building_info">
+            <div className="building_title">
+              <h1>{targetHouse.addressDetail}</h1>
+              <h1 className="proecss_percentge">NN%</h1>
+            </div>
+            <h3>{targetHouse.address}</h3>
           </div>
         </div>
 
@@ -95,42 +157,7 @@ const HouseDetail = () => {
           <MyButton
             text={"점검완료"}
             color={"green"}
-            onClick={() => navigate(`/house/${buildingId}/${houseId}/result`)}
-          />
-        </div>
-
-        {/* 닫겼다가 다시 열릴때 새 페이지를 보여줄까 아니면 기존 상태 그대로 보여주는게 나을까 */}
-        {<HouseTodoList isOpen={isOpenTodoList} handleOpenTodoList={handleOpenTodoList} />}
-      </div>
-    ) : (
-      <div className="HouseDetail container">
-        <div className="building_info_wrapper">
-          <div className="building_info">
-            <div className="building_title">
-              <h1>{targetHouse.addressDetail}</h1>
-              <h1 className="proecss_percentge">NN%</h1>
-            </div>
-            <h3>{targetBuilding.address}</h3>
-          </div>
-        </div>
-
-        <div className="loading_create_map">
-          <span className="loader" />
-          <img
-            src={process.env.PUBLIC_URL + `/assets/turtlebot.png`}
-            alt=""
-            // 임시로 바뀌게 해뒀습니다.
-            onClick={() => setIsCreatingMap(true)}
-          />
-        </div>
-
-        <div className="button_wrapper">
-          <MyButton text={"추가정보 입력"} color={"orange"} onClick={() => handleOpenTodoList()} />
-          <MyButton
-            text={"점검완료"}
-            color={"green"}
-            onClick={() => navigate(`/house/${buildingId}/${houseId}/result`)}
-            isFinish={isFinish}
+            onClick={() => navigate(`/house/${houseId}/result`)}
           />
         </div>
 

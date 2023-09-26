@@ -70,8 +70,12 @@ const HouseList = () => {
     }
   }, []);
 
-  const handleHouseCardClick = (houseId) => {
-    navigate(`/house/${houseId}`);
+  const handleHouseCardClick = (houseInfo) => {
+    if (houseInfo.status !== "DONE") {
+      navigate(`/house/${houseInfo.id}`);
+    } else {
+      navigate(`/house/${houseInfo.id}/result`);
+    }
   };
 
   if (!buildingList) {
@@ -100,7 +104,7 @@ const HouseList = () => {
                   houseInfo={it}
                   currentPercentage={Math.floor(Math.random() * 100) + 1}
                   // onclick 할 때 houseinfo 등 percentage 정보를 넘겨줘서 100프로이면 바로 결과창으로 보내던지
-                  onClick={() => handleHouseCardClick(it.id)}
+                  onClick={() => handleHouseCardClick(it)}
                 />
               );
             })}
