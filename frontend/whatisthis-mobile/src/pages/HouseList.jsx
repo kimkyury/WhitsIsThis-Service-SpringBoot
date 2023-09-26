@@ -31,7 +31,6 @@ const HouseList = () => {
           .flat()
           .filter((request) => request.status === "IN_PROGRESS" || request.status === "DONE")
           .sort((a, b) => {
-            // "status"가 "done"인 요소를 뒤로 이동시킵니다.
             if (a.status === "DONE" && b.status !== "DONE") {
               return 1;
             } else if (a.status !== "DONE" && b.status === "DONE") {
