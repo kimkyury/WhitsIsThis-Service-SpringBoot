@@ -16,9 +16,9 @@ public class MessageDto {
     private Map<String, String> data;
 
     public enum MessageType {
-        AUTH, REGISTER, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS;
+        AUTH, REGISTER, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS, IOT_DEVICE;
     }
     public enum MessageDataType {
-        accessToken, image, x, y, category, state, command, historyId, serialNumber
+        accessToken, image, x, y, category, state, command, historyId, serialNumber, isWorked
     }
 }
