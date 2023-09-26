@@ -17,7 +17,6 @@ import Health from "./pages/Health";
 // testpage
 import TestPage from "./test/TestPage";
 import Camera from "./pages/Camera";
-import AuthAxios from "./utils/AuthAxios";
 
 const reducer = (state, action) => {
   let newState = [];
