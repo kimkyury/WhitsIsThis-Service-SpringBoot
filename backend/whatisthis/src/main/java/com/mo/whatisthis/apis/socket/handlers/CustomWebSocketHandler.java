@@ -3,7 +3,9 @@ package com.mo.whatisthis.apis.socket.handlers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mo.whatisthis.apis.history.entities.DamagedHistoryEntity.Category;
+import com.mo.whatisthis.apis.history.entities.DeviceHistoryEntity;
 import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
+import com.mo.whatisthis.apis.history.services.DeviceHistoryService;
 import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.socket.dto.MessageDto;
@@ -38,6 +40,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     private final RedisService redisService;
     private final HistoryService historyService;
     private final DamagedHistoryService damagedHistoryService;
+    private final DeviceHistoryService deviceHistoryService;
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -71,10 +74,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
             statusHandler(session, dataMap);
 
-        } else if (type.equals(MessageType.IOT_DEVICE)){
-            
+        } else if (type.equals(MessageType.IOT_DEVICE)) {
+
             iotDeviceHandler(session, dataMap);
-            
+
         } else if (type.equals(MessageType.COMMAND)) {
 
             commandHandler(session, dataMap);
@@ -94,14 +97,18 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         String historyId = getAttributeFromSessionStorage(session, SessionKey.historyId.name());
         String employeeNo = getAttributeFromSessionStorage(session, SessionKey.employeeNo.name());
 
-        String isWorked = dataMap.get(MessageDataType.isWorked.name());
+        String isWorkedStr = dataMap.get(MessageDataType.isWorked.name());
+        boolean isWorked = "1".equals(isWorkedStr);
         String x = dataMap.get(MessageDataType.x.name());
         String y = dataMap.get(MessageDataType.y.name());
         String category = dataMap.get(MessageDataType.category.name());
 
+        deviceHistoryService.createDeviceHistory(Long.valueOf(historyId), Float.valueOf(x),
+            Float.valueOf(y), DeviceHistoryEntity.Category.valueOf(category), isWorked);
+
         Map<String, String> sendDataMap = new HashMap<>();
         sendDataMap.put(MessageDataType.historyId.name(), historyId);
-        sendDataMap.put(MessageDataType.isWorked.name(), isWorked);
+        sendDataMap.put(MessageDataType.isWorked.name(), isWorkedStr);
         sendDataMap.put(MessageDataType.x.name(), x);
         sendDataMap.put(MessageDataType.y.name(), y);
         sendDataMap.put(MessageDataType.category.name(), category);
@@ -175,10 +182,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         String serialNumber = dataMap.get(MessageDataType.serialNumber.name());
 
         if (command.equals("END")) {
-            moSocketProvider.sendMessageToDevice(serialNumber, "Close connection by Employee command");
+            moSocketProvider.sendMessageToDevice(serialNumber,
+                "Close connection by Employee command");
             moSocketProvider.closeConnectionDevice(serialNumber, 1000,
                 "Close connection by Employee command");
-        }else{
+        } else {
             moSocketProvider.sendMessageToDevice(serialNumber, command);
         }
 
