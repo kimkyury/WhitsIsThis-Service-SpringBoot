@@ -13,7 +13,6 @@ import com.mo.whatisthis.apis.socket.services.MoSocketProvider;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
-import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.WebSocketUtils;
 import io.jsonwebtoken.Claims;

@@ -4,7 +4,6 @@ package com.mo.whatisthis.apis.socket.services;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import java.io.IOException;
-import java.net.http.WebSocket;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
