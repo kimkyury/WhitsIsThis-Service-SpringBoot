@@ -114,11 +114,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
             session.getAttributes()
                    .put(SessionKey.employeeNo.name(), employeeNo);
 
-
             Map<String, String> sendDataMap = new HashMap<>();
             sendDataMap.put(MessageDataType.command.name(), "CONNECTED");
             String sendMessage = convertMessageToString(MessageType.STATUS, sendDataMap);
 
+            moSocketProvider.sendMessageToDevice(username, "Succeeded Verify Authorization");
             moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
         }
 
