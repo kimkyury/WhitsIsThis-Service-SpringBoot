@@ -14,7 +14,7 @@ params_map = {
     "MAP_RESOLUTION" : 0.05,
     "OCCUPANCY_UP" : 0.02,
     "OCCUPANCY_DOWN" : 0.01,
-    "MAP_CENTER" : (-8.5, -8.5),
+    "MAP_CENTER" : (-9.0, 10.0),
     "MAP_SIZE" : (17, 17),
     "MAP_FILENAME" : 'test.png',
     "MAPVIS_RESIZE_SCALE" : 2.0
@@ -177,7 +177,7 @@ class Mapper(Node):
 
     def scan_callback(self,msg):   
         pose_x=msg.range_min
-        pose_y=msg.scan_time - 19
+        pose_y=msg.scan_time
         heading=msg.time_increment+180
         Distance=np.array(msg.ranges)
         x = Distance * np.cos(np.linspace(0, 2 * np.pi, 360))
