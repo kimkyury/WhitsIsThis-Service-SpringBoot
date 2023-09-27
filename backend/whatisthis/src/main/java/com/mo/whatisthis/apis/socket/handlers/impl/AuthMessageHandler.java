@@ -36,6 +36,8 @@ public class AuthMessageHandler extends AbstractMessageHandlerInterface {
         String memberNo = getInfoAtClaim(claims, MEMBER_NO_KEY);
         String role = getInfoAtClaim(claims, AUTHORITIES_KEY);
 
+        System.out.println(">>>>>>>>>>> role: " + role);
+
         if (isEmployee(role)) {
 
             saveAttributeAtSession(session, SessionKey.EMPLOYEE_NO, memberNo);

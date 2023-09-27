@@ -68,7 +68,7 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
     }
 
     protected boolean isEmployee(String role) {
-        return role.equals(Role.ROLE_EMPLOYEE);
+        return role.equals(Role.ROLE_EMPLOYEE.name());
     }
 
     protected void addEmployeeToMapAndSendResponse(WebSocketSession session, String employeeNo) {
