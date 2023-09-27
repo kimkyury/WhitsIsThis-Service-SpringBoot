@@ -23,7 +23,6 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.socket.CloseStatus;
@@ -190,7 +189,9 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
             moSocketProvider.sendMessageToDevice(serialNumber, command);
         }
 
-        String username = getAttributeFromSessionStorage(session, SessionKey.employeeNo.name());
+        String username = getAttributeFromSessionStorage(session, SessionKey.username.name());
+        System.out.println("employeeNo>>>>>>> " + username);
+
         moSocketProvider.sendMessageToEmployee(username, "Success Send message");
     }
 
