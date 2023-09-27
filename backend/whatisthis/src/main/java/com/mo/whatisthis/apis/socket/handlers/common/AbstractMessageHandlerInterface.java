@@ -58,6 +58,14 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
         return map.get(key.name());
     }
 
+    protected void saveDataAtMap(Map<String, String> map, DataType key, String value){
+        map.put(key.name(), value);
+    }
+
+    protected void removeDataAtMap(Map<String, String> map, DataType key){
+        map.remove(key.name());
+    }
+
     protected Claims getClaimsByToken(String accessToken) {
         return jwtTokenProvider.getClaims(accessToken.substring(7));
     }
