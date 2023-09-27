@@ -1,4 +1,4 @@
-package com.mo.whatisthis.apis.socket.handlers;
+package com.mo.whatisthis.apis.socket.handlers.impl;
 
 import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
 import com.mo.whatisthis.apis.history.services.DeviceHistoryService;
@@ -51,7 +51,8 @@ public class AuthMessageHandler extends AbstractMessageHandlerInterface {
             String historyId = redisData[1];
 
             saveAttributeAtSession(session, SessionKey.HISTORY_ID, historyId);
-            saveAttributeAtSession(session, SessionKey.EMPLOYEE_NO, memberNo);
+            saveAttributeAtSession(session, SessionKey.EMPLOYEE_NO, employeeNo);
+            saveAttributeAtSession(session, SessionKey.SERIAL_NUMBER, memberNo);
 
             addDeviceToMapAndSendResponse(session, memberNo);
 

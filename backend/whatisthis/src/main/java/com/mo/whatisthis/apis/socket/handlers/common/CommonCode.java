@@ -3,7 +3,7 @@ package com.mo.whatisthis.apis.socket.handlers.common;
 public class CommonCode {
 
     public enum SessionKey{
-        HISTORY_ID, ROLE, EMPLOYEE_NO
+        HISTORY_ID, ROLE, EMPLOYEE_NO, SERIAL_NUMBER
     }
 
     public enum SendType {

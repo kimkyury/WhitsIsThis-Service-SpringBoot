@@ -45,58 +45,69 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
     }
 
 
-    public String getAttributeAtSession(WebSocketSession session, SessionKey key) {
+    protected String getAttributeAtSession(WebSocketSession session, SessionKey key) {
         return (String) session.getAttributes()
                                .get(key.name());
     }
 
-    public void saveAttributeAtSession(WebSocketSession session, SessionKey key, String value){
+    protected void saveAttributeAtSession(WebSocketSession session, SessionKey key, String value){
         session.getAttributes().put(key.name(), value);
     }
 
-    public String getDataAtMap(Map<String, String> map, DataType key) {
+    protected String getDataAtMap(Map<String, String> map, DataType key) {
         return map.get(key.name());
     }
 
-    public Claims getClaimsByToken(String accessToken) {
+    protected Claims getClaimsByToken(String accessToken) {
         return jwtTokenProvider.getClaims(accessToken.substring(7));
     }
 
-    public String getInfoAtClaim(Claims claims, String key) {
+    protected String getInfoAtClaim(Claims claims, String key) {
         return claims.get(key)
                      .toString();
     }
 
-    public boolean isEmployee(String role) {
+    protected boolean isEmployee(String role) {
         return role.equals(Role.ROLE_EMPLOYEE);
     }
 
-    public void addEmployeeToMapAndSendResponse(WebSocketSession session, String employeeNo) {
+    protected void addEmployeeToMapAndSendResponse(WebSocketSession session, String employeeNo) {
         socketProvider.addEmployeeToSocket(employeeNo, session);
         String sendMessage = createSuccessMessage();
         socketProvider.sendMessageToEmployee(employeeNo, sendMessage);
     }
 
-    public void addDeviceToMapAndSendResponse(WebSocketSession session, String serialNumber){
+    protected void addDeviceToMapAndSendResponse(WebSocketSession session, String serialNumber){
         socketProvider.addDeviceToSocket(serialNumber, session);
         String sendMessage = createSuccessMessage();
         socketProvider.sendMessageToDevice(serialNumber, sendMessage);
     }
 
-    public String createSuccessMessage() {
+    protected void sendMessageToEmployee(String sender, String receiver, String message){
+        socketProvider.sendMessageToEmployee(receiver, message);
+        String resultMessage = createSuccessMessage();
+        socketProvider.sendMessageToDevice(sender, resultMessage);
+    }
+
+    protected void sendMessageToDevice(String sender, String receiver, String message){
+        socketProvider.sendMessageToDevice(receiver, message);
+        String resultMessage = createSuccessMessage();
+        socketProvider.sendMessageToEmployee(sender, resultMessage);
+    }
+
+    protected String createSuccessMessage() {
         Map<String, String> dataMap = new HashMap<>();
-        dataMap.put(DataType.result.name(), "SEND SUCCESS");
+        dataMap.put(DataType.result.name(), "SUCCESS");
         return convertMessageToString(SendType.SEND_RESULT, dataMap);
     }
 
-    public String createFailMessage() {
+    protected String createFailMessage() {
         Map<String, String> dataMap = new HashMap<>();
-        dataMap.put(DataType.result.name(), "SEND FAIL");
+        dataMap.put(DataType.result.name(), "FAIL");
         return convertMessageToString(SendType.SEND_RESULT, dataMap);
     }
 
-
-    public String convertMessageToString(SendType messageType, Map<String, String> dataMap) {
+    protected String convertMessageToString(SendType messageType, Map<String, String> dataMap) {
 
         MessageDto messageDto = MessageDto.builder()
                                           .type(messageType)
