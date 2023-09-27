@@ -7,7 +7,7 @@ import com.mo.whatisthis.apis.history.responses.IntegratedHistoryResponse;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
-import com.mo.whatisthis.apis.todolist.responses.TodolistResponse;
+import com.mo.whatisthis.apis.todolist.responses.TodolistWrapperResponse;
 import com.mo.whatisthis.apis.todolist.services.TodolistService;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.s3.services.S3Service;
@@ -130,7 +130,7 @@ public class HistoryService {
             deviceHistoryService.getDeviceHistories(id), historyEntity.getDrawingUrl());
     }
 
-    public List<TodolistResponse> getTodolists(Long id) {
+    public List<TodolistWrapperResponse> getTodolists(Long id) {
         return todolistService.getTodolists(id);
     }
 

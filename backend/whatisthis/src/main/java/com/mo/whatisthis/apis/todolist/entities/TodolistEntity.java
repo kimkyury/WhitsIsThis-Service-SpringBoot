@@ -38,9 +38,13 @@ public class TodolistEntity {
     @Setter
     private String significant;
 
-    public TodolistEntity(Long historyId, TodolistOptionEntity todolistOption) {
+    private Integer roomOrder;
+
+    public TodolistEntity(Long historyId, Integer roomOrder, TodolistOptionEntity todolistOption) {
         this.historyId = historyId;
         this.todolistOption = todolistOption;
+        this.roomOrder = roomOrder;
         this.isChecked = false;
+        this.significant = "";
     }
 }
