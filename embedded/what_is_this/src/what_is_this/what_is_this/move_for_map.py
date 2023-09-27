@@ -14,14 +14,13 @@ class MoveForMap(Node) :
     def __init__(self):
         super().__init__('move_for_map')
         self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 10)
-        self.odom_sub = self.create_subscription(Odometry, '/odom', self.odom_callback, 10)
         self.status_sub = self.create_subscription(TurtlebotStatus,'/turtlebot_status',self.status_callback,10)
         self.cmd_vel_pub = self.create_publisher(Twist,'cmd_vel', 10)
         
         time_period=0.05 
         self.timer = self.create_timer(time_period, self.timer_callback)
 
-        self.wall_distance = 0.25 # 벽과의 거리 (미터)
+        self.wall_distance = 0.3 # 벽과의 거리 (미터)
         self.linear_speed = 0.0  # 로봇의 직진 속도 (m/s)
         self.angular_speed = 0.0  # 로봇의 회전 속도 (rad/s)
         self.wall_detected = False
@@ -32,6 +31,7 @@ class MoveForMap(Node) :
         self.time = 0
     
     def scan_callback(self, msg):
+        self.current_pose = [msg.range_min, msg.scan_time]
         range_data = msg.ranges
         min_data = 100.0
         min_theta = 360
@@ -45,14 +45,21 @@ class MoveForMap(Node) :
         if self.start == False : 
             if(85 < msg.time_increment < 95) : 
                 self.angular_speed = 0.0
-                self.linear_speed = 0.1 
-                if(range_data[180] < self.wall_distance) : 
-                    self.start = True
+                self.linear_speed = 0.1
+                if(range_data[180] <= self.wall_distance) : 
+                    if self.initial_pose is None:
+                        self.start = True
+                        self.initial_pose = self.current_pose
+                        print(range_data[180] , self.initial_pose)
+                        return
+            elif (95 <= msg.time_increment <= 180) : 
+                self.angular_speed = 0.2
+                self.linear_speed = 0.0
             else : 
                 self.angular_speed = -0.2
                 self.linear_speed = 0.0
         else : 
-            self.angular_speed = 0.025 * (270-min_theta)
+            self.angular_speed = 0.03 * (270-min_theta)
 
             if abs(min_theta-270) > 3: 
                 self.linear_speed = 0.1 
@@ -64,14 +71,6 @@ class MoveForMap(Node) :
                 
                 self.linear_speed = 0.3
 
-    def odom_callback(self, msg):
-        
-        self.current_pose = [msg.pose.pose.position.x,msg.pose.pose.position.y ]
-        if(self.start == True): 
-            if self.initial_pose is None:
-                self.initial_pose = self.current_pose
-                print(self.initial_pose)
-        
     def status_callback(self,msg):
         self.is_status=True
         self.status_msg=msg
@@ -84,21 +83,19 @@ class MoveForMap(Node) :
             self.cmd_vel_pub.publish(twist_msg)
             return
         else :
-            
-            self.time += 1
             twist_msg = Twist()
             twist_msg.linear.x = self.linear_speed
             twist_msg.angular.z = self.angular_speed
             self.cmd_vel_pub.publish(twist_msg)
-
         
             if self.initial_pose is not None:
+                self.time +=1
                 initial_x = self.initial_pose[0]
                 initial_y = self.initial_pose[1]
                 current_x = self.current_pose[0]
                 current_y = self.current_pose[1]
                 
-                if(self.start == True):      
+                if self.start == True:      
                     if(abs(initial_x-current_x) < 0.5 and abs(initial_y-current_y) < 0.2):
                         if self.time > 1000 : 
                             self.has_completed_one_rotation = True
