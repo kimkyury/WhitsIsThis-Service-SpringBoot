@@ -11,7 +11,8 @@ const HouseList = () => {
   const navigate = useNavigate();
   // const { buildingId } = useParams();
 
-  const buildingList = useContext(BuildingDataContext);
+  const { buildingList, socket } = useContext(BuildingDataContext);
+  console.log(socket);
   // console.log(targetBuilding);
   const [houseList, setHouseList] = useState();
 

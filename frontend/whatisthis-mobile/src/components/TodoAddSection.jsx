@@ -38,7 +38,7 @@ const TodoAddSection = ({ isAddSection, handleAddClick }) => {
               key={idx}
               sectionName={it.name}
               type={"add"}
-              onClick={() => handleAddClick({ name: it.name, id: it.id })}
+              onClick={() => handleAddClick(it.id)}
             />
           );
         })}

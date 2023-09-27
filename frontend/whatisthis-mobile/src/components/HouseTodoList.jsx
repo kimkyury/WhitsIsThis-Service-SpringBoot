@@ -4,9 +4,9 @@ import TodoListMain from "./TodoListMain";
 import TodoAddSection from "./TodoAddSection";
 import SectionDetail from "./SectionDetail";
 
-import { dummySections } from "../utils/DummyData";
+import AuthHttp from "../utils/AuthHttp";
 
-const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
+const HouseTodoList = ({ requestContent, historyId, isOpen, handleOpenTodoList }) => {
   const modalStatus = isOpen ? "slide_up" : "slide_down";
 
   const [sectionList, setSectionList] = useState();
@@ -18,10 +18,25 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
 
   useEffect(() => {
     // axios로 리스트 가져오는 등..
-    setSectionList(dummySections);
+    const getSectionList = async () => {
+      try {
+        const response = await AuthHttp({
+          method: "get",
+          url: `/private/histories/${historyId}/todolists`,
+        });
+
+        setSectionList(response.data.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    getSectionList();
+    console.log(sectionList);
   }, []);
 
-  const handleAddClick = (newSection) => {
+  const handleAddClick = async (sectionId) => {
+    console.log(sectionId);
+
     if (isListMain) {
       setIsListMain(!isListMain);
       setIsAddSection(!isAddSection);
@@ -29,14 +44,26 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
     }
 
     // sectionId 추가
-    setSectionList((prevData) => [...prevData, newSection]);
+    try {
+      const response = await AuthHttp({
+        method: "post",
+        url: `/private/histories/${historyId}/todolists`,
+        data: { roomId: sectionId },
+      });
+
+      setSectionList((prevData) => [...prevData, response.data.data]);
+    } catch (e) {
+      console.error(e);
+    }
+
+    console.log(sectionList);
     setIsListMain(!isListMain);
     setIsAddSection(!isAddSection);
   };
 
   const handleSectionOpen = (sectionId) => {
-    if (setIsListMain) {
-      const target = sectionList.find((it) => parseInt(it.sectionId) === parseInt(sectionId));
+    if (isListMain) {
+      const target = sectionList.find((it) => parseInt(it.roomOrder) === parseInt(sectionId));
       if (target) {
         setTargetSection(target);
       }
@@ -45,6 +72,8 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
       setIsSectionDetail(!isSectionDetail);
       return;
     }
+    const targetTodoLists = sectionList.find((it) => it.roomOrder === sectionId);
+    console.log(targetTodoLists);
     setIsListMain(!isListMain);
     setIsSectionDetail(!isSectionDetail);
   };
@@ -64,6 +93,7 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
       </div>
 
       <TodoListMain
+        requestContent={requestContent}
         isListMain={isListMain}
         sectionList={sectionList}
         handleAddClick={handleAddClick}

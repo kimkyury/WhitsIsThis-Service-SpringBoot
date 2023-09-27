@@ -4,10 +4,18 @@ import TodoSectionItem from "./TodoSectionItem";
 import { dummySections } from "../utils/DummyData";
 
 // 닫기는게 왼쪽 열리는게 오른쪽 디폴트는 고정
-const TodoListMain = ({ isListMain, sectionList, handleAddClick, handleSectionOpen }) => {
-  const [isFinish, setIsFinish] = useState(false);
-
-  // return (
+const TodoListMain = ({
+  requestContent,
+  isListMain,
+  sectionList,
+  handleAddClick,
+  handleSectionOpen,
+}) => {
+  const checkFinish = (roomOrder) => {
+    const room = sectionList.find((it) => it.roomOrder === roomOrder).todolist;
+    const allTodoListIsDone = room.some((it) => it.isChecked);
+    return allTodoListIsDone;
+  };
 
   return (
     <div
@@ -15,23 +23,21 @@ const TodoListMain = ({ isListMain, sectionList, handleAddClick, handleSectionOp
     >
       <div className="user_request">
         <h3>사용자 요청사항</h3>
-        <p>
-          사용자 요청사항 사용 자요 청사항 사 용자요 청사항 사용자 요청사항 사용 자요 청사항 사
-          용자요 청
-        </p>
+        <p>{(requestContent && requestContent) || "사용자 요청사항이 없습니다."}</p>
       </div>
       {/* section list map 적용해서 출력 */}
-      {sectionList.map((it, idx) => {
-        return (
-          <TodoSectionItem
-            key={idx}
-            sectionName={it.name}
-            // handleSectionOpen 전달 값 변경해야함
-            onClick={() => handleSectionOpen(it.id)}
-            isFinish={it.isFinish}
-          />
-        );
-      })}
+      {sectionList &&
+        sectionList.map((it) => {
+          return (
+            <TodoSectionItem
+              key={it.roomOrder}
+              sectionName={it.roomName}
+              // handleSectionOpen 전달 값 변경해야함
+              onClick={() => handleSectionOpen(it.roomOrder)}
+              isFinish={checkFinish(it.roomOrder)}
+            />
+          );
+        })}
 
       <div className="TodoSectionItem" onClick={handleAddClick}>
         <img

@@ -1,12 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import Notification from "../components/Notification";
 import { useEffect, useRef, useState } from "react";
+import AuthHttp from "../utils/AuthHttp";
 
 const Camera = () => {
   const navigate = useNavigate();
   // location이 아니라 axios 로 받아와야할듯
   const location = useLocation();
-
+  const receivedInfo = location.state;
   const canvasRef = useRef(null);
   const cameraRef = useRef(null);
   // useEffect 등으로 이미지 리스트를 받아와야할듯
@@ -14,7 +15,7 @@ const Camera = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setCapturedImage(location.state);
+    setCapturedImage(receivedInfo.images);
 
     const getCameraPermission = async () => {
       try {
@@ -65,9 +66,27 @@ const Camera = () => {
     });
   };
 
-  const saveAndBack = () => {
+  const saveAndBack = async () => {
     // 이미지들 저장로직
-
+    // try {
+    //   console.log(capturedImage);
+    //   const formData = new FormData();
+    //   formData.append("image", capturedImage);
+    //   // capturedImage.map((it) => formData.append("image", it));
+    //   // console.log(formData);
+    //   const response = await AuthHttp({
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //     method: "post",
+    //     url: `/private/todolists/${receivedInfo.todoListId}/image`,
+    //     data: formData,
+    //   });
+    //   console.log(response);
+    //   // navigate(-1);
+    // } catch (e) {
+    //   console.error(e);
+    // }
     navigate(-1);
   };
 
@@ -88,14 +107,22 @@ const Camera = () => {
 
       <div className="result_wrapper">
         <div className="title">
-          {/* 투두 리스트 이름 */}
-          <h2>123123</h2>
+          {/* 투두 리스트 이름 짧게..*/}
+          {/* <h2>{receivedInfo.todoListContent}</h2> */}
+          <h2>List Name</h2>
         </div>
         <div className="image_container">
           {/* map.. */}
           {capturedImage &&
             capturedImage.map((it, idx) => {
-              return <img key={idx} src={it} alt="Captured" onClick={() => removeImage(idx)} />;
+              return (
+                <img
+                  key={idx}
+                  src={process.env.REACT_APP_S3_BASE_URL + it.imageUrl}
+                  alt="Captured"
+                  onClick={() => removeImage(idx)}
+                />
+              );
             })}
         </div>
       </div>

@@ -8,12 +8,11 @@ const TodoListItem = ({ todoListItem, openCamera }) => {
   // 위에서 props로 받아와야 함.
   const [isChecked, setIsChecked] = useState(false);
   const [description, setDescription] = useState("");
-  const [imageList, setImageList] = useState([]);
-
+  const [imageList, setImageList] = useState();
   useEffect(() => {
     setIsChecked(todoListItem.isChecked);
-    setDescription(todoListItem.description);
-    setImageList(todoListItem.imageList);
+    setDescription(todoListItem.significant);
+    setImageList(todoListItem.images);
   }, []);
 
   const handleCheckboxChange = (e) => {
@@ -27,14 +26,14 @@ const TodoListItem = ({ todoListItem, openCamera }) => {
   const handleOpenCamera = () => {
     console.log("cam", todoListItem.id);
 
-    openCamera(todoListItem.id);
+    openCamera(todoListItem.id, todoListItem.content);
   };
 
   return (
     <div className="TodoListItem">
       <div className="header">
         <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
-        <h2>{todoListItem.todoName}</h2>
+        <h2>항목이름 간단하게</h2>
         {/* 카메라로 이동할 때 해당 섹션 이름을 가져갸아함 */}
         <div className="image_wrapper" onClick={handleOpenCamera}>
           <img src={process.env.PUBLIC_URL + `/assets/camera.png`} alt="" />
@@ -43,15 +42,20 @@ const TodoListItem = ({ todoListItem, openCamera }) => {
       <input
         className="description"
         type="text"
+        placeholder={todoListItem.content}
         value={description}
         onChange={handleDescriptionChange}
       />
       {/* 이미지는 일단 세개까지만 되는걸로 하죠.. */}
-      <div className="image_list">
-        {imageList.map((it, idx) => {
-          return <img key={idx} src={process.env.PUBLIC_URL + it} alt="img" />;
-        })}
-      </div>
+      {imageList && imageList.length > 0 && (
+        <div className="image_list">
+          {imageList.map((it, idx) => {
+            return (
+              <img key={idx} src={process.env.REACT_APP_S3_BASE_URL + it.imageUrl} alt="img" />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

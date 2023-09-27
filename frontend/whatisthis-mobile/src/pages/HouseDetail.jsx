@@ -37,28 +37,13 @@ const HouseDetail = () => {
           method: "get",
           url: `/private/requests/${houseId}`,
         });
-        // console.log(response.data.data);
-        setTargetHouse(response.data.data);
-        test(response.data.data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    const test = async (houseInfo) => {
-      console.log(houseInfo);
-      try {
-        const response = await AuthHttp({
-          method: "get",
-          url: `/private/histories/${houseInfo.history.id}/todolists`,
-        });
         console.log(response.data.data);
-        // setTargetHouse(response.data.data);
+        setTargetHouse(response.data.data);
+        // test(response.data.data);
       } catch (e) {
         console.error(e);
       }
     };
-
     getTargetHouse();
   }, []);
 
@@ -126,7 +111,13 @@ const HouseDetail = () => {
         </div>
 
         {/* 닫겼다가 다시 열릴때 새 페이지를 보여줄까 아니면 기존 상태 그대로 보여주는게 나을까 */}
-        {<HouseTodoList isOpen={isOpenTodoList} handleOpenTodoList={handleOpenTodoList} />}
+        {
+          <HouseTodoList
+            historyId={targetHouse.history.id}
+            isOpen={isOpenTodoList}
+            handleOpenTodoList={handleOpenTodoList}
+          />
+        }
       </div>
     ) : (
       <div className="HouseDetail container">
@@ -162,7 +153,14 @@ const HouseDetail = () => {
         </div>
 
         {/* 닫겼다가 다시 열릴때 새 페이지를 보여줄까 아니면 기존 상태 그대로 보여주는게 나을까 */}
-        {<HouseTodoList isOpen={isOpenTodoList} handleOpenTodoList={handleOpenTodoList} />}
+        {
+          <HouseTodoList
+            requestContent={targetHouse.requestContent}
+            historyId={targetHouse.history.id}
+            isOpen={isOpenTodoList}
+            handleOpenTodoList={handleOpenTodoList}
+          />
+        }
       </div>
     );
   }

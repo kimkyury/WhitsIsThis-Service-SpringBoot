@@ -43,13 +43,13 @@ const Login = () => {
           password: "1234",
         }
       );
-      console.log(response);
+
       setUserInfo(response.data.data.employeeinfo);
       setAccessToken(response.data.data.accessToken);
       localStorage.setItem("token", response.data.data.accessToken);
       localStorage.setItem("userInfo", JSON.stringify(response.data.data.employeeinfo));
 
-      console.log("login success");
+      console.log("login success", response.data.data.employeeinfo);
       setState({
         userId: "",
         userPassword: "",

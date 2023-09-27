@@ -9,7 +9,7 @@ import { BuildingDataContext } from "../App";
 const Search = () => {
   const navigate = useNavigate();
   const [searchWord, setSearchWord] = useState("");
-  const buildingList = useContext(BuildingDataContext);
+  const { buildingList, socket } = useContext(BuildingDataContext);
   // 새로고침되면 다시 불러오게끔 로직 수정 해야함
   console.log(buildingList);
   return (
