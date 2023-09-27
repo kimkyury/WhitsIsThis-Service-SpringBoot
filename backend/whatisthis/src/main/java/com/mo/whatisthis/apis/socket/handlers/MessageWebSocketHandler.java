@@ -9,9 +9,11 @@ import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.handlers.impl.AuthMessageHandlerImpl;
 import com.mo.whatisthis.apis.socket.handlers.impl.CommandMessageHandlerImpl;
+import com.mo.whatisthis.apis.socket.handlers.impl.CompletionRateMessageHandlerImpl;
 import com.mo.whatisthis.apis.socket.handlers.impl.CoordinateMessageHandlerImpl;
 import com.mo.whatisthis.apis.socket.handlers.impl.DamagedMessageHandlerImpl;
 import com.mo.whatisthis.apis.socket.handlers.impl.DrawingMessageHandlerImpl;
+import com.mo.whatisthis.apis.socket.handlers.impl.DrawingRouteMessageHandlerImpl;
 import com.mo.whatisthis.apis.socket.handlers.impl.IotDeviceMessageHandlerImpl;
 import com.mo.whatisthis.apis.socket.handlers.impl.RegisterMessageHandlerImpl;
 import com.mo.whatisthis.apis.socket.handlers.impl.StatusMessageHandlerImpl;
@@ -40,25 +42,32 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
     public MessageWebSocketHandler(SocketProvider socketProvider,
         RedisService redisService,
         AuthMessageHandlerImpl authMessageHandler,
+
         IotDeviceMessageHandlerImpl iotDeviceMessageHandler,
         RegisterMessageHandlerImpl registerMessageHandler,
         CommandMessageHandlerImpl commandMessageHandler,
         DamagedMessageHandlerImpl damagedMessageHandler,
         CoordinateMessageHandlerImpl coordinateMessageHandler,
         DrawingMessageHandlerImpl drawingMessageHandler,
-        StatusMessageHandlerImpl statusMessageHandler
+        StatusMessageHandlerImpl statusMessageHandler,
+        DrawingRouteMessageHandlerImpl drawingRouteMessageHandler,
+        CompletionRateMessageHandlerImpl completionRateMessageHandler
+
     ) {
 
         this.socketProvider = socketProvider;
         this.redisService = redisService;
-        this.handlers = Map.of(SendType.AUTH, authMessageHandler,
+        this.handlers = Map.of(
+            SendType.AUTH, authMessageHandler,
             SendType.IOT_DEVICE, iotDeviceMessageHandler,
             SendType.REGISTER, registerMessageHandler,
             SendType.COMMAND, commandMessageHandler,
             SendType.COORDINATE, coordinateMessageHandler,
             SendType.DAMAGED, damagedMessageHandler,
             SendType.DRAWING, drawingMessageHandler,
-            SendType.STATUS, statusMessageHandler);
+            SendType.DRAWING_ROUTE, drawingRouteMessageHandler,
+            SendType.STATUS, statusMessageHandler,
+            SendType.COMPLETION_RATE, completionRateMessageHandler);
     }
 
     @Override
