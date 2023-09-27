@@ -2,9 +2,6 @@ package com.mo.whatisthis.apis.socket.handlers.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
-import com.mo.whatisthis.apis.history.services.DeviceHistoryService;
-import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.socket.dto.MessageDto;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
@@ -14,7 +11,6 @@ import com.mo.whatisthis.apis.socket.handlers.interfaces.MessageHandlerInterface
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
-import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import io.jsonwebtoken.Claims;
 import java.util.HashMap;
@@ -78,25 +74,25 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
     protected void addEmployeeToMapAndSendResponse(WebSocketSession session, String employeeNo) {
         socketProvider.addEmployeeToSocket(employeeNo, session);
         String sendMessage = createSuccessMessage();
-        socketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+        socketProvider.sendMessageToEmployee(session, employeeNo, sendMessage);
     }
 
     protected void addDeviceToMapAndSendResponse(WebSocketSession session, String serialNumber){
         socketProvider.addDeviceToSocket(serialNumber, session);
         String sendMessage = createSuccessMessage();
-        socketProvider.sendMessageToDevice(serialNumber, sendMessage);
+        socketProvider.sendMessageToDevice(session, serialNumber, sendMessage);
     }
 
-    protected void sendMessageToEmployee(String sender, String receiver, String message){
-        socketProvider.sendMessageToEmployee(receiver, message);
+    protected void sendMessageToEmployee(WebSocketSession session, String sender, String receiver, String message){
+        socketProvider.sendMessageToEmployee(session, receiver, message);
         String resultMessage = createSuccessMessage();
-        socketProvider.sendMessageToDevice(sender, resultMessage);
+        socketProvider.sendMessageToDevice(session, sender, resultMessage);
     }
 
-    protected void sendMessageToDevice(String sender, String receiver, String message){
-        socketProvider.sendMessageToDevice(receiver, message);
+    protected void sendMessageToDevice(WebSocketSession session, String sender, String receiver, String message){
+        socketProvider.sendMessageToDevice(session, receiver, message);
         String resultMessage = createSuccessMessage();
-        socketProvider.sendMessageToEmployee(sender, resultMessage);
+        socketProvider.sendMessageToEmployee(session, sender, resultMessage);
     }
 
     protected String createSuccessMessage() {

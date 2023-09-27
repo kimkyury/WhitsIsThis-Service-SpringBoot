@@ -45,7 +45,7 @@ public class DrawingRouteMessageHandlerImpl extends AbstractMessageHandlerInterf
         byte[] byteStr = Base64.getDecoder()
                                .decode(getDataAtMap(dataMap, DataType.image));
         removeDataAtMap(dataMap, DataType.image);
-        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(byteStr, "drawing.jpg");
+        MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(byteStr, "drawingRoute.jpg");
 
         try {
             String imgUrl = awss3ResponseUtil.concatURL(s3Service.saveFile(multipartFile));
@@ -57,7 +57,7 @@ public class DrawingRouteMessageHandlerImpl extends AbstractMessageHandlerInterf
         dataMap.put(DataType.historyId.name(), historyId);
         String sendMessage = convertMessageToString(SendType.DRAWING_ROUTE, dataMap);
 
-        sendMessageToEmployee(senderDevice, receiverEmployeeNo, sendMessage);
+        sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
 
     }
 }

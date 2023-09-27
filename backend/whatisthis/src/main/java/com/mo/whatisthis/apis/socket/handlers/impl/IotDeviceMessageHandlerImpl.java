@@ -43,7 +43,7 @@ public class IotDeviceMessageHandlerImpl extends AbstractMessageHandlerInterface
         dataMap.put(DataType.historyId.name(), historyId);
         String sendMessage = convertMessageToString(SendType.IOT_DEVICE, dataMap);
 
-        sendMessageToEmployee( sender, employeeNo, sendMessage);
+        sendMessageToEmployee(session, sender, employeeNo, sendMessage);
 
     }
 }

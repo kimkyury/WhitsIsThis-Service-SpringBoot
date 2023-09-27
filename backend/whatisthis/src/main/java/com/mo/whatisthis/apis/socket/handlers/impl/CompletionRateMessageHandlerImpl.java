@@ -30,7 +30,7 @@ public class CompletionRateMessageHandlerImpl extends AbstractMessageHandlerInte
         saveDataAtMap(dataMap, DataType.historyId, historyId);
         String sendMessage = convertMessageToString(SendType.COMPLETION_RATE, dataMap);
 
-        sendMessageToEmployee( senderDevice, receiverEmployeeNo, sendMessage);
+        sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
     }
 }
 

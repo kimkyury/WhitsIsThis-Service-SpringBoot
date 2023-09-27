@@ -34,7 +34,7 @@ public class RegisterMessageHandlerImpl extends AbstractMessageHandlerInterface 
         redisService.saveData("device:" + serialNumber, senderEmployee + "/" + historyId);
 
         String message = createSuccessMessage();
-        socketProvider.sendMessageToEmployee(senderEmployee, message);
+        socketProvider.sendMessageToEmployee(session, senderEmployee, message);
     }
 }
 

@@ -1,9 +1,15 @@
 package com.mo.whatisthis.apis.socket.services;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mo.whatisthis.apis.socket.dto.MessageDto;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,6 +23,8 @@ public class SocketProvider {
 
     private final Map<String, WebSocketSession> employeeByHistoryMap;
     private final Map<String, WebSocketSession> deviceBySerialNumberMap;
+
+    private static ObjectMapper objectMapper;
 
     public SocketProvider() {
         this.employeeByHistoryMap = new ConcurrentHashMap<>();
@@ -48,7 +56,7 @@ public class SocketProvider {
 
     }
 
-    public void sendMessage(WebSocketSession session, String payload){
+    public void sendMessage(WebSocketSession session, String payload) {
         try {
             if (session.isOpen()) {
                 TextMessage message = new TextMessage(payload);
@@ -59,21 +67,8 @@ public class SocketProvider {
         }
     }
 
-    public void sendMessageToDevice(String serialNumber, String payload) {
-
-        WebSocketSession session = deviceBySerialNumberMap.get(serialNumber);
-
-        try {
-            if (session.isOpen()) {
-                TextMessage message = new TextMessage(payload);
-                session.sendMessage(message);
-            }
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public void closeConnectionDevice(String serialNumber, int closeCode, String reason) {
+    public void closeConnectionDevice(WebSocketSession senderSession, String serialNumber,
+        int closeCode, String reason) {
 
         WebSocketSession deviceSession = deviceBySerialNumberMap.get(serialNumber);
 
@@ -84,12 +79,13 @@ public class SocketProvider {
         }
     }
 
-    public void sendMessageToEmployee(String employeeNo, String payload) {
+    public void sendMessageToDevice(WebSocketSession senderSession, String serialNumber,
+        String payload) {
 
-        WebSocketSession session = employeeByHistoryMap.get(employeeNo);
+        WebSocketSession session = deviceBySerialNumberMap.get(serialNumber);
         if (session == null) {
-            // senderSession에게 closeCode 송신
-            // senderSession에게 메시지로 현재 종료 이유를 안내
+            String errorText = "This DEVICE did not join the socket.";
+            sendErrorMessage(senderSession, errorText);
         }
 
         try {
@@ -101,4 +97,47 @@ public class SocketProvider {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    public void sendMessageToEmployee(WebSocketSession senderSession, String employeeNo,
+        String payload) {
+
+        WebSocketSession session = employeeByHistoryMap.get(employeeNo);
+        if (session == null) {
+            String errorText = "This EMPLOYEE did not join the socket.";
+            sendErrorMessage(senderSession, errorText);
+        }
+
+        try {
+            if (session.isOpen()) {
+                TextMessage message = new TextMessage(payload);
+                session.sendMessage(message);
+            }
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public void sendErrorMessage(WebSocketSession session, String errorText) {
+        Map<String, String> errorData = new HashMap<>();
+        errorData.put(DataType.message.name(), errorText);
+        String errorMessage = convertMessageToString(SendType.SYSTEM_MESSAGE, errorData);
+
+        sendMessage(session, errorMessage);
+    }
+
+    private String convertMessageToString(SendType messageType, Map<String, String> dataMap) {
+
+        MessageDto messageDto = MessageDto.builder()
+                                          .type(messageType)
+                                          .data(dataMap)
+                                          .build();
+        try {
+            return objectMapper.writeValueAsString(messageDto);
+        } catch (JsonProcessingException e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }

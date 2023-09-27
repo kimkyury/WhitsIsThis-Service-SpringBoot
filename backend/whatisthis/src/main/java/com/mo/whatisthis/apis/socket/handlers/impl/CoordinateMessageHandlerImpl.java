@@ -31,7 +31,7 @@ public class CoordinateMessageHandlerImpl extends AbstractMessageHandlerInterfac
         saveDataAtMap(dataMap, DataType.historyId, historyId);
         String sendMessage = convertMessageToString(SendType.COORDINATE, dataMap);
 
-        sendMessageToEmployee( senderDevice, receiverEmployeeNo, sendMessage);
+        sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
     }
 }
 

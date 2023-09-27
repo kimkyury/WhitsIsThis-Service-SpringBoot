@@ -33,19 +33,19 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
         try {
             CommandCode.valueOf(command);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             map.put(DataType.message.name(),
                 "Command value is invalid. (You can only use the words 'START' or 'END' )");
             String message = convertMessageToString(SendType.SYSTEM_MESSAGE, dataMap);
-            socketProvider.sendMessageToEmployee(senderEmployee, message);
+            socketProvider.sendMessageToEmployee(session, senderEmployee, message);
         }
 
         saveDataAtMap(map, DataType.command, command);
         String sendMessage = convertMessageToString(SendType.COMMAND, map);
-        sendMessageToDevice(senderEmployee, serialNumber, sendMessage);
+        sendMessageToDevice(session, senderEmployee, serialNumber, sendMessage);
 
         if (command.equals(CommandCode.END)) {
-            socketProvider.closeConnectionDevice(serialNumber, 1000, sendMessage);
+            socketProvider.closeConnectionDevice(session, serialNumber, 1000, sendMessage);
         }
     }
 }

@@ -32,7 +32,7 @@ public class StatusMessageHandlerImpl extends AbstractMessageHandlerInterface {
         saveDataAtMap(dataMap, DataType.historyId, historyId);
         String sendMessage = convertMessageToString(SendType.STATUS, dataMap);
 
-        sendMessageToEmployee( senderDevice, receiverEmployeeNo, sendMessage);
+        sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
     }
 }
 

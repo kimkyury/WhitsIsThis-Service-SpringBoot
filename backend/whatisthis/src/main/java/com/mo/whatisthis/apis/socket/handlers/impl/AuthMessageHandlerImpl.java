@@ -55,10 +55,11 @@ public class AuthMessageHandlerImpl extends AbstractMessageHandlerInterface {
             addDeviceToMapAndSendResponse(session, memberNo);
 
             Map<String, String> sendDataMap = new HashMap<>();
-            sendDataMap.put(DataType.state.name(), "CONNECTED");
+            saveDataAtMap(sendDataMap, DataType.historyId, historyId);
+            saveDataAtMap(sendDataMap, DataType.state, "CONNECTED");
             String sendMessage = convertMessageToString(SendType.STATUS, sendDataMap);
 
-            socketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+            socketProvider.sendMessageToEmployee(session, employeeNo, sendMessage);
         }
 
     }

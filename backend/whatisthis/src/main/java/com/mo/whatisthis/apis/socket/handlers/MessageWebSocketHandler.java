@@ -79,14 +79,23 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
         Map<String, String> dataMap = messageRequest.getData();
 
         MessageHandlerInterface handler = handlers.get(type);
-        handler.handle(session, dataMap);
 
         if (handler == null) {
-            String errorText = "Please Confirm your MessageType, It is not valid type. ";
+            String errorText = "Please Confirm your MessageType, It is not valid type. (하지만 완벽한데도 에러가 난다면 백엔드에게 연락주세요. ) ";
             sendErrorMessage(session, errorText);
         }
 
-        handler.handle(session, dataMap);
+        try {
+            handler.handle(session, dataMap);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            e.printStackTrace();
+
+            Map<String, String> map = new HashMap<>();
+            map.put(DataType.message.name(),
+                "input data is invalid. ");
+            String errorMessage = convertMessageToString(SendType.SYSTEM_MESSAGE, map);
+            socketProvider.sendMessage(session, errorMessage);
+        }
     }
 
     @Override

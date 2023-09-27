@@ -54,7 +54,7 @@ public class DrawingMessageHandlerImpl extends AbstractMessageHandlerInterface {
         dataMap.put(DataType.historyId.name(), historyId);
         String sendMessage = convertMessageToString(SendType.DRAWING, dataMap);
 
-        sendMessageToEmployee(senderDevice, receiverEmployeeNo, sendMessage);
+        sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
 
     }
 }
