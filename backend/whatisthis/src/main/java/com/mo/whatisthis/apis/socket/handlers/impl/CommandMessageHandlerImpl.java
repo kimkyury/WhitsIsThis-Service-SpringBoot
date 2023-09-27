@@ -46,7 +46,7 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
             socketProvider.sendMessageToEmployee(senderEmployee, message);
         }
 
-        map.put(DataType.command.name(), command);
+        saveDataAtMap(map, DataType.command, command);
         String sendMessage = convertMessageToString(SendType.COMMAND, map);
         sendMessageToDevice(senderEmployee, serialNumber, sendMessage);
 
