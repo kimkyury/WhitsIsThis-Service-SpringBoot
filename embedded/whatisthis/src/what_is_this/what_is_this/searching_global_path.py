@@ -70,6 +70,7 @@ def make_path(start_x: int, start_y: int, Path_points: dict, Map: np) -> None:
     print('경로 생성 중')
     path = []
     cur_x, cur_y = start_x, start_y
+    total = len(Path_points)
 
     while Path_points:
         target = Path_points.get((cur_x, cur_y),0)
@@ -84,9 +85,12 @@ def make_path(start_x: int, start_y: int, Path_points: dict, Map: np) -> None:
             Path_points.pop((cur_x, cur_y))
             Path_points.pop((cur_x, target))
             cur_y = target
-
+        
+        print(f'\r진행율 :  {round((1-(len(Path_points)/total))*100,2)} %            ',end="")
         min_path = dijkstra(cur_x, cur_y, Map, Path_points)
-        if min_path == None:return path
+        if min_path == None:
+            print('\n생성 종료')
+            return path
         path.extend(min_path)
 
         cur_x, cur_y = path[-1]
@@ -187,8 +191,8 @@ class Searching_path(Node):
         for x, y in route:
             self.pre_map[x][y] = 254
                 
-        map_img = Image.fromarray(self.pre_map)
-        map_img.show()
+        # map_img = Image.fromarray(self.pre_map)
+        # map_img.show()
 
         print('경로 전송')
         if len(route)!=0:
