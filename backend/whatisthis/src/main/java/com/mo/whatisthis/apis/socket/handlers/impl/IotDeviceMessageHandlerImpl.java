@@ -11,15 +11,15 @@ import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
-import java.util.HashMap;
+import io.jsonwebtoken.Claims;
 import java.util.Map;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
 @Component
-public class RegisterHandler extends AbstractMessageHandlerInterface {
+public class IotDeviceMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
-    public RegisterHandler(
+    public IotDeviceMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
         RedisService redisService,
         HistoryService historyService,
@@ -31,17 +31,25 @@ public class RegisterHandler extends AbstractMessageHandlerInterface {
 
     @Override
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
-        // Employee가 Device를 등록하는 메시지
 
-        String historyId = getDataAtMap(dataMap, DataType.historyId);
-        String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
+        // Device가 Employee에게 보내는 Message
 
-        String sender = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
+        String historyId = getAttributeAtSession(session, SessionKey.HISTORY_ID);
+        String receiver = getAttributeAtSession(session, SessionKey.HISTORY_ID);
+        String sender = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
 
-        redisService.saveData("device:" + serialNumber, sender + "/" + historyId);
+        boolean isWorked = "1".equals(getDataAtMap(dataMap, DataType.isWorked));
+        Float x = Float.valueOf(getDataAtMap(dataMap, DataType.x));
+        Float y = Float.valueOf(getDataAtMap(dataMap, DataType.y));
+        Category category = Category.valueOf(getDataAtMap(dataMap, DataType.category));
 
-        String message = createSuccessMessage();
-        socketProvider.sendMessageToEmployee(sender, message);
+        deviceHistoryService.createDeviceHistory(Long.valueOf(historyId), x, y, category, isWorked);
+
+        dataMap.put(DataType.historyId.name(), historyId);
+        String sendMessage = convertMessageToString(SendType.IOT_DEVICE, dataMap);
+
+        sendMessageToEmployee( sender, receiver, sendMessage);
+
     }
 }
 

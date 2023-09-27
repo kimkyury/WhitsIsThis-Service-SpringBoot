@@ -18,9 +18,9 @@ import org.springframework.web.socket.WebSocketSession;
 
 
 @Component
-public class AuthMessageHandler extends AbstractMessageHandlerInterface {
+public class AuthMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
-    public AuthMessageHandler(
+    public AuthMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
         RedisService redisService, HistoryService historyService,
         DamagedHistoryService damagedHistoryService, DeviceHistoryService deviceHistoryService) {

@@ -9,9 +9,9 @@ import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.socket.dto.MessageDto;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
-import com.mo.whatisthis.apis.socket.handlers.impl.AuthMessageHandler;
-import com.mo.whatisthis.apis.socket.handlers.impl.IotDeviceHandler;
-import com.mo.whatisthis.apis.socket.handlers.impl.RegisterHandler;
+import com.mo.whatisthis.apis.socket.handlers.impl.AuthMessageHandlerImpl;
+import com.mo.whatisthis.apis.socket.handlers.impl.IotDeviceMessageHandlerImpl;
+import com.mo.whatisthis.apis.socket.handlers.impl.RegisterMessageHandlerImpl;
 import com.mo.whatisthis.apis.socket.handlers.interfaces.MessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.exception.CustomException;
@@ -42,8 +42,8 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
     public MessageWebSocketHandler(SocketProvider socketProvider,
         JwtTokenProvider jwtTokenProvider, RedisService redisService,
         HistoryService historyService, DamagedHistoryService damagedHistoryService,
-        DeviceHistoryService deviceHistoryService, AuthMessageHandler authMessageHandler,
-        IotDeviceHandler iotDeviceHandler, RegisterHandler registerHandler) {
+        DeviceHistoryService deviceHistoryService, AuthMessageHandlerImpl authMessageHandlerImpl,
+        IotDeviceMessageHandlerImpl iotDeviceMessageHandlerImpl, RegisterMessageHandlerImpl registerHandler) {
 
         this.socketProvider = socketProvider;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -51,8 +51,8 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
         this.historyService = historyService;
         this.damagedHistoryService = damagedHistoryService;
         this.deviceHistoryService = deviceHistoryService;
-        this.handlers = Map.of(SendType.AUTH, authMessageHandler,
-            SendType.IOT_DEVICE, iotDeviceHandler,
+        this.handlers = Map.of(SendType.AUTH, authMessageHandlerImpl,
+            SendType.IOT_DEVICE, iotDeviceMessageHandlerImpl,
             SendType.REGISTER, registerHandler);
     }
 

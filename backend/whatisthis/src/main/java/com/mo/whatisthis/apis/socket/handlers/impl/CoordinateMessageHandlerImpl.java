@@ -11,15 +11,14 @@ import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
-import io.jsonwebtoken.Claims;
 import java.util.Map;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
 @Component
-public class IotDeviceHandler extends AbstractMessageHandlerInterface {
+public class CoordinateMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
-    public IotDeviceHandler(
+    public CoordinateMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
         RedisService redisService,
         HistoryService historyService,

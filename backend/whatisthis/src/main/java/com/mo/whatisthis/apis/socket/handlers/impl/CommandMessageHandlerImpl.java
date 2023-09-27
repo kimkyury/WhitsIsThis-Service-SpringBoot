@@ -18,9 +18,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
 @Component
-public class CommandHandler extends AbstractMessageHandlerInterface {
+public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
-    public CommandHandler(
+    public CommandMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
         RedisService redisService, HistoryService historyService,
         DamagedHistoryService damagedHistoryService, DeviceHistoryService deviceHistoryService) {
