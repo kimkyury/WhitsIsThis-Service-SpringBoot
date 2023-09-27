@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './Maincustompage.css';
 import { Link } from "react-router-dom";
-
+import Pdf from './Pdf';
 function CustomMain() {
   const [logoVisible, setLogoVisible] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(false);
@@ -45,7 +45,9 @@ function CustomMain() {
                 결과확인
               </button>
             </Link>
+            
           </div>
+          {/* <Pdf></Pdf> */}
         </div>
       </div>
     </div>

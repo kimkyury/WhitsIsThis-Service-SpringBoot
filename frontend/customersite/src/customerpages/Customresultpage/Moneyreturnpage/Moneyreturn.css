@@ -43,3 +43,17 @@
   border-radius: 2.6vw;
   background-repeat: no-repeat;
 }
+
+.desk-customreceivedivm {
+
+  margin-top:5vh;
+  width: 50rem;
+  height: 30rem;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}

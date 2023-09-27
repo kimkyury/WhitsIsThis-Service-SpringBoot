@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import '../calendar/calendar.css';
 import Receivesuc from "./receivesuccess";
+import { useMediaQuery } from "react-responsive";
 function CustomreceiveModal() {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -117,8 +118,117 @@ function CustomreceiveModal() {
       console.log(jsonData, formData)
     }
   };
-
+  const Desktop = ({ children }) => {
+    const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
+    return isDesktop ? children : null;
+  };
+  
+  const Mobile = ({ children }) => {
+    const isMobile = useMediaQuery({ maxDeviceWidth: 1223 });
+    return isMobile ? children : null;
+  };
   return (
+    <div>
+         <Desktop>
+    <div className="customreceivediv desktop-view">
+      <div className="custommodaltitle">
+        <p>신청하기</p>
+      </div>
+      <div className="middlemodal">
+        <div>
+          <p className="desktoprectitle">신청자명</p>
+          <input
+            style={{ width: "40rem", height: "3rem" }}
+            className="input"
+            placeholder="이름을 입력해주십시오."
+          />
+          <p className="desktoprectitle">요청 사항</p>
+          <input
+            className="input"
+            style={{  width: "40rem", height: "3rem"  }}
+            placeholder="요청 사항을 입력해주십시오."
+          />
+          <p className="desktoprectitle">연락처</p>
+          <div className="customgrid">
+            <input
+              className="input desk-cinput"
+              placeholder="연락처를 입력해주십시오."
+            />
+            <button className="button desk-minibutton">인증하기</button>
+          </div>
+          <p className="desktoprectitle">위임장 사진</p>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <input
+              type="file"
+              id="fileInput"
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+            />
+            {uploadedFileName && (
+              <p>{uploadedFileName}</p>
+            )}
+            <button className="button desk-minibutton" onClick={handleOpenFileInput}>
+              찾아보기
+            </button>
+          </div>
+          <p className="desktoprectitle">주소</p>
+          <div className="customgrid">
+            <input
+              className="input desk-cinput"
+              placeholder="주소을 입력해주십시오."
+              value={selectedAddress}
+              onChange={(e) => setSelectedAddress(e.target.value)}
+            />
+            <button
+              className="button desk-minibutton"
+              onClick={handleOpenAddressModal}
+            >
+              주소찾기
+            </button>
+          </div>
+          <p className="desktoprectitle">상세주소</p>
+          <input
+            style={{  width: "40rem", height: "3rem"  }}
+            className="input"
+            placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"
+          />
+          <div className="customgridx">
+            <p className="desktoprectitle">점검 예정 일자 :</p>
+            <DatePicker
+              dateFormat='yyyy.MM.dd'
+              shouldCloseOnSelect
+              minDate={new Date()}
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(update) => {
+                setDateRange(update)
+              }}
+              withPortal
+              className='desktop-datePicker'
+            />
+          </div>
+        </div>
+      </div>
+      <div className="middlemodal">
+        <button className="button bigbuttons" onClick={handleApply}>
+          신청하기
+        </button>
+      </div>
+      {showAddressModal && (
+        <div className="address-modal">
+          <button className="close-button" onClick={handleCloseAddressModal}>
+            닫기
+          </button>
+          <Address selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress} onSelect={handleInputAddress} />
+        </div>
+      )}
+      {isApplicationSuccess && (
+        <Receivesuc />
+      )}
+    </div>
+    </Desktop>
+      <Mobile>
     <div className="customreceivediv">
       <div className="custommodaltitle">
         <p>신청하기</p>
@@ -127,14 +237,14 @@ function CustomreceiveModal() {
         <div>
           <p className="minititle">신청자명</p>
           <input
-            style={{ width: "18rem", height: "2.3rem" }}
+            style={{  width: "13rem", height: "2rem"  }}
             className="input"
             placeholder="이름을 입력해주십시오."
           />
           <p className="minititle">요청 사항</p>
           <input
             className="input"
-            style={{ width: "18rem", height: "4.2rem" }}
+            style={{  width: "13rem", height: "2rem"  }}
             placeholder="요청 사항을 입력해주십시오."
           />
           <p className="minititle">연락처</p>
@@ -177,7 +287,7 @@ function CustomreceiveModal() {
           </div>
           <p className="minititle">상세주소</p>
           <input
-            style={{ width: "18rem", height: "2.3rem" }}
+            style={{  width: "13rem", height: "2rem"  }}
             className="input"
             placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"
           />
@@ -215,6 +325,8 @@ function CustomreceiveModal() {
       {isApplicationSuccess && (
         <Receivesuc />
       )}
+    </div>
+    </Mobile>
     </div>
   );
 }

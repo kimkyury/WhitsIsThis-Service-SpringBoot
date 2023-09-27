@@ -8,7 +8,8 @@ import Receiveresult from "./customerpages/Customresultpage/Receiveresultpage/Re
 import Customheader from "./customcomponent/customheader/customheader";
 import Resultconfirm from "./customerpages/Customresultpage/resultconfirm/Resultconfirm";
 import Health from "./customerpages/Health.jsx";
-
+import Custom from "../../customersite/src/customerpages/Maincustompage/custom";
+import Pdf from './customerpages/Maincustompage/Pdf';
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
 
@@ -22,14 +23,14 @@ function App() {
 
       <Router basename={BASE_NAME}>
         <Routes>
-          <Route path="/" element={[<Customheader />, <Maincustompage />]} />
+          <Route path="/" element={[<Customheader />, <Maincustompage/>]} />
           <Route path="/customerreceive" element={[<Customheader />, <Customreceivepage />]} />
           <Route path="/fixcustom" element={[<Customheader />, <Fixcustom />]} />
           <Route path="/moneyreturn" element={[<Customheader />, <Moneyreturn />]} />
           <Route path="/moneywait" element={[<Customheader />, <Moneywait />]} />
           <Route path="/receiveresult" element={[<Customheader />, <Receiveresult />]} />
           <Route path="/resultconfirm" element={[<Customheader />, <Resultconfirm />]} />
-
+          
         </Routes>
       </Router>
     </div>

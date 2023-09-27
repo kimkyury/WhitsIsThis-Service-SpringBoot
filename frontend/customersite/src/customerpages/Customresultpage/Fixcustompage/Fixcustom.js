@@ -1,6 +1,6 @@
 import React from "react";
 import './Fixcustom.css';
-
+import { useMediaQuery } from "react-responsive";
 function Fixcustom() {
   // const status = sessionStorage.getItem('status');
   const status = 'WAITING_FOR_INSPECTION';;
@@ -17,11 +17,67 @@ function Fixcustom() {
   const showCheckmark = (circleStatus) => {
     return status === circleStatus ? "" : "";
   };
-
+  const Desktop = ({ children }) => {
+    const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
+    return isDesktop ? children : null;
+  };
+  
+  const Mobile = ({ children }) => {
+    const isMobile = useMediaQuery({ maxDeviceWidth: 1223 });
+    return isMobile ? children : null;
+  };
   return (
     <div className="roomimg resrecpage backgr">
+      <Desktop>
+      <div className="desk-customreceivedivfix">
+        <div className="desk-custommodaltitle ">
+          <p>점검 결과</p>
+        </div>
+        <div className="circlelinebox">
+
+          <span>
+            <div className="flexlinebox">
+              <p className="desk-circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}>
+                {showCheckmark("WAITING_FOR_INSPECTION")}
+                <p className="desk-listline">대기</p>
+              </p>
+            </div>
+          </span>
+          <p className="desk-line"></p>
+          <span>
+            <div className="flexlinebox">
+              <p className="desk-circle" style={getCircleStyle("IN_PROGRESS")}>
+                {showCheckmark("IN_PROGRESS")}
+                <p className="desk-listline">진행 중</p>
+              </p>
+            </div>
+          </span>
+          <p className="desk-line"></p>
+          <span>
+            <div className="flexlinebox">
+              <p className="desk-circle" style={getCircleStyle("DONE")}>
+                {showCheckmark("DONE")}
+                <p className="desk-listline">완료</p>
+              </p>
+            </div>
+          </span>
+        </div>
+        <div className="middlemodalsx">
+          <div className="desk-boxpage">
+            <p style={{ marginLeft: '5%' }}>담당자명 : 홍길동</p>
+            <p style={{ marginLeft: '5%' }}>점검 완료 일시 : 2023-09-19</p>
+            <p style={{ marginLeft: '5%' }}>보고서 다운로드 : 보고서 URL</p>
+            <p style={{ marginLeft: '5%', marginTop: '-3%' }}>사진 파일 다운로드 : 사진파일.zip</p>
+          </div>
+        </div>
+        <div className='middlemodal'>
+          <button className="button desk-bigbuttons">확인하기</button>
+        </div>
+      </div>
+      </Desktop>
+      <Mobile>
       <div className="customreceivedivfix">
-        <div className="custommodaltitle ">
+        <div className="moblie-custommodaltitlefix ">
           <p>점검 결과</p>
         </div>
         <div className="circlelinebox">
@@ -65,6 +121,7 @@ function Fixcustom() {
           <button className="button bigbuttons">확인하기</button>
         </div>
       </div>
+      </Mobile>
     </div>
   );
 }

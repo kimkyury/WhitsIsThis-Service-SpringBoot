@@ -11,6 +11,21 @@
   border-radius: 1.5rem;
   background-repeat: no-repeat;
 }
+
+.desk-customreceivedivfix {
+
+  margin-top:1rem;
+  width: 40rem;
+  height: 40rem;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 1rem;
+  border-radius: 1.5rem;
+  background-repeat: no-repeat;
+}
+
 .circlelinebox {
     margin-top:5%; 
     display: flex; 
@@ -44,6 +59,23 @@
   border: 0.1rem solid black;
 }
 
+.desk-boxpage {
+  margin-top: -4rem;
+  width: 32rem;
+  height: 10rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid black;
+}
+
+.desk-custommodaltitle {
+  color: #2D4059;
+  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+
+}
+
 .circle {
   border-radius: 100%;
   width:4.5rem;
@@ -52,9 +84,25 @@
   text-align: center;
 }
 
+
+.desk-circle {
+  margin-top: -4rem;
+  border-radius: 100%;
+  width:8rem;
+  height: 8rem;
+  background-color: #ECECEC;
+  text-align: center;
+}
 .line {
+  
   width:2rem;
   border: 0.01rem solid black;
+
+}
+.desk-line {
+  margin-top :-4rem;
+  width:4rem;
+  border: 0.02rem solid black;
 
 }
 
@@ -70,5 +118,22 @@
   font-weight: bold;
   margin-top: 5rem;
   
+
+}
+
+.desk-listline {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 9rem;
+  
+
+}
+
+.moblie-custommodaltitlefix {
+  color: #2D4059;
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
 
 }

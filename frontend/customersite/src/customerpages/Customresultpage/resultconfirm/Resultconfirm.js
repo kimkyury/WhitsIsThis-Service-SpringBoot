@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // useNavigate를 import로 추가
 import axios from "axios";
 import './Resultconfirm.css';
-
+import { useMediaQuery } from "react-responsive";
 function Resultconfirm() {
   const [customdata, setCustomdata] = useState([]);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -106,9 +106,19 @@ function Resultconfirm() {
         alert("전화번호 인증이 필요합니다.");
       });
   };
+  const Desktop = ({ children }) => {
+    const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
+    return isDesktop ? children : null;
+  };
+  
+  const Mobile = ({ children }) => {
+    const isMobile = useMediaQuery({ maxDeviceWidth: 1223 });
+    return isMobile ? children : null;
+  };
 
   return (
     <div className="roomimg resrecpage backgr">
+      <Mobile>
       <div className="customreceivedivconfirm">
         <div className="custommodaltitle">
           <p>결과확인</p>
@@ -139,6 +149,39 @@ function Resultconfirm() {
           </button>
         </div>
       </div>
+      </Mobile>
+      <Desktop>
+      <div className="customreceivedivconfirm">
+        <div className="custommodaltitle">
+          <p>결과확인</p>
+        </div>
+        <div className="middlemodalsx">
+          <div className="customgrid">
+            <input
+              className="input cinput"
+              placeholder="연락처를 입력해주십시오."
+              value={phoneNumberInput}
+              onChange={(e) => setPhoneNumberInput(e.target.value)}
+            />
+            <button
+              className="button minibutton"
+              style={{ marginLeft: '3%' }}
+              // onClick={handlePhoneNumberVerification}
+            >
+              {isVerified ? "확인" : "인증하기"}
+            </button>
+          </div>
+        </div>
+        <div className='middlemodalbox'>
+          <button
+            className="button bigbutton"
+            onClick={handleConfirmation}
+          >
+            확인하기
+          </button>
+        </div>
+      </div>
+      </Desktop>
     </div>
   );
 }

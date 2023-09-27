@@ -33,7 +33,10 @@
     /* background-image: linear-gradient(to Bottom, #5894D8, #D7E7FC);  */
     background-color: #2D4059;
 
+
 }
+
+
 .cmainbutton:hover {
   background-image: linear-gradient(to right, #2D4059, #2D4080);
 
@@ -62,3 +65,6 @@
 
 
 }
+
+
+

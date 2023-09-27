@@ -72,12 +72,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Receiveresult.css';
-
+import { useMediaQuery } from "react-responsive";
 function Receiveresult() {
   const [cancellationStatus, setCancellationStatus] = useState(null);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
-
+  const Desktop = ({ children }) => {
+    const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
+    return isDesktop ? children : null;
+  };
+  
+  const Mobile = ({ children }) => {
+    const isMobile = useMediaQuery({ maxDeviceWidth: 1223 });
+    return isMobile ? children : null;
+  };
   const handleCancellation = async () => {
     try {
       const id = sessionStorage.getItem('id'); // 올바른 ID를 얻어올 필요가 있습니다.
@@ -109,6 +117,35 @@ function Receiveresult() {
 
   return (
     <div className="roomimg resrecpage backgr">
+      <Desktop>
+      <div className="desk-customreceivedivs">
+        <div className="custommodaltitle">
+          <p>신청 결과</p>
+        </div>
+        <div className="middlemodals">
+          <div>
+            <div className="desk-customgrids">
+              <p className="desk-recrestitle">은행명 :</p>
+              <p>계좌명</p>
+            </div>
+            <p className="desk-recrestitle">가상계좌 :</p>
+            <p>가상계좌들어갈곳</p>
+          </div>
+        </div>
+        <div className="middlebox">
+          <button className="button middlebutton" onClick={handleCancellation}>
+            신청취소
+          </button>
+          <button className="button middlebutton">확인</button>
+        </div>
+      </div>
+      {cancellationStatus && (
+        <div className="cancellation-status">
+          {cancellationStatus}
+        </div>
+      )}
+      </Desktop>
+      <Mobile>
       <div className="customreceivedivs">
         <div className="custommodaltitle">
           <p>신청 결과</p>
@@ -135,6 +172,7 @@ function Receiveresult() {
           {cancellationStatus}
         </div>
       )}
+      </Mobile>
     </div>
   );
 }

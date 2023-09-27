@@ -12,6 +12,21 @@
   background-repeat: no-repeat;
 }
 
+.desk-customreceivedivs {
+
+  margin-top:1rem;
+  width: 40rem;
+  height: 40rem;
+
+  background-color: white;
+  opacity: 90%;
+  border: 0.05rem solid white;
+  /* margin-bottom: 5vh; */
+  border-radius: 1.4rem;
+  background-repeat: no-repeat;
+}
+
+
 .customreceivedivconfirm {
 
   margin-top:5vh;
@@ -40,6 +55,11 @@
   font-weight: bold;
 }
 
+.desk-recrestitle {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
 .middlebutton {
   font-size: 1.5rem;
 
@@ -51,6 +71,14 @@
   align-items: center; /* 수직 가운데 정렬 (선택 사항) */
   justify-content: space-between;
   width: 17rem;
+}
+
+.desk-customgrids {
+  display: flex;
+  flex-direction: row; /* 가로로 정렬 */
+  align-items: center; /* 수직 가운데 정렬 (선택 사항) */
+  justify-content: space-between;
+  width: 30rem;
 }
 
 .middlebox {

@@ -17,6 +17,11 @@
   height:2rem;
   border-radius: 0.2rem;
 }
+.desk-cinput {
+  width:33rem;
+  height:3rem;
+  border-radius: 0.2rem;
+}
 .customgridx {
   margin-top: 1rem;
   display: flex;
@@ -25,7 +30,10 @@
   justify-content: space-between;
   /* width: 35vw; */
 }
-
+.desktop-view {
+  height: 85rem;
+  width: 50rem; /* 원하는 데스크톱 뷰 높이 */
+}
 
 .customreceivedivsuc {
   display: flex;
@@ -134,10 +142,22 @@
   /* margin-left: 5%; */
 }
 
+.desktoprectitle {
+  font-size: 2rem;
+  font-weight: bold;
+  /* margin-left: 5%; */
+}
 .minibutton {
   width:3.8rem;
   height:2.3rem;
   font-size: 0.5rem;
+}
+
+.desk-minibutton {
+
+  width:5rem;
+  height: 3rem;
+  font-size: 1rem;
 }
 
 .bigbutton {
@@ -156,4 +176,11 @@
   height: 3rem;
   font-size: 1.2rem;
   margin-top:2rem
+}
+
+.desk-bigbuttons {
+  width: 10rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  /* margin-top:rem */
 }
