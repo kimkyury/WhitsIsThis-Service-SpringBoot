@@ -1,4 +1,4 @@
-package com.mo.whatisthis.apis.request.requests;
+package com.mo.whatisthis.apis.history.requests;
 
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

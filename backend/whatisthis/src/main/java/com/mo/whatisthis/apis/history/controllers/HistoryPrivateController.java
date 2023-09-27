@@ -2,11 +2,10 @@ package com.mo.whatisthis.apis.history.controllers;
 
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
+import com.mo.whatisthis.apis.history.requests.CreateTodolistRequest;
 import com.mo.whatisthis.apis.history.responses.AllHistoryResponse;
 import com.mo.whatisthis.apis.history.services.HistoryService;
-import com.mo.whatisthis.apis.request.requests.CreateTodolistRequest;
-import com.mo.whatisthis.apis.request.responses.CreateTodolistResponse;
-import com.mo.whatisthis.apis.todolist.responses.TodolistResponse;
+import com.mo.whatisthis.apis.todolist.responses.TodolistWrapperResponse;
 import com.mo.whatisthis.apis.todolist.services.TodolistService;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
@@ -39,7 +38,7 @@ public class HistoryPrivateController {
     @PostMapping("/{id}/todolists")
     @Operation(summary = "방 선택 후 투두리스트 생성", tags = {
         "6. Inspection"})
-    public ResponseEntity<SuccessResponse<List<CreateTodolistResponse>>> createTodolist(
+    public ResponseEntity<SuccessResponse<TodolistWrapperResponse>> createTodolist(
         @PathVariable Long id,
         @Valid @RequestBody
         CreateTodolistRequest createTodolistRequest) {
@@ -75,7 +74,7 @@ public class HistoryPrivateController {
 
     @Operation(summary = "투두리스트 조회", tags = {"6. Inspection"})
     @GetMapping("/{id}/todolists")
-    public ResponseEntity<SuccessResponse<List<TodolistResponse>>> getTodolists(
+    public ResponseEntity<SuccessResponse<List<TodolistWrapperResponse>>> getTodolists(
         @PathVariable Long id) {
         return createSuccessResponse(SuccessCode.OK, "투두리스트 조회", historyService.getTodolists(id));
     }
