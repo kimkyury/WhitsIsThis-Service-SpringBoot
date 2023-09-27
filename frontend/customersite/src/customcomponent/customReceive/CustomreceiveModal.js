@@ -156,6 +156,10 @@ function CustomreceiveModal() {
             />
             <button className="button desk-minibutton">인증하기</button>
           </div>
+          <div className="desk-customgrids">
+              <p className="desk-recrestitle">은행명 :</p>
+              <p>계좌명</p>
+            </div>
           <p className="desktoprectitle">위임장 사진</p>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <input
