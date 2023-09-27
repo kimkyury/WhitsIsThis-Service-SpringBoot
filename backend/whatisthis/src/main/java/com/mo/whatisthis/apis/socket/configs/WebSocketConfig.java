@@ -1,6 +1,6 @@
 package com.mo.whatisthis.apis.socket.configs;
 
-import com.mo.whatisthis.apis.socket.handlers.CustomWebSocketHandler;
+import com.mo.whatisthis.apis.socket.handlers.MessageWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final CustomWebSocketHandler customWebSocketHandler;
+    private final MessageWebSocketHandler customWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
