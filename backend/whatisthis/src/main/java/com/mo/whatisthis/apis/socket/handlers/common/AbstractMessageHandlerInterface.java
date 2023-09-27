@@ -28,10 +28,6 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
 
     protected final SocketProvider socketProvider;
     protected final JwtTokenProvider jwtTokenProvider;
-    protected final RedisService redisService;
-    protected final HistoryService historyService;
-    protected final DamagedHistoryService damagedHistoryService;
-    protected final DeviceHistoryService deviceHistoryService;
 
     protected static ObjectMapper objectMapper = new ObjectMapper();
 

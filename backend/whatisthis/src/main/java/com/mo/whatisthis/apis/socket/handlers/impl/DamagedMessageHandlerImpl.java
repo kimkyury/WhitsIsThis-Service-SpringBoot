@@ -2,8 +2,6 @@ package com.mo.whatisthis.apis.socket.handlers.impl;
 
 import com.mo.whatisthis.apis.history.entities.DamagedHistoryEntity.Category;
 import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
-import com.mo.whatisthis.apis.history.services.DeviceHistoryService;
-import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
@@ -11,7 +9,6 @@ import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
-import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.WebSocketUtils;
 import java.io.IOException;
@@ -24,14 +21,13 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class DamagedMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
+    private final DamagedHistoryService damagedHistoryService;
+
     public DamagedMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
-        RedisService redisService,
-        HistoryService historyService,
-        DamagedHistoryService damagedHistoryService,
-        DeviceHistoryService deviceHistoryService) {
-        super(socketProvider, jwtTokenProvider, redisService, historyService, damagedHistoryService,
-            deviceHistoryService);
+        DamagedHistoryService damagedHistoryService) {
+        super(socketProvider, jwtTokenProvider);
+        this.damagedHistoryService = damagedHistoryService;
     }
 
     @Override

@@ -48,6 +48,17 @@ public class SocketProvider {
 
     }
 
+    public void sendMessage(WebSocketSession session, String payload){
+        try {
+            if (session.isOpen()) {
+                TextMessage message = new TextMessage(payload);
+                session.sendMessage(message);
+            }
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public void sendMessageToDevice(String serialNumber, String payload) {
 
         WebSocketSession session = deviceBySerialNumberMap.get(serialNumber);

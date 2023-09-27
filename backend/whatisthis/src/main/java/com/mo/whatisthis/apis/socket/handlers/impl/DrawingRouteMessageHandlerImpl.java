@@ -1,6 +1,5 @@
 package com.mo.whatisthis.apis.socket.handlers.impl;
 
-import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
@@ -8,7 +7,9 @@ import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
+import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
+import com.mo.whatisthis.supports.utils.AWSS3ResponseUtil;
 import com.mo.whatisthis.supports.utils.WebSocketUtils;
 import java.io.IOException;
 import java.util.Base64;
@@ -18,15 +19,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.socket.WebSocketSession;
 
 @Component
-public class DrawingMessageHandlerImpl extends AbstractMessageHandlerInterface {
+public class DrawingRouteMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
-    private final HistoryService historyService;
+    private final S3Service s3Service;
+    private final AWSS3ResponseUtil awss3ResponseUtil;
 
-    public DrawingMessageHandlerImpl(
+    public DrawingRouteMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
-        HistoryService historyService) {
+        S3Service s3Service, AWSS3ResponseUtil awss3ResponseUtil) {
         super(socketProvider, jwtTokenProvider);
-        this.historyService = historyService;
+        this.s3Service = s3Service;
+        this.awss3ResponseUtil = awss3ResponseUtil;
     }
 
 
@@ -45,14 +48,14 @@ public class DrawingMessageHandlerImpl extends AbstractMessageHandlerInterface {
         MultipartFile multipartFile = WebSocketUtils.convertToMultipartFile(byteStr, "drawing.jpg");
 
         try {
-            String imgUrl = historyService.uploadDrawing(Long.valueOf(historyId), multipartFile);
+            String imgUrl = awss3ResponseUtil.concatURL(s3Service.saveFile(multipartFile));
             saveDataAtMap(dataMap, DataType.image, imgUrl);
         } catch (IOException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
         dataMap.put(DataType.historyId.name(), historyId);
-        String sendMessage = convertMessageToString(SendType.DRAWING, dataMap);
+        String sendMessage = convertMessageToString(SendType.DRAWING_ROUTE, dataMap);
 
         sendMessageToEmployee(senderDevice, receiverEmployeeNo, sendMessage);
 

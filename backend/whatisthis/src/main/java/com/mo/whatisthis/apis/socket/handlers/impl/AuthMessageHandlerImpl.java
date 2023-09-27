@@ -1,8 +1,5 @@
 package com.mo.whatisthis.apis.socket.handlers.impl;
 
-import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
-import com.mo.whatisthis.apis.history.services.DeviceHistoryService;
-import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
@@ -20,12 +17,13 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class AuthMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
+    private final RedisService redisService;
+
     public AuthMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
-        RedisService redisService, HistoryService historyService,
-        DamagedHistoryService damagedHistoryService, DeviceHistoryService deviceHistoryService) {
-        super(socketProvider, jwtTokenProvider, redisService, historyService, damagedHistoryService,
-            deviceHistoryService);
+        RedisService redisService) {
+        super(socketProvider, jwtTokenProvider);
+        this.redisService = redisService;
     }
 
     @Override
