@@ -5,6 +5,7 @@ from nav_msgs.msg import Odometry,OccupancyGrid,Path
 from geometry_msgs.msg import Pose,PoseStamped
 
 from sys import maxsize as INF
+from PIL import Image
 import numpy as np
 from heapq import heappush, heappop
 from collections import deque
@@ -26,7 +27,7 @@ def floodFill(x: int, y: int, Map: np) -> np:
             ny = cy + dy
             if nx < 0 or nx >= 340 or ny < 0 or ny >= 340:continue
             if visit[nx][ny]:continue
-            if Map[nx][ny] > 85:continue
+            if Map[nx][ny] > 95:continue
             if Map[nx][ny] == 0:continue
             visit[nx][ny] = 1
             Map[nx][ny] = 60
@@ -37,11 +38,12 @@ def dijkstra(x: int, y: int, Map: list, points: dict) -> tuple:
     visit = [[[INF, 0] for _ in range(MAP_LENGTH)] for _ in range(MAP_LENGTH)]
     visit[x][y] = [0, 0]
     h = [(0, x, y)]
+    check = True
 
     while h:
         cost, cur_x, cur_y = heappop(h)
 
-        if points.get((cur_x, cur_y),0):break
+        if points.get((cur_x, cur_y),0):check = False;break
         if visit[cur_x][cur_y][0] < cost:continue
 
         for dx, dy, w in DELTA_D:
@@ -53,7 +55,8 @@ def dijkstra(x: int, y: int, Map: list, points: dict) -> tuple:
             if total_cost < visit[nx][ny][0]:
                 visit[nx][ny] = [total_cost, (cur_x, cur_y)]
                 heappush(h, (total_cost, nx, ny))
-                
+
+    if check:return None
     history = []
     cur = (cur_x, cur_y)
     while visit[cur[0]][cur[1]][1]:
@@ -64,6 +67,7 @@ def dijkstra(x: int, y: int, Map: list, points: dict) -> tuple:
     return history
 
 def make_path(start_x: int, start_y: int, Path_points: dict, Map: np) -> None:
+    print('경로 생성 중')
     path = []
     cur_x, cur_y = start_x, start_y
 
@@ -82,10 +86,11 @@ def make_path(start_x: int, start_y: int, Path_points: dict, Map: np) -> None:
             cur_y = target
 
         min_path = dijkstra(cur_x, cur_y, Map, Path_points)
+        if min_path == None:return path
         path.extend(min_path)
 
         cur_x, cur_y = path[-1]
-    
+    print('생성 완료')
     return path
 
 class Searching_path(Node):
@@ -128,10 +133,10 @@ class Searching_path(Node):
     def map_callback(self,msg):
         self.is_map=True
         map_data=np.array(msg.data)
-        self.map_msg=map_data
-        if not self.is_map:
-            self.map_data=map_data
+        self.map_data=map_data.reshape((340,340))
 
+        self.path_pub()
+        
     def check_status(self,msg):
         self.status = msg.data
         if self.status == '':
@@ -145,7 +150,7 @@ class Searching_path(Node):
     def path_pub(self):
         Path_points=dict()
         self.pre_map = self.map_data
-        
+
         for x in range(340):
             for y in range(340):
                 if self.pre_map[x][y] == 100:
@@ -154,7 +159,9 @@ class Searching_path(Node):
                             if 0 <= x+i < 340 and 0 <= y+j < 340:
                                 if self.pre_map[x+i][y+j] != 100:
                                     self.pre_map[x+i][y+j] = 127
-
+        
+        self.pre_map = floodFill(0, 0, self.pre_map)
+        print('Map 전처리')
         for x in range(0,340,15):
             min_y, max_y = INF, 0
             y = 0
@@ -169,23 +176,38 @@ class Searching_path(Node):
                     Path_points[(x, max_y)] = min_y
                     min_y, max_y = INF, 0
                 y+=1
-        
-        (start_point_x, start_point_y), _ = sorted(list(Path_points.items()))[0]
-        route = make_path(start_point_x, start_point_y, Path_points, self.pre_map)
 
+        print('경로 전처리')
+        (start_point_x, start_point_y), _ = sorted(list(Path_points.items()))[0]
+        # print(start_point_x,start_point_y)
+        route = make_path(start_point_x, start_point_y, Path_points, self.pre_map)
+        # print(route)
+
+        # 확인용 이미지화
+        for x, y in route:
+            self.pre_map[x][y] = 254
+                
+        map_img = Image.fromarray(self.pre_map)
+        map_img.show()
+
+        print('경로 전송')
         if len(route)!=0:
             self.global_path_msg=Path()
             self.global_path_msg.header.frame_id='map'
             for grid_cell in route:
                 tmp_pose=PoseStamped()
                 waypoint_x,waypoint_y=self.grid_cell_to_pose(grid_cell)
+                # waypoint_x,waypoint_y=grid_cell
                 tmp_pose.pose.position.x=waypoint_x
                 tmp_pose.pose.position.y=waypoint_y
                 tmp_pose.pose.orientation.w=1.0
                 self.global_path_msg.poses.append(tmp_pose)
-        
-            if len(self.final_path)!=0 :
+
+            if len(route)!=0 :
                 self.global_path_pub.publish(self.global_path_msg)
+                self.status = 'done'
+                print('경로 전송 완료')
+
 
 def main(args=None):
     rclpy.init(args=args)
