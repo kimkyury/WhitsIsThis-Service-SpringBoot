@@ -12,16 +12,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MessageDto {
 
-    private MessageType type;
+    private SendType type;
     private Map<String, String> data;
 
-    public enum MessageType {
+    public enum SendType {
         AUTH, REGISTER, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS, IOT_DEVICE, COMPLETION_RATE, RESPONSE;
 
     }
-    public enum MessageDataType {
+    public enum DataType {
         accessToken, image, x, y, category, state, command, historyId, serialNumber, isWorked, rate, text;
     }
-
-
 }

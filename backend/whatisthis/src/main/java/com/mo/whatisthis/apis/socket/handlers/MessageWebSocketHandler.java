@@ -11,7 +11,8 @@ import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.socket.dto.MessageDto;
 import com.mo.whatisthis.apis.socket.dto.MessageDto.MessageDataType;
 import com.mo.whatisthis.apis.socket.dto.MessageDto.MessageType;
-import com.mo.whatisthis.apis.socket.services.MoSocketProvider;
+import com.mo.whatisthis.apis.socket.handlers.interfaces.MessageHandlerInterface;
+import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
@@ -22,7 +23,6 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.socket.CloseStatus;
@@ -31,10 +31,9 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
-@RequiredArgsConstructor
 public class CustomWebSocketHandler extends TextWebSocketHandler {
 
-    private final MoSocketProvider moSocketProvider;
+    private final SocketProvider socketProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
     private final HistoryService historyService;
@@ -43,11 +42,26 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
+    private final Map<MessageType, MessageHandlerInterface> handlers;
+
+    public CustomWebSocketHandler(SocketProvider socketProvider,
+        JwtTokenProvider jwtTokenProvider, RedisService redisService,
+        HistoryService historyService, DamagedHistoryService damagedHistoryService,
+        DeviceHistoryService deviceHistoryService, AuthMessageHandlerInterface authMessageHandler) {
+
+        this.socketProvider = socketProvider;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.redisService = redisService;
+        this.historyService = historyService;
+        this.damagedHistoryService = damagedHistoryService;
+        this.deviceHistoryService = deviceHistoryService;
+        this.handlers = Map.of(MessageType.COORDINATE, authMessageHandler);
+    }
+
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
 
         MessageDto messageRequest;
-
         try {
             messageRequest = objectMapper.readValue(message.getPayload(), MessageDto.class);
         } catch (JsonProcessingException e) {
@@ -113,10 +127,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         sendDataMap.put(MessageDataType.category.name(), category);
 
         String sendMessage = convertMessageToString(MessageType.IOT_DEVICE, sendDataMap);
-        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+        socketProvider.sendMessageToEmployee(employeeNo, sendMessage);
 
         String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
-        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
+        socketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
 
     }
 
@@ -137,11 +151,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
 
         if (role.equals(Role.ROLE_EMPLOYEE.name())) {
 
-            moSocketProvider.addEmployeeToSocket(username, session);
-            moSocketProvider.sendMessageToEmployee(username, "Succeeded Verify Authorization");
+            socketProvider.addEmployeeToSocket(username, session);
+            socketProvider.sendMessageToEmployee(username, "Succeeded Verify Authorization");
 
         } else {
-            moSocketProvider.addDeviceToSocket(username, session);
+            socketProvider.addDeviceToSocket(username, session);
 
             String[] redisData = redisService.getValue("device:" + username)
                                              .split("/");
@@ -158,8 +172,8 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
             sendDataMap.put(MessageDataType.command.name(), "CONNECTED");
             String sendMessage = convertMessageToString(MessageType.STATUS, sendDataMap);
 
-            moSocketProvider.sendMessageToDevice(username, "Succeeded Verify Authorization");
-            moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+            socketProvider.sendMessageToDevice(username, "Succeeded Verify Authorization");
+            socketProvider.sendMessageToEmployee(employeeNo, sendMessage);
         }
     }
 
@@ -171,7 +185,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         String employeeNo = getAttributeFromSessionStorage(session, SessionKey.username.name());
         redisService.saveData("device:" + serialNumber, employeeNo + "/" + historyId);
 
-        moSocketProvider.sendMessageToEmployee(employeeNo, "Success Send Message");
+        socketProvider.sendMessageToEmployee(employeeNo, "Success Send Message");
 
     }
 
@@ -181,18 +195,18 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         String serialNumber = dataMap.get(MessageDataType.serialNumber.name());
 
         if (command.equals("END")) {
-            moSocketProvider.sendMessageToDevice(serialNumber,
+            socketProvider.sendMessageToDevice(serialNumber,
                 "Close connection by Employee command");
-            moSocketProvider.closeConnectionDevice(serialNumber, 1000,
+            socketProvider.closeConnectionDevice(serialNumber, 1000,
                 "Close connection by Employee command");
         } else {
-            moSocketProvider.sendMessageToDevice(serialNumber, command);
+            socketProvider.sendMessageToDevice(serialNumber, command);
         }
 
         String username = getAttributeFromSessionStorage(session, SessionKey.username.name());
         System.out.println("employeeNo>>>>>>> " + username);
 
-        moSocketProvider.sendMessageToEmployee(username, "Success Send message");
+        socketProvider.sendMessageToEmployee(username, "Success Send message");
     }
 
     public void coordinateHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -210,10 +224,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         sendDataMap.put(MessageDataType.y.name(), y);
 
         String sendMessage = convertMessageToString(MessageType.COORDINATE, sendDataMap);
-        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+        socketProvider.sendMessageToEmployee(employeeNo, sendMessage);
 
         String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
-        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
+        socketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
     }
 
     public void drawingHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -241,10 +255,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         sendDataMap.put(MessageDataType.image.name(), imgUrl);
 
         String sendMessage = convertMessageToString(MessageType.DRAWING, sendDataMap);
-        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+        socketProvider.sendMessageToEmployee(employeeNo, sendMessage);
 
         String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
-        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
+        socketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
     }
 
     public void damageHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -276,10 +290,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         sendDataMap.put(MessageDataType.category.name(), category);
 
         String sendMessage = convertMessageToString(MessageType.DRAWING, sendDataMap);
-        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+        socketProvider.sendMessageToEmployee(employeeNo, sendMessage);
 
         String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
-        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
+        socketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
     }
 
     public void statusHandler(WebSocketSession session, Map<String, String> dataMap) {
@@ -293,10 +307,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         sendDataMap.put(MessageDataType.state.name(), state);
 
         String sendMessage = convertMessageToString(MessageType.STATUS, sendDataMap);
-        moSocketProvider.sendMessageToEmployee(employeeNo, sendMessage);
+        socketProvider.sendMessageToEmployee(employeeNo, sendMessage);
 
         String serialNumber = getAttributeFromSessionStorage(session, SessionKey.username.name());
-        moSocketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
+        socketProvider.sendMessageToDevice(serialNumber, "Success Send Message");
 
     }
 
@@ -336,10 +350,10 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
                                           .get(SessionKey.username.name());
 
         if (role.equals(Role.ROLE_EMPLOYEE.name())) {
-            moSocketProvider.removeEmployeeToSocket(username);
+            socketProvider.removeEmployeeToSocket(username);
         } else {
             redisService.deleteValue("device:" + username);
-            moSocketProvider.removeDeviceToSocket(username);
+            socketProvider.removeDeviceToSocket(username);
         }
     }
 
