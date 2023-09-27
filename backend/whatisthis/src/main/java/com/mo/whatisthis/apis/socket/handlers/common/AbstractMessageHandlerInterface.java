@@ -97,14 +97,14 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
 
     protected String createSuccessMessage() {
         Map<String, String> dataMap = new HashMap<>();
-        dataMap.put(DataType.result.name(), "SUCCESS");
-        return convertMessageToString(SendType.SEND_RESULT, dataMap);
+        dataMap.put(DataType.message.name(), "SUCCESS");
+        return convertMessageToString(SendType.SYSTEM_MESSAGE, dataMap);
     }
 
     protected String createFailMessage() {
         Map<String, String> dataMap = new HashMap<>();
-        dataMap.put(DataType.result.name(), "FAIL");
-        return convertMessageToString(SendType.SEND_RESULT, dataMap);
+        dataMap.put(DataType.message.name(), "FAIL");
+        return convertMessageToString(SendType.SYSTEM_MESSAGE, dataMap);
     }
 
     protected String convertMessageToString(SendType messageType, Map<String, String> dataMap) {

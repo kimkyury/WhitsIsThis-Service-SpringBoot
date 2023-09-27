@@ -37,6 +37,16 @@ public class CommandHandler extends AbstractMessageHandlerInterface {
         String command = getDataAtMap(dataMap, DataType.command);
 
         Map<String, String> map = new HashMap<>();
+
+        try {
+            CommandCode.valueOf(command);
+        } catch (IllegalArgumentException e) {
+            map.put(DataType.message.name(),
+                "Command value is invalid. (You can only use the words 'START' or 'END' )");
+            String message = convertMessageToString(SendType.SYSTEM_MESSAGE, dataMap);
+            socketProvider.sendMessageToEmployee(employeeNo, message);
+        }
+
         map.put(DataType.command.name(), command);
         String sendMessage = convertMessageToString(SendType.COMMAND, map);
         sendMessageToDevice(employeeNo, serialNumber, sendMessage);
