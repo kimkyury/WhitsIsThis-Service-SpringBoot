@@ -33,21 +33,17 @@ public class CoordinateMessageHandlerImpl extends AbstractMessageHandlerInterfac
 
         // Device가 Employee에게 보내는 Message
 
+        String senderDevice = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
+        String receiverEmployeeNo = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
         String historyId = getAttributeAtSession(session, SessionKey.HISTORY_ID);
-        String receiver = getAttributeAtSession(session, SessionKey.HISTORY_ID);
-        String sender = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
 
-        boolean isWorked = "1".equals(getDataAtMap(dataMap, DataType.isWorked));
         Float x = Float.valueOf(getDataAtMap(dataMap, DataType.x));
         Float y = Float.valueOf(getDataAtMap(dataMap, DataType.y));
-        Category category = Category.valueOf(getDataAtMap(dataMap, DataType.category));
-
-        deviceHistoryService.createDeviceHistory(Long.valueOf(historyId), x, y, category, isWorked);
 
         dataMap.put(DataType.historyId.name(), historyId);
-        String sendMessage = convertMessageToString(SendType.IOT_DEVICE, dataMap);
+        String sendMessage = convertMessageToString(SendType.COORDINATE, dataMap);
 
-        sendMessageToEmployee( sender, receiver, sendMessage);
+        sendMessageToEmployee( senderDevice, receiverEmployeeNo, sendMessage);
 
     }
 }

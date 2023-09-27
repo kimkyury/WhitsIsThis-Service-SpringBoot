@@ -33,15 +33,14 @@ public class RegisterMessageHandlerImpl extends AbstractMessageHandlerInterface 
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
         // Employee가 Device를 등록하는 메시지
 
+        String senderEmployee = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
         String historyId = getDataAtMap(dataMap, DataType.historyId);
         String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
 
-        String sender = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
-
-        redisService.saveData("device:" + serialNumber, sender + "/" + historyId);
+        redisService.saveData("device:" + serialNumber, senderEmployee + "/" + historyId);
 
         String message = createSuccessMessage();
-        socketProvider.sendMessageToEmployee(sender, message);
+        socketProvider.sendMessageToEmployee(senderEmployee, message);
     }
 }
 

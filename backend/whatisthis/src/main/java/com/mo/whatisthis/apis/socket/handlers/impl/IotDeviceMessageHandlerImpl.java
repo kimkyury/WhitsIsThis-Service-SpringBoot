@@ -34,9 +34,9 @@ public class IotDeviceMessageHandlerImpl extends AbstractMessageHandlerInterface
 
         // Device가 Employee에게 보내는 Message
 
-        String historyId = getAttributeAtSession(session, SessionKey.HISTORY_ID);
-        String receiver = getAttributeAtSession(session, SessionKey.HISTORY_ID);
         String sender = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
+        String employeeNo = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
+        String historyId = getAttributeAtSession(session, SessionKey.HISTORY_ID);
 
         boolean isWorked = "1".equals(getDataAtMap(dataMap, DataType.isWorked));
         Float x = Float.valueOf(getDataAtMap(dataMap, DataType.x));
@@ -48,7 +48,7 @@ public class IotDeviceMessageHandlerImpl extends AbstractMessageHandlerInterface
         dataMap.put(DataType.historyId.name(), historyId);
         String sendMessage = convertMessageToString(SendType.IOT_DEVICE, dataMap);
 
-        sendMessageToEmployee( sender, receiver, sendMessage);
+        sendMessageToEmployee( sender, employeeNo, sendMessage);
 
     }
 }

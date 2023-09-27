@@ -11,7 +11,6 @@ import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import com.mo.whatisthis.redis.services.RedisService;
-import io.lettuce.core.protocol.CommandType;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Component;
@@ -32,7 +31,7 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
         // Employee가 Device에게 보내는 메시지 (START, END)
 
-        String employeeNo = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
+        String senderEmployee = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
         String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
         String command = getDataAtMap(dataMap, DataType.command);
 
@@ -44,12 +43,12 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
             map.put(DataType.message.name(),
                 "Command value is invalid. (You can only use the words 'START' or 'END' )");
             String message = convertMessageToString(SendType.SYSTEM_MESSAGE, dataMap);
-            socketProvider.sendMessageToEmployee(employeeNo, message);
+            socketProvider.sendMessageToEmployee(senderEmployee, message);
         }
 
         map.put(DataType.command.name(), command);
         String sendMessage = convertMessageToString(SendType.COMMAND, map);
-        sendMessageToDevice(employeeNo, serialNumber, sendMessage);
+        sendMessageToDevice(senderEmployee, serialNumber, sendMessage);
 
         if (command.equals(CommandCode.END)) {
             socketProvider.closeConnectionDevice(serialNumber, 1000, sendMessage);
