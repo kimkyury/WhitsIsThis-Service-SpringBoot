@@ -7,10 +7,14 @@ public class CommonCode {
     }
 
     public enum SendType {
-        AUTH, REGISTER, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS, IOT_DEVICE, COMPLETION_RATE, SEND_RESULT;
+        AUTH, REGISTER, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS, IOT_DEVICE, COMPLETION_RATE, SYSTEM_MESSAGE;
     }
 
     public enum DataType {
-        accessToken, image, x, y, category, state, command, historyId, serialNumber, isWorked, rate, text, result;
+        accessToken, image, x, y, category, state, command, historyId, serialNumber, isWorked, rate, text, message;
+    }
+
+    public enum CommandCode {
+        START, END
     }
 }
