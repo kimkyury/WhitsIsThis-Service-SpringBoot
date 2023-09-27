@@ -13,12 +13,12 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 @Component
-public class MoSocketProvider {
+public class SocketProvider {
 
     private final Map<String, WebSocketSession> employeeByHistoryMap;
     private final Map<String, WebSocketSession> deviceBySerialNumberMap;
 
-    public MoSocketProvider() {
+    public SocketProvider() {
         this.employeeByHistoryMap = new ConcurrentHashMap<>();
         this.deviceBySerialNumberMap = new ConcurrentHashMap<>();
     }

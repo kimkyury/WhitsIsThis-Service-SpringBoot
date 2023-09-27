@@ -1,5 +1,6 @@
 package com.mo.whatisthis.apis.socket.dto;
 
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +16,4 @@ public class MessageDto {
     private SendType type;
     private Map<String, String> data;
 
-    public enum SendType {
-        AUTH, REGISTER, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS, IOT_DEVICE, COMPLETION_RATE, RESPONSE;
-
-    }
-    public enum DataType {
-        accessToken, image, x, y, category, state, command, historyId, serialNumber, isWorked, rate, text;
-    }
 }
