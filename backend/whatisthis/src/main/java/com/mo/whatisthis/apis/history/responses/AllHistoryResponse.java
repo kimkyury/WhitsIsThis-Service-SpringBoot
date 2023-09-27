@@ -1,6 +1,6 @@
 package com.mo.whatisthis.apis.history.responses;
 
-import com.mo.whatisthis.apis.todolist.responses.TodolistResponse;
+import com.mo.whatisthis.apis.todolist.responses.TodolistWrapperResponse;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class AllHistoryResponse {
 
     IntegratedHistoryResponse history;
-    List<TodolistResponse> todolist;
+    List<TodolistWrapperResponse> todolist;
 }
