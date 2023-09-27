@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/private/banks")
+@RequestMapping("/api/v1/banks")
 @Tag(name = "5. Common code")
 @RequiredArgsConstructor
-public class BankPrivateController {
+public class BankPublicController {
 
     private final BankService bankService;
 
