@@ -26,6 +26,7 @@ public class MoSocketProvider {
     public void addEmployeeToSocket(String username, WebSocketSession employeeSession) {
 
         employeeByHistoryMap.put(username, employeeSession);
+        System.out.println("Add to Employee");
     }
 
     public void removeEmployeeToSocket(String employeeNo) {
@@ -37,6 +38,7 @@ public class MoSocketProvider {
     public void addDeviceToSocket(String serialNumber, WebSocketSession deviceSession) {
 
         deviceBySerialNumberMap.put(serialNumber, deviceSession);
+        System.out.println("Add to Device");
 
     }
 
