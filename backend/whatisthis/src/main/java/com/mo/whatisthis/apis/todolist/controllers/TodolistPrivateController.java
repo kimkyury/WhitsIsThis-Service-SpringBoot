@@ -12,6 +12,7 @@ import java.io.IOException;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,11 +41,20 @@ public class TodolistPrivateController {
         return createSuccessResponse(SuccessCode.NO_CONTENT, "변경되었습니다.");
     }
 
-    @PostMapping("/{id}/image")
+    @PostMapping("/{id}/images")
     @Operation(summary = "투두리스트의 사진 업로드", tags = {"6. Inspection"})
     public ResponseEntity<SuccessResponse<String>> uploadTodolistImage(@PathVariable Long id,
         @RequestPart("image") MultipartFile multipartFile) throws IOException {
         return createSuccessResponse(SuccessCode.OK, "업로드 성공",
             todolistService.uploadTodolistImage(id, multipartFile));
+    }
+
+    @DeleteMapping("/images/{id}")
+    @Operation(summary = "투두리스트 사진 삭제", tags = {"6. Inspection"})
+    public ResponseEntity<SuccessResponse<String>> deleteTodolistImage(@PathVariable Long id)
+        throws IOException {
+        todolistService.deleteTodolistImage(id);
+
+        return createSuccessResponse(SuccessCode.NO_CONTENT, "사진 삭제 성공");
     }
 }
