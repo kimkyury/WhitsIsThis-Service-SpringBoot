@@ -33,6 +33,7 @@ public class AuthMessageHandlerImpl extends AbstractMessageHandlerInterface {
         Claims claims = getClaimsByToken(accessToken);
         String memberNo = getInfoAtClaim(claims, MEMBER_NO_KEY);
         String role = getInfoAtClaim(claims, AUTHORITIES_KEY);
+        saveAttributeAtSession(session, SessionKey.ROLE, role);
 
         if (isEmployee(role)) {
 

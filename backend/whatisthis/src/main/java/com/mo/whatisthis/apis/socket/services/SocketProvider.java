@@ -40,6 +40,7 @@ public class SocketProvider {
     public void removeEmployeeToSocket(String employeeNo) {
 
         employeeByHistoryMap.remove(employeeNo);
+        System.out.println("REMOVE employee");
 
     }
 
@@ -53,6 +54,7 @@ public class SocketProvider {
     public void removeDeviceToSocket(String serialNumber) {
 
         deviceBySerialNumberMap.remove(serialNumber);
+        System.out.println("REMOVE device");
 
     }
 
@@ -71,9 +73,10 @@ public class SocketProvider {
         int closeCode, String reason) {
 
         WebSocketSession deviceSession = deviceBySerialNumberMap.get(serialNumber);
-
         try {
-            deviceSession.close(new CloseStatus(closeCode, reason));
+            if (deviceSession != null && deviceSession.isOpen()) {
+                deviceSession.close(new CloseStatus(closeCode, reason));
+            }
         } catch (IOException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
