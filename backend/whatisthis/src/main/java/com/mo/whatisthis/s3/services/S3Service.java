@@ -1,11 +1,15 @@
 package com.mo.whatisthis.s3.services;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
+import com.mo.whatisthis.exception.CustomException;
+import com.mo.whatisthis.supports.codes.ErrorCode;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -53,4 +57,15 @@ public class S3Service {
 
         return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
     }
+
+    public void deleteFile(String fileName) {
+        try {
+            amazonS3.deleteObject(bucket, fileName);
+        } catch (AmazonServiceException e) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        } catch (SdkClientException e) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+    }
+
 }
