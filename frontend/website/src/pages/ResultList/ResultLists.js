@@ -78,7 +78,7 @@ function ResultList() {
   };
 
   return (
-    <div>
+    <div className='fontb'>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         {/* 검색 필터 등 추가할 수 있는 UI 요소 */}
       </div>

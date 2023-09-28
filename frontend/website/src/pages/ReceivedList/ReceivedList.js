@@ -4,21 +4,22 @@ import Item from './Receiveditem';
 import RequestModal from './RequestModal';
 import { FaSearch } from 'react-icons/fa';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import Warning from '../../component/warning/warning';
 
 function List() {
   const [showModal, setShowModal] = useState(false);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [isLogin, setIsLogin] = useState(false);
   const [applicant, setApplicant] = useState([]);
   const [myApplicant, setMyApplicant] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-
+  const accessToken = sessionStorage.getItem('accessToken')
   const getRefreshToken = () => {
-    return sessionStorage.getItem('refreshToken');
+    return sessionStorage.getItem('accessToken');
   };
 
   const handleItemClick = (itemData) => {
@@ -40,10 +41,10 @@ function List() {
   const fetchData = (page, endpoint) => {
     setIsFetching(true);
 
-    const refreshToken = getRefreshToken();
+    const accessToken = getRefreshToken();
 
     const headers = {
-      'Authorization': `${refreshToken}`,
+      'Authorization': `${accessToken}`,
     };
 
     fetch(`${BASE_URL}/api/v1/private/requests/${endpoint}?page=${page}`, {
@@ -67,7 +68,7 @@ function List() {
         } else {
           console.error('API 오류:', data.message);
           setIsFetching(false);
-          console.log(refreshToken);
+          // console.log(refreshToken);
         }
       })
       .catch((error) => {
@@ -94,6 +95,17 @@ function List() {
       fetchData(nextPage, 'waiting');
     }
   };
+
+  useEffect(() => {
+    if (accessToken) {
+      fetchData();
+      console.log(accessToken)
+      setIsLogin(true)
+      }
+      if (!isLogin) {
+        // navigate(-1)
+      }
+  })
 
   useEffect(() => {
     window.addEventListener('scroll', handleApplicantScroll);
@@ -141,7 +153,8 @@ function List() {
   }
 
   return (
-    <div>
+    isLogin?(
+    <div className='fontb'>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div className="inputgrid">
           <input
@@ -241,7 +254,11 @@ function List() {
         </div>
       )}
       {loadingMore && <div>Loading...</div>}
-    </div>
+    </div>):(
+      <div style={{display:'flex',justifyContent:'center', alignItems:'center', height:'90vh'}}>
+        <Warning/>
+      </div>
+    )
   );
 }
 

@@ -28,7 +28,7 @@ function WebMain() {
 
   // 최초 로그인 여부에 따라 컴포넌트를 렌더링합니다.
   return (
-    <div className='backgr'>
+    <div className='backgr fontb'>
       <div className='loginform'>
  
           

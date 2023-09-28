@@ -12,7 +12,7 @@ function Receiveditem({ data }) {
   } = data;
 
   return (
-    <div className="recitembox">
+    <div className="recitembox fontb">
       <div className="recitemdiv">
         <span className="rectag">신청자명: {requesterName}</span>
         <span className="rectag">연락처: {requesterPhone}</span>

@@ -94,7 +94,7 @@ function 첫번째로그인페이지() {
   };
 
   return (
-    <div className="infocha">
+    <div className="infocha fontb">
       <div className="infoin">
         <div className="infogridx">
           <div>

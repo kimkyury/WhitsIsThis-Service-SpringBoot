@@ -14,7 +14,7 @@ export function ResultItem({ data, onClick }) {
 console.log('formattedInspectionEnd:', formattedInspectionEnd);
 
   return (
-    <div className='relist' onClick={handleClick}>
+    <div className='relist fontb' onClick={handleClick}>
       <span className='databox relistdata'>
         {data.requesterName}
       </span>

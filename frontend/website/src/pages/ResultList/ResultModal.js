@@ -12,7 +12,7 @@ function ResultModal({ selectedItem, setShowModal }) {
   };
 
   return (
-    <div className="Modalbox flexcenter" style={{ backgroundColor: 'white' }}>
+    <div className="Modalbox flexcenter fontb" style={{ backgroundColor: 'white' }}>
       <div>
       
         <p className="resmodalform">

@@ -4,7 +4,8 @@ import { ResultItem } from './ResultItem';
 import ResultModal from './ResultModal';
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
+import Warning from '../../component/warning/warning';
 function ResultList() {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -12,18 +13,19 @@ function ResultList() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const [dataList, setDataList] = useState([]); // dataList를 빈 배열로 초기화
-  const refreshToken = sessionStorage.getItem('refreshToken');
-
+  const accessToken = sessionStorage.getItem('accessToken');
+  const [isLogin, setIsLogin] = useState(false);
+  const navigate = useNavigate();
   const fetchData = async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/private/requests/done`,
         {
           params: {
-            page: currentPage,
+            page: 1,
           },
           headers: {
-            'Authorization': refreshToken,
+            'Authorization': accessToken,
           },
         }
       );
@@ -38,14 +40,21 @@ function ResultList() {
       console.error('데이터를 가져오는 중 오류가 발생했습니다:', error);
     }
   };
-
+  console.log(currentPage)
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
     setShowModal(true);
   };
 
   useEffect(() => {
+    if (accessToken) {
     fetchData();
+    console.log(accessToken)
+    setIsLogin(true)
+    }
+    if (!isLogin) {
+      // navigate(-1)
+    }
   }, [currentPage]);
 
   const filteredData = Array.isArray(dataList)
@@ -84,8 +93,13 @@ function ResultList() {
     }
   };
 
+  console.log(currentPage)
+
+
+
   return (
-    <div>
+    isLogin?(
+    <div className='fontb'>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         {/* 검색 필터 등 추가할 수 있는 UI 요소 */}
       </div>
@@ -171,7 +185,11 @@ function ResultList() {
           </div> */}
         </div>
       </div>
-    </div>
+    </div>):(
+      <div style={{display:'flex',justifyContent:'center', alignItems:'center', height:'90vh'}}>
+        <Warning/>
+   </div> 
+    )
   );
 }
 

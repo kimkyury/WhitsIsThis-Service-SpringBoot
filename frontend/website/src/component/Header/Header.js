@@ -21,7 +21,7 @@ function Header(props) {
 
 
   return (
-    <div>
+    <div className='fontb'>
       <div className="header">
         <img style={{ marginLeft:'1rem', width: '4vw', height:'4vw' }} src={`${process.env.PUBLIC_URL}/assets/logo.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
         <div style={{ display: 'flex', width: '40vw',height:'3.3vh', marginRight: '-7.2rem' }}>

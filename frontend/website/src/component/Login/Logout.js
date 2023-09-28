@@ -8,30 +8,30 @@ function Logout() {
   const BASE_URL = process.env.REACT_APP_BASE_URL
   const handleLogout = async () => {
     try {
-      const refreshToken = sessionStorage.getItem('refreshToken');
+      const accessToken = sessionStorage.getItem('accessToken');
 
-      if (refreshToken) {
-        // Send a POST request to the logout API with refreshToken in Authorization header
+      if (accessToken) {
+        // Send a POST request to the logout API with accessToken in Authorization header
         await axios.post(
           `${BASE_URL}/api/v1/private/auth/logout`,
           {},
           {
             headers: {
-              Authorization: `${refreshToken}`,
+              Authorization: `${accessToken}`,
             },
           }
         );
       }
 
       // Assuming the logout was successful, clear the token from localStorage
-      localStorage.removeItem('refreshToken');
-      Cookies.remove('refreshToken');
+      localStorage.removeItem('accessToken');
+      Cookies.remove('accessToken');
       sessionStorage.removeItem('imageurl');
       sessionStorage.removeItem('username');
       sessionStorage.removeItem('role');
       sessionStorage.removeItem('name');
       sessionStorage.removeItem('phone');
-      sessionStorage.removeItem('refreshToken');
+      sessionStorage.removeItem('accessToken');
       // sessionStorage.clear();
       // Cookies.clear();
       // Optionally, you can clear other data from localStorage as well, e.g., username

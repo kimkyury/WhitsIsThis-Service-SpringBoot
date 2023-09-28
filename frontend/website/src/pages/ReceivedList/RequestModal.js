@@ -38,7 +38,7 @@ function RequestModal({ selectedItem, setShowModal }) {
   };
 
   return (
-    <div className="Modalbox">
+    <div className="Modalbox fontb">
     
       <div>
         <div>

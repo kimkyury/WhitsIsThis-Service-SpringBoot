@@ -94,6 +94,7 @@
   background-color: #ECECEC;
   opacity: 100%;
   font-weight: bold;
+  
   color: #F07B3F;
 }
 /* <Item key={index} data={data} onItemDoubleClick={handleItemDoubleClick} /> */
@@ -125,4 +126,6 @@
     border: 3px solid #2D4059;
     width: 20vw;
     height: 3vh;
+    
 }
+

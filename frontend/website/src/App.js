@@ -19,7 +19,7 @@ function App() {
   const isAuthenticated = !!access;
 
   return (
-    <div>
+    <div className='fontb'>
       <Router basename={BASE_NAME}>
         <Header />
         <Routes>
@@ -31,11 +31,11 @@ function App() {
           <Route path="/rlist" element={<RList />} />
           <Route
             path="/mypage"
-            element={<PrivateRoute element={<Mypage />} isAuthenticated={isAuthenticated} />}
-          />
+            element={<Mypage />}/>
+    
           <Route
             path="/mypass"
-            element={<PrivateRoute element={<Mypass />} isAuthenticated={isAuthenticated} />}
+            element={<Mypass />}
           />
         </Routes>
       </Router>
