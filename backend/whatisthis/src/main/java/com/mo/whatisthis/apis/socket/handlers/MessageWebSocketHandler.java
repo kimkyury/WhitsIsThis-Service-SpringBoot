@@ -22,6 +22,7 @@ import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.supports.codes.ErrorCode;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Component;
@@ -73,28 +74,37 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
 
-        MessageDto messageRequest = convertMessageToDto(session, message);
-
-        SendType type = messageRequest.getType();
-        Map<String, String> dataMap = messageRequest.getData();
-
-        MessageHandlerInterface handler = handlers.get(type);
-
-        if (handler == null) {
-            String errorText = "Please Confirm your MessageType, It is not valid type. (하지만 완벽한데도 에러가 난다면 백엔드에게 연락주세요. ) ";
-            sendErrorMessage(session, errorText);
-        }
-
         try {
-            handler.handle(session, dataMap);
+            MessageDto messageRequest = convertMessageToDto(session, message);
+
+            SendType type = messageRequest.getType();
+            Map<String, String> dataMap = messageRequest.getData();
+
+            MessageHandlerInterface handler = handlers.get(type);
+
+            if (handler == null) {
+                String errorText = "Please Confirm your MessageType, It is not valid type. (하지만 완벽한데도 에러가 난다면 백엔드에게 연락주세요. ) ";
+                sendErrorMessage(session, errorText);
+            }else{
+                handler.handle(session, dataMap);
+            }
         } catch (IllegalArgumentException | NullPointerException e) {
             e.printStackTrace();
 
             Map<String, String> map = new HashMap<>();
             map.put(DataType.message.name(),
-                "input data is invalid. ");
+                "input data is invalid. (하지만 완벽한데도 에러가 난다면 백엔드에게 연락주세요. )");
             String errorMessage = convertMessageToString(SendType.SYSTEM_MESSAGE, map);
             socketProvider.sendMessage(session, errorMessage);
+
+        }
+    }
+
+    public void closeSession(WebSocketSession session){
+        try {
+            session.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -111,6 +121,7 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
             String employeeNo = getAttributeFromSession(session, SessionKey.EMPLOYEE_NO);
             socketProvider.removeEmployeeToSocket(employeeNo);
         } else {
+            System.out.println("Remove Device At redis");
             String serialNumber = getAttributeFromSession(session, SessionKey.SERIAL_NUMBER);
             redisService.deleteValue("device:" + serialNumber);
             socketProvider.removeDeviceToSocket(serialNumber);
