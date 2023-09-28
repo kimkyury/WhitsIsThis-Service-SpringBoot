@@ -16,6 +16,9 @@ import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.DateUtil;
+import com.mo.whatisthis.toss.models.Payment;
+import com.mo.whatisthis.toss.requests.CreateVirtualAccountRequest;
+import com.mo.whatisthis.toss.services.TossService;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,6 +42,9 @@ public class RequestService {
     private final MemberRepository memberRepository;
     private final HistoryRepository historyRepository;
     private final S3Service s3Service;
+    private final TossService tossService;
+    private final Float weight = 0.305f;
+    private final Integer money = 5000;
 
     public void createRequest(RequestRegisterRequest requestRegisterRequest,
         MultipartFile warrant) throws IOException {
@@ -49,11 +55,12 @@ public class RequestService {
             requestRegisterRequest.getRequesterName(),
             requestRegisterRequest.getRequesterPhone(),
             DateUtil.stringConvertToLocalDate(requestRegisterRequest.getInspectionStart()),
-            DateUtil.stringConvertToLocalDate(requestRegisterRequest.getInspectionEnd())
+            DateUtil.stringConvertToLocalDate(requestRegisterRequest.getInspectionEnd()),
+            requestRegisterRequest.getBuildingArea()
         );
 
         String requestContent = requestRegisterRequest.getRequestContent();
-        if (!requestContent.isEmpty() || !requestContent.isBlank()) {
+        if (!requestContent.isEmpty()) {
             requestEntity.setRequestContent(requestContent);
         }
 
@@ -63,6 +70,14 @@ public class RequestService {
         }
         requestEntity.setStatus(Status.WAITING_FOR_PAY);
         requestEntity.setRequestedAt(LocalDateTime.now());
+
+        /*
+         * 결제 관련 작업
+         */
+        Integer amount = (int) (requestRegisterRequest.getBuildingArea() * weight * money);
+        Payment payment = tossService.createVirtualAccount(
+            CreateVirtualAccountRequest.of(amount, requestRegisterRequest.getRequesterName(),
+                requestRegisterRequest.getBankCode(), requestRegisterRequest.getRequesterPhone()));
 
         requestRepository.save(requestEntity);
     }
