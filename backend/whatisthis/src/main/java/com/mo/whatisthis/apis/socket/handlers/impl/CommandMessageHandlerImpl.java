@@ -10,6 +10,7 @@ import com.mo.whatisthis.jwt.services.JwtTokenProvider;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 
 @Component
@@ -29,22 +30,22 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
         String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
         String command = getDataAtMap(dataMap, DataType.command);
 
-        Map<String, String> map = new HashMap<>();
 
         try {
             CommandCode.valueOf(command);
         } catch (IllegalArgumentException | NullPointerException e) {
-            map.put(DataType.message.name(),
+            Map<String, String> errorDataMap = new HashMap<>();
+            errorDataMap.put(DataType.message.name(),
                 "Command value is invalid. (You can only use the words 'START' or 'END' )");
-            String message = convertMessageToString(SendType.SYSTEM_MESSAGE, dataMap);
+            String message = convertMessageToString(SendType.SYSTEM_MESSAGE, errorDataMap);
             socketProvider.sendMessageToEmployee(session, senderEmployee, message);
         }
 
-        saveDataAtMap(map, DataType.command, command);
-        String sendMessage = convertMessageToString(SendType.COMMAND, map);
+        String sendMessage = convertMessageToString(SendType.COMMAND, dataMap);
         sendMessageToDevice(session, senderEmployee, serialNumber, sendMessage);
 
-        if (command.equals(CommandCode.END)) {
+        if (command.equals(CommandCode.END.name())) {
+
             socketProvider.closeConnectionDevice(session, serialNumber, 1000, sendMessage);
         }
     }
