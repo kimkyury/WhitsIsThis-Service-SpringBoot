@@ -12,6 +12,14 @@
   background-repeat: no-repeat;
 }
 
+.vertical-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  height: 100%; /* 컨테이너의 높이를 100%로 설정하여 세로 중앙 정렬합니다. */
+}
+
 .desk-customreceivedivfix {
 
   margin-top:1rem;
@@ -57,6 +65,7 @@
   height: 10rem;
   border-radius: 0.5rem;
   border: 0.1rem solid black;
+  align-items: center;
 }
 
 .desk-boxpage {
