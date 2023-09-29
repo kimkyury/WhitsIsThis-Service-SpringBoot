@@ -1,6 +1,6 @@
 package com.mo.whatisthis.toss.models;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Data;
 
@@ -18,8 +18,8 @@ public class Payment {
     private String totalAmount;
     private Integer balanceAmount;
     private String status;
-    private LocalDateTime requestedAt;
-    private LocalDateTime approvedAt;
+    private OffsetDateTime requestedAt;
+    private OffsetDateTime approvedAt;
     private Boolean useEscrow;
     private String lastTransactionKey;
     private Integer suppliedAmount;

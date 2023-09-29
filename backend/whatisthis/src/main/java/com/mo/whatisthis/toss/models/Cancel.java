@@ -1,6 +1,6 @@
 package com.mo.whatisthis.toss.models;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import lombok.Data;
 
 @Data
@@ -12,7 +12,7 @@ public class Cancel {
     private Integer taxExemptionAmount;
     private Integer refundableAmount;
     private Integer easyPayDiscountAmount;
-    private LocalDateTime canceledAt;
+    private OffsetDateTime canceledAt;
     private String transactionKey;
     private String receiptKey;
 

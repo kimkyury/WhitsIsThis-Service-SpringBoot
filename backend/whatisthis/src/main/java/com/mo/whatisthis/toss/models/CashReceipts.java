@@ -1,6 +1,6 @@
 package com.mo.whatisthis.toss.models;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import lombok.Data;
 
 @Data
@@ -19,5 +19,5 @@ public class CashReceipts {
     private String issueStatus;
     private Failure failure;
     private String customerIdentityNumber;
-    private LocalDateTime requestedAt;
+    private OffsetDateTime requestedAt;
 }
