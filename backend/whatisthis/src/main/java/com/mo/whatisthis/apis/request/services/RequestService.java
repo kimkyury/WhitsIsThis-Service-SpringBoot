@@ -3,6 +3,7 @@ package com.mo.whatisthis.apis.request.services;
 import com.mo.whatisthis.apis.history.entities.HistoryEntity;
 import com.mo.whatisthis.apis.history.repositories.HistoryRepository;
 import com.mo.whatisthis.apis.member.repositories.MemberRepository;
+import com.mo.whatisthis.apis.payment.services.PaymentService;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
@@ -16,9 +17,6 @@ import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.DateUtil;
-import com.mo.whatisthis.toss.models.Payment;
-import com.mo.whatisthis.toss.requests.CreateVirtualAccountRequest;
-import com.mo.whatisthis.toss.services.TossService;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,10 +40,9 @@ public class RequestService {
     private final MemberRepository memberRepository;
     private final HistoryRepository historyRepository;
     private final S3Service s3Service;
-    private final TossService tossService;
-    private final Float weight = 0.305f;
-    private final Integer money = 5000;
+    private final PaymentService paymentService;
 
+    @Transactional
     public void createRequest(RequestRegisterRequest requestRegisterRequest,
         MultipartFile warrant) throws IOException {
 
@@ -64,22 +61,16 @@ public class RequestService {
             requestEntity.setRequestContent(requestContent);
         }
 
-        if (!warrant.isEmpty()) {
+        if (warrant != null) {
             String warrantFileUrl = s3Service.saveFile(warrant);
             requestEntity.setWarrantUrl(warrantFileUrl);
         }
         requestEntity.setStatus(Status.WAITING_FOR_PAY);
         requestEntity.setRequestedAt(LocalDateTime.now());
 
-        /*
-         * 결제 관련 작업
-         */
-        Integer amount = (int) (requestRegisterRequest.getBuildingArea() * weight * money);
-        Payment payment = tossService.createVirtualAccount(
-            CreateVirtualAccountRequest.of(amount, requestRegisterRequest.getRequesterName(),
-                requestRegisterRequest.getBankCode(), requestRegisterRequest.getRequesterPhone()));
+        requestEntity = requestRepository.save(requestEntity);
 
-        requestRepository.save(requestEntity);
+        paymentService.createPayment(requestEntity, requestRegisterRequest.getBankCode());
     }
 
     public void cancelRequest(Long requestId) {
