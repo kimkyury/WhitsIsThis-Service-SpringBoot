@@ -27,6 +27,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import java.util.Random;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -50,7 +51,7 @@ public class AuthService {
     public TokenDto loginEmployee(EmployeeLoginRequest employeeLoginRequest) {
 
         MemberEntity memberEntity = memberRepository.findByUsername(
-                                                        employeeLoginRequest.getUsername())
+            employeeLoginRequest.getUsername())
                                                     .orElseThrow(
                                                         () -> new CustomException(
                                                             ErrorCode.USERNAME_INVALID)
@@ -87,7 +88,7 @@ public class AuthService {
 
         String serialNumber = deviceLoginRequest.getSerialNumber();
         // 1. Redis에 존재하는가
-        if (redisService.getValue("device:" + serialNumber ) == null) {
+        if (redisService.getValue("device:" + serialNumber) == null) {
             throw new CustomException(ErrorCode.SERIALNUMBER_INVALID);
         }
 
@@ -166,23 +167,20 @@ public class AuthService {
 
         redisService.saveDataWithTimeout(sendAuthMessageRequest.getPhone(), authCode, (long) 500);
 
-        String authMessageContent = "[이게MO야] 인증번호 : " + authCode;
+        String authMessageContent = "[이게MO징] 인증번호 : " + authCode;
 
         MessageDto authMessageDto = naverSmsService.makeMessageDto(
             sendAuthMessageRequest.getPhone(), authMessageContent);
 
         SmsRequest authSmsRequest = naverSmsService.makeSmsRequest(authMessageDto);
 
-        SmsResponse smsResponse = null;
         try {
-            smsResponse = naverSmsService.sendSmsRequest(authSmsRequest);
+            return naverSmsService.sendSmsRequest(authSmsRequest);
         } catch (URISyntaxException | JsonProcessingException e) {
             throw new CustomException(ErrorCode.BAD_REQUEST);
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-
-        return smsResponse;
     }
 
     public static String createAuthCode() {
@@ -226,4 +224,13 @@ public class AuthService {
     }
 
 
+    public void setSessionExpiryDuration(HttpServletRequest request,
+        VerifyAuthCodeRequest verifyAuthCodeRequest) {
+
+        String sessionId = request.getSession()
+                                  .getId();
+        String phone = verifyAuthCodeRequest.getPhone();
+
+        redisService.saveCustomerSession(sessionId, phone);
+    }
 }
