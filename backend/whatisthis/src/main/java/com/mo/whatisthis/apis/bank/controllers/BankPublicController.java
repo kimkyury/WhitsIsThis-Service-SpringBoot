@@ -28,4 +28,11 @@ public class BankPublicController {
     public ResponseEntity<SuccessResponse<List<BankResponse>>> getBanks() {
         return createSuccessResponse(SuccessCode.OK, "전체 은행 조회", bankService.getBanks());
     }
+
+    @GetMapping("/assigned")
+    @Operation(summary = "가상계좌 발급 가능 은행", tags = {"5. Common code"})
+    public ResponseEntity<SuccessResponse<List<BankResponse>>> getAssignedBanks() {
+        return createSuccessResponse(SuccessCode.OK, "가상계좌 발급 가능 은행 조회",
+            bankService.getAssignedBanks());
+    }
 }
