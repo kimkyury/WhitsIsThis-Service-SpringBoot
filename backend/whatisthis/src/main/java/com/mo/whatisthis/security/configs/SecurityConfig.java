@@ -4,6 +4,8 @@ import com.mo.whatisthis.jwt.filters.JwtAuthenticationFilter;
 import com.mo.whatisthis.jwt.handlers.JwtAccessDeniedHandler;
 import com.mo.whatisthis.jwt.handlers.JwtAuthenticationEntryPoint;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
+import com.mo.whatisthis.redis.services.RedisService;
+import com.mo.whatisthis.security.filters.CustomerSessionCheckFilter;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +33,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final RedisService redisService;
 
     private final String[] AUTH_WHITELIST = {"/v2/api-docs", "/v3/api-docs/**", "/configuration/ui",
         "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**",
@@ -67,8 +70,10 @@ public class SecurityConfig {
 
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                 UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new CustomerSessionCheckFilter(redisService),JwtAuthenticationFilter.class)
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
 
             .and()
             .exceptionHandling()

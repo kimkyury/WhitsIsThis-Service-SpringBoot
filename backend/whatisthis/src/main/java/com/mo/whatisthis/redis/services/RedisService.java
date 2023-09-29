@@ -52,7 +52,7 @@ public class RedisService {
         String key = "customer:session:" + sessionId;
         saveDataWithTimeout(key, phone, customerSessionTTL);
     }
-    public boolean getCustomerSession(String sessionId){
-        return getValue("customer:session:" + sessionId) == null;
+    public boolean existCustomerSession(String sessionId){
+        return getValue("customer:session:" + sessionId) != null;
     }
 }
