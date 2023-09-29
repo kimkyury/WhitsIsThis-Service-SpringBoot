@@ -20,11 +20,12 @@ public class CustomerSessionCheckFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
 
-        String sessionId = request.getSession().getId();
+        String sessionId = request.getSession()
+                                  .getId();
         String requestURI = request.getRequestURI();
 
         // Customer 전용 API에 대하여 Redis에 Session이 저장되지 않았다면
-        if (isCustomer(requestURI) && !redisService.existCustomerSession(sessionId)){
+        if (isCustomer(requestURI) && !redisService.existCustomerSession(sessionId)) {
             response.sendError(401); //TODO: JwtAuthenticationFilter에서도 401로 바꿔야 함
             return;
         }
@@ -32,8 +33,9 @@ public class CustomerSessionCheckFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    public boolean isCustomer(String requestURI){
-        return Arrays.stream(AUTH_CUSTOMER_LIST).anyMatch(pattern ->
-            requestURI.startsWith(pattern.replace("/**", "")));
+    public boolean isCustomer(String requestURI) {
+        return Arrays.stream(AUTH_CUSTOMER_LIST)
+                     .anyMatch(pattern ->
+                         requestURI.startsWith(pattern.replace("/**", "")));
     }
 }

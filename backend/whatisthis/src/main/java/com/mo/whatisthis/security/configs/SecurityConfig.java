@@ -70,10 +70,10 @@ public class SecurityConfig {
 
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                 UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new CustomerSessionCheckFilter(redisService),JwtAuthenticationFilter.class)
+            .addFilterBefore(new CustomerSessionCheckFilter(redisService),
+                JwtAuthenticationFilter.class)
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
 
             .and()
             .exceptionHandling()

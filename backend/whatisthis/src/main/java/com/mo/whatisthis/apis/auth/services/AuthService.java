@@ -51,7 +51,7 @@ public class AuthService {
     public TokenDto loginEmployee(EmployeeLoginRequest employeeLoginRequest) {
 
         MemberEntity memberEntity = memberRepository.findByUsername(
-                                                        employeeLoginRequest.getUsername())
+            employeeLoginRequest.getUsername())
                                                     .orElseThrow(
                                                         () -> new CustomException(
                                                             ErrorCode.USERNAME_INVALID)
@@ -88,7 +88,7 @@ public class AuthService {
 
         String serialNumber = deviceLoginRequest.getSerialNumber();
         // 1. Redis에 존재하는가
-        if (redisService.getValue("device:" + serialNumber ) == null) {
+        if (redisService.getValue("device:" + serialNumber) == null) {
             throw new CustomException(ErrorCode.SERIALNUMBER_INVALID);
         }
 
@@ -224,11 +224,13 @@ public class AuthService {
     }
 
 
-  public void setSessionExpiryDuration(HttpServletRequest request, VerifyAuthCodeRequest verifyAuthCodeRequest) {
+    public void setSessionExpiryDuration(HttpServletRequest request,
+        VerifyAuthCodeRequest verifyAuthCodeRequest) {
 
-      String sessionId =  request.getSession().getId();
-      String phone = verifyAuthCodeRequest.getPhone();
+        String sessionId = request.getSession()
+                                  .getId();
+        String phone = verifyAuthCodeRequest.getPhone();
 
-      redisService.saveCustomerSession(sessionId, phone);
-  }
+        redisService.saveCustomerSession(sessionId, phone);
+    }
 }

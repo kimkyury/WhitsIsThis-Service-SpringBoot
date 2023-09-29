@@ -135,6 +135,7 @@ public class AuthPublicController {
         authService.confirmAuthCode(verifyAuthCodeRequest);
         authService.setSessionExpiryDuration(request, verifyAuthCodeRequest);
 
-        return createSuccessResponse(SuccessCode.OK, "AuthCode is Accept, You have 60 minutes of access");
+        return createSuccessResponse(SuccessCode.OK,
+            "AuthCode is Accept, You have 60 minutes of access");
     }
 }
