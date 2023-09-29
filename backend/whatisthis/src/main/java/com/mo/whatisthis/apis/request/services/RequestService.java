@@ -40,7 +40,6 @@ public class RequestService {
     private final MemberRepository memberRepository;
     private final RequestRepository requestRepository;
     private final HistoryRepository historyRepository;
-    private final S3Service s3Service;
     private final PaymentService paymentService;
 
     @Transactional
@@ -48,11 +47,7 @@ public class RequestService {
         MultipartFile warrant) throws IOException {
 
         requestRepository.findByRequesterPhone(requestRegisterRequest.getRequesterPhone())
-                         .ifPresent(
-                             (selectRequest) -> {
-                                 requestRepository.delete(selectRequest);
-                             }
-                         );
+                         .ifPresent(requestRepository::delete);
 
         RequestEntity requestEntity = new RequestEntity(
             requestRegisterRequest.getAddress(),
@@ -66,7 +61,7 @@ public class RequestService {
 
         String requestContent = requestRegisterRequest.getRequestContent();
 
-        if (requestContent != null || !requestContent.isBlank()) {
+        if (requestContent != null) {
             requestEntity.setRequestContent(requestContent);
         }
 
