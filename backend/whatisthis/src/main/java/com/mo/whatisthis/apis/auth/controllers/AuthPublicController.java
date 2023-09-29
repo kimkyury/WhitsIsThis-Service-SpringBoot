@@ -20,6 +20,8 @@ import com.mo.whatisthis.supports.responses.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -124,14 +126,16 @@ public class AuthPublicController {
     }
 
     @Operation(summary = "휴대폰 인증 번호 검사", tags = {
-        "1. Auth"}, description = "휴대폰 인증 메시지 전송 API이용 후, 메시지를 받은 phone 번호와 안내받은 Message 내의 인증번호를 입력하세요. ")
+        "1. Auth"}, description = "휴대폰 인증 메시지 전송 API이용 후, 메시지를 받은 phone 번호와 안내받은 Message 내의 인증번호를 입력하세요. \n인증완료시 60분간의 접속 제한시간이 부여됩니다.  ")
     @PostMapping("/phone/verification")
-    public ResponseEntity<SuccessResponse<String>> verifyAuthCode(
+    public ResponseEntity<SuccessResponse<String>> verifyAuthCode(HttpServletRequest request,
         @Valid @RequestBody VerifyAuthCodeRequest verifyAuthCodeRequest
     ) {
 
         authService.confirmAuthCode(verifyAuthCodeRequest);
+        authService.setSessionExpiryDuration(request, verifyAuthCodeRequest);
 
-        return createSuccessResponse(SuccessCode.OK, "AuthCode is Accept");
+        return createSuccessResponse(SuccessCode.OK,
+            "AuthCode is Accept, You have 60 minutes of access");
     }
 }
