@@ -27,6 +27,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import java.util.Random;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -173,16 +174,13 @@ public class AuthService {
 
         SmsRequest authSmsRequest = naverSmsService.makeSmsRequest(authMessageDto);
 
-        SmsResponse smsResponse = null;
         try {
-            smsResponse = naverSmsService.sendSmsRequest(authSmsRequest);
+            return naverSmsService.sendSmsRequest(authSmsRequest);
         } catch (URISyntaxException | JsonProcessingException e) {
             throw new CustomException(ErrorCode.BAD_REQUEST);
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-
-        return smsResponse;
     }
 
     public static String createAuthCode() {
@@ -226,4 +224,11 @@ public class AuthService {
     }
 
 
+  public void setSessionExpiryDuration(HttpServletRequest request, VerifyAuthCodeRequest verifyAuthCodeRequest) {
+
+      String sessionId =  request.getSession().getId();
+      String phone = verifyAuthCodeRequest.getPhone();
+
+      redisService.saveCustomerSession(sessionId, phone);
+  }
 }

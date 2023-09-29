@@ -15,15 +15,14 @@ public class RedisService {
     @Value("${jwt.access-token-ttl}")
     private Long accessTokenTTL;
 
+    private Long customerSessionTTL = (long) 3600;
+
+
     private final RedisTemplate<String, String> redisTemplate;
 
     public String getValue(String key) {
         return redisTemplate.opsForValue()
                             .get(key);
-    }
-
-    public String getHistoryBySerialNumber(String serialNumber){
-        return redisTemplate.opsForValue().get("device:" + serialNumber + ":history");
     }
 
     public void saveData(String key, String value){
@@ -35,23 +34,25 @@ public class RedisService {
         redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
     }
 
-
-    public void saveRefreshToken(String key, String value) {
-        redisTemplate.opsForValue()
-                     .set(key, value, refreshTokenTTL, TimeUnit.SECONDS);
-    }
-
-    public void saveAccessToken(String key, String value) {
-        redisTemplate.opsForValue()
-                     .set(key, value, accessTokenTTL, TimeUnit.SECONDS);
-    }
-
     public void deleteValue(String key) {
         redisTemplate.delete(key);
     }
 
+    // refreshToken
+    public void saveRefreshToken(String key, String value) {
+        saveDataWithTimeout(key, value, refreshTokenTTL);
+    }
     public String getRefreshTokenKey(String memberNo) {
         String returnValue = "member:" + memberNo + ":refreshToken";
         return returnValue;
+    }
+
+    // CustomerSession
+    public void saveCustomerSession(String sessionId, String phone){
+        String key = "customer:session:" + sessionId;
+        saveDataWithTimeout(key, phone, customerSessionTTL);
+    }
+    public boolean getCustomerSession(String sessionId){
+        return getValue("customer:session:" + sessionId) == null;
     }
 }
