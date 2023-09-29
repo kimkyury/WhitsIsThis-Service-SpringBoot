@@ -26,4 +26,19 @@ public class BankService {
 
         return bankResponses;
     }
+
+    public List<BankResponse> getAssignedBanks() {
+        List<BankResponse> bankResponses = new ArrayList<>();
+
+        for (BankEntity bankEntity : bankRepository.findAllByCodeIn(
+            List.of("039", "034", "004", "003", "011", "031", "032", "045", "007", "088", "020",
+                "071", "037", "081"))) {
+            BankResponse bankResponse = new BankResponse();
+            bankResponse.of(bankEntity);
+
+            bankResponses.add(bankResponse);
+        }
+
+        return bankResponses;
+    }
 }

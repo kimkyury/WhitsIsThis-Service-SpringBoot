@@ -3,6 +3,7 @@ package com.mo.whatisthis.apis.request.services;
 import com.mo.whatisthis.apis.history.entities.HistoryEntity;
 import com.mo.whatisthis.apis.history.repositories.HistoryRepository;
 import com.mo.whatisthis.apis.member.repositories.MemberRepository;
+import com.mo.whatisthis.apis.payment.services.PaymentService;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
@@ -39,7 +40,10 @@ public class RequestService {
     private final MemberRepository memberRepository;
     private final RequestRepository requestRepository;
     private final HistoryRepository historyRepository;
+    private final S3Service s3Service;
+    private final PaymentService paymentService;
 
+    @Transactional
     public void createRequest(RequestRegisterRequest requestRegisterRequest,
         MultipartFile warrant) throws IOException {
 
@@ -56,7 +60,8 @@ public class RequestService {
             requestRegisterRequest.getRequesterName(),
             requestRegisterRequest.getRequesterPhone(),
             DateUtil.stringConvertToLocalDate(requestRegisterRequest.getInspectionStart()),
-            DateUtil.stringConvertToLocalDate(requestRegisterRequest.getInspectionEnd())
+            DateUtil.stringConvertToLocalDate(requestRegisterRequest.getInspectionEnd()),
+            requestRegisterRequest.getBuildingArea()
         );
 
         String requestContent = requestRegisterRequest.getRequestContent();
@@ -73,7 +78,9 @@ public class RequestService {
         requestEntity.setStatus(Status.WAITING_FOR_PAY);
         requestEntity.setRequestedAt(LocalDateTime.now());
 
-        requestRepository.save(requestEntity);
+        requestEntity = requestRepository.save(requestEntity);
+
+        paymentService.createPayment(requestEntity, requestRegisterRequest.getBankCode());
     }
 
     public void cancelRequest(Long requestId) {
