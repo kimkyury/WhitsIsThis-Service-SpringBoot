@@ -167,7 +167,7 @@ public class AuthService {
 
         redisService.saveDataWithTimeout(sendAuthMessageRequest.getPhone(), authCode, (long) 500);
 
-        String authMessageContent = "[이게MO야] 인증번호 : " + authCode;
+        String authMessageContent = "[이게MO징] 인증번호 : " + authCode;
 
         MessageDto authMessageDto = naverSmsService.makeMessageDto(
             sendAuthMessageRequest.getPhone(), authMessageContent);
