@@ -36,8 +36,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class RequestService {
 
-    private final RequestRepository requestRepository;
+    private final S3Service s3Service;
     private final MemberRepository memberRepository;
+    private final RequestRepository requestRepository;
     private final HistoryRepository historyRepository;
     private final S3Service s3Service;
     private final PaymentService paymentService;
@@ -45,6 +46,13 @@ public class RequestService {
     @Transactional
     public void createRequest(RequestRegisterRequest requestRegisterRequest,
         MultipartFile warrant) throws IOException {
+
+        requestRepository.findByRequesterPhone(requestRegisterRequest.getRequesterPhone())
+                         .ifPresent(
+                             (selectRequest) -> {
+                                 requestRepository.delete(selectRequest);
+                             }
+                         );
 
         RequestEntity requestEntity = new RequestEntity(
             requestRegisterRequest.getAddress(),
@@ -57,7 +65,8 @@ public class RequestService {
         );
 
         String requestContent = requestRegisterRequest.getRequestContent();
-        if (!requestContent.isEmpty()) {
+
+        if (requestContent != null || !requestContent.isBlank()) {
             requestEntity.setRequestContent(requestContent);
         }
 
@@ -65,6 +74,7 @@ public class RequestService {
             String warrantFileUrl = s3Service.saveFile(warrant);
             requestEntity.setWarrantUrl(warrantFileUrl);
         }
+
         requestEntity.setStatus(Status.WAITING_FOR_PAY);
         requestEntity.setRequestedAt(LocalDateTime.now());
 
@@ -82,7 +92,6 @@ public class RequestService {
                                  requestRepository.save(selectRequest);
                              }
                          );
-
     }
 
     public RequestFindByCustomerResponse findRequestForCustomer(String requesterPhone) {
@@ -99,10 +108,13 @@ public class RequestService {
     }
 
     public List<AssignedRequestResponse> getAssignedRequest(Integer employeeId) {
+
         LocalDate today = LocalDate.now();
-        List<RequestEntity> requestEntities = requestRepository.findByEmployeeIdAndStatusInAndInspectionStartLessThanEqualAndInspectionEndGreaterThanEqual(
-            employeeId,
-            List.of(Status.WAITING_FOR_INSPECTION, Status.IN_PROGRESS, Status.DONE), today, today);
+        List<RequestEntity> requestEntities = requestRepository
+            .findByEmployeeIdAndStatusInAndInspectionStartLessThanEqualAndInspectionEndGreaterThanEqual(
+                employeeId,
+                List.of(Status.WAITING_FOR_INSPECTION, Status.IN_PROGRESS, Status.DONE), today,
+                today);
 
         Map<String, AssignedRequestResponse> assignedRequestResponseMap = new HashMap<>();
 
@@ -204,4 +216,5 @@ public class RequestService {
 
         requestRepository.save(requestEntity);
     }
+
 }

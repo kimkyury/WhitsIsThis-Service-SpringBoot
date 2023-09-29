@@ -87,6 +87,17 @@ public class TodolistService {
         return awsS3ResponseUtil.concatURL(url);
     }
 
+    public void deleteTodolistImage(Long id) throws IOException {
+        TodolistImageEntity todolistImageEntity = todolistImageRepository.findById(id)
+                                                                         .orElseThrow(
+                                                                             () -> new CustomException(
+                                                                                 ErrorCode.BAD_REQUEST));
+
+        s3Service.deleteFile(todolistImageEntity.getImageUrl());
+
+        todolistImageRepository.delete(todolistImageEntity);
+    }
+
     public List<TodolistImageResponse> getTodolistImage(Long todolistId) {
         List<TodolistImageResponse> todolistImageResponses = new ArrayList<>();
         for (TodolistImageEntity todolistImageEntity : todolistImageRepository.findAllByTodolistId(
