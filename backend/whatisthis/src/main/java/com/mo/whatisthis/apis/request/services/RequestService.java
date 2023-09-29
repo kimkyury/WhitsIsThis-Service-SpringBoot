@@ -53,11 +53,11 @@ public class RequestService {
         );
 
         String requestContent = requestRegisterRequest.getRequestContent();
-        if (!requestContent.isEmpty() || !requestContent.isBlank()) {
+        if (!(requestContent != null) || !requestContent.isBlank()) {
             requestEntity.setRequestContent(requestContent);
         }
 
-        if (!warrant.isEmpty()) {
+        if (!(warrant != null)) {
             String warrantFileUrl = s3Service.saveFile(warrant);
             requestEntity.setWarrantUrl(warrantFileUrl);
         }
@@ -70,21 +70,20 @@ public class RequestService {
     public void cancelRequest(Long requestId) {
 
         requestRepository.findById(requestId)
-                         .ifPresent(
-                             (selectRequest) -> {
-                                 selectRequest.setStatus(Status.CANCELED);
-                                 requestRepository.save(selectRequest);
-                             }
-                         );
-
+            .ifPresent(
+                (selectRequest) -> {
+                    selectRequest.setStatus(Status.CANCELED);
+                    requestRepository.save(selectRequest);
+                }
+            );
     }
 
     public RequestFindByCustomerResponse findRequestForCustomer(String requesterPhone) {
 
         RequestEntity requestEntityByPhone = requestRepository.findByRequesterPhone(requesterPhone)
-                                                              .orElseThrow(
-                                                                  () -> new CustomException(
-                                                                      ErrorCode.NOT_FOUND));
+            .orElseThrow(
+                () -> new CustomException(
+                    ErrorCode.NOT_FOUND));
 
         RequestFindByCustomerResponse requestFindByCustomerResponse = new RequestFindByCustomerResponse();
         requestFindByCustomerResponse.of(requestEntityByPhone);
@@ -94,9 +93,11 @@ public class RequestService {
 
     public List<AssignedRequestResponse> getAssignedRequest(Integer employeeId) {
         LocalDate today = LocalDate.now();
-        List<RequestEntity> requestEntities = requestRepository.findByEmployeeIdAndStatusInAndInspectionStartLessThanEqualAndInspectionEndGreaterThanEqual(
-            employeeId,
-            List.of(Status.WAITING_FOR_INSPECTION, Status.IN_PROGRESS, Status.DONE), today, today);
+        List<RequestEntity> requestEntities = requestRepository
+            .findByEmployeeIdAndStatusInAndInspectionStartLessThanEqualAndInspectionEndGreaterThanEqual(
+                employeeId,
+                List.of(Status.WAITING_FOR_INSPECTION, Status.IN_PROGRESS, Status.DONE), today,
+                today);
 
         Map<String, AssignedRequestResponse> assignedRequestResponseMap = new HashMap<>();
 
@@ -125,16 +126,16 @@ public class RequestService {
     @Transactional
     public void assignRequest(Long id, Integer employeeId, LocalDate inspectionDate) {
         RequestEntity requestEntity = requestRepository.findById(id)
-                                                       .orElseThrow(() -> new CustomException(
-                                                           ErrorCode.BAD_REQUEST));
+            .orElseThrow(() -> new CustomException(
+                ErrorCode.BAD_REQUEST));
 
         if (!Status.WAITING_INSPECTION_DATE.equals(requestEntity.getStatus())) {
             throw new CustomException(ErrorCode.STATUS_INVALID);
         }
 
         requestEntity.setEmployee(memberRepository.findById(employeeId)
-                                                  .orElseThrow(() -> new CustomException(
-                                                      ErrorCode.BAD_REQUEST)));
+            .orElseThrow(() -> new CustomException(
+                ErrorCode.BAD_REQUEST)));
         requestEntity.setInspectionDate(inspectionDate);
         requestEntity.setStatus(Status.WAITING_FOR_INSPECTION);
         requestRepository.save(requestEntity);
@@ -176,8 +177,8 @@ public class RequestService {
 
     public RequestDetailRequests getRequestDetail(Long id) {
         RequestEntity requestEntity = requestRepository.findById(id)
-                                                       .orElseThrow(() -> new CustomException(
-                                                           ErrorCode.BAD_REQUEST));
+            .orElseThrow(() -> new CustomException(
+                ErrorCode.BAD_REQUEST));
 
         RequestDetailRequests requestDetailRequests = new RequestDetailRequests(requestEntity);
 
@@ -191,8 +192,8 @@ public class RequestService {
 
     public void setRequestStatus(Long id, Status status) {
         RequestEntity requestEntity = requestRepository.findById(id)
-                                                       .orElseThrow(() -> new CustomException(
-                                                           ErrorCode.BAD_REQUEST));
+            .orElseThrow(() -> new CustomException(
+                ErrorCode.BAD_REQUEST));
 
         requestEntity.setStatus(status);
 
