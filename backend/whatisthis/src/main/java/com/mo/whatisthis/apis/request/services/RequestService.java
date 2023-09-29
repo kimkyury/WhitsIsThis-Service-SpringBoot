@@ -35,13 +35,20 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class RequestService {
 
-    private final RequestRepository requestRepository;
-    private final MemberRepository memberRepository;
-    private final HistoryRepository historyRepository;
     private final S3Service s3Service;
+    private final MemberRepository memberRepository;
+    private final RequestRepository requestRepository;
+    private final HistoryRepository historyRepository;
 
     public void createRequest(RequestRegisterRequest requestRegisterRequest,
         MultipartFile warrant) throws IOException {
+
+        requestRepository.findByRequesterPhone(requestRegisterRequest.getRequesterPhone())
+            .ifPresent(
+                (selectRequest) -> {
+                    requestRepository.delete(selectRequest);
+                }
+            );
 
         RequestEntity requestEntity = new RequestEntity(
             requestRegisterRequest.getAddress(),
@@ -53,14 +60,16 @@ public class RequestService {
         );
 
         String requestContent = requestRegisterRequest.getRequestContent();
-        if (!(requestContent != null) || !requestContent.isBlank()) {
+
+        if ( requestContent != null || !requestContent.isBlank()) {
             requestEntity.setRequestContent(requestContent);
         }
 
-        if (!(warrant != null)) {
+        if (warrant != null) {
             String warrantFileUrl = s3Service.saveFile(warrant);
             requestEntity.setWarrantUrl(warrantFileUrl);
         }
+
         requestEntity.setStatus(Status.WAITING_FOR_PAY);
         requestEntity.setRequestedAt(LocalDateTime.now());
 
@@ -92,6 +101,7 @@ public class RequestService {
     }
 
     public List<AssignedRequestResponse> getAssignedRequest(Integer employeeId) {
+
         LocalDate today = LocalDate.now();
         List<RequestEntity> requestEntities = requestRepository
             .findByEmployeeIdAndStatusInAndInspectionStartLessThanEqualAndInspectionEndGreaterThanEqual(
@@ -199,4 +209,5 @@ public class RequestService {
 
         requestRepository.save(requestEntity);
     }
+
 }
