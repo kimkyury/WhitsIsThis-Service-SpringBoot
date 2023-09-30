@@ -105,6 +105,7 @@ public class PaymentService {
 
     @Transactional
     public void depositCallback(WebhookDepositRequest webhookDepositRequest) {
+        System.out.println(">>>" + webhookDepositRequest.getOrderId() + "<<<");
         PaymentEntity paymentEntity = paymentRepository.findByOrderId(
                                                            webhookDepositRequest.getOrderId())
                                                        .orElseThrow(() -> new CustomException(
