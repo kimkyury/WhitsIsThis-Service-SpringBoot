@@ -3,7 +3,7 @@ package com.mo.whatisthis.apis.request.controllers;
 import static com.mo.whatisthis.supports.utils.ApiResponseUtil.createSuccessResponse;
 
 import com.mo.whatisthis.apis.request.requests.RequestRegisterRequest;
-import com.mo.whatisthis.apis.request.responses.RequestFindByCustomerResponse;
+import com.mo.whatisthis.apis.request.responses.RequestDetailRequests;
 import com.mo.whatisthis.apis.request.services.RequestService;
 import com.mo.whatisthis.supports.codes.SuccessCode;
 import com.mo.whatisthis.supports.responses.SuccessResponse;
@@ -48,11 +48,11 @@ public class RequestPublicController {
 
     @Operation(summary = "비회원의 점검요청 확인", tags = {"3. InspectionRequest"})
     @GetMapping("/verification")
-    public ResponseEntity<SuccessResponse<RequestFindByCustomerResponse>> getRequestByPhone(
+    public ResponseEntity<SuccessResponse<RequestDetailRequests>> getRequestByPhone(
         @RequestParam String requesterPhone) {
 
         //TODO: 확인필요 - 해당 로직이 직원이 조회할 때도 동일할 수 있음
-        RequestFindByCustomerResponse requestFindByCustomerResponse = requestService.findRequestForCustomer(
+        RequestDetailRequests requestFindByCustomerResponse = requestService.findRequestForCustomer(
             requesterPhone);
 
         return createSuccessResponse(SuccessCode.OK, requestFindByCustomerResponse);

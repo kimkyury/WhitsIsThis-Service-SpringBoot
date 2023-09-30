@@ -1,7 +1,6 @@
 package com.mo.whatisthis.apis.request.requests;
 
 import com.sun.istack.NotNull;
-import java.time.LocalDate;
 import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,5 +32,11 @@ public class RequestRegisterRequest {
 
     @NotNull
     private String inspectionEnd;
+
+    @NotNull
+    private Float buildingArea;
+
+    @NotNull
+    private String bankCode;
 
 }
