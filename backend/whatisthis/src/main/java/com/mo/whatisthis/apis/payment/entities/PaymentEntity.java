@@ -57,6 +57,9 @@ public class PaymentEntity {
     @Setter
     private String refundHolderName;
 
+    @Setter
+    private String orderId;
+
     public enum Status {
         READY, IN_PROGRESS, WAITING_FOR_DEPOSIT, DONE, CANCELED, PARTIAL_CANCELED, ABORTED, EXPIRED
     }
@@ -71,5 +74,6 @@ public class PaymentEntity {
         this.requestedAt = payment.getRequestedAt()
                                   .toLocalDateTime();
         this.status = Status.valueOf(payment.getStatus());
+        this.orderId = payment.getOrderId();
     }
 }
