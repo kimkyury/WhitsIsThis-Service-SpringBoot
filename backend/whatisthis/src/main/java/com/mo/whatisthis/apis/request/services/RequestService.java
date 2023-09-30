@@ -3,6 +3,9 @@ package com.mo.whatisthis.apis.request.services;
 import com.mo.whatisthis.apis.history.entities.HistoryEntity;
 import com.mo.whatisthis.apis.history.repositories.HistoryRepository;
 import com.mo.whatisthis.apis.member.repositories.MemberRepository;
+import com.mo.whatisthis.apis.payment.entities.PaymentEntity;
+import com.mo.whatisthis.apis.payment.repositories.PaymentRepository;
+import com.mo.whatisthis.apis.payment.services.PaymentService;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
@@ -10,7 +13,6 @@ import com.mo.whatisthis.apis.request.requests.RequestRegisterRequest;
 import com.mo.whatisthis.apis.request.responses.AssignedRequestResponse;
 import com.mo.whatisthis.apis.request.responses.DoneRequestResponse;
 import com.mo.whatisthis.apis.request.responses.RequestDetailRequests;
-import com.mo.whatisthis.apis.request.responses.RequestFindByCustomerResponse;
 import com.mo.whatisthis.apis.request.responses.WaitingRequestResponse;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.s3.services.S3Service;
@@ -39,16 +41,15 @@ public class RequestService {
     private final MemberRepository memberRepository;
     private final RequestRepository requestRepository;
     private final HistoryRepository historyRepository;
+    private final PaymentRepository paymentRepository;
+    private final PaymentService paymentService;
 
+    @Transactional
     public void createRequest(RequestRegisterRequest requestRegisterRequest,
         MultipartFile warrant) throws IOException {
 
         requestRepository.findByRequesterPhone(requestRegisterRequest.getRequesterPhone())
-                         .ifPresent(
-                             (selectRequest) -> {
-                                 requestRepository.delete(selectRequest);
-                             }
-                         );
+                         .ifPresent(requestRepository::delete);
 
         RequestEntity requestEntity = new RequestEntity(
             requestRegisterRequest.getAddress(),
@@ -56,12 +57,13 @@ public class RequestService {
             requestRegisterRequest.getRequesterName(),
             requestRegisterRequest.getRequesterPhone(),
             DateUtil.stringConvertToLocalDate(requestRegisterRequest.getInspectionStart()),
-            DateUtil.stringConvertToLocalDate(requestRegisterRequest.getInspectionEnd())
+            DateUtil.stringConvertToLocalDate(requestRegisterRequest.getInspectionEnd()),
+            requestRegisterRequest.getBuildingArea()
         );
 
         String requestContent = requestRegisterRequest.getRequestContent();
 
-        if (requestContent != null || !requestContent.isBlank()) {
+        if (requestContent != null) {
             requestEntity.setRequestContent(requestContent);
         }
 
@@ -73,7 +75,9 @@ public class RequestService {
         requestEntity.setStatus(Status.WAITING_FOR_PAY);
         requestEntity.setRequestedAt(LocalDateTime.now());
 
-        requestRepository.save(requestEntity);
+        requestEntity = requestRepository.save(requestEntity);
+
+        paymentService.createPayment(requestEntity, requestRegisterRequest.getBankCode());
     }
 
     public void cancelRequest(Long requestId) {
@@ -87,17 +91,27 @@ public class RequestService {
                          );
     }
 
-    public RequestFindByCustomerResponse findRequestForCustomer(String requesterPhone) {
+    public RequestDetailRequests findRequestForCustomer(String requesterPhone) {
 
         RequestEntity requestEntityByPhone = requestRepository.findByRequesterPhone(requesterPhone)
                                                               .orElseThrow(
                                                                   () -> new CustomException(
                                                                       ErrorCode.NOT_FOUND));
 
-        RequestFindByCustomerResponse requestFindByCustomerResponse = new RequestFindByCustomerResponse();
-        requestFindByCustomerResponse.of(requestEntityByPhone);
+        RequestDetailRequests requestDetailRequests = new RequestDetailRequests(
+            requestEntityByPhone);
 
-        return requestFindByCustomerResponse;
+        Optional<HistoryEntity> historyEntity = historyRepository.findByRequestId(
+            requestEntityByPhone.getId());
+
+        historyEntity.ifPresent(requestDetailRequests::setHistory);
+
+        Optional<PaymentEntity> paymentEntity = paymentRepository.findByRequestId(
+            requestEntityByPhone.getId());
+
+        paymentEntity.ifPresent(requestDetailRequests::setPayment);
+
+        return requestDetailRequests;
     }
 
     public List<AssignedRequestResponse> getAssignedRequest(Integer employeeId) {
@@ -197,9 +211,15 @@ public class RequestService {
 
         historyEntity.ifPresent(requestDetailRequests::setHistory);
 
+        Optional<PaymentEntity> paymentEntity = paymentRepository.findByRequestId(
+            requestEntity.getId());
+
+        paymentEntity.ifPresent(requestDetailRequests::setPayment);
+
         return requestDetailRequests;
     }
 
+    @Transactional
     public void setRequestStatus(Long id, Status status) {
         RequestEntity requestEntity = requestRepository.findById(id)
                                                        .orElseThrow(() -> new CustomException(

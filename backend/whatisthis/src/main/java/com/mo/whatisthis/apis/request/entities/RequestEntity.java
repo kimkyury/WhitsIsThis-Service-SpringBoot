@@ -76,16 +76,20 @@ public class RequestEntity {
     @Setter
     private String warrantUrl;
 
+    @Column(nullable = false)
+    private Float buildingArea;
+
     @Builder
     public RequestEntity(String address, String addressDetail, String requesterName,
         String requesterPhone, LocalDate inspectionStart,
-        LocalDate inspectionEnd) {
+        LocalDate inspectionEnd, Float buildingArea) {
         this.address = address;
         this.addressDetail = addressDetail;
         this.requesterName = requesterName;
         this.requesterPhone = requesterPhone;
         this.inspectionStart = inspectionStart;
         this.inspectionEnd = inspectionEnd;
+        this.buildingArea = buildingArea;
     }
 
     public enum Status {
