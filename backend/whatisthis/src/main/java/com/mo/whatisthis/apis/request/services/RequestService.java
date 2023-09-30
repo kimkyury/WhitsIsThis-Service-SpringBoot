@@ -219,6 +219,7 @@ public class RequestService {
         return requestDetailRequests;
     }
 
+    @Transactional
     public void setRequestStatus(Long id, Status status) {
         RequestEntity requestEntity = requestRepository.findById(id)
                                                        .orElseThrow(() -> new CustomException(
