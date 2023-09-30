@@ -41,6 +41,7 @@ public class PaymentEntity {
 
     private LocalDateTime requestedAt;
 
+    @Setter
     private LocalDateTime approvedAt;
 
     @Column(nullable = false)

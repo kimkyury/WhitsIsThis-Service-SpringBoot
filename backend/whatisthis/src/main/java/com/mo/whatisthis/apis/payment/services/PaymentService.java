@@ -1,5 +1,7 @@
 package com.mo.whatisthis.apis.payment.services;
 
+import static com.mo.whatisthis.supports.utils.DateUtil.convertStringToLocalDateTime;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mo.whatisthis.apis.bank.repositories.BankRepository;
 import com.mo.whatisthis.apis.payment.entities.PaymentEntity;
@@ -114,6 +116,8 @@ public class PaymentService {
         if (Status.WAITING_FOR_DEPOSIT.equals(webhookDepositRequest.getStatus())) {
             if (Status.DONE.equals(paymentEntity.getStatus())) {
                 paymentEntity.setStatus(Status.WAITING_FOR_DEPOSIT);
+                paymentEntity.setApprovedAt(
+                    convertStringToLocalDateTime(webhookDepositRequest.getCreatedAt()));
 
                 paymentRepository.save(paymentEntity);
                 setRequestStatus(paymentEntity.getRequest()
