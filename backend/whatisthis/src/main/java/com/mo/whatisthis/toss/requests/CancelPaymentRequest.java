@@ -1,6 +1,5 @@
 package com.mo.whatisthis.toss.requests;
 
-import com.mo.whatisthis.toss.models.RefundReceiveAccount;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,21 +14,28 @@ public class CancelPaymentRequest {
 
     private String paymentKey;
     private String cancelReason;
-    private RefundReceiveAccount refundReceiveAccount;
+    private RefundReceiveAccountRequest refundReceiveAccount;
 
     public static CancelPaymentRequest of(String paymentKey, String refundBankCode,
         String refundAccount, String refundHolderName) {
         return CancelPaymentRequest.builder()
                                    .paymentKey(paymentKey)
                                    .cancelReason("단순 변심")
-                                   .refundReceiveAccount(RefundReceiveAccount.builder()
-                                                                             .bankCode(
-                                                                                 refundBankCode)
-                                                                             .accountNumber(
-                                                                                 refundAccount)
-                                                                             .holderName(
-                                                                                 refundHolderName)
-                                                                             .build())
+                                   .refundReceiveAccount(RefundReceiveAccountRequest.builder()
+                                                                                    .bank(
+                                                                                        refundBankCode)
+                                                                                    .accountNumber(
+                                                                                        refundAccount)
+                                                                                    .holderName(
+                                                                                        refundHolderName)
+                                                                                    .build())
+                                   .build();
+    }
+
+    public static CancelPaymentRequest of(String paymentKey) {
+        return CancelPaymentRequest.builder()
+                                   .paymentKey(paymentKey)
+                                   .cancelReason("단순 변심")
                                    .build();
     }
 }
