@@ -1,14 +1,15 @@
 .header {
   /* margin-top:1%; */
-  height: 9.3vh;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  height: 100vh;
+  width: 18rem;
+  display: grid;
+  /* justify-content: center; */
+  /* align-items: center; */
   /* background-color: rgb(229, 246, 251); */
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: #2D4059;
+  /* background-color: #2D4059; */
   border-bottom: 2px solid black;
 }   
 a {
@@ -16,24 +17,48 @@ a {
   color: inherit; /* 상위 엘리먼트에서 상속받은 글꼴 색상 사용 */
 }
 .item {
-
-  margin-left: 0.5vw;
-  font-size: 1.4vw;
+  margin-top:5rem;
+  margin-left: 3.5rem;
+  font-size: 1.4rem;
   
   font-weight:bold;
 }
 
-.item:hover {
-  /* color:#F07B3F;  */
+.minitem:hover {
+  color:#F07B3F !important; 
   font-size:1.2rem;
+  border-bottom: 2px solid #F07B3F;
+  width:3.4rem
+}
+.minitem {
+  margin-top:5rem;
+  margin-left: 3.5rem;
+  font-size: 1.4rem;
+  
+  font-weight:bold;
+}
+.item:hover {
+  color:#F07B3F !important; 
+  font-size:1.2rem;
+  border-bottom: 2px solid #F07B3F;
+  width:4.5rem
 }
 .itemposition {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
 }
 
 .activeLink {
   color: #F07B3F; /* 활성화된 링크의 글꼴 색상을 변경 */
-  border-bottom: 3px solid #F07B3F;
+  border-bottom: 1px solid #F07B3F;
 
+}
+.items {
+  margin-top:-12rem;
+  display: flex;
+  flex-direction: column; /* 세로로 배치하기 위해 flex-direction을 column으로 설정합니다. */
+  width: 40rem;
+  height: 18rem;
+  
+  margin-right: -7.2rem;
 }

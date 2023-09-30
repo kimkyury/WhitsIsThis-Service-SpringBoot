@@ -13,7 +13,7 @@ function Myinfo() {
   const role = sessionStorage.getItem('role')
   const picture = sessionStorage.getItem('imageurl');
   return (
-    <div className='InfomMy'>
+    <div className='InfomMy' style={{marginLeft:'-10vw'}}>
       <p className='Myinform'>내 정보</p>
       <div className='gridboxss' 
 >
@@ -21,7 +21,7 @@ function Myinfo() {
         style={{ 
           position: 'sticky', 
           objectFit:'cover', 
-          marginBottom:'40%'
+          marginBottom:'31%',
           }}
           src={picture} 
           alt="프로필 사진" 
@@ -29,13 +29,15 @@ function Myinfo() {
         <div 
         style={{
           display:'flex', 
-          alignItems:'center'
+          alignItems:'center',
+          marginTop:'1%',
           }} 
           >
           <div 
           style={{
             display:'grid', 
-            gridTemplateRows:'1fr 1fr'
+            gridTemplateRows:'1fr 1fr',
+            
             }}>
           <p className='updatebox'>
             <span>{consumer}</span>
@@ -60,8 +62,8 @@ function Myinfo() {
 
       <div>
         <p className='Myinform'>기본정보</p>
-        <div style={{ marginLeft: '10%', borderRadius: '0.42vw', border: '0.15vw solid black', width: '31vw', height: '12.5vh' }}>
-          <div style={{ marginLeft: '5%', marginRight: '5%', marginTop:'-2%' }}>
+        <div style={{  marginLeft: '10%', borderRadius: '0.42vw', border: '0.15vw solid black', width: '27rem', height: '6rem' }}>
+          <div style={{ marginLeft: '5%', marginRight: '5%', marginTop:'5%'}}>
             <p className='updatebox'>
               <span>아이디 : {id}</span>
               {/* <button

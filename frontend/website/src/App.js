@@ -21,23 +21,25 @@ function App() {
   return (
     <div className='fontb'>
       <Router basename={BASE_NAME}>
-        <Header />
-        <Routes>
-          <Route path='/first' element={<First />} />
-          <Route path="/" element={<WebMain />} />
-          <Route path="/list" element={<List />} />
-          <Route path="/resultlist" element={<ResultList />} />
-          <Route path="/request" element={<Request />} />
-          <Route path="/rlist" element={<RList />} />
-          <Route
-            path="/mypage"
-            element={<Mypage />}/>
-    
-          <Route
-            path="/mypass"
-            element={<Mypass />}
-          />
-        </Routes>
+        <div style={{ display: 'flex' }}>
+          <Header />
+          <Routes>
+            <Route path='/first' element={<First />} />
+            <Route path="/" element={<WebMain />} />
+            <Route path="/list" element={<List />} />
+            <Route path="/resultlist" element={<ResultList />} />
+            <Route path="/request" element={<Request />} />
+            <Route path="/rlist" element={<RList />} />
+            <Route
+              path="/mypage"
+              element={<Mypage />}
+            />
+            <Route
+              path="/mypass"
+              element={<Mypass />}
+            />
+          </Routes>
+        </div>
       </Router>
     </div>
   );

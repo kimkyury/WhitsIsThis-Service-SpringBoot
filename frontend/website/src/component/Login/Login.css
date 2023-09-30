@@ -54,20 +54,20 @@
   }
 
   .buttonta {
-    font-size: 0.3rem;
-    width: 4rem;
-    border-radius: 0.3rem;
+    font-size: 0.05vw;
+    width: 4vw;
+    border-radius: 0.2vw;
     color: black;
     background-color: white;
-    border: 0.1rem solid black;
-    box-shadow: 0px 0.1rem 0px rgba(0, 0, 0, 0.3);
+    border: 0.1vw solid black;
+    box-shadow: 0px 0.1vw 0px rgba(0, 0, 0, 0.3);
   }
 
   .buttonta:hover {
     font-weight: bold;
     background-color: #2D4059;
     color: white;
-    border: 0.2rem solid #F07B3F;
+    border: 0.1vw solid #F07B3F;
     /* border: none; */
   }
 

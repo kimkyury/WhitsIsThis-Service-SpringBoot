@@ -27,7 +27,7 @@ function Mypage() {
     <div className='mypage'>
       <div style={{ display: 'flex', gap: '5%', width: '50vw' }}>
         <div className='menu-container'>
-          <div>
+          {/* <div>
             <div className='mypagemenuimgbox'>
               <img
                 src={imgurl}
@@ -38,19 +38,19 @@ function Mypage() {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <p style={{ fontSize: '1.5vw', fontWeight: 'bold' }}>{consumer}</p>
             </div>
-          </div>
-          <p
+          </div> */}
+          {/* <p
             className={selectedMenu === '내 정보' ? 'selecte' : 'ptag'}
             onClick={() => setSelectedMenu('내 정보')}
           >
             내 정보
-          </p>
-          <p
+          </p> */}
+          {/* <p
             className={selectedMenu === '비밀번호 변경' ? 'selecte' : 'ptag'}
             onClick={() => setSelectedMenu('비밀번호 변경')}
           >
             비밀번호 변경
-          </p>
+          </p> */}
         </div>
         <div  className='menufix'> {/* 내용을 표시할 영역 */}
           {selectedMenu === '내 정보' && <Myinfo />}

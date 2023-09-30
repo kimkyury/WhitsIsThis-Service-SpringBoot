@@ -17,14 +17,14 @@ function List() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const accessToken = sessionStorage.getItem('accessToken')
+  const accessToken = sessionStorage.getItem('accessToken');
+
   const getRefreshToken = () => {
     return sessionStorage.getItem('accessToken');
   };
 
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
-    console.log(itemData)
     setShowModal(true);
   };
 
@@ -68,7 +68,6 @@ function List() {
         } else {
           console.error('API 오류:', data.message);
           setIsFetching(false);
-          // console.log(refreshToken);
         }
       })
       .catch((error) => {
@@ -79,7 +78,7 @@ function List() {
 
   useEffect(() => {
     fetchData(currentPage, 'waiting');
-  }, []);
+  }, [currentPage]);
 
   // Attach a scroll event listener to the "접수대기" div
   const applicantContainerRef = useRef(null);
@@ -87,6 +86,7 @@ function List() {
   const handleApplicantScroll = () => {
     const element = applicantContainerRef.current;
     if (
+      element &&
       element.scrollHeight - element.scrollTop === element.clientHeight &&
       !isFetching &&
       !loadingMore
@@ -99,19 +99,21 @@ function List() {
   useEffect(() => {
     if (accessToken) {
       fetchData();
-      console.log(accessToken)
-      setIsLogin(true)
-      }
-      if (!isLogin) {
-        // navigate(-1)
-      }
-  })
+      setIsLogin(true);
+    }
+    if (!isLogin) {
+      // navigate(-1)
+    }
+  }, []);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleApplicantScroll);
-    return () => {
-      window.removeEventListener('scroll', handleApplicantScroll);
-    };
+    const element = applicantContainerRef.current;
+    if (element) {
+      element.addEventListener('scroll', handleApplicantScroll);
+      return () => {
+        element.removeEventListener('scroll', handleApplicantScroll);
+      };
+    }
   }, [currentPage, isFetching, loadingMore]);
 
   function handleOnDragEnd(result) {
@@ -153,110 +155,110 @@ function List() {
   }
 
   return (
-    isLogin?(
-    <div className='fontb'>
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <div className="inputgrid">
-          <input
-            className="recinputtag"
-            placeholder="검색"
-            value={searchQuery}
-            onChange={handleInputChange}
-          />
-          <p className="iconsearch">
-            <FaSearch />
-          </p>
+    isLogin ? (
+      <div className='fontb' style={{ marginTop: '7vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div className="inputgrid">
+            <input
+              className="recinputtag"
+              placeholder="검색"
+              value={searchQuery}
+              onChange={handleInputChange}
+            />
+            <p className="iconsearch">
+              <FaSearch />
+            </p>
+          </div>
         </div>
-      </div>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="applicant">
-          {(provided) => (
-            <div className="gridbox">
-              <div className="left">
-                <span className="recspan">내 접수</span>
-                <div
-                  className="Dropbox"
-                  style={{ paddingTop: '1.5vw' }}
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {filteredData.map((data, index) => (
-                    <Draggable key={data.id.toString()} draggableId={data.id.toString()} index={index}>
-                      {(provided, snapshot) => (
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId="applicant">
+            {(provided) => (
+              <div className="gridbox">
+                <div className="left">
+                  <span className="recspan">내 접수</span>
+                  <div
+                    className="Dropbox"
+                    style={{ paddingTop: '1.5vw' }}
+                    {...provided.droppableProps}
+                    ref={applicantContainerRef}
+                  >
+                    {filteredData.map((data, index) => (
+                      <Draggable key={data.id.toString()} draggableId={data.id.toString()} index={index}>
+                        {(provided, snapshot) => (
+                          <div
+                            onClick={() => handleItemClick(data)}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                            style={{
+                              ...provided.draggableProps.style,
+                              position: snapshot.isDragging ? 'fixed' : 'relative',
+                              zIndex: snapshot.isDragging ? 2000 : 'auto',
+                              opacity: snapshot.isDragging ? 0.5 : 1,
+                            }}
+                          >
+                            <Item data={data} />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                </div>
+                <div className="left" style={{ marginLeft: '2vw' }}>
+                  <span className="recspan">접수대기</span>
+                  <div
+                    onScroll={handleApplicantScroll}
+                    className="Dropbox myApplicant-container"
+                    style={{ paddingTop: '1.5vw' }}
+                  >
+                    <Droppable droppableId="myApplicant">
+                      {(provided) => (
                         <div
-                          onClick={() => handleItemClick(data)}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
+                          {...provided.droppableProps}
                           ref={provided.innerRef}
-                          style={{
-                            ...provided.draggableProps.style,
-                            position: snapshot.isDragging ? 'fixed' : 'relative',
-                            zIndex: snapshot.isDragging ? 2000 : 'auto',
-                            opacity: snapshot.isDragging ? 0.5 : 1,
-                          }}
+                          className="myApplicant-container"
                         >
-                          <Item data={data} />
+                          {myApplicant.map((data, index) => (
+                            <Draggable key={data.id.toString()} draggableId={data.id.toString()} index={index}>
+                              {(provided, snapshot) => (
+                                <div
+                                  onClick={() => handleItemClick(data)}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  ref={provided.innerRef}
+                                  style={{
+                                    ...provided.draggableProps.style,
+                                    position: snapshot.isDragging ? 'fixed' : 'relative',
+                                    zIndex: snapshot.isDragging ? 2000 : 'auto',
+                                    opacity: snapshot.isDragging ? 0.5 : 1,
+                                  }}
+                                >
+                                  <Item data={data} />
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
                         </div>
                       )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
+                    </Droppable>
+                  </div>
                 </div>
               </div>
-              <div className="left">
-                <span className="recspan">접수대기</span>
-                <div
-                  ref={applicantContainerRef}
-                  onScroll={handleApplicantScroll}
-                  className="Dropbox myApplicant-container"
-                  style={{ paddingTop: '1.5vw' }}
-                >
-                  <Droppable droppableId="myApplicant">
-                    {(provided) => (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className="myApplicant-container"
-                      >
-                        {myApplicant.map((data, index) => (
-                          <Draggable key={data.id.toString()} draggableId={data.id.toString()} index={index}>
-                            {(provided, snapshot) => (
-                              <div
-                                onClick={() => handleItemClick(data)}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                ref={provided.innerRef}
-                                style={{
-                                  ...provided.draggableProps.style,
-                                  position: snapshot.isDragging ? 'fixed' : 'relative',
-                                  zIndex: snapshot.isDragging ? 2000 : 'auto',
-                                  opacity: snapshot.isDragging ? 0.5 : 1,
-                                }}
-                              >
-                                <Item data={data} />
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-              </div>
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-      {showModal && (
-        <div className="modal-container">
-          <RequestModal selectedItem={selectedItem} setShowModal={setShowModal} />
-        </div>
-      )}
-      {loadingMore && <div>Loading...</div>}
-    </div>):(
-      <div style={{display:'flex',justifyContent:'center', alignItems:'center', height:'90vh'}}>
-        <Warning/>
+            )}
+          </Droppable>
+        </DragDropContext>
+        {showModal && (
+          <div className="modal-container">
+            <RequestModal selectedItem={selectedItem} setShowModal={setShowModal} />
+          </div>
+        )}
+        {loadingMore && <div>Loading...</div>}
+      </div>
+    ) : (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
+        <Warning />
       </div>
     )
   );
