@@ -61,9 +61,12 @@ const HouseTodoList = ({ requestContent, historyId, isOpen, handleOpenTodoList }
     setIsAddSection(!isAddSection);
   };
 
-  const handleSectionOpen = (sectionId) => {
+  const handleSectionOpen = (section) => {
     if (isListMain) {
-      const target = sectionList.find((it) => parseInt(it.roomOrder) === parseInt(sectionId));
+      const target = sectionList.find(
+        (it) => parseInt(it.roomOrder) === parseInt(section.roomOrder)
+      );
+      console.log(target);
       if (target) {
         setTargetSection(target);
       }
@@ -72,23 +75,23 @@ const HouseTodoList = ({ requestContent, historyId, isOpen, handleOpenTodoList }
       setIsSectionDetail(!isSectionDetail);
       return;
     }
-    const targetTodoLists = sectionList.find((it) => it.roomOrder === sectionId);
-    console.log(targetTodoLists);
+    const targetTodoLists = sectionList.find((it) => it.roomOrder === section.roomOrder);
     setIsListMain(!isListMain);
     setIsSectionDetail(!isSectionDetail);
   };
 
-  // const handleCameraOpen = () => {
-  //   setIsAddSection(false);
-  //   setIsListMain(true);
-  //   setIsSectionDetail(false);
-  //   // 카메라 열렸을 때 창 전환
-  //   isOpen = false;
-  // };
+  const handleMenu = () => {
+    setTimeout(() => {
+      setIsAddSection(false);
+      setIsListMain(true);
+      setIsSectionDetail(false);
+    }, 500);
+    handleOpenTodoList();
+  };
 
   return (
     <div className={`HouseTodoList options ${modalStatus}`}>
-      <div className="option_header" onClick={handleOpenTodoList}>
+      <div className="option_header" onClick={handleMenu}>
         <img src={process.env.PUBLIC_URL + `/assets/stick_small.png`} alt="" />
       </div>
 

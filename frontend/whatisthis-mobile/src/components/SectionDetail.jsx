@@ -3,12 +3,14 @@ import TodoListItem from "./TodoListItem";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import AuthHttp from "../utils/AuthHttp";
+import { useState } from "react";
 
 // 할일이 객체로 이름, 내용, 선택됨, 이미지 를 갖고 있어야 함
 
 const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) => {
   const navigate = useNavigate();
   const { houseId } = useParams();
+
   // 렌더링 여러번 되는 문제 개선 필요
 
   // useEffect(() => {
@@ -27,6 +29,40 @@ const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) =>
   //     }
   //   };
   // }, []);
+
+  const closeSectionDetail = (roomOrder) => {
+    console.log(targetSection);
+    targetSection.todolist.map(async (todo) => {
+      try {
+        const response = await AuthHttp({
+          method: "patch",
+          url: `/private/todolists/${todo.id}/status`,
+          data: {
+            isChecked: todo.isChecked,
+            significant: todo.significant,
+          },
+        });
+        // console.log(response);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+    handleSectionOpen(roomOrder);
+  };
+
+  const handleCheckboxChange = (id, value) => {
+    targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id)).isChecked = value;
+
+    const currentState = targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id));
+    // console.log(currentState);
+  };
+
+  const handleDescriptionChange = (id, value) => {
+    targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id)).significant = value;
+    const currentState = targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id));
+    // console.log(currentState);
+  };
+
   const openCamera = (todoListItemId, todoListContent) => {
     console.log(todoListItemId);
     const targetTodoItem = targetSection.todolist.find(
@@ -51,15 +87,24 @@ const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) =>
           isSectionDetail ? "slide_in_right" : "slide_out_right"
         }`}
       >
-        {/* section list map 적용해서 출력 */}
-        {/* handleSectionClick은 편의상 임시로 넣은 것 뒤로가기 아이콘을 추가해야할 듯 */}
         <TodoSectionItem
           sectionName={targetSection.roomName}
-          onClick={() => handleSectionOpen(targetSection.roomOrder)}
+          onClick={() => closeSectionDetail(targetSection)}
+          type={"add"}
+          isSave={true}
         />
         {targetSection.todolist &&
           targetSection.todolist.map((it) => {
-            return <TodoListItem key={it.id} todoListItem={it} openCamera={openCamera} />;
+            return (
+              <TodoListItem
+                key={it.id}
+                todoListId={it.id}
+                handleCheckboxChange={handleCheckboxChange}
+                handleDescriptionChange={handleDescriptionChange}
+                todoListItem={it}
+                openCamera={openCamera}
+              />
+            );
           })}
       </div>
     );

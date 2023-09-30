@@ -1,8 +1,6 @@
 import { useState } from "react";
 import TodoSectionItem from "./TodoSectionItem";
 
-import { dummySections } from "../utils/DummyData";
-
 // 닫기는게 왼쪽 열리는게 오른쪽 디폴트는 고정
 const TodoListMain = ({
   requestContent,
@@ -13,7 +11,7 @@ const TodoListMain = ({
 }) => {
   const checkFinish = (roomOrder) => {
     const room = sectionList.find((it) => it.roomOrder === roomOrder).todolist;
-    const allTodoListIsDone = room.some((it) => it.isChecked);
+    const allTodoListIsDone = room.every((it) => it.isChecked);
     return allTodoListIsDone;
   };
 
@@ -33,7 +31,7 @@ const TodoListMain = ({
               key={it.roomOrder}
               sectionName={it.roomName}
               // handleSectionOpen 전달 값 변경해야함
-              onClick={() => handleSectionOpen(it.roomOrder)}
+              onClick={() => handleSectionOpen(it)}
               isFinish={checkFinish(it.roomOrder)}
             />
           );
