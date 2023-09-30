@@ -105,7 +105,6 @@ public class PaymentService {
 
     @Transactional
     public void depositCallback(WebhookDepositRequest webhookDepositRequest) {
-        System.out.println(">>>" + webhookDepositRequest.getOrderId() + "<<<");
         PaymentEntity paymentEntity = paymentRepository.findByOrderId(
                                                            webhookDepositRequest.getOrderId())
                                                        .orElseThrow(() -> new CustomException(
@@ -126,6 +125,11 @@ public class PaymentService {
 //                sendMessage(requesterNumber, "[이게MO징] 서비스의 장애가 발생해 입금에 실패하였습니다. 재입금 부탁드립니다.");
             }
         } else if (Status.CANCELED.equals(webhookDepositRequest.getStatus())) {
+            paymentEntity.setStatus(Status.CANCELED);
+
+            paymentRepository.save(paymentEntity);
+            setRequestStatus(paymentEntity.getRequest()
+                                          .getId(), RequestEntity.Status.CANCELED);
 //            sendMessage(requesterNumber, "[이게MO징] 집 사전 점검 요청이 취소되었습니다.");
         } else if (Status.DONE.equals(webhookDepositRequest.getStatus())) {
             paymentEntity.setStatus(Status.DONE);
