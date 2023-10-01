@@ -1,96 +1,73 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // useNavigate를 import로 추가
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './Resultconfirm.css';
 import { useMediaQuery } from "react-responsive";
+import Phoneconfirm from '../../../customcomponent/customReceive/Phoneconfirm';
+
 function Resultconfirm() {
   const [customdata, setCustomdata] = useState([]);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [phoneNumberInput, setPhoneNumberInput] = useState("");
-  const [isVerified, setIsVerified] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
+  const [phoneConfirmVisible, setPhoneConfirmVisible] = useState(false);
+  const [isSuc, setIsSuc] = useState(false);
+  const navigate = useNavigate();
+  const phoneNumberInputRef = useRef(null);
 
-  const navigate = useNavigate(); // useNavigate로 navigate 함수 가져오기
+  useEffect(() => {
+    if (phoneNumberInputRef.current) {
+      const requesterPhoneNumber = phoneNumberInputRef.current.value;
+    }
+  }, []);
 
-  const handlePhoneNumberVerification = () => {
-    const matchingData = customdata.find((data) => data.phonenumber === phoneNumberInput);
+  const handleSendSMS = async () => {
+    if (!isSuc) {
+      if (phoneNumberInputRef.current && phoneNumberInputRef.current.value) {
+        const requesterPhoneNumber = phoneNumberInputRef.current.value;
+        const phone = requesterPhoneNumber;
+        const requestData = {
+          phone: phone,
+        };
 
-    if (matchingData) {
-      setIsVerified(true);
-
-      axios.get(`${BASE_URL}/api/v1/guest/requests/verification?requesterPhone=${phoneNumberInput}`)
-        .then((response) => {
-          console.log("Verification request successful", response);
-        })
-        .catch((error) => {
-          console.error("Error verifying phone number", error);
-        });
-    } else {
-      alert("전화번호가 일치하지 않습니다.");
+        try {
+          const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData);
+          setPhoneConfirmVisible(true);
+        } catch (error) {
+          console.error('SMS 전송 중 오류 발생:', error);
+        }
+      }
     }
   };
 
-  // const handleConfirmation = () => {
-  //   if (isVerified) {
-  //     const matchingData = customdata.find((data) => data.phonenumber === phoneNumberInput);
-  //     if (matchingData) {
-  //       const status = matchingData.status;
- 
-  //       switch (status) {
-  //         case "canceled":
-  //           navigate("/refundPage"); // navigate 함수로 페이지 이동
-  //           break;
-  //         case "waiting_for_pay":
-  //           navigate("/waitingForPayment");
-  //           break;
-  //         case "waiting_inspection_date":
-  //         case "waiting_for_inspection":
-  //         case "in_Progress":
-  //         case "Done":
-  //           navigate("/inspectionResult");
-  //           break;
-  //         default:
-  //           // 다른 상태에 따른 처리
-  //           break;
-  //       }
-  //     } else {
-  //       alert("상태가 대기 중이 아닙니다.");
-  //       console.log(matchingData)
-
-  //     }
-  //   } else {
-  //     alert("전화번호 인증이 필요합니다.");
-  //   }
-  // };
   const handleConfirmation = () => {
-    // 인증 없이 서버로 요청을 보내고, 서버에서 일치하는 데이터를 확인
     axios.get(`${BASE_URL}/api/v1/guest/requests/verification?requesterPhone=${phoneNumberInput}`)
       .then((response) => {
-        const matchingData = response.data; // 서버로부터 받은 데이터를 확인
+        const matchingData = response.data;
 
         if (matchingData) {
           const status = matchingData.data.status;
-          
-          console.log(status);
+
           switch (status) {
             case "CANCELED":
               navigate("/moneyreturn");
-              sessionStorage.setItem('id', response.data.data.requestId)
+              sessionStorage.setItem('id', response.data.data.requestId);
               break;
             case "WAITING_FOR_PAY":
-              sessionStorage.setItem('status', matchingData.data.status)
-              sessionStorage.setItem('employeeName', matchingData.data.employeeName)
-              sessionStorage.setItem('responsedata', matchingData.data.inspectionEnd)
-              sessionStorage.setItem('id', response.data.data.requestId)
+              sessionStorage.setItem('status', matchingData.data.status);
+              sessionStorage.setItem('employeeName', matchingData.data.employeeName);
+              sessionStorage.setItem('responsedata', matchingData.data.inspectionEnd);
+              sessionStorage.setItem('id', response.data.data.requestId);
               navigate("/receiveresult");
               break;
             case "WAITING_INSPECTION_DATE":
             case "WAITING_FOR_INSPECTION":
             case "IN_PROGRESS":
             case "DONE":
-              sessionStorage.setItem('status', matchingData.data.status)
-              sessionStorage.setItem('employeeName', matchingData.data.employeeName)             
-              sessionStorage.setItem('responsedata', matchingData.data.inspectionEnd)
-              sessionStorage.setItem('id', response.data.data.history.id)
+              sessionStorage.setItem('status', matchingData.data.status);
+              sessionStorage.setItem('employeeName', matchingData.data.employeeName);
+              sessionStorage.setItem('responsedata', matchingData.data.inspectionEnd);
+              sessionStorage.setItem('id', response.data.data.history.id);
               navigate("/fixcustom");
               break;
             default:
@@ -106,6 +83,7 @@ function Resultconfirm() {
         alert("전화번호 인증이 필요합니다.");
       });
   };
+
   const Desktop = ({ children }) => {
     const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
     return isDesktop ? children : null;
@@ -117,8 +95,7 @@ function Resultconfirm() {
   };
 
   return (
-    <div className="roomimg resrecpage backgr">
-      <Mobile>
+    <div className="roomimg resrecpage">
       <div className="customreceivedivconfirm">
         <div className="custommodaltitle">
           <p>결과확인</p>
@@ -128,60 +105,30 @@ function Resultconfirm() {
             <input
               className="input cinput"
               placeholder="연락처를 입력해주십시오."
+              ref={phoneNumberInputRef}
               value={phoneNumberInput}
               onChange={(e) => setPhoneNumberInput(e.target.value)}
             />
-            <button
-              className="button minibutton"
-              style={{ marginLeft: '3%' }}
-              // onClick={handlePhoneNumberVerification}
-            >
-              {isVerified ? "확인" : "인증하기"}
-            </button>
+            {isSuc ? (
+              <button className="button minibutton" onClick={handleSendSMS}>확인</button>
+            ) : (
+              <button className="button minibutton" onClick={handleSendSMS}>인증하기</button>
+            )}
           </div>
         </div>
         <div className='middlemodalbox'>
           <button
             className="button bigbutton"
             onClick={handleConfirmation}
+            disabled={!isVerified} // 인증이 완료되지 않은 경우 버튼 비활성화
           >
-            확인하기
+            {isVerified ? "확인하기" : "인증하기"}
           </button>
         </div>
       </div>
-      </Mobile>
-      <Desktop>
-      <div className="customreceivedivconfirm">
-        <div className="custommodaltitle">
-          <p>결과확인</p>
-        </div>
-        <div className="middlemodalsx">
-          <div className="customgrid">
-            <input
-              className="input cinput"
-              placeholder="연락처를 입력해주십시오."
-              value={phoneNumberInput}
-              onChange={(e) => setPhoneNumberInput(e.target.value)}
-            />
-            <button
-              className="button minibutton"
-              style={{ marginLeft: '3%' }}
-              // onClick={handlePhoneNumberVerification}
-            >
-              {isVerified ? "확인" : "인증하기"}
-            </button>
-          </div>
-        </div>
-        <div className='middlemodalbox'>
-          <button
-            className="button bigbutton"
-            onClick={handleConfirmation}
-          >
-            확인하기
-          </button>
-        </div>
-      </div>
-      </Desktop>
+      {phoneConfirmVisible && (
+        <Phoneconfirm isSuc={isSuc} setIsSuc={setIsSuc} setPhoneConfirmVisible={setPhoneConfirmVisible} requesterPhoneNumber={phoneNumberInput} setIsVerified={setIsVerified} />
+      )}
     </div>
   );
 }

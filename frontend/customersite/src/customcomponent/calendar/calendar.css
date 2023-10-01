@@ -3,16 +3,17 @@
 .datePicker {
   display: flex;
   align-items: center;
-  border: 1px solid gray;
-  border-radius: 4px;
-  background-color: #2D4059;
+  border: 1px solid black;
+  /* border-radius: 4px; */
+  background-color: white;
   box-sizing: border-box;
   width: 10rem;
   height: 2rem;
-  color: white;
+  color: #2D4059;
   text-align: center;
   /* padding-right: 14px; */
   margin-left:1rem;
+  opacity:60%
 
 }
 

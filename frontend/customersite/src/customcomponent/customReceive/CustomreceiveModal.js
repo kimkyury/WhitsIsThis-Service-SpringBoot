@@ -6,9 +6,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import '../calendar/calendar.css';
 import Receivesuc from "./receivesuccess";
+import Phoneconfirm from './Phoneconfirm'; // Phoneconfirm 컴포넌트를 import
 import { useMediaQuery } from "react-responsive";
-
+import { useNavigate } from 'react-router-dom';
 function CustomreceiveModal() {
+  const navigate = useNavigate();
+  const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -16,7 +19,10 @@ function CustomreceiveModal() {
   const [uploadedFileName, setUploadedFileName] = useState("");
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [isApplicationSuccess, setIsApplicationSuccess] = useState(false);
-  const [selectedBank, setSelectedBank] = useState(""); // 추가: 선택된 은행명을 저장할 상태 변수
+  const [selectedBank, setSelectedBank] = useState("");
+  const [requesterPhone, setRequesterPhone] = useState(""); // 요청자 연락처
+  const [phoneConfirmVisible, setPhoneConfirmVisible] = useState(false); // Phoneconfirm 모달 표시 상태
+  const [isSuc, setIsSuc] = useState(false);
 
   const handleOpenAddressModal = () => {
     setShowAddressModal(true);
@@ -67,9 +73,9 @@ function CustomreceiveModal() {
     const addressDetail = document.querySelector('.input[placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"]').value;
     const requestContent = document.querySelector('.input[placeholder="요청 사항을 입력해주십시오."]').value;
     const requesterName = document.querySelector('.input[placeholder="이름을 입력해주십시오."]').value;
-    const requesterPhone = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
+    // const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
 
-    if (!addressDetail || !requestContent || !requesterName || !requesterPhone) {
+    if (!addressDetail || !requestContent || !requesterName || !requesterPhoneNumber) {
       console.error('필수 정보를 모두 입력해주세요.');
       alert('필수 정보를 모두 입력해주세요.');
       return;
@@ -85,8 +91,8 @@ function CustomreceiveModal() {
       inspectionStart: formattedStartDate,
       requestContent: requestContent,
       requesterName: requesterName,
-      requesterPhone: requesterPhone,
-      selectedBank: selectedBank, // 추가: 선택된 은행명을 JSON 데이터에 추가
+      requesterPhone: requesterPhoneNumber,
+      bankCode: selectedBank, 
     };
 
     formData.append('requestRegisterRequest', JSON.stringify(jsonData));
@@ -110,252 +116,169 @@ function CustomreceiveModal() {
       document.body.removeChild(link);
 
       setIsApplicationSuccess(true);
+
+      // 요청이 성공하면 Phoneconfirm 모달을 표시
+      setPhoneConfirmVisible(true);
+      navigate('/');
     } catch (error) {
       console.error('신청 처리 중 오류가 발생했다.', error);
       console.log(jsonData, formData);
     }
   };
 
-  const Desktop = ({ children }) => {
-    const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
-    return isDesktop ? children : null;
-  };
-
-  const Mobile = ({ children }) => {
-    const isMobile = useMediaQuery({ maxDeviceWidth: 1223 });
-    return isMobile ? children : null;
+  const handleSendSMS = async () => {
+    if (!isSuc) {
+      const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
+      const phone = requesterPhoneNumber;
+      console.log(phone)
+      const requestData = {
+        phone: phone,
+        // 다른 필요한 데이터를 여기에 추가합니다.
+      };
+  
+      try {
+        const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData);
+  
+        // SMS 전송 성공 시 phoneConfirm 모달을 화면 중앙으로 보내는 코드
+        setPhoneConfirmVisible(true);
+      } catch (error) {
+        console.error('SMS 전송 중 오류 발생:', error);
+        // SMS 전송 중 오류가 발생했을 때의 처리를 여기에 추가합니다.
+      }
+    }
   };
 
   return (
     <div>
-      <Desktop>
-        <div className="customreceivediv desktop-view">
-          <div className="custommodaltitle">
-            <p>신청하기</p>
-          </div>
-          <div className="middlemodal">
-            <div>
-              <p className="desktoprectitle">신청자명</p>
-              <input
-                style={{ width: "40rem", height: "3rem" }}
-                className="input"
-                placeholder="이름을 입력해주십시오."
-              />
-              <p className="desktoprectitle">요청 사항</p>
-              <input
-                className="input"
-                style={{ width: "40rem", height: "3rem" }}
-                placeholder="요청 사항을 입력해주십시오."
-              />
-              {/* 은행명 드롭다운 */}
-              <p className="desktoprectitle">은행명 :</p>
-              <select
-                className="input desk-cinput"
-                value={selectedBank}
-                onChange={(e) => setSelectedBank(e.target.value)}
-              >
-                <option value="">은행 선택</option>
-                <option value="Bank 1">Bank 1</option>
-                <option value="Bank 2">Bank 2</option>
-                <option value="Bank 3">Bank 3</option>
-                {/* 필요한 은행명 옵션을 추가하세요 */}
-              </select>
-              {/* 은행명 드롭다운 끝 */}
-              <p className="desktoprectitle">연락처</p>
-              <div className="customgrid">
-                <input
-                  className="input desk-cinput"
-                  placeholder="연락처를 입력해주십시오."
-                />
-                <button className="button desk-minibutton">인증하기</button>
-              </div>
-
-              <p className="desktoprectitle">위임장 사진</p>
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <input
-                  type="file"
-                  id="fileInput"
-                  style={{ display: 'none' }}
-                  onChange={handleFileChange}
-                />
-                {uploadedFileName && (
-                  <p>{uploadedFileName}</p>
-                )}
-                <button className="button desk-minibutton" onClick={handleOpenFileInput}>
-                  찾아보기
-                </button>
-              </div>
-              <p className="desktoprectitle">주소</p>
-              <div className="customgrid">
-                <input
-                  className="input desk-cinput"
-                  placeholder="주소을 입력해주십시오."
-                  value={selectedAddress}
-                  onChange={(e) => setSelectedAddress(e.target.value)}
-                />
-                <button
-                  className="button desk-minibutton"
-                  onClick={handleOpenAddressModal}
-                >
-                  주소찾기
-                </button>
-              </div>
-              <p className="desktoprectitle">상세주소</p>
-              <input
-                style={{ width: "40rem", height: "3rem" }}
-                className="input"
-                placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"
-              />
-              <div className="customgridx">
-                <p className="desktoprectitle">점검 예정 일자 :</p>
-                <DatePicker
-                  dateFormat='yyyy.MM.dd'
-                  shouldCloseOnSelect
-                  minDate={new Date()}
-                  selectsRange={true}
-                  startDate={startDate}
-                  endDate={endDate}
-                  onChange={(update) => {
-                    setDateRange(update)
-                  }}
-                  withPortal
-                  className='desktop-datePicker'
-                />
-              </div>
-            </div>
-          </div>
-          <div className="middlemodal">
-            <button className="button bigbuttons" onClick={handleApply}>
-              신청하기
-            </button>
-          </div>
-          {showAddressModal && (
-            <div className="address-modal">
-              <button className="close-button" onClick={handleCloseAddressModal}>
-                닫기
-              </button>
-              <Address selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress} onSelect={handleInputAddress} />
-            </div>
-          )}
-          {isApplicationSuccess && (
-            <Receivesuc />
-          )}
+      <div className="customreceivediv">
+        <div className="custommodaltitle">
+          <p>신청하기</p>
         </div>
-      </Desktop>
-      <Mobile>
-        <div className="customreceivediv">
-          <div className="custommodaltitle">
-            <p>신청하기</p>
-          </div>
-          <div className="middlemodal">
-            <div>
-              <p className="minititle">신청자명</p>
+        <div className="middlemodal">
+          <div>
+            <p className="minititle">신청자명</p>
+            <input
+              style={{ width: "80vw", height: "2rem" }}
+              className="input"
+              placeholder="이름을 입력해주십시오."
+            />
+            <p className="minititle">요청 사항</p>
+            <input
+              className="input"
+              style={{ width: "80vw", height: "2rem" }}
+              placeholder="요청 사항을 입력해주십시오."
+            />
+            <p className="minititle">은행명 :</p>
+            <select
+              className="input cinput"
+              value={selectedBank}
+              onChange={(e) => setSelectedBank(e.target.value)}
+            >
+              <option value="">은행 선택</option>
+              <option value="03">IBK기업은행</option>
+              <option value="06">KB국민은행</option>
+              <option value="07">SH수협은행</option>
+              <option value="11">NH농협은행</option>
+              <option value="20">우리은행</option>
+              <option value="31">DGB대구은행</option>
+              <option value="32">부산은행</option>
+              <option value="34">광주은행</option>
+              <option value="37">전북은행</option>
+              <option value="45">새마을금고</option>
+              <option value="71">우체국예금보험</option>
+              <option value="81">하나은행</option>
+              <option value="88">신한은행</option>
+            </select>
+            {/* 은행명 드롭다운 끝 */}
+            <p className="minititle">연락처</p>
+            <div className="customgrid">
               <input
-                style={{ width: "13rem", height: "2rem" }}
-                className="input"
-                placeholder="이름을 입력해주십시오."
-              />
-              <p className="minititle">요청 사항</p>
-              <input
-                className="input"
-                style={{ width: "13rem", height: "2rem" }}
-                placeholder="요청 사항을 입력해주십시오."
-              />
-              {/* 은행명 드롭다운 */}
-              <p className="minititle">은행명 :</p>
-              <select
                 className="input cinput"
-                value={selectedBank}
-                onChange={(e) => setSelectedBank(e.target.value)}
-              >
-                <option value="">은행 선택</option>
-                <option value="Bank 1">Bank 1</option>
-                <option value="Bank 2">Bank 2</option>
-                <option value="Bank 3">Bank 3</option>
-                {/* 필요한 은행명 옵션을 추가하세요 */}
-              </select>
-              {/* 은행명 드롭다운 끝 */}
-              <p className="minititle">연락처</p>
-              <div className="customgrid">
-                <input
-                  className="input cinput"
-                  placeholder="연락처를 입력해주십시오."
-                />
-                <button className="button minibutton">인증하기</button>
-              </div>
-
-              <p className="minititle">위임장 사진</p>
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <input
-                  type="file"
-                  id="fileInput"
-                  style={{ display: 'none' }}
-                  onChange={handleFileChange}
-                />
-                {uploadedFileName && (
-                  <p>{uploadedFileName}</p>
-                )}
-                <button className="button minibutton" onClick={handleOpenFileInput}>
-                  찾아보기
-                </button>
-              </div>
-              <p className="minititle">주소</p>
-              <div className="customgrid">
-                <input
-                  className="input cinput"
-                  placeholder="주소을 입력해주십시오."
-                  value={selectedAddress}
-                  onChange={(e) => setSelectedAddress(e.target.value)}
-                />
-                <button
-                  className="button minibutton"
-                  onClick={handleOpenAddressModal}
-                >
-                  주소찾기
-                </button>
-              </div>
-              <p className="minititle">상세주소</p>
-              <input
-                style={{ width: "13rem", height: "2rem" }}
-                className="input"
-                placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"
+                placeholder="연락처를 입력해주십시오."
               />
-              <div className="customgridx">
-                <p className="minititle">점검 예정 일자 :</p>
-                <DatePicker
-                  dateFormat='yyyy.MM.dd'
-                  shouldCloseOnSelect
-                  minDate={new Date()}
-                  selectsRange={true}
-                  startDate={startDate}
-                  endDate={endDate}
-                  onChange={(update) => {
-                    setDateRange(update)
-                  }}
-                  withPortal
-                  className='datePicker'
-                />
-              </div>
+              {isSuc ? (
+                <button className="button minibutton" onClick={handleSendSMS}>확인</button>
+              ) : (
+                <button className="button minibutton" onClick={handleSendSMS}>인증하기</button>
+              )}
             </div>
-          </div>
-          <div className="middlemodal">
-            <button className="button bigbuttons" onClick={handleApply}>
-              신청하기
-            </button>
-          </div>
-          {showAddressModal && (
-            <div className="address-modal">
-              <button className="close-button" onClick={handleCloseAddressModal}>
-                닫기
+            <p className="minititle">위임장 사진</p>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <input
+                type="file"
+                id="fileInput"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+              {uploadedFileName && (
+                <p>{uploadedFileName}</p>
+              )}
+              <button className="button minibutton" onClick={handleOpenFileInput}>
+                찾아보기
               </button>
-              <Address selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress} onSelect={handleInputAddress} />
             </div>
-          )}
-          {isApplicationSuccess && (
-            <Receivesuc />
-          )}
+            <p className="minititle">주소</p>
+            <div className="customgrid">
+              <input
+                className="input cinput"
+                placeholder="주소을 입력해주십시오."
+                value={selectedAddress}
+                onChange={(e) => setSelectedAddress(e.target.value)}
+              />
+              <button
+                className="button minibutton"
+                onClick={handleOpenAddressModal}
+              >
+                주소찾기
+              </button>
+            </div>
+            <p className="minititle">상세주소</p>
+            <input
+              style={{ width: "80vw", height: "2rem" }}
+              className="input"
+              placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"
+            />
+            <div className="customgridx">
+              <p className="minititle">점검 예정 일자 :</p>
+              <DatePicker
+                dateFormat='yyyy.MM.dd'
+                shouldCloseOnSelect
+                minDate={new Date()}
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(update) => {
+                  setDateRange(update)
+                }}
+                withPortal
+                className='datePicker'
+              />
+            </div>
+            <p className="minititle">면적</p>
+            <input
+              style={{ width: "80vw", height: "2rem" }}
+              className="input"
+              placeholder="면적을 입력해주십시오."
+            />
+          </div>
         </div>
-      </Mobile>
+        <div className="middlemodal">
+          <button className="button bigbuttons" onClick={handleApply}>
+            신청하기
+          </button>
+        </div>
+        {showAddressModal && (
+          <div className="address-modal">
+            <button className="close-button" onClick={handleCloseAddressModal}>
+              닫기
+            </button>
+            <Address selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress} onSelect={handleInputAddress} />
+          </div>
+        )}
+      </div>
+      {phoneConfirmVisible && (
+        <Phoneconfirm isSuc={isSuc} setIsSuc={setIsSuc} setPhoneConfirmVisible={setPhoneConfirmVisible} requesterPhoneNumber={requesterPhoneNumber} />
+      )}
     </div>
   );
 }

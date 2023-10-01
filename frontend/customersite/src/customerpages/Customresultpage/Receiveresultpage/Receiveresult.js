@@ -116,7 +116,7 @@ function Receiveresult() {
   };
 
   return (
-    <div className="roomimg resrecpage backgr">
+    <div className="roomimg resrecpage">
       <Desktop>
       <div className="desk-customreceivedivs">
         <div className="custommodaltitle">
@@ -133,10 +133,10 @@ function Receiveresult() {
           </div>
         </div>
         <div className="middlebox">
+          <button className="button middlebutton">확인</button>
           <button className="button middlebutton" onClick={handleCancellation}>
             신청취소
           </button>
-          <button className="button middlebutton">확인</button>
         </div>
       </div>
       {cancellationStatus && (
@@ -161,10 +161,10 @@ function Receiveresult() {
           </div>
         </div>
         <div className="middlebox">
+          <button className="button middlebutton">확인</button>
           <button className="button middlebutton" onClick={handleCancellation}>
             신청취소
           </button>
-          <button className="button middlebutton">확인</button>
         </div>
       </div>
       {cancellationStatus && (

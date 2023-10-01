@@ -23,13 +23,13 @@ function App() {
 
       <Router basename={BASE_NAME}>
         <Routes>
-          <Route path="/" element={[<Customheader />, <Maincustompage/>]} />
-          <Route path="/customerreceive" element={[<Customheader />, <Customreceivepage />]} />
-          <Route path="/fixcustom" element={[<Customheader />, <Fixcustom />]} />
-          <Route path="/moneyreturn" element={[<Customheader />, <Moneyreturn />]} />
-          <Route path="/moneywait" element={[<Customheader />, <Moneywait />]} />
-          <Route path="/receiveresult" element={[<Customheader />, <Receiveresult />]} />
-          <Route path="/resultconfirm" element={[<Customheader />, <Resultconfirm />]} />
+          <Route path="/" element={[ <Maincustompage/>]} />
+          <Route path="/customerreceive" element={[<Customreceivepage />]} />
+          <Route path="/fixcustom" element={[ <Fixcustom />]} />
+          <Route path="/moneyreturn" element={[ <Moneyreturn />]} />
+          <Route path="/moneywait" element={[ <Moneywait />]} />
+          <Route path="/receiveresult" element={[ <Receiveresult />]} />
+          <Route path="/resultconfirm" element={[ <Resultconfirm />]} />
           
         </Routes>
       </Router>

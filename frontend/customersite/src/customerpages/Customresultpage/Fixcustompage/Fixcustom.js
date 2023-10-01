@@ -8,7 +8,7 @@ function Fixcustom() {
   // 상태에 따라 원 모양 스타일을 반환하는 함수 정의
   const getCircleStyle = (circleStatus) => {
     if (status === circleStatus) {
-      return { backgroundColor: '#F07B3F' };
+      return { backgroundColor: '#F07B3F' , color:'green'};
     }
     return {};
   };
@@ -43,7 +43,7 @@ function Fixcustom() {
   };
 
   return (
-    <div className="roomimg resrecpage backgr">
+    <div className="roomimg resrecpage">
       <Desktop>
         <div className="desk-customreceivedivfix">
           <div className="desk-custommodaltitle ">

@@ -48,7 +48,7 @@ function Moneyreturn() {
   }, []);
 
   return (
-    <div className="roomimg resrecpage backgr">
+    <div className="roomimg resrecpage">
       <Mobile>
         <div className="customreceivedivm">
           <div className="custommodaltitle">

@@ -38,7 +38,7 @@
 
 
 .cmainbutton:hover {
-  background-image: linear-gradient(to right, #2D4059, #2D4080);
+  /* background-image: linear-gradient(to right, #2D4059, #2D4080); */
 
 }
 .cmainbutton.show {
@@ -46,6 +46,8 @@
   opacity: 1;
 }
 .logo-img {
+  display: flex;
+
   position: absolute;
   top: -19rem; /* 세로 중앙 정렬 */
   transform: translateX(25, -25%); /* 가로, 세로 중앙 정렬 */

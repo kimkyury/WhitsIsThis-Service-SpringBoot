@@ -12,7 +12,7 @@ function Customreceive() {
   return (
     <div>
  
-      <div className="modalbox roomimg backgr">
+      <div className="modalbox roomimg">
 
       <CustomreceiveModal/>
       {/* <Receivesuc/> */}

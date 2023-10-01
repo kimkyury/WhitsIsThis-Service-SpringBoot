@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import './Maincustompage.css';
 import { Link } from "react-router-dom";
 import Pdf from './Pdf';
+
 function CustomMain() {
   const [logoVisible, setLogoVisible] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(false);
@@ -24,14 +25,16 @@ function CustomMain() {
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
-
-       
       // backgroundImage: `url(${process.env.PUBLIC_URL}/assets/배경사진.png)`
     }}
-    className="roomimg backgr">
+    className="roomimg">
       <div className='cbox'>
         <p className={`logo-img ${logoVisible ? "show" : ""}`}>
-          <img src={`${process.env.PUBLIC_URL}/assets/로고사진누.png`} alt="로고" />
+          <img 
+            src={`${process.env.PUBLIC_URL}/assets/로고사진누.png`} 
+            alt="로고"
+            style={{ margin: "0 auto" }} // 이미지를 가로 중앙으로 정렬
+          />
         </p>
         <div>
           <div className="gridbuttonbox">
@@ -45,7 +48,6 @@ function CustomMain() {
                 결과확인
               </button>
             </Link>
-            
           </div>
           {/* <Pdf></Pdf> */}
         </div>
