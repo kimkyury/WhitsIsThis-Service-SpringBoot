@@ -98,15 +98,6 @@ function Resultconfirm() {
       });
   };
 
-  const Desktop = ({ children }) => {
-    const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
-    return isDesktop ? children : null;
-  };
-  
-  const Mobile = ({ children }) => {
-    const isMobile = useMediaQuery({ maxDeviceWidth: 1223 });
-    return isMobile ? children : null;
-  };
 
   return (
     <div className="roomimg resrecpage">

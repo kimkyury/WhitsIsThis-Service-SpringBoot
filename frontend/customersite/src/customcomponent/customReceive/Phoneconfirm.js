@@ -11,7 +11,7 @@ function Phoneconfirm({ requesterPhoneNumber, setPhoneConfirmVisible, isSuc, set
       const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/verification`, {
         phone: requesterPhoneNumber,
         authCode: authCode, // 입력한 인증 코드를 전달합니다.
-      });
+      }, { withCredentials: true });
       console.log(response)
 
       // 성공적으로 인증되었을 때 처리
