@@ -35,6 +35,12 @@ public class StatusMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
         try {
             StateType.valueOf(state);
+
+            // Todo: JSON형식 유효성 검사
+            saveDataAtMap(dataMap, DataType.historyId, historyId);
+            String sendMessage = convertMessageToString(SendType.STATUS, dataMap);
+            sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
+
         } catch (IllegalArgumentException | NullPointerException e) {
             Map<String, String> errorDataMap = new HashMap<>();
             errorDataMap.put(DataType.message.name(),
@@ -43,11 +49,7 @@ public class StatusMessageHandlerImpl extends AbstractMessageHandlerInterface {
             socketProvider.sendMessageToDevice(session, senderDevice, message);
         }
 
-        // Todo: JSON형식 유효성 검사
-        saveDataAtMap(dataMap, DataType.historyId, historyId);
-        String sendMessage = convertMessageToString(SendType.STATUS, dataMap);
 
-        sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
     }
 }
 

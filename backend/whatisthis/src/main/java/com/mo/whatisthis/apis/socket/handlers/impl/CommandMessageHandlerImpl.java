@@ -30,9 +30,16 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
         String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
         String command = getDataAtMap(dataMap, DataType.command);
 
-
         try {
             CommandCode.valueOf(command);
+
+            String sendMessage = convertMessageToString(SendType.COMMAND, dataMap);
+            sendMessageToDevice(session, senderEmployee, serialNumber, sendMessage);
+
+            if (command.equals(CommandCode.END.name())) {
+                socketProvider.closeConnectionDevice(session, serialNumber, 1000, sendMessage);
+            }
+
         } catch (IllegalArgumentException | NullPointerException e) {
             Map<String, String> errorDataMap = new HashMap<>();
             errorDataMap.put(DataType.message.name(),
@@ -41,13 +48,7 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
             socketProvider.sendMessageToEmployee(session, senderEmployee, message);
         }
 
-        String sendMessage = convertMessageToString(SendType.COMMAND, dataMap);
-        sendMessageToDevice(session, senderEmployee, serialNumber, sendMessage);
 
-        if (command.equals(CommandCode.END.name())) {
-
-            socketProvider.closeConnectionDevice(session, serialNumber, 1000, sendMessage);
-        }
     }
 }
 
