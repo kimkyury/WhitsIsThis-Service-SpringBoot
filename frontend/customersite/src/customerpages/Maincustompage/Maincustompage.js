@@ -37,6 +37,7 @@ function CustomMain() {
           />
         </p>
         <div>
+          {/* <img src={`${process.env.PUBLIC_URL}/assets/집1.jpg`}/> */}
           <div className="gridbuttonbox">
             <Link to={'/customerreceive'}>
               <button className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>

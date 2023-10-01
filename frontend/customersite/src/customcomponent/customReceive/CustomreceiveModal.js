@@ -11,7 +11,7 @@ import { useMediaQuery } from "react-responsive";
 import { useNavigate } from 'react-router-dom';
 function CustomreceiveModal() {
   const navigate = useNavigate();
-  const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
+  // const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -23,7 +23,7 @@ function CustomreceiveModal() {
   const [requesterPhone, setRequesterPhone] = useState(""); // 요청자 연락처
   const [phoneConfirmVisible, setPhoneConfirmVisible] = useState(false); // Phoneconfirm 모달 표시 상태
   const [isSuc, setIsSuc] = useState(false);
-
+  const [requesterPhoneNumber, setRequesterPhoneNumber] = useState(""); // 요청자 연락처를 상태로 관리
   const handleOpenAddressModal = () => {
     setShowAddressModal(true);
   };
@@ -128,6 +128,7 @@ function CustomreceiveModal() {
 
   const handleSendSMS = async () => {
     if (!isSuc) {
+      
       const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
       const phone = requesterPhoneNumber;
       console.log(phone)
@@ -170,7 +171,8 @@ function CustomreceiveModal() {
             />
             <p className="minititle">은행명 :</p>
             <select
-              className="input cinput"
+              className="input"
+              style={{width:'7vw', height:'5vh', borderRadius:'1vw'}}
               value={selectedBank}
               onChange={(e) => setSelectedBank(e.target.value)}
             >

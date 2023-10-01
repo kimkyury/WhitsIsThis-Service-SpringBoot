@@ -13,9 +13,9 @@
 }
 
 .cinput {
-  width:14rem;
-  height:2rem;
-  border-radius: 0.2rem;
+  width:70vw;
+  height:5vh;
+  /* border-radius: 0.2rem; */
 }
 .desk-cinput {
   width:33rem;
