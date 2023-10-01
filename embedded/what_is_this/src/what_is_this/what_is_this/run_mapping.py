@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 import ros2pkg
+from std_msgs.msg import String
 from geometry_msgs.msg import Pose
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import OccupancyGrid, MapMetaData
@@ -9,6 +10,7 @@ import what_is_this.utils as utils
 import numpy as np
 import cv2
 from collections import deque
+from copy import deepcopy
 
 params_map = {
     "MAP_RESOLUTION" : 0.05,
@@ -108,7 +110,7 @@ class Mapping :
         for i in range(laser_global.shape[1]):
             p1 = np.array([pose_x, pose_y]).reshape(-1).astype(np.int)
             p2 = np.array([laser_global_x[i], laser_global_y[i]]).astype(np.int)
-        
+            # print(p1)
             line_iter = createLineIterator(p1, p2, self.map)
         
             if (line_iter.shape[0] is 0):
@@ -157,6 +159,10 @@ class Mapper(Node):
         super().__init__('Mapper')        
         self.subscription = self.create_subscription(LaserScan, '/scan',self.scan_callback,10)
         self.map_pub = self.create_publisher(OccupancyGrid, '/map', 1)
+        # status 확인
+        self.status_publisher = self.create_publisher(String, 'result', 1)
+        self.status_subscriber = self.create_subscription(String, 'progress', self.check_bot_status, 10)
+        self.status = None
         
         self.map_msg=OccupancyGrid()
         self.map_msg.header.frame_id="map"
@@ -174,6 +180,26 @@ class Mapper(Node):
         self.map_meta_data = m
         self.map_msg.info=self.map_meta_data
         self.mapping = Mapping(params_map)
+        self.save_data = None
+
+    def check_bot_status(self,msg):
+        self.status = msg.data
+        if self.status == "SKIP_MAPPING":
+            pkg_path =os.getcwd()
+            back_folder='what_is_this'
+            folder_name='map'
+            file_name='map.txt'
+            full_path=os.path.join(pkg_path,back_folder,folder_name,file_name)
+
+            with open(full_path, 'r') as file:
+                lines = file.readline().strip(' ')
+                line_data = np.array(list(map(float,lines.split(' '))))
+                map_data = line_data.reshape((340,340))
+                np.rot90(map_data, k=1)
+                np.flipud(map_data)
+                self.mapping.map = map_data
+            
+            print("\r맵 불러오기 완료")
 
     def scan_callback(self,msg):   
         pose_x=msg.range_min
@@ -189,6 +215,7 @@ class Mapper(Node):
 
         np_map_data=self.mapping.map.reshape(1,self.map_size) 
         list_map_data=np_map_data.tolist()
+        self.save_data = deepcopy(list_map_data[0])
         for i in range(self.map_size):
             list_map_data[0][i]=100-int(list_map_data[0][i]*100)
             if list_map_data[0][i] >100 :
@@ -196,46 +223,24 @@ class Mapper(Node):
             if list_map_data[0][i] <0 :
                 list_map_data[0][i]=0
                 
-        
         self.map_msg.header.stamp =rclpy.clock.Clock().now().to_msg()
         self.map_msg.data=list_map_data[0]
-        self.map_pub.publish(self.map_msg)        
-
-def floodFill(x: int, y: int, Map  : np) -> np:
-    DELTA = ((-1, 0), (1, 0), (0, -1), (0, 1))
-    visit = np.zeros((340,340))
-    Map[x][y] = 60
-    visit[x][y] = 1
-    q = deque([(x, y)])
-    while q:
-        cx, cy = q.popleft()
-        for dx, dy in DELTA:
-            nx = cx + dx
-            ny = cy + dy
-            if nx < 0 or nx >= 340 or ny < 0 or ny >= 340:continue
-            if visit[nx][ny]:continue
-            if Map[nx][ny] > 85:continue
-            if Map[nx][ny] == 0:continue
-            visit[nx][ny] = 1
-            Map[nx][ny] = 60
-            q.append((nx,ny))
-    return Map
-
-
+        self.map_pub.publish(self.map_msg)
 
 def save_map(node,file_path):
     pkg_path =os.getcwd()
-    back_folder='src\\what_is_this'
+    back_folder='what_is_this'
     folder_name='map'
     file_name=file_path
     full_path=os.path.join(pkg_path,back_folder,folder_name,file_name)
     print(full_path)
     f=open(full_path,'w')
     data=''
-    for pixel in node.map_msg.data :
-        data+='{0} '.format(pixel)
+    for pixel in node.save_data:
+        data += '{:.3f} '.format(pixel)
     f.write(data) 
     f.close()
+
 def main(args=None):    
     rclpy.init(args=args)
     

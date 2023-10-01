@@ -3,6 +3,8 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from nav_msgs.msg import Odometry,OccupancyGrid,Path
 from geometry_msgs.msg import Pose,PoseStamped
+from sensor_msgs.msg import LaserScan
+import what_is_this.utils as utils
 
 from sys import maxsize as INF
 from PIL import Image
@@ -13,6 +15,16 @@ from collections import deque
 DELTA = ((-1, 0), (1, 0), (0, -1), (0, 1))
 DELTA_D = ((0, 1, 1), (1, 1, 1.414), (1, 0, 1), (1, -1, 1.414), (0, -1, 1), (-1, -1, 1.414), (-1, 0, 1), (-1, 1, 1.414))
 MAP_LENGTH = 340
+
+params_map = {
+    "MAP_RESOLUTION" : 0.05,
+    "OCCUPANCY_UP" : 0.02,
+    "OCCUPANCY_DOWN" : 0.01,
+    "MAP_CENTER" : (-9.0, 10.0),
+    "MAP_SIZE" : (17, 17),
+    "MAP_FILENAME" : 'test.png',
+    "MAPVIS_RESIZE_SCALE" : 2.0
+}
 
 def floodFill(x: int, y: int, Map: np) -> np:
     visit = np.zeros((340,340))
@@ -94,6 +106,7 @@ def make_path(start_x: int, start_y: int, Path_points: dict, Map: np) -> None:
         path.extend(min_path)
 
         cur_x, cur_y = path[-1]
+    
     print('생성 완료')
     return path
 
@@ -104,23 +117,42 @@ class Searching_path(Node):
         self.map_sub = self.create_subscription(OccupancyGrid, 'map', self.map_callback, 1)
         self.odom_sub = self.create_subscription(Odometry, 'odom', self.odom_callback, 1)
         self.status_sub =  self.create_subscription(String, 'progress', self.check_status, 10)
+        self.subscription = self.create_subscription(LaserScan, 'scan',self.scan_callback,20)
+        self.status_publisher = self.create_publisher(String, 'result', 1)
         self.global_path_pub = self.create_publisher(Path, 'global_path', 1)
         
         self.map_msg = OccupancyGrid()
         self.odom_msg = Odometry()
+        self.result_msg = String()
 
         self.is_map=False
         self.is_odom=False
         self.status=None
         self.map_data=None
         self.pre_map=None
+        self.pose_x=None
+        self.pose_y=None
 
         self.map_size_x=MAP_LENGTH
         self.map_size_y=MAP_LENGTH
-        
-        self.map_resolution=0.05 
+
+        self.map_center = params_map["MAP_CENTER"]
+        self.map_resolution = params_map["MAP_RESOLUTION"]
+        self.map_size = np.array(params_map["MAP_SIZE"]) / self.map_resolution
         self.map_offset_x=-2.8
         self.map_offset_y=4
+
+
+    def scan_callback(self,msg):
+        pose_x=msg.range_min
+        pose_y=msg.scan_time
+        heading=msg.time_increment+180
+        pose = np.array([[pose_x],[pose_y],[heading]])
+        self.pose_x = (pose[0] - self.map_center[0] + (self.map_size[0]*self.map_resolution)/2) / self.map_resolution
+        self.pose_y = (pose[1] - self.map_center[1] + (self.map_size[1]*self.map_resolution)/2) / self.map_resolution
+        pose = np.array([self.pose_x, self.pose_y]).reshape(-1).astype(np.int)
+        self.pose_x = pose[0]
+        self.pose_y = pose[1]
 
     def odom_callback(self,msg):
         self.is_odom=True
@@ -137,40 +169,42 @@ class Searching_path(Node):
     def map_callback(self,msg):
         self.is_map=True
         map_data=np.array(msg.data)
-        self.map_data=map_data.reshape((340,340))
-
-        self.path_pub()
+        map_data=map_data.reshape((340,340))
+        # 대각선 대칭
+        map_data = np.rot90(map_data, k=1)
+        map_data = np.flipud(map_data)
+        self.map_data=map_data
         
     def check_status(self,msg):
         self.status = msg.data
-        if self.status == '':
+        if self.status == "CALCULATE_PATH":
             self.path_pub()
     
     def grid_cell_to_pose(self,grid_cell):
-            x = (grid_cell[0] * self.map_resolution) + self.map_offset_x
-            y = (grid_cell[1] * self.map_resolution) + self.map_offset_y
-            return [x,y]
-
+        x = grid_cell[0] * self.map_resolution + self.map_center[0] - (self.map_size[0] * self.map_resolution) / 2
+        y = grid_cell[1] * self.map_resolution + self.map_center[1] - (self.map_size[1] * self.map_resolution) / 2
+        return [x,y]
+    
     def path_pub(self):
         Path_points=dict()
         self.pre_map = self.map_data
-
+        # print(self.map_data)
         for x in range(340):
             for y in range(340):
                 if self.pre_map[x][y] == 100:
-                    for i in range(-4,5):
-                        for j in range(-4,5):
+                    for i in range(-7,8):
+                        for j in range(-7,8):
                             if 0 <= x+i < 340 and 0 <= y+j < 340:
                                 if self.pre_map[x+i][y+j] != 100:
                                     self.pre_map[x+i][y+j] = 127
         
         self.pre_map = floodFill(0, 0, self.pre_map)
         print('Map 전처리')
-        for x in range(0,340,15):
+        for x in range(0,340,9):
             min_y, max_y = INF, 0
             y = 0
             while y < 340:
-                while self.pre_map[x][y] < 50:
+                while y < 340 and self.pre_map[x][y] < 50:
                     min_y = y if y < min_y else min_y
                     max_y = y if y > max_y else max_y
                     y+=1
@@ -182,9 +216,10 @@ class Searching_path(Node):
                 y+=1
 
         print('경로 전처리')
-        (start_point_x, start_point_y), _ = sorted(list(Path_points.items()))[0]
-        # print(start_point_x,start_point_y)
-        route = make_path(start_point_x, start_point_y, Path_points, self.pre_map)
+        # (start_point_x, start_point_y), _ = sorted(list(Path_points.items()))[0]
+        print(self.pose_x,self.pose_y)
+        route = make_path(self.pose_x, self.pose_y, Path_points, self.pre_map)
+        # route = make_path(start_point_x, start_point_y, Path_points, self.pre_map)
         # print(route)
 
         # 확인용 이미지화
@@ -198,9 +233,11 @@ class Searching_path(Node):
         if len(route)!=0:
             self.global_path_msg=Path()
             self.global_path_msg.header.frame_id='map'
+
             for grid_cell in route:
                 tmp_pose=PoseStamped()
                 waypoint_x,waypoint_y=self.grid_cell_to_pose(grid_cell)
+                # print(waypoint_x, waypoint_y, "/", end="")
                 # waypoint_x,waypoint_y=grid_cell
                 tmp_pose.pose.position.x=waypoint_x
                 tmp_pose.pose.position.y=waypoint_y
@@ -209,7 +246,8 @@ class Searching_path(Node):
 
             if len(route)!=0 :
                 self.global_path_pub.publish(self.global_path_msg)
-                self.status = 'done'
+                self.result_msg.data = "CALCULATE_PATH_FINISHED"
+                self.status_publisher.publish(self.result_msg)
                 print('경로 전송 완료')
 
 

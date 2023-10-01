@@ -1,67 +1,7 @@
+import threading
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
-import websocket
-import requests
-import threading
-import time
-import json
-
-DEVICE_SERIAL="DEVICE1"
-BASE_URL = "https://j9e203.p.ssafy.io"
-WS_BASE_URL = "wss://j9e203.p.ssafy.io/ws"
-
-class socket:
-    def __init__(self):
-        self.serial_number = DEVICE_SERIAL
-        self.token = None
-        self.sed_message = None
-        self.rev_message = None
-        self.ws = None
-
-        self.ws_message = None
-        self.ws_error = None
-        self.ws_open = None
-        self.ws_close = None
-
-        self.get_token()
-        self.connect()
-
-    def get_token(self):
-        cnt = 0
-        while self.token == None and cnt < 10:
-            response = requests.post(f"{BASE_URL}/api/v1/auth/devices/login",
-                                        json={"serialNumber": self.serial_number}).json()
-            if response['status'] == 200:
-                self.token = response['data']['accessToken']
-                self.rev_message = response['message']
-                return
-            elif response['status'] == 400:
-                print('연결에 실패했습니다. 5초뒤 다시 시도합니다.')
-                cnt += 1
-                time.sleep(5)
-        print('연결에 실패했습니다. 다시 시도해주세요.')
-        exit(0)
-    
-    def connect(self):
-        self.ws = websocket.WebSocketApp(
-            WS_BASE_URL,
-            on_message=self.ws_message,
-            on_error=self.ws_error,
-            on_close=self.ws_close,
-            on_open=self.ws_open
-        )
-
-        self.ws_thread = threading.Thread(target=self.ws.run_forever)
-        self.ws_thread.start()
-        
-        self.sed_message = {"type": "AUTH", "data": {"accessToken": self.token}}
-        send_data = json.dumps(self.sed_message)
-
-        self.ws.send(send_data)
-
-        while True:
-            message = self.ws.recv()
 
 class What_is_this(Node):
 
@@ -76,12 +16,28 @@ class What_is_this(Node):
 
         TIME_PERIOD = 1
         self.timer = self.create_timer(TIME_PERIOD, self.tell_bot_status)
+        self.control_status = threading.Thread(target=self.control)
+        self.control_status.start()
 
-    
+    def control(self):
+        while True:
+            temp = input()
+            if temp == '1':
+                self.status = "WAIT_MAPPING"
+            if temp == '2':
+                self.status = "SKIP_MAPPING"
+            if temp == '3':
+                self.status = "CALCULATE_PATH"
+            if temp == '4':
+                self.status = "WAIT_FINDING"
+            if temp == '5':
+                self.status = "FINDING"
+            print(f"\rSTATUS를 {self.status}로 변경합니다.\n",end="")
+
     # 현재 진행상태 publish
     def tell_bot_status(self):
         self.str_msg.data = self.status
-        print(f"STATUS : {self.status}")
+        print("{0:<40} >>".format(f"\rSTATUS : {self.status}"),end="")
         self.status_publisher.publish(self.str_msg)
     
 
@@ -89,15 +45,23 @@ class What_is_this(Node):
     def check_bot_status(self,msg):
         self.get_result = msg.data
         if self.get_result == "CONNECTED":
+            self.status = "WAIT_WORK"
+        if self.get_result == "WORK_START":
             self.status = "WAIT_MAPPING"
-        elif self.get_result == "START_MAPPING":
+        elif self.get_result == "MAPPING":
             self.status = "MAPPING"
         elif self.get_result == "END_MAPPING":
+            self.status = "CALCULATE_PATH"
+        elif self.get_result == "CALCULATE_PATH_FINISHED":
             self.status = "WAIT_FINDING"
-        elif self.get_result == "START_FINDING":
+        elif self.get_result == "FINDING":
             self.status = "FINDING"
         elif self.get_result == "END_FINDING":
             self.status = "FINISH"
+        elif self.get_result == "ERROR":
+            self.status = "ERROR"
+        elif self.get_result == "WORK_STOP":
+            self.status = "WORK_STOP"
 
 
 def main(args=None):
