@@ -1,30 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './Receive.css';
-import axios from 'axios'; // Import axios
-
+import axios from 'axios';
+import { BiSolidDownload } from "react-icons/bi";
 function RequestModal({ selectedItem, setShowModal }) {
-  const [requestData, setRequestData] = useState(null);
+  const [requestData, setRequestData] = useState({});
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const refreshToken = sessionStorage.getItem('refreshToken');
+  const refreshToken = sessionStorage.getItem('accessToken');
 
   useEffect(() => {
-    // Check if selectedItem exists and has an id
     if (selectedItem && selectedItem.id) {
-      // Define the API endpoint URL
       const apiUrl = `${BASE_URL}/api/v1/private/requests/${selectedItem.id}`;
 
-      // Define the headers for the request
       const headers = {
-        Authorization: refreshToken, // Add your authorization token here
+        Authorization: refreshToken,
       };
 
-      // Use axios to send a GET request to the API
       axios.get(apiUrl, { headers })
         .then((response) => {
-          // Parse the response data
-          const data = response.data.object;
-
-          // Store the API response data in state
+          console.log('API Response:', response.data);
+          const data = response.data;
           setRequestData(data);
         })
         .catch((error) => {
@@ -37,9 +31,19 @@ function RequestModal({ selectedItem, setShowModal }) {
     setShowModal(false);
   };
 
+  // 위임장 사진을 다운로드하는 함수
+  const downloadWarrantImage = () => {
+    if (requestData.data && requestData.data.warrantUrl) {
+      const downloadLink = document.createElement('a');
+      downloadLink.href = requestData.data.warrantUrl;
+      downloadLink.download = requestData.data.warrantUrl; // 다운로드될 파일 이름
+      downloadLink.click();
+      console.log(requestData.data.warrantUrl)
+    }
+  };
+
   return (
-    <div className="Modalbox fontb">
-    
+    <div className="Modalbox fontb" style={{ zIndex: '9999' }}>
       <div>
         <div>
           <p className="recmodalform">
@@ -50,44 +54,50 @@ function RequestModal({ selectedItem, setShowModal }) {
           </p>
           <div className="gridmodal">
             <div className="nameVtagv">
-              {/* Render the data from the API response */}
-              {requestData ? (
+              {requestData.data ? (
                 <div>
                   <p className="nametag" style={{ width: '10vw' }}>
                     신청자명
                   </p>
-                  <p className="Vtag vtag">{requestData.requesterName}</p>
+                  <p className="Vtag vtag">{requestData.data.requesterName}</p>
                   <p className="nametag" style={{ width: '10vw' }}>
                     요청사항
                   </p>
-                  <p className="Vtag vtag">{requestData.requestContent}</p>
+                  <p className="Vtag vtag">{requestData.data.requestContent}</p>
                   <p className="nametag" style={{ width: '10vw' }}>
                     연락처
                   </p>
-                  <p className="Vtag vtag">{requestData.requesterPhone}</p>
+                  <p className="Vtag vtag">{requestData.data.requesterPhone}</p>
                 </div>
               ) : (
                 <p>Loading...</p>
               )}
             </div>
             <div>
-              {/* Add similar rendering for other data fields */}
-              {requestData ? (
+              {requestData.data ? (
                 <div>
                   <p className="nametag" style={{ width: '10vw' }}>
                     주소
                   </p>
                   <p className="Vtag vtag">
-                    {requestData.address} {requestData.addressDetail}
+                    {requestData.data.address} {requestData.data.addressDetail}
                   </p>
                   <p className="nametag" style={{ width: '10vw' }}>
-                    검사 시작일
+                    검사 예정일
                   </p>
-                  <p className="Vtag vtag">{requestData.inspectionStart}</p>
+                  <p className="Vtag vtag">{requestData.data.inspectionStart} ~ {requestData.data.inspectionEnd}</p>
                   <p className="nametag" style={{ width: '10vw' }}>
-                    검사 종료일
+                    위임장 사진
                   </p>
-                  <p className="Vtag vtag">{requestData.inspectionEnd}</p>
+                  {requestData.data.warrantUrl ? (
+                    <div>
+                      {/* <img src={requestData.data.warrantUrl} alt="위임장 사진" /> */}
+                      {/* "다운로드" 버튼 추가 */}
+                      <button className='i' style={{ border:'none', backgroundColor:'white'}} onClick={downloadWarrantImage}><BiSolidDownload/>{requestData.data.warrantUrl}</button>
+                    </div>
+                  ) : (
+                    <p>No image available</p>
+                  )}
                 </div>
               ) : (
                 <p>Loading...</p>

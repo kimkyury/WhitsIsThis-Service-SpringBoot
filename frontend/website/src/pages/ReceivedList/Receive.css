@@ -16,6 +16,10 @@
     color: black;
 }
 
+.i:hover {
+  border-bottom: 1vw solid black;
+}
+
 .rectag {
   margin-left: 2%; 
   font-size: 1vw;

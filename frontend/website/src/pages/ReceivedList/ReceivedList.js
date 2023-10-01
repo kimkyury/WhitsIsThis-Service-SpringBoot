@@ -5,6 +5,7 @@ import RequestModal from './RequestModal';
 import { FaSearch } from 'react-icons/fa';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import Warning from '../../component/warning/warning';
+import axios from 'axios';
 
 function List() {
   const [showModal, setShowModal] = useState(false);
@@ -16,12 +17,11 @@ function List() {
   const [myApplicant, setMyApplicant] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const accessToken = sessionStorage.getItem('accessToken');
 
   const getRefreshToken = () => {
     return sessionStorage.getItem('accessToken');
   };
+  const accessToken = getRefreshToken();
 
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
@@ -38,30 +38,34 @@ function List() {
     setSearchQuery(event.target.value);
   };
 
+  useEffect(() => {
+    setMyApplicant([]);
+  }, [currentPage]);
+
   const fetchData = (page, endpoint) => {
     setIsFetching(true);
-
-    const accessToken = getRefreshToken();
 
     const headers = {
       'Authorization': `${accessToken}`,
     };
 
-    fetch(`${BASE_URL}/api/v1/private/requests/${endpoint}?page=${page}`, {
+    axios.get(`${BASE_URL}/api/v1/private/requests/${endpoint}?page=${page}`, {
       headers: headers,
     })
-      .then((response) => response.json())
-      .then((data) => {
+      .then((response) => {
+        const data = response.data;
         if (data.status === 200) {
           const responseData = data.data;
+          const uniqueData = responseData.filter((newData) => {
+            return !myApplicant.some((existingData) => existingData.id === newData.id);
+          });
+
           setMyApplicant((prevData) =>
-            page === 1 ? responseData : [...prevData, ...responseData]
+            page === 1 ? uniqueData : [...prevData, ...uniqueData]
           );
 
-          // Check if there are more pages to fetch
           if (data.hasNextPage) {
-            const nextPage = page + 1;
-            fetchData(nextPage, endpoint);
+            setCurrentPage(page + 1);
           } else {
             setIsFetching(false);
           }
@@ -80,31 +84,20 @@ function List() {
     fetchData(currentPage, 'waiting');
   }, [currentPage]);
 
-  // Attach a scroll event listener to the "접수대기" div
   const applicantContainerRef = useRef(null);
+  const myApplicantContainerRef = useRef(null);
 
   const handleApplicantScroll = () => {
     const element = applicantContainerRef.current;
     if (
       element &&
       element.scrollHeight - element.scrollTop === element.clientHeight &&
-      !isFetching &&
-      !loadingMore
+      !isFetching
     ) {
       const nextPage = currentPage + 1;
       fetchData(nextPage, 'waiting');
     }
   };
-
-  useEffect(() => {
-    if (accessToken) {
-      fetchData();
-      setIsLogin(true);
-    }
-    if (!isLogin) {
-      // navigate(-1)
-    }
-  }, []);
 
   useEffect(() => {
     const element = applicantContainerRef.current;
@@ -114,14 +107,20 @@ function List() {
         element.removeEventListener('scroll', handleApplicantScroll);
       };
     }
-  }, [currentPage, isFetching, loadingMore]);
+  }, [currentPage, isFetching]);
+
+  useEffect(() => {
+    if (accessToken) {
+      fetchData(1, 'waiting');
+      setIsLogin(true);
+    }
+  }, []);
 
   function handleOnDragEnd(result) {
     if (!result.destination) return;
 
     const sourceIndex = result.source.index;
     const destinationIndex = result.destination.index;
-    const draggedItem = result.draggableId;
 
     if (
       result.source.droppableId === 'applicant' &&
@@ -138,6 +137,9 @@ function List() {
       const updatedApplicant = [...applicant];
       updatedApplicant.splice(sourceIndex, 1);
       setApplicant(updatedApplicant);
+
+      // 패치 요청 보내기
+      sendPatchRequest(draggedData.id);
     } else if (
       result.source.droppableId === 'myApplicant' &&
       result.destination.droppableId === 'applicant'
@@ -151,8 +153,46 @@ function List() {
       const updatedMyApplicant = [...myApplicant];
       updatedMyApplicant.splice(sourceIndex, 1);
       setMyApplicant(updatedMyApplicant);
+
+      // 패치 요청 보내기
+      sendPatchRequest(draggedData.id);
     }
   }
+
+  // 패치 요청을 보내는 함수
+  const sendPatchRequest = (itemId) => {
+    if (itemId) {
+      const patchUrl = `${BASE_URL}/api/v1/private/requests/${itemId}/manager`;
+
+      const headers = {
+        'Authorization': `${accessToken}`,
+      };
+
+      // 업데이트할 데이터를 요청 본문에 포함
+      const requestData = {
+        // 업데이트할 데이터의 필드 및 값
+        // 예: fieldName: updatedValue
+      };
+
+      axios.patch(patchUrl, requestData,
+        {params: {
+          id: itemId,
+        },},
+        { headers })
+        .then((response) => {
+          const data = response.data;
+          if (data.status === 200) {
+            // 패치 요청이 성공하면 처리할 내용을 추가
+            console.log('패치 요청이 성공했습니다.');
+          } else {
+            console.error('API 오류:', data.message);
+          }
+        })
+        .catch((error) => {
+          console.error('패치 요청 오류:', error);
+        });
+    }
+  };
 
   return (
     isLogin ? (
@@ -171,19 +211,23 @@ function List() {
           </div>
         </div>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId="applicant">
-            {(provided) => (
-              <div className="gridbox">
-                <div className="left">
-                  <span className="recspan">내 접수</span>
+          <div className="gridbox">
+            <div className="left">
+              <span className="recspan">내 접수</span>
+              <Droppable droppableId="applicant" ref={applicantContainerRef}>
+                {(provided) => (
                   <div
                     className="Dropbox"
                     style={{ paddingTop: '1.5vw' }}
+                    ref={provided.innerRef}
                     {...provided.droppableProps}
-                    ref={applicantContainerRef}
                   >
                     {filteredData.map((data, index) => (
-                      <Draggable key={data.id.toString()} draggableId={data.id.toString()} index={index}>
+                      <Draggable
+                        key={data.id.toString()}
+                        draggableId={data.id.toString()}
+                        index={index}
+                      >
                         {(provided, snapshot) => (
                           <div
                             onClick={() => handleItemClick(data)}
@@ -204,57 +248,55 @@ function List() {
                     ))}
                     {provided.placeholder}
                   </div>
-                </div>
-                <div className="left" style={{ marginLeft: '2vw' }}>
-                  <span className="recspan">접수대기</span>
+                )}
+              </Droppable>
+            </div>
+            <div className="left" style={{ marginLeft: '2vw' }}>
+              <span className="recspan">접수대기</span>
+              <Droppable droppableId="myApplicant" ref={myApplicantContainerRef}>
+                {(provided) => (
                   <div
-                    onScroll={handleApplicantScroll}
                     className="Dropbox myApplicant-container"
                     style={{ paddingTop: '1.5vw' }}
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
                   >
-                    <Droppable droppableId="myApplicant">
-                      {(provided) => (
-                        <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                          className="myApplicant-container"
-                        >
-                          {myApplicant.map((data, index) => (
-                            <Draggable key={data.id.toString()} draggableId={data.id.toString()} index={index}>
-                              {(provided, snapshot) => (
-                                <div
-                                  onClick={() => handleItemClick(data)}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  ref={provided.innerRef}
-                                  style={{
-                                    ...provided.draggableProps.style,
-                                    position: snapshot.isDragging ? 'fixed' : 'relative',
-                                    zIndex: snapshot.isDragging ? 2000 : 'auto',
-                                    opacity: snapshot.isDragging ? 0.5 : 1,
-                                  }}
-                                >
-                                  <Item data={data} />
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
+                    {myApplicant.map((data, index) => (
+                      <Draggable
+                        key={data.id.toString()}
+                        draggableId={data.id.toString()}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            onClick={() => handleItemClick(data)}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                            style={{
+                              ...provided.draggableProps.style,
+                              position: snapshot.isDragging ? 'fixed' : 'relative',
+                              zIndex: snapshot.isDragging ? 2000 : 'auto',
+                              opacity: snapshot.isDragging ? 0.5 : 1,
+                            }}
+                          >
+                            <Item data={data} />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
                   </div>
-                </div>
-              </div>
-            )}
-          </Droppable>
+                )}
+              </Droppable>
+            </div>
+          </div>
         </DragDropContext>
         {showModal && (
           <div className="modal-container">
             <RequestModal selectedItem={selectedItem} setShowModal={setShowModal} />
           </div>
         )}
-        {loadingMore && <div>Loading...</div>}
       </div>
     ) : (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>

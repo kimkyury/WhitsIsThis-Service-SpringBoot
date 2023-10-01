@@ -75,7 +75,7 @@ function Myinfo() {
           </div>
           <div className='updatebox' style={{marginLeft:'5%', marginTop:'-3%'}}>
             {/* <span>사번 : {number}</span> */}
-            <span style={{ marginRight: '5%' }}>역할 : {role}</span>
+            <span style={{ marginRight: '5%' }}>역할 : 사원</span>
           </div>
         </div>
       </div>
