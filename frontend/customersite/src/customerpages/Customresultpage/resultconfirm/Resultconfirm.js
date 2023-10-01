@@ -115,9 +115,9 @@ function Resultconfirm() {
               onChange={(e) => setPhoneNumberInput(e.target.value)}
             />
             {isSuc ? (
-              <button className="button minibutton"style={{marginLeft:'2vw'}} onClick={handleSendSMS}>확인</button>
+              <button className="button minibutton"style={{marginLeft:'2vw',marginTop:'0.5vh'}} onClick={handleSendSMS}>확인</button>
             ) : (
-              <button className="button minibutton"style={{marginLeft:'2vw'}} onClick={handleSendSMS}>인증하기</button>
+              <button className="button minibutton"style={{marginLeft:'2vw', marginTop:'0.5vh'}} onClick={handleSendSMS}>인증하기</button>
             )}
           </div>
         </div>

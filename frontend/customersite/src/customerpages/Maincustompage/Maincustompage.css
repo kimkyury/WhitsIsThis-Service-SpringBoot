@@ -45,14 +45,15 @@
   /* transform: translateY(0); */
   opacity: 1;
 }
+
 .logo-img {
   display: flex;
-
   position: absolute;
   top: -19rem; /* 세로 중앙 정렬 */
   transform: translateX(25, -25%); /* 가로, 세로 중앙 정렬 */
   transition: top 1s ease; /* 애니메이션 지속 시간 및 가속도 설정 */
 }
+
 .logo-img.show {
   top: 100px; /* 세로 중앙으로 이동 */
 }

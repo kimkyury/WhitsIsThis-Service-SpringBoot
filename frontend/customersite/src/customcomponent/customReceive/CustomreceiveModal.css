@@ -14,7 +14,8 @@
 
 .cinput {
   width:45vw;
-  height:5vh;
+  height:2.5vh;
+  margin-right: 2vw;
   /* border-radius: 0.2rem; */
 }
 
@@ -27,7 +28,7 @@
 
 .cinputs {
   width:30vw;
-  height:5vh;
+  height:3vh;
   /* border-radius: 0.2rem; */
 }
 .desk-cinput {
@@ -170,7 +171,7 @@
 }
 .minibutton {
   width:3.8rem;
-  height:2.3rem;
+  height:1.5rem;
   font-size: 0.5rem;
 }
 
@@ -182,16 +183,17 @@
 }
 
 .bigbutton {
-  width: 10rem;
-  height: 3rem;
-  font-size: 1.7rem;
-  margin-top: 8vh
+  width: 7rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  margin-top: 8vh;
+  border-radius: 0.3rem;
   /* margin-bottom:5rem; */
 }
 
 .bigbuttons {
   width: 8rem;
-  height: 3rem;
+  height: 2rem;
   font-size: 1.2rem;
   margin-top:5rem
   /* margin-bottom:5rem; */
@@ -203,16 +205,17 @@
 }
 
 .bigbuttons {
-  width: 8rem;
-  height: 3rem;
+  width: 7rem;
+  height: 2rem;
   font-size: 1.2rem;
   margin-top:2rem;
+  border-radius: 0.3rem;
   /* margin-bottom:2rem; */
 }
 
 .desk-bigbuttons {
   width: 10rem;
-  height: 3rem;
+  height: 2rem;
   font-size: 1.5rem;
   /* margin-top:rem */
 }

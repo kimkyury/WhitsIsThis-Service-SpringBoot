@@ -219,7 +219,7 @@ function CustomreceiveModal() {
               {uploadedFileName && (
                 <p>{uploadedFileName}</p>
               )}
-              <button className="button minibutton" onClick={handleOpenFileInput}>
+              <button className="button minibutton" style={{ marginTop:'1.5vh', marginLeft:'2vw'}} onClick={handleOpenFileInput}>
                 찾아보기
               </button>
             </div>

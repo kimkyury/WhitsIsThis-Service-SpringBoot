@@ -9,10 +9,11 @@
 }
 
 .customheadersdiv {
-  /* border: 2px solid black;
+  border: 2px solid black;
   width: 100vw;
   height: 6vh;
-  background-color: #2D4059; */
+  border:none;
+  /* background-color: #2D4059; */
   /* background-image: url(`${process.env.PUBLIC_URL}/assets/방사진.svg`); */
   background-size: cover;
 }
