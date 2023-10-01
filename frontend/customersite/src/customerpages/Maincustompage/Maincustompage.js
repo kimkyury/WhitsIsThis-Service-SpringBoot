@@ -27,7 +27,7 @@ function CustomMain() {
       height: '100vh',
       // backgroundImage: `url(${process.env.PUBLIC_URL}/assets/배경사진.png)`
     }}
-    className="roomimg">
+    className="roomimg fontb">
       <div className='cbox'>
         <p className={`logo-img ${logoVisible ? "show" : ""}`}>
           <img 
@@ -37,7 +37,6 @@ function CustomMain() {
           />
         </p>
         <div>
-          {/* <img src={`${process.env.PUBLIC_URL}/assets/집1.jpg`}/> */}
           <div className="gridbuttonbox">
             <Link to={'/customerreceive'}>
               <button className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
@@ -53,6 +52,7 @@ function CustomMain() {
           {/* <Pdf></Pdf> */}
         </div>
       </div>
+{/* <p><img src={`${process.env.PUBLIC_URL}/assets/집2.jfif`}/></p> */}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./CustomreceiveModal.css";
 import Address from "../addresscomp/address";
 import axios from 'axios';
@@ -11,6 +11,7 @@ import { useMediaQuery } from "react-responsive";
 import { useNavigate } from 'react-router-dom';
 function CustomreceiveModal() {
   const navigate = useNavigate();
+  // const [requesterPhoneNumber, setRequesterPhoneNumber] = useState(""); // 연락처 상태 추가
   // const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -23,7 +24,7 @@ function CustomreceiveModal() {
   const [requesterPhone, setRequesterPhone] = useState(""); // 요청자 연락처
   const [phoneConfirmVisible, setPhoneConfirmVisible] = useState(false); // Phoneconfirm 모달 표시 상태
   const [isSuc, setIsSuc] = useState(false);
-  const [requesterPhoneNumber, setRequesterPhoneNumber] = useState(""); // 요청자 연락처를 상태로 관리
+  // const [requesterPhoneNumber, setRequesterPhoneNumber] = useState(""); // 요청자 연락처를 상태로 관리
   const handleOpenAddressModal = () => {
     setShowAddressModal(true);
   };
@@ -73,7 +74,7 @@ function CustomreceiveModal() {
     const addressDetail = document.querySelector('.input[placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"]').value;
     const requestContent = document.querySelector('.input[placeholder="요청 사항을 입력해주십시오."]').value;
     const requesterName = document.querySelector('.input[placeholder="이름을 입력해주십시오."]').value;
-    // const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
+    const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
 
     if (!addressDetail || !requestContent || !requesterName || !requesterPhoneNumber) {
       console.error('필수 정보를 모두 입력해주세요.');
@@ -94,6 +95,7 @@ function CustomreceiveModal() {
       requesterPhone: requesterPhoneNumber,
       bankCode: selectedBank, 
     };
+    
 
     formData.append('requestRegisterRequest', JSON.stringify(jsonData));
     try {
@@ -102,7 +104,7 @@ function CustomreceiveModal() {
           'Content-Type': 'multipart/form-data',
         },
         responseType: 'blob',
-      });
+      }, { withCredentials: true});
 
       const contentDisposition = response.headers['content-disposition'];
       const fileName = contentDisposition.split(';')[1].trim().split('=')[1];
@@ -138,16 +140,18 @@ function CustomreceiveModal() {
       };
   
       try {
-        const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData);
+        const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData, { withCredentials: true});
   
         // SMS 전송 성공 시 phoneConfirm 모달을 화면 중앙으로 보내는 코드
         setPhoneConfirmVisible(true);
+        setRequesterPhone(requesterPhoneNumber)
       } catch (error) {
         console.error('SMS 전송 중 오류 발생:', error);
         // SMS 전송 중 오류가 발생했을 때의 처리를 여기에 추가합니다.
       }
     }
   };
+  
 
   return (
     <div>
@@ -159,20 +163,20 @@ function CustomreceiveModal() {
           <div>
             <p className="minititle">신청자명</p>
             <input
-              style={{ width: "80vw", height: "2rem" }}
+              style={{ width: "60vw", height: "2rem" }}
               className="input"
               placeholder="이름을 입력해주십시오."
             />
             <p className="minititle">요청 사항</p>
             <input
               className="input"
-              style={{ width: "80vw", height: "2rem" }}
+              style={{ width: "60vw", height: "2rem" }}
               placeholder="요청 사항을 입력해주십시오."
             />
             <p className="minititle">은행명 :</p>
             <select
               className="input"
-              style={{width:'7vw', height:'5vh', borderRadius:'1vw'}}
+              style={{width:'7rem', height:'2.5rem', borderRadius:'1vw'}}
               value={selectedBank}
               onChange={(e) => setSelectedBank(e.target.value)}
             >
@@ -236,7 +240,7 @@ function CustomreceiveModal() {
             </div>
             <p className="minititle">상세주소</p>
             <input
-              style={{ width: "80vw", height: "2rem" }}
+              style={{ width: "60vw", height: "2rem" }}
               className="input"
               placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"
             />
@@ -258,7 +262,7 @@ function CustomreceiveModal() {
             </div>
             <p className="minititle">면적</p>
             <input
-              style={{ width: "80vw", height: "2rem" }}
+              style={{ width: "60vw", height: "2rem" }}
               className="input"
               placeholder="면적을 입력해주십시오."
             />
@@ -279,7 +283,7 @@ function CustomreceiveModal() {
         )}
       </div>
       {phoneConfirmVisible && (
-        <Phoneconfirm isSuc={isSuc} setIsSuc={setIsSuc} setPhoneConfirmVisible={setPhoneConfirmVisible} requesterPhoneNumber={requesterPhoneNumber} />
+        <Phoneconfirm isSuc={isSuc} setIsSuc={setIsSuc} setPhoneConfirmVisible={setPhoneConfirmVisible} requesterPhoneNumber={requesterPhone} />
       )}
     </div>
   );

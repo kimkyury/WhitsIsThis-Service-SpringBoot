@@ -23,6 +23,7 @@ function Phoneconfirm({ requesterPhoneNumber, setPhoneConfirmVisible, isSuc, set
       console.error("인증 실패:", error);
       setPhoneConfirmVisible(false);
       setIsSuc(false)
+      console.log(requesterPhoneNumber)
       // 필요한 오류 처리를 여기에 추가하세요.
       // console.log(response)
     }
@@ -33,13 +34,13 @@ function Phoneconfirm({ requesterPhoneNumber, setPhoneConfirmVisible, isSuc, set
       <div className="customreceivedivconfirms">
         <div className="customgrid">
           <input
-            className="input cinput"
+            className="input cinputss"
             placeholder="인증번호를 입력해주십시오."
-            style={{ border: '0.5vw solid black' }}
+            style={{ borderBottom: '0.1rem solid black' }}
             value={authCode}
             onChange={(e) => setAuthCode(e.target.value)}
           />
-          <button className="button minibutton" style={{ marginLeft: '4vw' }} onClick={handleVerification}>
+          <button className="button minibutton" style={{ marginLeft: '3vw' }} onClick={handleVerification}>
             인증하기
           </button>
         </div>

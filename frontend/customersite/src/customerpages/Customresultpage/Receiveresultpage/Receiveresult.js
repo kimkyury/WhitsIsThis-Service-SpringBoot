@@ -99,7 +99,7 @@ function Receiveresult() {
         headers: {
           'Content-Type': 'application/json',
         },
-      });
+      }, { withCredentials: true});
 
       if (response.ok) {
         const responseData = await response.json();

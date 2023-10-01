@@ -6,13 +6,14 @@
 
 
 .inputs {
-  background-color: #ECF0F3;
-  border-radius: 0.4vw;
-  box-shadow: 0.01vw 0.15vw 0px rgba(0, 0, 0, 0.5);
+  /* background-color: #ECF0F3; */
+  /* border-radius: 0.4vw; */
+  /* box-shadow: 0.01vw 0.15vw 0px rgba(0, 0, 0, 0.5); */
   border: none;
+  border-bottom: 0.1vw solid black;
   font-size: 1.4vw;
   padding-left:0.8vw;
-  height: 3vh;
+  height: 6vh;
 
 }
 
@@ -57,4 +58,15 @@
   margin-bottom: 5vh;
   border-radius: 2.6vw;
   background-repeat: no-repeat;
+}
+.select-container {
+  position: relative;
+}
+
+.select-dropdown {
+  position: absolute;
+  bottom: -100%; /* 옵션 목록을 위로 이동 */
+  left: 0;
+  width: 100%;
+  z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
 }

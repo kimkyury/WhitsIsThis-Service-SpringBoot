@@ -31,8 +31,9 @@ function Resultconfirm() {
         };
 
         try {
-          const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData);
+          const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData, { withCredentials: true});
           setPhoneConfirmVisible(true);
+          setIsVerified(true)
         } catch (error) {
           console.error('SMS 전송 중 오류 발생:', error);
         }
@@ -41,46 +42,59 @@ function Resultconfirm() {
   };
 
   const handleConfirmation = () => {
-    axios.get(`${BASE_URL}/api/v1/guest/requests/verification?requesterPhone=${phoneNumberInput}`)
+    axios
+    .get(
+      `${BASE_URL}/api/v1/guest/requests/verification`,
+      {
+        params: {
+          requesterPhone: phoneNumberInputRef.current.value
+        },
+        withCredentials: true
+      }
+      )
       .then((response) => {
+        console.log(phoneNumberInputRef.current.value)
         const matchingData = response.data;
-
+  
         if (matchingData) {
           const status = matchingData.data.status;
-
+          console.log(status)
           switch (status) {
             case "CANCELED":
+              sessionStorage.setItem("id", response.data.data.requestId);
               navigate("/moneyreturn");
-              sessionStorage.setItem('id', response.data.data.requestId);
               break;
             case "WAITING_FOR_PAY":
-              sessionStorage.setItem('status', matchingData.data.status);
-              sessionStorage.setItem('employeeName', matchingData.data.employeeName);
-              sessionStorage.setItem('responsedata', matchingData.data.inspectionEnd);
-              sessionStorage.setItem('id', response.data.data.requestId);
+              sessionStorage.setItem("status", matchingData.data.status);
+              sessionStorage.setItem("employeeName", matchingData.data.employeeName);
+              sessionStorage.setItem("responsedata", matchingData.data.inspectionEnd);
+              sessionStorage.setItem("id", response.data.data.requestId);
               navigate("/receiveresult");
               break;
             case "WAITING_INSPECTION_DATE":
             case "WAITING_FOR_INSPECTION":
             case "IN_PROGRESS":
             case "DONE":
-              sessionStorage.setItem('status', matchingData.data.status);
-              sessionStorage.setItem('employeeName', matchingData.data.employeeName);
-              sessionStorage.setItem('responsedata', matchingData.data.inspectionEnd);
-              sessionStorage.setItem('id', response.data.data.history.id);
+              sessionStorage.setItem("status", matchingData.data.status);
+              sessionStorage.setItem("employeeName", matchingData.data.employeeName);
+              sessionStorage.setItem("responsedata", matchingData.data.inspectionEnd);
+              sessionStorage.setItem("id", matchingData.data.history.id);
               navigate("/fixcustom");
               break;
             default:
               // 다른 상태에 따른 처리
+              console.log(status)
               break;
           }
         } else {
           alert("상태가 대기 중이 아닙니다.");
+          
         }
       })
       .catch((error) => {
         console.error("Error verifying phone number", error);
         alert("전화번호 인증이 필요합니다.");
+        console.log(phoneNumberInputRef.current.value)
       });
   };
 
@@ -103,26 +117,27 @@ function Resultconfirm() {
         <div className="middlemodalsx">
           <div className="customgrid">
             <input
-              className="input cinput"
+              className="input cinputs"
               placeholder="연락처를 입력해주십시오."
               ref={phoneNumberInputRef}
               value={phoneNumberInput}
               onChange={(e) => setPhoneNumberInput(e.target.value)}
             />
             {isSuc ? (
-              <button className="button minibutton" onClick={handleSendSMS}>확인</button>
+              <button className="button minibutton"style={{marginLeft:'2vw'}} onClick={handleSendSMS}>확인</button>
             ) : (
-              <button className="button minibutton" onClick={handleSendSMS}>인증하기</button>
+              <button className="button minibutton"style={{marginLeft:'2vw'}} onClick={handleSendSMS}>인증하기</button>
             )}
           </div>
         </div>
         <div className='middlemodalbox'>
           <button
             className="button bigbutton"
+            
             onClick={handleConfirmation}
             disabled={!isVerified} // 인증이 완료되지 않은 경우 버튼 비활성화
           >
-            {isVerified ? "확인하기" : "인증하기"}
+            확인하기
           </button>
         </div>
       </div>

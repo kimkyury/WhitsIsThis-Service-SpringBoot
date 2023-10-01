@@ -14,7 +14,7 @@ function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
 
   return (
-    <div>
+    <div className="fontb">
       <Router>
         <Routes>
           <Route path="/health" element={<Health />} />
@@ -27,7 +27,7 @@ function App() {
           <Route path="/customerreceive" element={[<Customreceivepage />]} />
           <Route path="/fixcustom" element={[ <Fixcustom />]} />
           <Route path="/moneyreturn" element={[ <Moneyreturn />]} />
-          <Route path="/moneywait" element={[ <Moneywait />]} />
+          {/* <Route path="/moneywait" element={[ <Moneywait />]} /> */}
           <Route path="/receiveresult" element={[ <Receiveresult />]} />
           <Route path="/resultconfirm" element={[ <Resultconfirm />]} />
           

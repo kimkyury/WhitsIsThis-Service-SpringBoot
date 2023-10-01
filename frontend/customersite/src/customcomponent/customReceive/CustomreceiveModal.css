@@ -13,7 +13,20 @@
 }
 
 .cinput {
-  width:70vw;
+  width:45vw;
+  height:5vh;
+  /* border-radius: 0.2rem; */
+}
+
+.cinputss {
+  width:27rem;
+  height:1.5rem;
+  /* border-radius: 0.2rem; */
+}
+
+
+.cinputs {
+  width:30vw;
   height:5vh;
   /* border-radius: 0.2rem; */
 }
@@ -66,6 +79,8 @@
   border-radius: 2.6vw;
   background-repeat: no-repeat;
 }
+
+
 .customgrid {
   display:flex;
   grid-template-columns: 1fr 1fr;
@@ -117,7 +132,7 @@
   /* border-bottom: 1px solid black; */
   border: none;
   border-bottom: 1px solid black;
-  font-size: 1rem;
+  font-size: 0.1vw;
   padding-left:0.4rem;
   opacity: 60%;
 
@@ -167,6 +182,14 @@
 }
 
 .bigbutton {
+  width: 10rem;
+  height: 3rem;
+  font-size: 1.7rem;
+  margin-top: 8vh
+  /* margin-bottom:5rem; */
+}
+
+.bigbuttons {
   width: 8rem;
   height: 3rem;
   font-size: 1.2rem;
@@ -196,10 +219,11 @@
 .phone-confirm-modal {
 
   position: fixed;
-  top: 50%;
+  top: 56%;
   left: 50%;
+  border:none;
   transform: translate(-50%, -50%);
-  border:1px solid black;
+  /* border:1px solid black; */
   /* 위의 속성을 사용하여 가로와 세로로 중앙에 정렬합니다. */
   background-color: white;
   width: 85vw; /* 모달의 폭을 설정하세요. */
