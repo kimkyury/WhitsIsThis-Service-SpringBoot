@@ -39,10 +39,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (IncorrectClaimException e) {
             SecurityContextHolder.clearContext();
-            response.sendError(403); //TODO: 401로 바꿔야 함
+            response.sendError(401); //TODO: 401로 바꿔야 함
         } catch (UsernameNotFoundException e) {
             SecurityContextHolder.clearContext();
-            response.sendError(403); //TODO: 401로 바꿔야 함
+            response.sendError(401); //TODO: 401로 바꿔야 함
         }
 
         filterChain.doFilter(request, response);

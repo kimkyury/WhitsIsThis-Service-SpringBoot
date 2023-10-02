@@ -31,6 +31,9 @@ public class RegisterMessageHandlerImpl extends AbstractMessageHandlerInterface 
         String historyId = getDataAtMap(dataMap, DataType.historyId);
         String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
 
+        // For Command에서 DB-Requets 상태 변경
+        saveAttributeAtSession(session, SessionKey.HISTORY_ID, historyId);
+
         redisService.saveData("device:" + serialNumber, senderEmployee + "/" + historyId);
 
         String message = createSuccessMessage();
