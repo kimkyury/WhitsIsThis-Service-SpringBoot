@@ -53,7 +53,7 @@ const Home = () => {
       data: data,
     };
 
-    const messageString = JSON.stringify(message, null, 2); // 2-space indentation
+    const messageString = JSON.stringify(message, null, 2);
 
     setDisplayMessage(JSON.stringify(message, null, 2));
 
@@ -96,13 +96,6 @@ const Home = () => {
   }, []);
 
   const logout = async () => {
-    // 임시
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("token");
-    navigate("/");
-
-    //
-
     try {
       const response = await AuthHttp({
         method: "post",
@@ -127,8 +120,6 @@ const Home = () => {
 
   return (
     <div className="Home container">
-      {/* 현재 작업중인 업무가 있는 경우 */}
-
       {isLogin && workInProgress && (
         <Notification
           type={"right"}

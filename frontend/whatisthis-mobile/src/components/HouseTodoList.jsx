@@ -6,7 +6,13 @@ import SectionDetail from "./SectionDetail";
 
 import AuthHttp from "../utils/AuthHttp";
 
-const HouseTodoList = ({ requestContent, historyId, isOpen, handleOpenTodoList }) => {
+const HouseTodoList = ({
+  requestContent,
+  historyId,
+  isOpen,
+  handleOpenTodoList,
+  handleIsFinish,
+}) => {
   const modalStatus = isOpen ? "slide_up" : "slide_down";
 
   const [sectionList, setSectionList] = useState();
@@ -26,11 +32,23 @@ const HouseTodoList = ({ requestContent, historyId, isOpen, handleOpenTodoList }
         });
 
         setSectionList(response.data.data);
+        checkAllTodoIsDone(response.data.data);
       } catch (e) {
         console.error(e);
       }
     };
     getSectionList();
+
+    const checkAllTodoIsDone = (sectionList) => {
+      const mergedTodolist = sectionList.reduce((total, currentObj) => {
+        return total.concat(currentObj.todolist);
+      }, []);
+
+      const state = mergedTodolist.every((it) => it.isChecked);
+
+      handleIsFinish(state);
+    };
+
     console.log(sectionList);
   }, []);
 

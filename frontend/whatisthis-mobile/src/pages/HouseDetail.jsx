@@ -26,11 +26,12 @@ const HouseDetail = () => {
 
   // 모든 검사를 마쳤는지 확인
   // 값 받아와서 설정해주기
-  const [isFinish, setIsFinish] = useState(
-    targetHouse && targetHouse.stats === "DONE" ? true : false
-  );
+  const [isFinish, setIsFinish] = useState(false);
 
   useEffect(() => {
+    console.log(targetHouse);
+    // setIsFinish(targetHouse && targetHouse.status === "DONE" ? true : false);
+    setIsFinish(true);
     const getTargetHouse = async () => {
       try {
         const response = await AuthHttp({
@@ -39,7 +40,6 @@ const HouseDetail = () => {
         });
         console.log(response.data.data);
         setTargetHouse(response.data.data);
-        // test(response.data.data);
       } catch (e) {
         console.error(e);
       }
@@ -47,31 +47,12 @@ const HouseDetail = () => {
     getTargetHouse();
   }, []);
 
-  // useEffect(() => {
-  //   if (buildingList.length >= 1) {
-  //     const targetBuilding = buildingList.find((it) => parseInt(it.id) === parseInt(buildingId));
-  //     if (targetBuilding) {
-  //       if (targetBuilding.houses.length >= 1) {
-  //         const targetHouse = targetBuilding.houses.find(
-  //           (it) => parseInt(it.id) === parseInt(houseId)
-  //         );
-  //         setAddr(targetBuilding.addr);
-  //         if (targetHouse) {
-  //           setData(targetHouse);
-  //         } else {
-  //           alert("없는 세대입니다.");
-  //           navigate("/search", { replace: true });
-  //         }
-  //       }
-  //     } else {
-  //       alert("없는 건물입니다.");
-  //       navigate("/search", { replace: true });
-  //     }
-  //   }
-  // }, [houseId, houseList]);
-
   const handleOpenTodoList = () => {
     setIsOpenTodoList(!isOpenTodoList);
+  };
+
+  const handleIsFinish = (state) => {
+    setIsFinish(state);
   };
 
   if (!targetHouse) {
@@ -113,6 +94,7 @@ const HouseDetail = () => {
         {/* 닫겼다가 다시 열릴때 새 페이지를 보여줄까 아니면 기존 상태 그대로 보여주는게 나을까 */}
         {
           <HouseTodoList
+            handleIsFinish={handleIsFinish}
             historyId={targetHouse.history.id}
             isOpen={isOpenTodoList}
             handleOpenTodoList={handleOpenTodoList}
@@ -149,12 +131,14 @@ const HouseDetail = () => {
             text={"점검완료"}
             color={"green"}
             onClick={() => navigate(`/house/${houseId}/result`)}
+            isFinish={isFinish}
           />
         </div>
 
         {/* 닫겼다가 다시 열릴때 새 페이지를 보여줄까 아니면 기존 상태 그대로 보여주는게 나을까 */}
         {
           <HouseTodoList
+            handleIsFinish={handleIsFinish}
             requestContent={targetHouse.requestContent}
             historyId={targetHouse.history.id}
             isOpen={isOpenTodoList}
