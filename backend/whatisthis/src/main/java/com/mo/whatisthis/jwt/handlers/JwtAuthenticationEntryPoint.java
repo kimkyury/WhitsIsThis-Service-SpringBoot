@@ -17,7 +17,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         AuthenticationException authException) throws IOException, ServletException {
 
         response.setCharacterEncoding("utf-8");
-        response.sendError(ErrorCode.FORBIDDEN.getStatus(),
-            ErrorCode.FORBIDDEN.getMessage());
+        response.sendError(ErrorCode.UNAUTHORIZED.getStatus(),
+            ErrorCode.UNAUTHORIZED.getMessage());
     }
 }
