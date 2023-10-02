@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import './Receive.css';
 import axios from 'axios';
 import { BiSolidDownload } from "react-icons/bi";
-function RequestModal({ selectedItem, setShowModal }) {
+function RequestModals({ selectedItems, setShowModals }) {
   const [requestData, setRequestData] = useState({});
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const refreshToken = sessionStorage.getItem('accessToken');
 
   useEffect(() => {
-    // console.log(selectedItem)
-    if (selectedItem && selectedItem.id) {
-      const apiUrl = `${BASE_URL}/api/v1/private/requests/${selectedItem.id}`;
+    console.log(selectedItems.requests[0].id)
+    if (selectedItems && selectedItems.requests[0].id) {
+      const apiUrl = `${BASE_URL}/api/v1/private/requests/${selectedItems.requests[0].id}`;
 
       const headers = {
         Authorization: refreshToken,
@@ -22,17 +22,17 @@ function RequestModal({ selectedItem, setShowModal }) {
           const data = response.data;
           console.log(data)
           setRequestData(data);
+   
         })
         .catch((error) => {
           console.error('get요청 중 에러 발생:', error);
         });
     }
-  }, [selectedItem, BASE_URL, refreshToken]);
+  }, [selectedItems, BASE_URL, refreshToken]);
 
   const closeModal = () => {
-    setShowModal(false);
+    setShowModals(false);
   };
-
   // 위임장 사진을 다운로드하는 함수
   const downloadWarrantImage = () => {
     if (requestData.data && requestData.data.warrantUrl) {
@@ -80,7 +80,6 @@ function RequestModal({ selectedItem, setShowModal }) {
       // Handle the case when no warrant URL is found in requestData.
     }
   };
-
   return (
     <div className="Modalbox fontb" style={{ zIndex: '9999' }}>
       <div>
@@ -130,9 +129,11 @@ function RequestModal({ selectedItem, setShowModal }) {
                   </p>
                   {requestData.data.warrantUrl ? (
                     <div>
-                      {/* <img src={requestData.data.warrantUrl} alt="위임장 사진" /> */}
+                      {/* <img src={`${process.env.REACT_APP_S3_BASE_URL}${requestData.data.warrantUrl}`} alt="위임장 사진" /> */}
                       {/* "다운로드" 버튼 추가 */}
-                      <button className='i' style={{ border:'none', backgroundColor:'white'}} onClick={downloadWarrantImage}><BiSolidDownload/>{`${process.env.REACT_APP_S3_BASE_URL}/requestData.data.warrantUrl`}</button>
+                      {/* <button className='i' style={{ border:'none', backgroundColor:'white'}} onClick={downloadWarrantImage}><BiSolidDownload/>{requestData.data.warrantUrl}</button> */}
+                      <button className='i' style={{ border:'none', backgroundColor:'white'}} onClick={downloadWarrantImage}><BiSolidDownload/>{requestData.data.warrantUrl}</button>
+
                     </div>
                   ) : (
                     <p>No image available</p>
@@ -149,4 +150,4 @@ function RequestModal({ selectedItem, setShowModal }) {
   );
 }
 
-export default RequestModal;
+export default RequestModals;

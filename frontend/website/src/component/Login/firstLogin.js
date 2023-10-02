@@ -17,20 +17,26 @@ function 첫번째로그인페이지() {
   const [phoneChangeSuccess, setPhoneChangeSuccess] = useState(false);
   const [uploadMessage, setUploadMessage] = useState(''); // 이미지 업로드 메시지
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const refreshToken = sessionStorage.getItem('refreshToken');
-  
+  const refreshToken = sessionStorage.getItem('accessToken');
+  const [upload, setUpload] = useState(null);
   const handleImageChange = (e) => {
+    console.log(e);
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const uploadedImage = e.target.result;
-        setImage(uploadedImage);
-      };
-      reader.readAsDataURL(file);
-    }
+    setImage(file);
+  
+    // if (file) {
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     const uploadedImage = e.target.result;
+    //     setImage(uploadedImage);
+    //   };
+    //   reader.readAsDataURL(file);
+    // }
   };
 
+  // const handleimageInput = () => {
+  //   document.getElementById('profileimage').click();
+  // }
   const handleUpdate = () => {
     // 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인합니다.
     if (newPassword !== confirmNewPassword) {
@@ -40,26 +46,30 @@ function 첫번째로그인페이지() {
 
     // FormData 객체를 생성하여 데이터를 담습니다.
     const formData = new FormData();
-    if (image) {
-      formData.append("profileimage", image);
-    }
-    // JSON 데이터를 생성합니다.
     const jsonData = {
       name: name,
       password: newPassword,
       phone: newPhone,
     };
+    if (image) {
+      formData.append("profileImage", image);
+      formData.append('employeeUpdateRequest', JSON.stringify(jsonData));
+      console.log(formData)
+    }
+    sendUpdateRequest(formData);
+    // JSON 데이터를 생성합니다.
 
     // 여기서 API PATCH 요청을 보냅니다.
-    sendUpdateRequest(formData, jsonData);
   };
-
-  const sendUpdateRequest = (formData, jsonData) => {
+  
+  const sendUpdateRequest = (formData) => {
     // axios를 사용하여 PATCH 요청을 보냅니다.
     const headers = {
       'Authorization': `${refreshToken}`,
+      'Content-Type': 'multipart/form-data'
     };
-
+  
+    console.log(headers)
     axios
       .patch(`${BASE_URL}/api/v1/private/members/employees`, formData, { headers })
       .then((response) => {
@@ -67,11 +77,11 @@ function 첫번째로그인페이지() {
         console.log("이미지 업로드 성공:", response.data);
 
         // 나머지 데이터 업데이트 요청
-        axios
-          .patch(`${BASE_URL}/api/v1/private/members/employees`, jsonData, { headers })
-          .then((response) => {
-            // 성공적으로 업데이트된 경우
-            console.log("API 요청 성공:", response.data);
+        // axios
+        //   .patch(`${BASE_URL}/api/v1/private/members/employees`, jsonData, { headers })
+        //   .then((response) => {
+        //     // 성공적으로 업데이트된 경우
+        //     console.log("API 요청 성공:", response.data);
 
             // 여기서 성공 메시지를 처리하거나 필요한 로직을 추가하세요.
             // 예를 들어, sessionStorage 업데이트 및 성공 메시지 표시
@@ -80,13 +90,7 @@ function 첫번째로그인페이지() {
             setPasswordChangeSuccess(true);
             setPhoneChangeSuccess(true);
           })
-          .catch((error) => {
-            // 요청이 실패한 경우
-            console.error("API 요청 실패:", error);
-
-            // 실패 메시지를 처리하거나 에러 핸들링을 추가하세요.
-          });
-      })
+        
       .catch((error) => {
         console.error("이미지 업로드 실패:", error);
         setUploadMessage('이미지 업로드에 실패했습니다. 다시 시도해주세요.');

@@ -6,18 +6,24 @@ import { FaSearch } from 'react-icons/fa';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import Warning from '../../component/warning/warning';
 import axios from 'axios';
-
+import AuthHttp from '../../component/util/AuthHttp';
+import Receivedsitem from './Myreceiveitem';
+import RequestModals from './MyRequestModal';
 function List() {
   const [showModal, setShowModal] = useState(false);
+  const [showModals, setShowModals] = useState(false);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItems, setSelectedItems] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLogin, setIsLogin] = useState(false);
   const [applicant, setApplicant] = useState([]);
   const [myApplicant, setMyApplicant] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
-
+  const [mydata, setMydata] = useState(null);
+  const [mdata, setMdata] = useState(null);
+  
   const getRefreshToken = () => {
     return sessionStorage.getItem('accessToken');
   };
@@ -26,8 +32,14 @@ function List() {
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
     setShowModal(true);
+
   };
 
+  const handleItemClicks = (itemData) => {
+    setSelectedItems(itemData);
+    setShowModals(true);
+
+  };
   const filteredData = applicant.filter((data) =>
     Object.values(data).some((value) =>
       typeof value === 'string' && value.toLowerCase().includes(searchQuery.toLowerCase())
@@ -40,49 +52,101 @@ function List() {
 
   useEffect(() => {
     setMyApplicant([]);
+    getData(currentPage);
   }, [currentPage]);
 
-  const fetchData = (page, endpoint) => {
-    setIsFetching(true);
-
-    const headers = {
-      'Authorization': `${accessToken}`,
-    };
-
-    axios.get(`${BASE_URL}/api/v1/private/requests/${endpoint}?page=${page}`, {
-      headers: headers,
-    })
-      .then((response) => {
-        const data = response.data;
-        if (data.status === 200) {
-          const responseData = data.data;
-          const uniqueData = responseData.filter((newData) => {
-            return !myApplicant.some((existingData) => existingData.id === newData.id);
-          });
-
-          setMyApplicant((prevData) =>
-            page === 1 ? uniqueData : [...prevData, ...uniqueData]
-          );
-
-          if (data.hasNextPage) {
-            setCurrentPage(page + 1);
-          } else {
-            setIsFetching(false);
-          }
-        } else {
-          console.error('API 오류:', data.message);
-          setIsFetching(false);
-        }
-      })
-      .catch((error) => {
-        console.error('데이터 가져오기 오류:', error);
-        setIsFetching(false);
-      });
-  };
 
   useEffect(() => {
-    fetchData(currentPage, 'waiting');
-  }, [currentPage]);
+  
+  getData(1)
+  fetchMyData();
+  }, []);
+  const fetchMyData =  async() => {
+    try {
+      const response = await AuthHttp({
+        method:'get',
+        url:`/private/requests/assigned`
+      })
+      console.log(response.data)
+      console.log(response.data.data[0].requests[0])
+      setMydata(response.data.data)
+      console.log(response.data.data)
+      // setMdata(response.data.data.requests)
+    } catch(e) {
+      console.error(e)
+    }
+  }
+  // console.log(mydata)
+  const getData = async(page)=>{
+
+    try{
+      const response = await AuthHttp({
+        method:'get',
+        url:`/private/requests/waiting?page=${page}`
+      })
+      console.log(response.data.data); 
+      const data = response.data
+      const responseData = data.data;
+      const uniqueData = responseData.filter((newData) => {
+        return !myApplicant.some((existingData) => existingData.id === newData.id);
+      });
+
+      setMyApplicant((prevData) =>
+        page === 1 ? uniqueData : [...prevData, ...uniqueData]
+      );
+
+      if (data.hasNextPage) {
+        setCurrentPage(page + 1);
+      } else {
+        setIsFetching(false);
+      }
+    }catch(e){
+      console.error(e);
+    }
+
+  }
+
+  // const fetchData = (page, endpoint) => {
+  //   setIsFetching(true);
+
+  //   const headers = {
+  //     'Authorization': `${accessToken}`,
+  //   };
+
+  //   axios.get(`${BASE_URL}/api/v1/private/requests/waiting?page=${page}`, {
+  //     headers: headers,
+  //   })
+  //     .then((response) => {
+  //       const data = response.data;
+  //       if (data.status === 200) {
+  //         const responseData = data.data;
+  //         const uniqueData = responseData.filter((newData) => {
+  //           return !myApplicant.some((existingData) => existingData.id === newData.id);
+  //         });
+
+  //         setMyApplicant((prevData) =>
+  //           page === 1 ? uniqueData : [...prevData, ...uniqueData]
+  //         );
+
+  //         if (data.hasNextPage) {
+  //           setCurrentPage(page + 1);
+  //         } else {
+  //           setIsFetching(false);
+  //         }
+  //       } else {
+  //         console.error('API 오류:', data.message);
+  //         setIsFetching(false);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error('데이터 가져오기 오류:', error);
+  //       setIsFetching(false);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   fetchData(currentPage, 'waiting');
+  // }, [currentPage]);
 
   const applicantContainerRef = useRef(null);
   const myApplicantContainerRef = useRef(null);
@@ -95,7 +159,7 @@ function List() {
       !isFetching
     ) {
       const nextPage = currentPage + 1;
-      fetchData(nextPage, 'waiting');
+      getData(nextPage, 'waiting');
     }
   };
 
@@ -111,7 +175,7 @@ function List() {
 
   useEffect(() => {
     if (accessToken) {
-      fetchData(1, 'waiting');
+      getData(1, 'waiting');
       setIsLogin(true);
     }
   }, []);
@@ -139,7 +203,7 @@ function List() {
       setApplicant(updatedApplicant);
 
       // 패치 요청 보내기
-      sendPatchRequest(draggedData.id);
+      moveItem(draggedData.id);
     } else if (
       result.source.droppableId === 'myApplicant' &&
       result.destination.droppableId === 'applicant'
@@ -155,44 +219,64 @@ function List() {
       setMyApplicant(updatedMyApplicant);
 
       // 패치 요청 보내기
-      sendPatchRequest(draggedData.id);
+      console.log(draggedData);
+      moveItem(draggedData.id);
     }
   }
 
   // 패치 요청을 보내는 함수
-  const sendPatchRequest = (itemId) => {
-    if (itemId) {
-      const patchUrl = `${BASE_URL}/api/v1/private/requests/${itemId}/manager`;
 
-      const headers = {
-        'Authorization': `${accessToken}`,
-      };
-
-      // 업데이트할 데이터를 요청 본문에 포함
-      const requestData = {
-        // 업데이트할 데이터의 필드 및 값
-        // 예: fieldName: updatedValue
-      };
-
-      axios.patch(patchUrl, requestData,
-        {params: {
-          id: itemId,
-        },},
-        { headers })
-        .then((response) => {
-          const data = response.data;
-          if (data.status === 200) {
-            // 패치 요청이 성공하면 처리할 내용을 추가
-            console.log('패치 요청이 성공했습니다.');
-          } else {
-            console.error('API 오류:', data.message);
-          }
-        })
-        .catch((error) => {
-          console.error('패치 요청 오류:', error);
-        });
+  const moveItem = async (targetId) =>{
+    try{
+      const response = await AuthHttp({
+        method:'patch',
+        url:`/private/requests/${targetId}/manager`,
+        data:{
+          // 자바스크립트 date 함수 로저걸 포매팅해서 보내면 됨
+          inspectionDate: "2023-10-02"
+        }
+      })
+      console.log(response);
+    }catch(e){
+      console.error(e);
     }
-  };
+  }
+
+  // const sendPatchRequest = (itemId) => {
+  //   if (itemId) {
+  //     moveItem(itemId);
+
+  //     const patchUrl = `${BASE_URL}/api/v1/private/requests/${itemId}/manager`;
+
+  //     const headers = {
+  //       'Authorization': `${accessToken}`,
+  //     };
+
+  //     // 업데이트할 데이터를 요청 본문에 포함
+  //     const requestData = {
+  //       // 업데이트할 데이터의 필드 및 값
+  //       // 예: fieldName: updatedValue
+  //     };
+
+  //     axios.patch(patchUrl, requestData,
+  //       {params: {
+  //         id: itemId,
+  //       },},
+  //       { headers })
+  //       .then((response) => {
+  //         const data = response.data;
+  //         if (data.status === 200) {
+  //           // 패치 요청이 성공하면 처리할 내용을 추가
+  //           console.log('패치 요청이 성공했습니다.');
+  //         } else {
+  //           console.error('API 오류:', data.message);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error('패치 요청 오류:', error);
+  //       });
+  //   }
+  // };
 
   return (
     isLogin ? (
@@ -221,12 +305,17 @@ function List() {
                     style={{ paddingTop: '1.5vw' }}
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                  >
+                    >
+                    <div >
+                    {mydata && mydata.map((mydata, mdata) => (
+                      <span onClick={() => handleItemClicks(mydata)} ><Receivedsitem   mydata={mydata} mdata={mydata.requests}/></span>
+                      ))}
+                      </div>
                     {filteredData.map((data, index) => (
                       <Draggable
-                        key={data.id.toString()}
-                        draggableId={data.id.toString()}
-                        index={index}
+                      key={data.id.toString()}
+                      draggableId={data.id.toString()}
+                      index={index}
                       >
                         {(provided, snapshot) => (
                           <div
@@ -241,6 +330,7 @@ function List() {
                               opacity: snapshot.isDragging ? 0.5 : 1,
                             }}
                           >
+                            
                             <Item data={data} />
                           </div>
                         )}
@@ -297,6 +387,12 @@ function List() {
             <RequestModal selectedItem={selectedItem} setShowModal={setShowModal} />
           </div>
         )}
+         {showModals && (
+          <div className="modal-container">
+            <RequestModals selectedItems={selectedItems} setShowModals={setShowModals} />
+          </div>
+        )}
+       
       </div>
     ) : (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
