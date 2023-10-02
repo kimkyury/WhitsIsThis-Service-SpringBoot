@@ -11,10 +11,6 @@ public class VerifyAuthCodeRequest {
 
     @NotNull
     @NotEmpty
-    private String phone;
-
-    @NotNull
-    @NotEmpty
     private String authCode;
 
 }

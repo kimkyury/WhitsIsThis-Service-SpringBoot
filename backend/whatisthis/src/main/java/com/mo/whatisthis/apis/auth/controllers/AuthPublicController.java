@@ -117,10 +117,12 @@ public class AuthPublicController {
         "1. Auth"}, description = "인증번호를 받기 위한 핸드폰 번호를 기입해주세요 (유효기간이 5분이므로, 5분 이내에 인증을 하셔야 합니다.) ")
     @PostMapping("/phone/sms")
     public ResponseEntity<SuccessResponse<String>> sendMessageToAuthCode(
+        HttpServletRequest request,
         @Valid @RequestBody SendAuthMessageRequest sendAuthMessageRequest
     ) {
 
         authService.sendMessageProcedure(sendAuthMessageRequest);
+        authService.setSessionPhone(request, sendAuthMessageRequest);
 
         return createSuccessResponse(SuccessCode.OK, "Sent message to verify Phone");
     }
@@ -132,7 +134,7 @@ public class AuthPublicController {
         @Valid @RequestBody VerifyAuthCodeRequest verifyAuthCodeRequest
     ) {
 
-        authService.confirmAuthCode(verifyAuthCodeRequest);
+        authService.confirmAuthCode(request, verifyAuthCodeRequest);
         authService.setSessionExpiryDuration(request, verifyAuthCodeRequest);
 
         return createSuccessResponse(SuccessCode.OK,
