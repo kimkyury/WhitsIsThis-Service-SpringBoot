@@ -1,6 +1,5 @@
 .customreceivedivfix {
-
-  margin-top:1rem;
+  margin-top: 1rem;
   width: 20rem;
   height: 35rem;
 
@@ -21,8 +20,7 @@
 }
 
 .desk-customreceivedivfix {
-
-  margin-top:1rem;
+  margin-top: 1rem;
   width: 4z;
   height: 40rem;
 
@@ -35,10 +33,10 @@
 }
 
 .circlelinebox {
-    margin-top:5%; 
-    display: flex; 
-    align-items: center;
-    justify-content:center;
+  margin-top: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .flexlinebox {
@@ -46,8 +44,7 @@
   align-items: center;
 }
 .customreceivedivwait {
-
-  margin-top:1rem;
+  margin-top: 1rem;
   width: 80vw;
   height: 30rem;
 
@@ -77,72 +74,70 @@
 }
 
 .desk-custommodaltitle {
-  color: #2D4059;
+  color: #2d4059;
   font-size: 4rem;
   display: flex;
   justify-content: center;
   font-weight: bold;
-
 }
 
 .circle {
   border-radius: 100%;
-  width:4.5rem;
+  width: 4.5rem;
   height: 4.5rem;
-  background-color: #ECECEC;
+  background-color: #ececec;
   text-align: center;
 }
-
 
 .desk-circle {
   margin-top: -4rem;
   border-radius: 100%;
-  width:8rem;
+  width: 8rem;
   height: 8rem;
-  background-color: #ECECEC;
+  background-color: #ececec;
   text-align: center;
 }
 .line {
-  
-  width:2rem;
+  width: 2rem;
   border: 0.01rem solid black;
-
 }
 .desk-line {
-  margin-top :-4rem;
-  width:4rem;
+  margin-top: -4rem;
+  width: 4rem;
   border: 0.02rem solid black;
-
 }
-
 
 .lines {
   width: 10rem;
   border: 0.05rem solid black;
-
 }
 
 .listline {
   font-size: 0.5rem;
   font-weight: bold;
   margin-top: 5rem;
-  
-
 }
 
 .desk-listline {
   font-size: 1.5rem;
   font-weight: bold;
   margin-top: 9rem;
-  
-
 }
 
 .moblie-custommodaltitlefix {
-  color: #2D4059;
+  color: #2d4059;
   font-size: 1.8rem;
   display: flex;
   justify-content: center;
   font-weight: bold;
+}
 
+.desk-download {
+  marginleft: "5%";
+  margintop: "10px";
+  padding: "8px 12px";
+  cursor: "pointer";
+  border: "1px solid #ccc";
+  borderradius: "4px";
+  transition: "background-color 0.3s ease";
 }
