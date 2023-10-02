@@ -62,29 +62,29 @@ function App() {
   const [displayMessage, setDisplayMessage] = useState("");
   const [receivedMessage, setReceivedMessage] = useState("");
 
-  const handleConnect = () => {
-    const ws = new WebSocket(`${WS_BASE_URL}`);
+  // const handleConnect = () => {
+  //   const ws = new WebSocket(`${WS_BASE_URL}`);
 
-    ws.onopen = () => {
-      console.log("connected!!");
-      setSocket(ws);
-    };
-    ws.onerror = (error) => {
-      console.log("Connection error..");
-      console.error(error);
-    };
+  //   ws.onopen = () => {
+  //     console.log("connected!!");
+  //     setSocket(ws);
+  //   };
+  //   ws.onerror = (error) => {
+  //     console.log("Connection error..");
+  //     console.error(error);
+  //   };
 
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      const formattedData = JSON.stringify(data, null, 2);
-      setReceivedMessage(formattedData);
-    };
+  //   ws.onmessage = (e) => {
+  //     const data = JSON.parse(e.data);
+  //     const formattedData = JSON.stringify(data, null, 2);
+  //     setReceivedMessage(formattedData);
+  //   };
 
-    ws.onclose = (e) => {
-      alert("소켓 연결 끊김!");
-      console.error(e);
-    };
-  };
+  //   ws.onclose = (e) => {
+  //     alert("소켓 연결 끊김!");
+  //     console.error(e);
+  //   };
+  // };
 
   useEffect(() => {
     // 토큰 만료됐을때 다시 로그인하면 데이터 가져오게끔 해야함
@@ -93,7 +93,7 @@ function App() {
       const userData = JSON.parse(localData);
       if (userData) {
         if (!socket) {
-          handleConnect();
+          // handleConnect();
         }
       }
     } else {
