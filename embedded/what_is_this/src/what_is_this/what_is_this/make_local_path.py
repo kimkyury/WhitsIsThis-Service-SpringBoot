@@ -51,15 +51,18 @@ class MakeLocalPath(Node):
         super().__init__('local_path')
         self.local_path_pub = self.create_publisher(Path, '/local_path', 10)
         self.status_publisher = self.create_publisher(String, 'result', 1)
+        self.percent_publisher = self.create_publisher(String, 'percent', 1)
         self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 10)
         self.global_path_sub = self.create_subscription(Path, '/global_path', self.path_callback, 10)
 
+        self.percent = -1
         self.is_scan = False
         self.is_odom = False
         self.is_path = False
         self.local_path_size = 30
         self.prev_waypoint = 0
 
+        self.percnet_msg = String()
         self.result_msg = String()
         self.odom_msg = Odometry()
         self.global_path_msg = Path()
@@ -94,10 +97,15 @@ class MakeLocalPath(Node):
                         current_waypoint = i
             
             if current_waypoint != -1:
-                percent = round(current_waypoint/len(self.global_path_msg.poses)*100,2)
-                print("{0:<20} >>".format(f"\r진행률 : {percent}"),end="")
+                self.percent = round(current_waypoint/len(self.global_path_msg.poses)*100,2)
+                print("{0:<20} >>".format(f"\r진행률 : {self.percent}"),end="")
+                self.percnet_msg.data = str(self.percent)
+                self.percent_publisher.publish(self.percnet_msg)                
 
-                if percent > 99.95:
+                if self.percent > 99.96:
+                    self.percent = "100"
+                    self.percnet_msg.data = str(self.percent)
+                    self.percent_publisher.publish(self.percnet_msg) 
                     self.result_msg.data = "END_FINDING"
                     self.status_publisher.publish(self.result_msg)
 

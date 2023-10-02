@@ -40,7 +40,6 @@ class What_is_this(Node):
         print("{0:<40} >>".format(f"\rSTATUS : {self.status}"),end="")
         self.status_publisher.publish(self.str_msg)
     
-
     # 진행결과에 따라 status 변경
     def check_bot_status(self,msg):
         self.get_result = msg.data
