@@ -21,7 +21,6 @@ function CustomMain() {
 
   return (
     <div>
-    <Header/>
     <div style={{       
       display: 'flex',
       alignItems: 'center',
@@ -31,16 +30,22 @@ function CustomMain() {
     }}
     className="roomimg fontb">
       <div className='cbox'>
-
+      <p className={`logo-img ${logoVisible ? "show" : ""}`}>
+          <img 
+            src={`${process.env.PUBLIC_URL}/assets/logo_blue.png`} 
+            alt="로고"
+            style={{ height:'7rem'}} // 이미지를 가로 중앙으로 정렬
+          />
+        </p>
         <div style={{display:'flex', flexDirection: 'column', alignItems: 'center'}}>
           <div style={{ display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <Link to={'/customerreceive'}>
+          <Link  to={'/customerreceive'}>
               <button className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
                 신청하기
               </button>
             </Link>
             <Link to={'/resultconfirm'}>
-              <button  className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
+              <button className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
                 결과확인
               </button>
             </Link>

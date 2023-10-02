@@ -21,7 +21,7 @@ function CustomHeader() { // 컴포넌트 이름을 대문자로 변경
           <img 
             src={`${process.env.PUBLIC_URL}/assets/로고사진누.png`} 
             alt="로고"
-            style={{ width:'5rem', height:'5rem', marginTop:'-13vh' }} // 이미지를 가로 중앙으로 정렬
+            style={{ height:'5rem', marginTop:'-13vh' }} // 이미지를 가로 중앙으로 정렬
           />
         </p>
       {/* <div className="customheaders">
