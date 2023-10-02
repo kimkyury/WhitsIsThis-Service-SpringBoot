@@ -32,24 +32,21 @@ const HouseTodoList = ({
         });
 
         setSectionList(response.data.data);
-        checkAllTodoIsDone(response.data.data);
+        // checkAllTodoIsDone(response.data.data);
       } catch (e) {
         console.error(e);
       }
     };
-    getSectionList();
 
     const checkAllTodoIsDone = (sectionList) => {
       const mergedTodolist = sectionList.reduce((total, currentObj) => {
         return total.concat(currentObj.todolist);
       }, []);
-
       const state = mergedTodolist.every((it) => it.isChecked);
 
       handleIsFinish(state);
     };
-
-    console.log(sectionList);
+    getSectionList();
   }, []);
 
   const handleAddClick = async (sectionId) => {
@@ -98,13 +95,35 @@ const HouseTodoList = ({
     setIsSectionDetail(!isSectionDetail);
   };
 
-  const handleMenu = () => {
+  const handleMenu = async () => {
+    // 여기 울트라 초 슈퍼 하드코딩, 고쳐야함.
+    const mergedTodolist = sectionList.reduce((total, currentObj) => {
+      return total.concat(currentObj.todolist);
+    }, []);
+    const updateCycle = mergedTodolist.map(async (todo) => {
+      try {
+        const response = await AuthHttp({
+          method: "patch",
+          url: `/private/todolists/${todo.id}/status`,
+          data: {
+            isChecked: todo.isChecked,
+            significant: todo.significant,
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    });
+    await Promise.all(updateCycle);
+    const state = mergedTodolist.every((it) => it.isChecked);
+    handleIsFinish(state);
+
     setTimeout(() => {
       setIsAddSection(false);
       setIsListMain(true);
       setIsSectionDetail(false);
     }, 500);
-    handleOpenTodoList();
+    handleOpenTodoList(sectionList);
   };
 
   return (

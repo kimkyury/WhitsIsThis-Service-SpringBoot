@@ -15,7 +15,6 @@ const TodoAddSection = ({ isAddSection, handleAddClick }) => {
           method: "get",
           url: `/private/rooms`,
         });
-        console.log(response.data.data);
         setSectionList(response.data.data);
       } catch (e) {
         console.error(e);

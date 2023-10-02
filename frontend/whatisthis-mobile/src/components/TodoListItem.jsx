@@ -16,6 +16,7 @@ const TodoListItem = ({
     setIsChecked(JSON.parse(todoListItem.isChecked));
     setDescription(todoListItem.significant);
     setImageList(todoListItem.images);
+    console.log(todoListItem.images);
   }, []);
 
   const handleCheckBoxState = (e) => {

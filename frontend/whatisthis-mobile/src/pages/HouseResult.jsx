@@ -19,7 +19,7 @@ const HouseResult = () => {
           method: "get",
           url: `/private/requests/${houseId}`,
         });
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setTargetHouse(response.data.data);
         getResult(response.data.data.history.id);
       } catch (e) {
@@ -33,7 +33,7 @@ const HouseResult = () => {
           method: "get",
           url: `/private/histories/${historyId}`,
         });
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setResult(response.data.data);
       } catch (e) {
         console.error(e);
@@ -80,10 +80,8 @@ const HouseResult = () => {
             })}
           {result.todolist &&
             result.todolist.map((room) => {
-              console.log(room);
               return room.todolist.map((todo) => {
                 if (todo.isChecked === true) {
-                  console.log(todo);
                   return (
                     <div key={todo.id} className="result_item">
                       <h2>[IP]{room.roomName}</h2>
