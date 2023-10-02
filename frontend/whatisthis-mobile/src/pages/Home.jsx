@@ -20,30 +20,30 @@ const Home = () => {
   const [displayMessage, setDisplayMessage] = useState("");
   const [receivedMessage, setReceivedMessage] = useState("");
 
-  const handleConnect = () => {
-    const ws = new WebSocket(process.env.REACT_APP_WS_BASE_URL);
+  // const handleConnect = () => {
+  //   const ws = new WebSocket(process.env.REACT_APP_WS_BASE_URL);
 
-    ws.onopen = () => {
-      console.log("connected!!");
-      setSocket(ws);
-    };
+  //   ws.onopen = () => {
+  //     console.log("connected!!");
+  //     setSocket(ws);
+  //   };
 
-    ws.onerror = (error) => {
-      console.log("Connection error..");
-      console.error(error);
-    };
+  //   ws.onerror = (error) => {
+  //     console.log("Connection error..");
+  //     console.error(error);
+  //   };
 
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      const formattedData = JSON.stringify(data, null, 2);
-      setReceivedMessage(formattedData);
-    };
+  //   ws.onmessage = (e) => {
+  //     const data = JSON.parse(e.data);
+  //     const formattedData = JSON.stringify(data, null, 2);
+  //     setReceivedMessage(formattedData);
+  //   };
 
-    ws.onclose = (e) => {
-      alert("소켓 연결 끊김!");
-      console.error(e);
-    };
-  };
+  //   ws.onclose = (e) => {
+  //     alert("소켓 연결 끊김!");
+  //     console.error(e);
+  //   };
+  // };
 
   const handleSend = (type, data) => {
     if (!socket) return;
