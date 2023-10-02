@@ -13,10 +13,13 @@ const QRrecognition = ({ connect }) => {
       // console.info(error);
     }
   };
-
   return (
     <>
-      <QrReader className="camera_frame" onResult={(result, error) => handleScan(result, error)} />
+      <QrReader
+        className="camera_frame"
+        onResult={(result, error) => handleScan(result, error)}
+        facingMode="environment"
+      />
     </>
   );
 };

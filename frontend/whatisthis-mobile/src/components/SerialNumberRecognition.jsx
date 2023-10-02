@@ -30,7 +30,7 @@ const SerialNumberRecognition = ({
       serialNumber: "DEVICE1",
     });
 
-    if (receivedMessage.data.message === "SUCCESS") {
+    if (receivedMessage && receivedMessage.data.message === "SUCCESS") {
       navigate(`/connection/${buildingId}/${houseId}/result`, {
         state: {
           serialNumber: serialNumber,

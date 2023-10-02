@@ -7,7 +7,7 @@ import AuthHttp from "../utils/AuthHttp";
 const HouseResult = () => {
   const navigate = useNavigate();
 
-  const { buildingId, houseId } = useParams();
+  const { houseId } = useParams();
 
   const [targetHouse, setTargetHouse] = useState();
   const [result, setResult] = useState();
@@ -19,7 +19,6 @@ const HouseResult = () => {
           method: "get",
           url: `/private/requests/${houseId}`,
         });
-        // console.log(response.data.data);
         setTargetHouse(response.data.data);
         getResult(response.data.data.history.id);
       } catch (e) {
@@ -43,9 +42,22 @@ const HouseResult = () => {
     getTargetHouse();
   }, []);
 
-  const handleAcceptClick = () => {
+  const handleAcceptClick = async () => {
     //승인 했을 때 발생될 로직
-    navigate(`/houselist`, { replace: true });
+
+    try {
+      const response = await AuthHttp({
+        method: "patch",
+        url: `/private/requests/${houseId}/status`,
+        data: {
+          status: "DONE",
+        },
+      });
+      console.log(response);
+      navigate(`/houselist`, { replace: true });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   if (!result) {
