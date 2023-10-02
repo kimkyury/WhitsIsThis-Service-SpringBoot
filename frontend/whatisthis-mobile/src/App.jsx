@@ -51,41 +51,55 @@ export const BuildingDispatchContext = React.createContext();
 
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
+  const WS_BASE_URL = process.env.REACT_APP_WS_BASE_URL || "";
 
   const [isLogin, setIsLogin] = useState(false);
-  const [buildinglist, dispatch] = useReducer(reducer, []);
+  const [buildingList, dispatch] = useReducer(reducer, []);
+
+  const [socket, setSocket] = useState(null);
+  const [type, setType] = useState("");
+  const [datas, setDatas] = useState({});
+  const [displayMessage, setDisplayMessage] = useState("");
+  const [receivedMessage, setReceivedMessage] = useState("");
+
+  const handleConnect = () => {
+    const ws = new WebSocket(`${WS_BASE_URL}`);
+
+    ws.onopen = () => {
+      console.log("connected!!");
+      setSocket(ws);
+    };
+    ws.onerror = (error) => {
+      console.log("Connection error..");
+      console.error(error);
+    };
+
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      const formattedData = JSON.stringify(data, null, 2);
+      setReceivedMessage(formattedData);
+    };
+
+    ws.onclose = (e) => {
+      alert("소켓 연결 끊김!");
+      console.error(e);
+    };
+  };
 
   useEffect(() => {
-    // const getBuildingList = async () => {
-    //   try {
-    //     const response = await AuthHttp({
-    //       method: "get",
-    //       url: "/requests/assigned",
-    //     });
-    //     const data = response.data.data;
-    //     if (data.length >= 1) {
-    //       dispatch({ type: "INIT", data: data });
-    //     }
-    //     console.log(buildinglist);
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // };
     // 토큰 만료됐을때 다시 로그인하면 데이터 가져오게끔 해야함
-    // const localData = localStorage.getItem("userInfo");
-    // if (localData) {
-    //   const userData = JSON.parse(localData);
-    //   if (userData) {
-    //     setIsLogin(true);
-    //     // getBuildingList();
-    //     console.log("hello");
-    //   }
-    // } else {
-    //   setIsLogin(false);
-    //   console.log("notloggin");
-    // }
-    // getBuildingList();
-  }, [buildinglist]);
+    const localData = localStorage.getItem("userInfo");
+    if (localData) {
+      const userData = JSON.parse(localData);
+      if (userData) {
+        if (!socket) {
+          handleConnect();
+        }
+      }
+    } else {
+      console.log("notloggin");
+    }
+  }, [socket]);
 
   //INIT
   const init = (data) => {
@@ -96,7 +110,7 @@ function App() {
   };
 
   return (
-    <BuildingDataContext.Provider value={buildinglist}>
+    <BuildingDataContext.Provider value={{ buildingList, socket }}>
       <BuildingDispatchContext.Provider value={{ init }}>
         <div className="App">
           {/* <BrowserRouter>

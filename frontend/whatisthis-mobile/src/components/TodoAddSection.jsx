@@ -2,8 +2,28 @@ import TodoSectionItem from "./TodoSectionItem";
 
 // 닫기는게 오른쪽 열리는게 왼쪽
 import { dummySectionList } from "../utils/DummyData";
+import { useEffect, useState } from "react";
+import AuthHttp from "../utils/AuthHttp";
 
 const TodoAddSection = ({ isAddSection, handleAddClick }) => {
+  const [sectionList, setSectionList] = useState();
+
+  useEffect(() => {
+    const getSectionList = async () => {
+      try {
+        const response = await AuthHttp({
+          method: "get",
+          url: `/private/rooms`,
+        });
+        console.log(response.data.data);
+        setSectionList(response.data.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    getSectionList();
+  }, []);
+
   return (
     <div
       className={`TodoAddSection section_list ${
@@ -11,16 +31,17 @@ const TodoAddSection = ({ isAddSection, handleAddClick }) => {
       }`}
     >
       {/* section list map 적용해서 출력 */}
-      {dummySectionList.map((it, idx) => {
-        return (
-          <TodoSectionItem
-            key={idx}
-            sectionName={it.sectionName}
-            type={"add"}
-            onClick={() => handleAddClick(it)}
-          />
-        );
-      })}
+      {sectionList &&
+        sectionList.map((it, idx) => {
+          return (
+            <TodoSectionItem
+              key={idx}
+              sectionName={it.name}
+              type={"add"}
+              onClick={() => handleAddClick(it.id)}
+            />
+          );
+        })}
     </div>
   );
 };

@@ -13,7 +13,8 @@ const SearchDetail = () => {
   const { buildingId } = useParams();
   const navigate = useNavigate();
 
-  const houseList = useContext(BuildingDataContext)[parseInt(buildingId)];
+  const { buildingList } = useContext(BuildingDataContext);
+  const houseList = buildingList[parseInt(buildingId)];
   console.log(houseList);
 
   const handleHouseInfoClick = (info) => {
