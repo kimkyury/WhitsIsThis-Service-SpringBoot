@@ -1,11 +1,15 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyButton from "../components/MyButton";
 import AuthHttp from "../utils/AuthHttp";
 
+import { useWebSocket } from "../utils/WebSocket";
+
 const Login = () => {
   const navigate = useNavigate();
+
+  const { ws, receivedMessage } = useWebSocket();
 
   const [state, setState] = useState({
     userId: "",
@@ -23,6 +27,24 @@ const Login = () => {
 
   const userIdInput = useRef();
   const userPasswordInput = useRef();
+
+  const handleSend = (type, data) => {
+    if (!ws) {
+      console.log("소켓 없음");
+      return;
+    }
+
+    const message = {
+      type: type,
+      data: data,
+    };
+
+    const messageString = JSON.stringify(message, null, 2);
+
+    // setDisplayMessage(JSON.stringify(message, null, 2));
+    ws.send(messageString);
+    console.log(receivedMessage);
+  };
 
   const handleSubmit = async () => {
     // if (state.userId.length < 12) {
@@ -44,8 +66,8 @@ const Login = () => {
         }
       );
 
-      setUserInfo(response.data.data.employeeinfo);
-      setAccessToken(response.data.data.accessToken);
+      // setUserInfo(response.data.data.employeeinfo);
+      // setAccessToken(response.data.data.accessToken);
       localStorage.setItem("token", response.data.data.accessToken);
       localStorage.setItem("userInfo", JSON.stringify(response.data.data.employeeinfo));
 
@@ -54,6 +76,14 @@ const Login = () => {
         userId: "",
         userPassword: "",
       });
+
+      // setType("AUTH");
+      const token = localStorage.getItem("token");
+      // setDatas({ accessToken: token });
+
+      handleSend("AUTH", { accessToken: token });
+      // handleConnect();
+
       // navigate("/");
     } catch (e) {
       console.error(e);
@@ -64,7 +94,7 @@ const Login = () => {
     try {
       const response = await AuthHttp({
         method: "patch",
-        url: `/private/requests/36/status`,
+        url: `/private/requests/1/status`,
         data: {
           status: "WAITING_FOR_INSPECTION",
         },

@@ -1,20 +1,18 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { getBuildingName } from "../utils/ParseAddress";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MyButton from "../components/MyButton";
 import HouseCard from "../components/HouseCard";
 
 import { BuildingDataContext } from "../App";
 import AuthHttp from "../utils/AuthHttp";
+import { useWebSocket } from "../utils/WebSocket";
 
 const HouseList = () => {
   const navigate = useNavigate();
-  // const { buildingId } = useParams();
+  const { ws, receivedMessage } = useWebSocket();
 
-  const { socket } = useContext(BuildingDataContext);
-  console.log(socket);
-  // console.log(targetBuilding);
   const [houseList, setHouseList] = useState();
 
   useEffect(() => {

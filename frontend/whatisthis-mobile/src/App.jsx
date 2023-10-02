@@ -18,6 +18,7 @@ import Health from "./pages/Health";
 import TestPage from "./test/TestPage";
 import Camera from "./pages/Camera";
 import AuthHttp from "./utils/AuthHttp";
+import { WebSocketProvider } from "./utils/WebSocket";
 
 const reducer = (state, action) => {
   let newState = [];
@@ -51,55 +52,9 @@ export const BuildingDispatchContext = React.createContext();
 
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
-  const WS_BASE_URL = process.env.REACT_APP_WS_BASE_URL || "";
 
   const [isLogin, setIsLogin] = useState(false);
   const [buildingList, dispatch] = useReducer(reducer, []);
-
-  const [socket, setSocket] = useState(null);
-  const [type, setType] = useState("");
-  const [datas, setDatas] = useState({});
-  const [displayMessage, setDisplayMessage] = useState("");
-  const [receivedMessage, setReceivedMessage] = useState("");
-
-  // const handleConnect = () => {
-  //   const ws = new WebSocket(`${WS_BASE_URL}`);
-
-  //   ws.onopen = () => {
-  //     console.log("connected!!");
-  //     setSocket(ws);
-  //   };
-  //   ws.onerror = (error) => {
-  //     console.log("Connection error..");
-  //     console.error(error);
-  //   };
-
-  //   ws.onmessage = (e) => {
-  //     const data = JSON.parse(e.data);
-  //     const formattedData = JSON.stringify(data, null, 2);
-  //     setReceivedMessage(formattedData);
-  //   };
-
-  //   ws.onclose = (e) => {
-  //     alert("소켓 연결 끊김!");
-  //     console.error(e);
-  //   };
-  // };
-
-  useEffect(() => {
-    // 토큰 만료됐을때 다시 로그인하면 데이터 가져오게끔 해야함
-    const localData = localStorage.getItem("userInfo");
-    if (localData) {
-      const userData = JSON.parse(localData);
-      if (userData) {
-        if (!socket) {
-          // handleConnect();
-        }
-      }
-    } else {
-      console.log("notloggin");
-    }
-  }, [socket]);
 
   //INIT
   const init = (data) => {
@@ -110,35 +65,37 @@ function App() {
   };
 
   return (
-    <BuildingDataContext.Provider value={{ buildingList, socket }}>
-      <BuildingDispatchContext.Provider value={{ init }}>
-        <div className="App">
-          {/* <BrowserRouter>
+    <WebSocketProvider>
+      <BuildingDataContext.Provider value={{ buildingList }}>
+        <BuildingDispatchContext.Provider value={{ init }}>
+          <div className="App">
+            {/* <BrowserRouter>
           <Routes>
             <Route path="/health" element={<Health />} />
           </Routes>
         </BrowserRouter> */}
-          <BrowserRouter basename={BASE_NAME}>
-            <Routes>
-              <Route path="/test" element={<TestPage />} />
-              <Route path="" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/connection/:buildingId/:houseId" element={<Connection />} />
-              <Route
-                path="/connection/:buildingId/:houseId/result"
-                element={<ConnectionResult />}
-              />
-              <Route path="/house/:houseId" element={<HouseDetail />} />
-              <Route path="/houselist" element={<HouseList />} />
-              <Route path="/house/:houseId/result" element={<HouseResult />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/search/:buildingId" element={<SearchDetail />} />
-              <Route path="/camera" element={<Camera />} />
-            </Routes>
-          </BrowserRouter>
-        </div>
-      </BuildingDispatchContext.Provider>
-    </BuildingDataContext.Provider>
+            <BrowserRouter basename={BASE_NAME}>
+              <Routes>
+                <Route path="/test" element={<TestPage />} />
+                <Route path="" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/connection/:buildingId/:houseId" element={<Connection />} />
+                <Route
+                  path="/connection/:buildingId/:houseId/result"
+                  element={<ConnectionResult />}
+                />
+                <Route path="/house/:houseId" element={<HouseDetail />} />
+                <Route path="/houselist" element={<HouseList />} />
+                <Route path="/house/:houseId/result" element={<HouseResult />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/search/:buildingId" element={<SearchDetail />} />
+                <Route path="/camera" element={<Camera />} />
+              </Routes>
+            </BrowserRouter>
+          </div>
+        </BuildingDispatchContext.Provider>
+      </BuildingDataContext.Provider>
+    </WebSocketProvider>
   );
 }
 

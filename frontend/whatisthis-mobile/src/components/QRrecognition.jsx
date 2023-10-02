@@ -10,7 +10,7 @@ const QRrecognition = ({ connect }) => {
     }
 
     if (!!error) {
-      console.info(error);
+      // console.info(error);
     }
   };
 
