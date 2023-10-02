@@ -1,20 +1,23 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import Notification from "../components/Notification";
 import { useEffect, useRef, useState } from "react";
+import AuthHttp from "../utils/AuthHttp";
 
 const Camera = () => {
   const navigate = useNavigate();
   // location이 아니라 axios 로 받아와야할듯
   const location = useLocation();
-
+  const receivedInfo = location.state;
   const canvasRef = useRef(null);
   const cameraRef = useRef(null);
   // useEffect 등으로 이미지 리스트를 받아와야할듯
   const [capturedImage, setCapturedImage] = useState([]);
+  const [existingImageId, setExistingImageId] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setCapturedImage(location.state);
+    setCapturedImage(receivedInfo.images);
+    setExistingImageId(receivedInfo.images.map((it) => it.id));
 
     const getCameraPermission = async () => {
       try {
@@ -36,7 +39,7 @@ const Camera = () => {
   }, []);
 
   const captureScreen = () => {
-    if (capturedImage.length === 3) {
+    if (capturedImage && capturedImage.length === 3) {
       alert("이미지는 최대 3개만 촬영가능");
       return;
     }
@@ -52,10 +55,26 @@ const Camera = () => {
       // 캔버스의 이미지 데이터를 가져와서 이미지 URL로 변환합니다.
       const capturedImageUrl = canvasElement.toDataURL("image/jpeg");
       // 캡처된 이미지를 상태에 저장합니다.
-      setCapturedImage((prevImage) => [capturedImageUrl, ...prevImage]);
+      if (capturedImage) {
+        setCapturedImage((prevImage) => [{ imageUrl: capturedImageUrl }, ...prevImage]);
+      } else {
+        setCapturedImage([{ imageUrl: capturedImageUrl }]);
+      }
     } else {
       console.log(cameraRef.current);
       console.log(canvasRef.current);
+    }
+  };
+
+  const convertImageUrlTpFormData = async (imageUrl) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const file = new File([blob], "captured_image.jpg", { type: "image/jpeg" });
+
+      return file;
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -65,8 +84,41 @@ const Camera = () => {
     });
   };
 
-  const saveAndBack = () => {
-    // 이미지들 저장로직
+  const saveAndBack = async () => {
+    if (capturedImage.length > 0) {
+      capturedImage
+        .filter((image) => image.id === undefined)
+        .forEach(async (it) => {
+          try {
+            const image = await convertImageUrlTpFormData(it.imageUrl);
+
+            const response = await AuthHttp({
+              headers: { "Content-Type": "multipart/form-data" },
+              method: "post",
+              url: `/private/todolists/${receivedInfo.todoListId}/images`,
+              data: {
+                image: image,
+              },
+            });
+          } catch (e) {
+            console.error(e);
+          }
+        });
+    }
+
+    existingImageId.forEach(async (id) => {
+      const checkIdIsExist = capturedImage.find((image) => image.id === id);
+      if (!checkIdIsExist) {
+        try {
+          const response = await AuthHttp({
+            method: "delete",
+            url: `/private/todolists/images/${id}`,
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    });
 
     navigate(-1);
   };
@@ -88,14 +140,21 @@ const Camera = () => {
 
       <div className="result_wrapper">
         <div className="title">
-          {/* 투두 리스트 이름 */}
-          <h2>123123</h2>
+          {/* 투두 리스트 이름 짧게..*/}
+          {/* <h2>{receivedInfo.todoListContent}</h2> */}
+          <h2>List Name</h2>
         </div>
         <div className="image_container">
-          {/* map.. */}
           {capturedImage &&
             capturedImage.map((it, idx) => {
-              return <img key={idx} src={it} alt="Captured" onClick={() => removeImage(idx)} />;
+              return (
+                <img
+                  key={idx}
+                  src={it.id ? process.env.REACT_APP_S3_BASE_URL + it.imageUrl : it.imageUrl}
+                  alt="Captured"
+                  onClick={() => removeImage(idx)}
+                />
+              );
             })}
         </div>
       </div>

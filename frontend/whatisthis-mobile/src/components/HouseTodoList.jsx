@@ -4,9 +4,15 @@ import TodoListMain from "./TodoListMain";
 import TodoAddSection from "./TodoAddSection";
 import SectionDetail from "./SectionDetail";
 
-import { dummySections } from "../utils/DummyData";
+import AuthHttp from "../utils/AuthHttp";
 
-const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
+const HouseTodoList = ({
+  requestContent,
+  historyId,
+  isOpen,
+  handleOpenTodoList,
+  handleIsFinish,
+}) => {
   const modalStatus = isOpen ? "slide_up" : "slide_down";
 
   const [sectionList, setSectionList] = useState();
@@ -18,10 +24,37 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
 
   useEffect(() => {
     // axios로 리스트 가져오는 등..
-    setSectionList(dummySections);
+    const getSectionList = async () => {
+      try {
+        const response = await AuthHttp({
+          method: "get",
+          url: `/private/histories/${historyId}/todolists`,
+        });
+
+        setSectionList(response.data.data);
+        checkAllTodoIsDone(response.data.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    getSectionList();
+
+    const checkAllTodoIsDone = (sectionList) => {
+      const mergedTodolist = sectionList.reduce((total, currentObj) => {
+        return total.concat(currentObj.todolist);
+      }, []);
+
+      const state = mergedTodolist.every((it) => it.isChecked);
+
+      handleIsFinish(state);
+    };
+
+    console.log(sectionList);
   }, []);
 
-  const handleAddClick = (newSection) => {
+  const handleAddClick = async (sectionId) => {
+    console.log(sectionId);
+
     if (isListMain) {
       setIsListMain(!isListMain);
       setIsAddSection(!isAddSection);
@@ -29,14 +62,29 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
     }
 
     // sectionId 추가
-    setSectionList((prevData) => [...prevData, newSection]);
+    try {
+      const response = await AuthHttp({
+        method: "post",
+        url: `/private/histories/${historyId}/todolists`,
+        data: { roomId: sectionId },
+      });
+
+      setSectionList((prevData) => [...prevData, response.data.data]);
+    } catch (e) {
+      console.error(e);
+    }
+
+    console.log(sectionList);
     setIsListMain(!isListMain);
     setIsAddSection(!isAddSection);
   };
 
-  const handleSectionOpen = (sectionId) => {
-    if (setIsListMain) {
-      const target = sectionList.find((it) => parseInt(it.sectionId) === parseInt(sectionId));
+  const handleSectionOpen = (section) => {
+    if (isListMain) {
+      const target = sectionList.find(
+        (it) => parseInt(it.roomOrder) === parseInt(section.roomOrder)
+      );
+      console.log(target);
       if (target) {
         setTargetSection(target);
       }
@@ -45,25 +93,28 @@ const HouseTodoList = ({ isOpen, handleOpenTodoList }) => {
       setIsSectionDetail(!isSectionDetail);
       return;
     }
+    const targetTodoLists = sectionList.find((it) => it.roomOrder === section.roomOrder);
     setIsListMain(!isListMain);
     setIsSectionDetail(!isSectionDetail);
   };
 
-  // const handleCameraOpen = () => {
-  //   setIsAddSection(false);
-  //   setIsListMain(true);
-  //   setIsSectionDetail(false);
-  //   // 카메라 열렸을 때 창 전환
-  //   isOpen = false;
-  // };
+  const handleMenu = () => {
+    setTimeout(() => {
+      setIsAddSection(false);
+      setIsListMain(true);
+      setIsSectionDetail(false);
+    }, 500);
+    handleOpenTodoList();
+  };
 
   return (
     <div className={`HouseTodoList options ${modalStatus}`}>
-      <div className="option_header" onClick={handleOpenTodoList}>
+      <div className="option_header" onClick={handleMenu}>
         <img src={process.env.PUBLIC_URL + `/assets/stick_small.png`} alt="" />
       </div>
 
       <TodoListMain
+        requestContent={requestContent}
         isListMain={isListMain}
         sectionList={sectionList}
         handleAddClick={handleAddClick}
