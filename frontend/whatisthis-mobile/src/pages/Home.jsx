@@ -92,7 +92,7 @@ const Home = () => {
     setDatas({ accessToken: token });
 
     handleSend("AUTH", { accessToken: token });
-    handleConnect();
+    // handleConnect();
   }, []);
 
   const logout = async () => {
