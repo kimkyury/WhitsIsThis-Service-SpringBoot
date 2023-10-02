@@ -10,7 +10,8 @@ const Connection = () => {
   const { buildingId } = useParams();
   const { houseId } = useParams();
 
-  const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
+  const { buildingList } = useContext(BuildingDataContext);
+  const targetBuilding = buildingList[parseInt(buildingId)];
   const targetHouse =
     targetBuilding && targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
 

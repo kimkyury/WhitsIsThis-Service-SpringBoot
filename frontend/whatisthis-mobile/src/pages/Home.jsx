@@ -14,6 +14,52 @@ const Home = () => {
 
   const { init } = useContext(BuildingDispatchContext);
 
+  const [socket, setSocket] = useState(null);
+  const [type, setType] = useState("");
+  const [datas, setDatas] = useState({});
+  const [displayMessage, setDisplayMessage] = useState("");
+  const [receivedMessage, setReceivedMessage] = useState("");
+
+  const handleConnect = () => {
+    const ws = new WebSocket(process.env.REACT_APP_WS_BASE_URL);
+
+    ws.onopen = () => {
+      console.log("connected!!");
+      setSocket(ws);
+    };
+
+    ws.onerror = (error) => {
+      console.log("Connection error..");
+      console.error(error);
+    };
+
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      const formattedData = JSON.stringify(data, null, 2);
+      setReceivedMessage(formattedData);
+    };
+
+    ws.onclose = (e) => {
+      alert("소켓 연결 끊김!");
+      console.error(e);
+    };
+  };
+
+  const handleSend = (type, data) => {
+    if (!socket) return;
+
+    const message = {
+      type: type,
+      data: data,
+    };
+
+    const messageString = JSON.stringify(message, null, 2);
+
+    setDisplayMessage(JSON.stringify(message, null, 2));
+
+    socket.send(messageString);
+  };
+
   useEffect(() => {
     const getBuildingList = async () => {
       try {
@@ -22,6 +68,7 @@ const Home = () => {
           url: "/private/requests/assigned",
         });
         const data = response.data.data;
+        console.log(response.data.data);
         if (data.length >= 1) {
           init(data);
         }
@@ -40,23 +87,30 @@ const Home = () => {
       }
     }
 
-    // 쿠키 가져오기
-    const cookies = document.cookie;
-    // document.cookie = "safeCookie1=foo; SameSite=Lax";
-    // document.cookie = "safeCookie2=foo";
-    // document.cookie = "crossCookie=bar; SameSite=None; Secure";
-    // 쿠키 콘솔에 출력
-    console.log(cookies);
+    setType("AUTH");
+    const token = localStorage.getItem("token");
+    setDatas({ accessToken: token });
+
+    handleSend("AUTH", { accessToken: token });
+    handleConnect();
   }, []);
 
-  const logout = () => {
-    console.log("logged out");
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("token");
+  const logout = async () => {
+    try {
+      const response = await AuthHttp({
+        method: "post",
+        url: `/private/auth/logout`,
+      });
 
-    // 쿠키삭제도 해줘야합미다
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("token");
+      console.log("logout success", response);
+      setIsLogin(false);
 
-    setIsLogin(false);
+      navigate("/");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const moveToWorkInProgress = () => {
@@ -66,8 +120,6 @@ const Home = () => {
 
   return (
     <div className="Home container">
-      {/* 현재 작업중인 업무가 있는 경우 */}
-
       {isLogin && workInProgress && (
         <Notification
           type={"right"}

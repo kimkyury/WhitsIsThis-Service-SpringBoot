@@ -12,7 +12,8 @@ const ConnectionResult = () => {
   const { buildingId, houseId } = useParams();
   const { serialNumber } = useLocation().state;
 
-  const targetBuilding = useContext(BuildingDataContext)[parseInt(buildingId)];
+  const { buildingList } = useContext(BuildingDataContext);
+  const targetBuilding = buildingList[parseInt(buildingId)];
   const targetHouse = targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
 
   const startWorking = async () => {
@@ -20,7 +21,7 @@ const ConnectionResult = () => {
     try {
       const response = await AuthHttp({
         method: "patch",
-        url: `/requests/${houseId}/status`,
+        url: `/private/requests/${houseId}/status`,
         data: {
           status: "IN_PROGRESS",
         },

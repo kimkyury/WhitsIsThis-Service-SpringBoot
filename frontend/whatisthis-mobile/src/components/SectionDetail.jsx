@@ -1,20 +1,81 @@
 import TodoSectionItem from "./TodoSectionItem";
 import TodoListItem from "./TodoListItem";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import AuthHttp from "../utils/AuthHttp";
+import { useState } from "react";
 
 // 할일이 객체로 이름, 내용, 선택됨, 이미지 를 갖고 있어야 함
 
 const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) => {
   const navigate = useNavigate();
-  const { buildingId, houseId } = useParams();
+  const { houseId } = useParams();
+
   // 렌더링 여러번 되는 문제 개선 필요
 
-  const openCamera = (todoListItemId) => {
-    const targetTodoItem = targetSection.todoList.find(
+  // useEffect(() => {
+  //   const getTodoList = async () => {
+  //     try {
+  //       const response = await AuthHttp({
+  //         method: "patch",
+  //         url: `/private/histories/${houseId}/todolists`,
+  //         data: {
+  //           roomId: targetSection.id,
+  //         },
+  //       });
+  //       console.log(response);
+  //     } catch (e) {
+  //       console.error(e);
+  //     }
+  //   };
+  // }, []);
+
+  const closeSectionDetail = (roomOrder) => {
+    console.log(targetSection);
+    targetSection.todolist.map(async (todo) => {
+      try {
+        const response = await AuthHttp({
+          method: "patch",
+          url: `/private/todolists/${todo.id}/status`,
+          data: {
+            isChecked: todo.isChecked,
+            significant: todo.significant,
+          },
+        });
+        // console.log(response);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+    handleSectionOpen(roomOrder);
+  };
+
+  const handleCheckboxChange = (id, value) => {
+    targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id)).isChecked = value;
+
+    const currentState = targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id));
+    // console.log(currentState);
+  };
+
+  const handleDescriptionChange = (id, value) => {
+    targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id)).significant = value;
+    const currentState = targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id));
+    // console.log(currentState);
+  };
+
+  const openCamera = (todoListItemId, todoListContent) => {
+    console.log(todoListItemId);
+    const targetTodoItem = targetSection.todolist.find(
       (it) => parseInt(it.id) === parseInt(todoListItemId)
     );
     // console.log(buildingId, houseId);
-    navigate(`/camera`, { state: targetTodoItem.imageList });
+    navigate(`/camera`, {
+      state: {
+        todoListId: todoListItemId,
+        todoListContent: todoListContent,
+        images: targetTodoItem.images,
+      },
+    });
   };
 
   if (!targetSection) {
@@ -26,15 +87,24 @@ const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) =>
           isSectionDetail ? "slide_in_right" : "slide_out_right"
         }`}
       >
-        {/* section list map 적용해서 출력 */}
-        {/* handleSectionClick은 편의상 임시로 넣은 것 뒤로가기 아이콘을 추가해야할 듯 */}
         <TodoSectionItem
-          sectionName={targetSection.sectionId}
-          onClick={() => handleSectionOpen(targetSection.sectionId)}
+          sectionName={targetSection.roomName}
+          onClick={() => closeSectionDetail(targetSection)}
+          type={"add"}
+          isSave={true}
         />
-        {targetSection.todoList &&
-          targetSection.todoList.map((it, idx) => {
-            return <TodoListItem key={idx} todoListItem={it} openCamera={openCamera} />;
+        {targetSection.todolist &&
+          targetSection.todolist.map((it) => {
+            return (
+              <TodoListItem
+                key={it.id}
+                todoListId={it.id}
+                handleCheckboxChange={handleCheckboxChange}
+                handleDescriptionChange={handleDescriptionChange}
+                todoListItem={it}
+                openCamera={openCamera}
+              />
+            );
           })}
       </div>
     );

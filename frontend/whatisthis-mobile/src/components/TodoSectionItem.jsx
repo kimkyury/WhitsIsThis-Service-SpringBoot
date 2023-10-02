@@ -1,4 +1,4 @@
-const TodoSectionItem = ({ sectionName, isFinish, onClick, type }) => {
+const TodoSectionItem = ({ sectionName, isFinish, onClick, type, isSave }) => {
   const btnType = ["default", "add"].includes(type) ? type : "default";
   const imageVisibility = btnType === "default" ? true : false;
 
@@ -11,12 +11,23 @@ const TodoSectionItem = ({ sectionName, isFinish, onClick, type }) => {
         ) : (
           <img src={process.env.PUBLIC_URL + `/assets/check_red_small.png`} alt="status" />
         ))}
+      {isSave && (
+        <img
+          style={{
+            width: "2.5rem",
+            height: "2.5rem",
+          }}
+          src={process.env.PUBLIC_URL + `/assets/save.png`}
+          alt="status"
+        />
+      )}
     </div>
   );
 };
 
 TodoSectionItem.defaultProps = {
   isFinish: false,
+  isSave: false,
   type: "default",
 };
 
