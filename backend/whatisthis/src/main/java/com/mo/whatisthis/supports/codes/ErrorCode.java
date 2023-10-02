@@ -26,16 +26,13 @@ public enum ErrorCode {
     USERNAME_INVALID(400, "일치하는 아이디가 없습니다."),
     PASSWORD_INVALID(400, "잘못된 비밀번호입니다."),
 
-    TOKEN_EXPIRED(401, "Token is expired"),
-    TOKEN_INVALID(401, "토큰이 올바르지 않거나 만료되어 거부되었습니다. "),
-
-    SESSION_INVALID(401, "해당 세션은 접근권한이 없습니다. "),
-
-    NOT_INCLUDE_REFRESH_TOKEN(401, "Header에 RefreshToken이 첨부되지 않았습니다. "),
-    NOT_INCLUDE_ACCESS_TOKEN(401, "Cookie에 AccessToken이 첨부되지 않았습니다. "),
-
 
     UNAUTHORIZED(401, "Unauthorized"),
+    TOKEN_EXPIRED(401, "Token is expired"),
+    TOKEN_INVALID(401, "토큰이 올바르지 않거나 만료되어 거부되었습니다. "),
+    NOT_INCLUDE_REFRESH_TOKEN(401, "Header에 RefreshToken이 첨부되지 않았습니다. "),
+    NOT_INCLUDE_ACCESS_TOKEN(401, "Cookie에 AccessToken이 첨부되지 않았습니다. "),
+    SESSION_INVALID(401, "해당 세션은 접근권한이 없습니다. "),
 
     FORBIDDEN(403, "Forbidden"),
 
