@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -80,7 +81,10 @@ public class RequestService {
         paymentService.createPayment(requestEntity, requestRegisterRequest.getBankCode());
     }
 
-    public void cancelRequest(Long requestId) {
+    public void cancelRequest(HttpServletRequest request) {
+
+        String requestPhone = (String)request.getSession().getAttribute("phone");
+        Long requestId = requestRepository.findByRequesterPhone(requestPhone).get().getId();
 
         requestRepository.findById(requestId)
                          .ifPresent(
@@ -91,8 +95,9 @@ public class RequestService {
                          );
     }
 
-    public RequestDetailRequests findRequestForCustomer(String requesterPhone) {
+    public RequestDetailRequests findRequestForCustomer(HttpServletRequest request) {
 
+        String requesterPhone = (String)request.getSession().getAttribute("phone");
         RequestEntity requestEntityByPhone = requestRepository.findByRequesterPhone(requesterPhone)
                                                               .orElseThrow(
                                                                   () -> new CustomException(

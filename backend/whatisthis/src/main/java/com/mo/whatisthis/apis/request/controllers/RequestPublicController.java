@@ -10,6 +10,7 @@ import com.mo.whatisthis.supports.responses.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -49,21 +50,21 @@ public class RequestPublicController {
     @Operation(summary = "비회원의 점검요청 확인", tags = {"3. InspectionRequest"})
     @GetMapping("/verification")
     public ResponseEntity<SuccessResponse<RequestDetailRequests>> getRequestByPhone(
-        @RequestParam String requesterPhone) {
+        HttpServletRequest request) {
 
         //TODO: 확인필요 - 해당 로직이 직원이 조회할 때도 동일할 수 있음
         RequestDetailRequests requestFindByCustomerResponse = requestService.findRequestForCustomer(
-            requesterPhone);
+            request);
 
         return createSuccessResponse(SuccessCode.OK, requestFindByCustomerResponse);
     }
 
     @Operation(summary = "비회원의 점검요청 취소", tags = {"3. InspectionRequest"})
-    @PatchMapping("/{id}/cancel")
+    @PatchMapping("/cancel")
     public ResponseEntity<SuccessResponse<String>> cancelRequest(
-        @PathVariable("id") Long requestId) {
+        HttpServletRequest request) {
 
-        requestService.cancelRequest(requestId);
+        requestService.cancelRequest(request);
 
         return createSuccessResponse(SuccessCode.OK,
             "Update Inspection Request to Cancel by Customer");

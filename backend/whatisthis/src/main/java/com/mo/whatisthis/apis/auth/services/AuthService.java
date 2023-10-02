@@ -194,9 +194,13 @@ public class AuthService {
         return key.toString();
     }
 
-    public void confirmAuthCode(VerifyAuthCodeRequest verifyAuthCodeRequest) {
+    public void confirmAuthCode(HttpServletRequest request,
+        VerifyAuthCodeRequest verifyAuthCodeRequest) {
 
-        String inputAuthCodeKey = verifyAuthCodeRequest.getPhone();
+        String inputAuthCodeKey = (String) request.getSession()
+                                                  .getAttribute("phone");
+
+        System.out.println("phone>>>>>" + inputAuthCodeKey);
         String inputAuthCodeValue = verifyAuthCodeRequest.getAuthCode();
 
         String redisAuthCodeValue = redisService.getValue(inputAuthCodeKey);
@@ -229,8 +233,17 @@ public class AuthService {
 
         String sessionId = request.getSession()
                                   .getId();
-        String phone = verifyAuthCodeRequest.getPhone();
+        String phone = (String) request.getSession()
+                                       .getAttribute("phone");
 
         redisService.saveCustomerSession(sessionId, phone);
+    }
+
+    public void setSessionPhone(HttpServletRequest request,
+        SendAuthMessageRequest sendAuthMessageRequest) {
+
+        String phone = sendAuthMessageRequest.getPhone();
+        request.getSession()
+               .setAttribute("phone", phone);
     }
 }
