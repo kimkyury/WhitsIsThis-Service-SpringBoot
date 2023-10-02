@@ -52,13 +52,11 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
         try {
 
-            if (command.equals(CommandCode.START.name())
-                && request.getStatus() == Status.WAITING_FOR_INSPECTION) {
+            if (command.equals(CommandCode.START.name())) {
 
                 request.setStatus(Status.IN_PROGRESS);
                 requestRepository.save(request);
-            } else if (command.equals(CommandCode.END.name())
-                && request.getStatus() == Status.IN_PROGRESS) {
+            } else if (command.equals(CommandCode.END.name())) {
 
                 request.setStatus(Status.DONE);
                 requestRepository.save(request);
