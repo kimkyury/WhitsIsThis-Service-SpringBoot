@@ -30,9 +30,9 @@ const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) =>
   //   };
   // }, []);
 
-  const closeSectionDetail = (roomOrder) => {
+  const closeSectionDetail = async (roomOrder) => {
     console.log(targetSection);
-    targetSection.todolist.map(async (todo) => {
+    const updateCycle = targetSection.todolist.map(async (todo) => {
       try {
         const response = await AuthHttp({
           method: "patch",
@@ -47,6 +47,8 @@ const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) =>
         console.error(e);
       }
     });
+    await Promise.all(updateCycle);
+
     handleSectionOpen(roomOrder);
   };
 

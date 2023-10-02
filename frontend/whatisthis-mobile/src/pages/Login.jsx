@@ -54,27 +54,27 @@ const Login = () => {
         userId: "",
         userPassword: "",
       });
-      navigate("/");
+      // navigate("/");
     } catch (e) {
       console.error(e);
     }
   };
 
-  // const test = async () => {
-  //   try {
-  //     const response = await AuthHttp({
-  //       method: "patch",
-  //       url: `/private/requests/5/status`,
-  //       data: {
-  //         status: "WAITING_FOR_INSPECTION",
-  //       },
-  //     });
-  //     console.log(response);
-  //     navigate("/");
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
+  const test = async () => {
+    try {
+      const response = await AuthHttp({
+        method: "patch",
+        url: `/private/requests/36/status`,
+        data: {
+          status: "WAITING_FOR_INSPECTION",
+        },
+      });
+      console.log(response);
+      navigate("/");
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div className="Login container">
@@ -95,7 +95,7 @@ const Login = () => {
         />
       </div>
       <MyButton color={"white"} text={"로그인"} onClick={handleSubmit} />
-      {/* <MyButton color={"black"} text={"테스트"} onClick={test} /> */}
+      <MyButton color={"black"} text={"테스트"} onClick={test} />
     </div>
   );
 };

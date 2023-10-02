@@ -18,7 +18,6 @@ const Camera = () => {
   useEffect(() => {
     setCapturedImage(receivedInfo.images);
     setExistingImageId(receivedInfo.images.map((it) => it.id));
-
     const getCameraPermission = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -86,9 +85,9 @@ const Camera = () => {
 
   const saveAndBack = async () => {
     if (capturedImage.length > 0) {
-      capturedImage
+      const uploadCycle = capturedImage
         .filter((image) => image.id === undefined)
-        .forEach(async (it) => {
+        .map(async (it) => {
           try {
             const image = await convertImageUrlTpFormData(it.imageUrl);
 
@@ -100,13 +99,15 @@ const Camera = () => {
                 image: image,
               },
             });
+            console.log("uploaded");
           } catch (e) {
             console.error(e);
           }
         });
+      await Promise.all(uploadCycle);
     }
 
-    existingImageId.forEach(async (id) => {
+    const deleteCycle = existingImageId.map(async (id) => {
       const checkIdIsExist = capturedImage.find((image) => image.id === id);
       if (!checkIdIsExist) {
         try {
@@ -120,7 +121,10 @@ const Camera = () => {
       }
     });
 
+    await Promise.all(deleteCycle);
+
     navigate(-1);
+    // 이 부분 해결해야할듯
   };
 
   return (
