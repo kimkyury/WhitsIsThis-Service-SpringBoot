@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import './Resultconfirm.css';
+import "./Resultconfirm.css";
 import { useMediaQuery } from "react-responsive";
-import Phoneconfirm from '../../../customcomponent/customReceive/Phoneconfirm';
+import Phoneconfirm from "../../../customcomponent/customReceive/Phoneconfirm";
 
 function Resultconfirm() {
   const [customdata, setCustomdata] = useState([]);
@@ -31,11 +31,13 @@ function Resultconfirm() {
         };
 
         try {
-          const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData, { withCredentials: true});
+          const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData, {
+            withCredentials: true,
+          });
           setPhoneConfirmVisible(true);
-          setIsVerified(true)
+          setIsVerified(true);
         } catch (error) {
-          console.error('SMS 전송 중 오류 발생:', error);
+          console.error("SMS 전송 중 오류 발생:", error);
         }
       }
     }
@@ -43,61 +45,66 @@ function Resultconfirm() {
 
   const handleConfirmation = () => {
     axios
-    .get(
-      `${BASE_URL}/api/v1/guest/requests/verification`,
-      {
+      .get(`${BASE_URL}/api/v1/guest/requests/verification`, {
         params: {
-          requesterPhone: phoneNumberInputRef.current.value
+          requesterPhone: phoneNumberInputRef.current.value,
         },
-        withCredentials: true
-      }
-      )
+        withCredentials: true,
+      })
       .then((response) => {
-        console.log(phoneNumberInputRef.current.value)
+        console.log(phoneNumberInputRef.current.value);
         const matchingData = response.data;
-  
+
         if (matchingData) {
           const status = matchingData.data.status;
-          console.log(status)
+          console.log(status);
           switch (status) {
             case "CANCELED":
-              sessionStorage.setItem("id", response.data.data.requestId);
-              navigate("/moneyreturn");
+              navigate("/information", {
+                state: { content: "이미 취소 또는 환불된 주문입니다." },
+              });
               break;
             case "WAITING_FOR_PAY":
-              sessionStorage.setItem("status", matchingData.data.status);
-              sessionStorage.setItem("employeeName", matchingData.data.employeeName);
-              sessionStorage.setItem("responsedata", matchingData.data.inspectionEnd);
-              sessionStorage.setItem("id", response.data.data.requestId);
-              navigate("/receiveresult");
+              navigate("/receiveresult", {
+                state: {
+                  id: matchingData.data.id,
+                  status: "결제 대기",
+                  paymentId: matchingData.data.payment.id,
+                  virtualAccount: matchingData.data.payment.virtualAccount,
+                  virtualBankCode: matchingData.data.payment.virtualBankCode,
+                },
+              });
               break;
             case "WAITING_INSPECTION_DATE":
             case "WAITING_FOR_INSPECTION":
             case "IN_PROGRESS":
             case "DONE":
-              sessionStorage.setItem("status", matchingData.data.status);
-              sessionStorage.setItem("employeeName", matchingData.data.employeeName);
-              sessionStorage.setItem("responsedata", matchingData.data.inspectionEnd);
-              sessionStorage.setItem("id", matchingData.data.history.id);
-              navigate("/fixcustom");
+              navigate("/fixcustom", {
+                state: {
+                  id: matchingData.data.id,
+                  status: matchingData.data.status,
+                  employeeName: matchingData.data.employeeName,
+                  inspectionDate: matchingData.data.inspectionDate,
+                  history: matchingData.data.history,
+                  payment: matchingData.data.payment,
+                },
+              });
               break;
             default:
               // 다른 상태에 따른 처리
-              console.log(status)
+              console.log(status);
               break;
           }
         } else {
           alert("상태가 대기 중이 아닙니다.");
-          
         }
       })
       .catch((error) => {
         console.error("Error verifying phone number", error);
         alert("전화번호 인증이 필요합니다.");
-        console.log(phoneNumberInputRef.current.value)
+        console.log(phoneNumberInputRef.current.value);
       });
   };
-
 
   return (
     <div className="roomimg resrecpage">
@@ -115,16 +122,27 @@ function Resultconfirm() {
               onChange={(e) => setPhoneNumberInput(e.target.value)}
             />
             {isSuc ? (
-              <button className="button minibutton"style={{marginLeft:'2vw',marginTop:'0.5vh'}} onClick={handleSendSMS}>확인</button>
+              <button
+                className="button minibutton"
+                style={{ marginLeft: "2vw", marginTop: "0.5vh" }}
+                onClick={handleSendSMS}
+              >
+                확인
+              </button>
             ) : (
-              <button className="button minibutton"style={{marginLeft:'2vw', marginTop:'0.5vh'}} onClick={handleSendSMS}>인증하기</button>
+              <button
+                className="button minibutton"
+                style={{ marginLeft: "2vw", marginTop: "0.5vh" }}
+                onClick={handleSendSMS}
+              >
+                인증하기
+              </button>
             )}
           </div>
         </div>
-        <div className='middlemodalbox'>
+        <div className="middlemodalbox">
           <button
             className="button bigbutton"
-            
             onClick={handleConfirmation}
             disabled={!isVerified} // 인증이 완료되지 않은 경우 버튼 비활성화
           >
@@ -133,7 +151,13 @@ function Resultconfirm() {
         </div>
       </div>
       {phoneConfirmVisible && (
-        <Phoneconfirm isSuc={isSuc} setIsSuc={setIsSuc} setPhoneConfirmVisible={setPhoneConfirmVisible} requesterPhoneNumber={phoneNumberInput} setIsVerified={setIsVerified} />
+        <Phoneconfirm
+          isSuc={isSuc}
+          setIsSuc={setIsSuc}
+          setPhoneConfirmVisible={setPhoneConfirmVisible}
+          requesterPhoneNumber={phoneNumberInput}
+          setIsVerified={setIsVerified}
+        />
       )}
     </div>
   );
