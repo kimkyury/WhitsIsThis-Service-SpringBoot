@@ -31,7 +31,6 @@ const HouseDetail = () => {
   useEffect(() => {
     console.log(targetHouse);
     // setIsFinish(targetHouse && targetHouse.status === "DONE" ? true : false);
-    setIsFinish(true);
     const getTargetHouse = async () => {
       try {
         const response = await AuthHttp({
@@ -65,7 +64,7 @@ const HouseDetail = () => {
           <div className="building_info">
             <div className="building_title">
               <h1>{targetHouse.addressDetail}</h1>
-              <h1 className="proecss_percentge">NN%</h1>
+              <h1 className="proecss_percentge">탐색중</h1>
             </div>
             <h3>{targetHouse.address}</h3>
           </div>

@@ -6,69 +6,88 @@ import MyButton from "../components/MyButton";
 import HouseCard from "../components/HouseCard";
 
 import { BuildingDataContext } from "../App";
+import AuthHttp from "../utils/AuthHttp";
 
 const HouseList = () => {
   const navigate = useNavigate();
   // const { buildingId } = useParams();
 
-  const { buildingList, socket } = useContext(BuildingDataContext);
+  const { socket } = useContext(BuildingDataContext);
   console.log(socket);
   // console.log(targetBuilding);
   const [houseList, setHouseList] = useState();
 
   useEffect(() => {
-    if (buildingList) {
-      setHouseList(
-        buildingList
-          .map((building) => {
-            const requests = building.requests.map((request) => {
-              const newRequest = { ...request };
-              newRequest.address = building.address;
-              return newRequest;
-            });
+    const getBuildingList = async () => {
+      try {
+        const response = await AuthHttp({
+          method: "get",
+          url: "/private/requests/assigned",
+        });
+        const data = response.data.data;
+        if (data.length >= 1) {
+          getHouseList(data);
+          // setBuildings(data);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    getBuildingList();
 
-            return requests;
-          })
-          .flat()
-          .filter((request) => request.status === "IN_PROGRESS" || request.status === "DONE")
-          .sort((a, b) => {
-            if (a.status === "DONE" && b.status !== "DONE") {
-              return 1;
-            } else if (a.status !== "DONE" && b.status === "DONE") {
-              return -1;
-            } else {
-              return 0;
-            }
-          })
-      );
-      console.log(
-        buildingList
-          .map((building) => {
-            const requests = building.requests.map((request) => {
-              const newRequest = { ...request };
-              newRequest.address = building.address;
-              return newRequest;
-            });
+    const getHouseList = (buildings) => {
+      if (buildings) {
+        setHouseList(
+          buildings
 
-            return requests;
-          })
-          .flat()
-          .filter((request) => request.status === "IN_PROGRESS" || request.status === "DONE")
-          .sort((a, b) => {
-            if (a.status === "DONE" && b.status !== "DONE") {
-              return 1;
-            } else if (a.status !== "DONE" && b.status === "DONE") {
-              return -1;
-            } else {
-              return 0;
-            }
-          })
-      );
+            .map((building) => {
+              const requests = building.requests.map((request) => {
+                const newRequest = { ...request };
+                newRequest.address = building.address;
+                return newRequest;
+              });
 
-      // console.log(buildingList);
-      // setHouseList(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
-      // console.log(targetBuilding.requests.filter((request) => request.status === "IN_PROGRESS"));
-    }
+              return requests;
+            })
+            .flat()
+            .filter((request) => request.status === "IN_PROGRESS" || request.status === "DONE")
+            .sort((a, b) => {
+              if (a.status === "DONE" && b.status !== "DONE") {
+                return 1;
+              } else if (a.status !== "DONE" && b.status === "DONE") {
+                return -1;
+              } else {
+                return 0;
+              }
+            })
+        );
+      }
+    };
+
+    // console.log(
+    //   buildings &&
+    //     buildings
+    //       .map((building) => {
+    //         const requests = building.requests.map((request) => {
+    //           const newRequest = { ...request };
+    //           newRequest.address = building.address;
+    //           return newRequest;
+    //         });
+
+    //         return requests;
+    //       })
+    //       .flat()
+    //       .filter((request) => request.status === "IN_PROGRESS" || request.status === "DONE")
+    //       .sort((a, b) => {
+    //         if (a.status === "DONE" && b.status !== "DONE") {
+    //           return 1;
+    //         } else if (a.status !== "DONE" && b.status === "DONE") {
+    //           return -1;
+    //         } else {
+    //           return 0;
+    //         }
+    //       })
+    // );
   }, []);
 
   const handleHouseCardClick = (houseInfo) => {
@@ -79,7 +98,7 @@ const HouseList = () => {
     }
   };
 
-  if (!buildingList) {
+  if (!houseList) {
     return <div className="HouseList">로딩중입니다...</div>;
   } else {
     return (
