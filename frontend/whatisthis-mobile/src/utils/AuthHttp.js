@@ -28,7 +28,7 @@ const AuthHttp = async (config) => {
     return response;
   } catch (e) {
     // console.error("토큰만료", e.response);
-    if (e.response.status === 403) {
+    if (e.response.status === 403 || e.response.status === 401) {
       try {
         // 액세스 토큰 갱신 요청
         const response = await axios.post(

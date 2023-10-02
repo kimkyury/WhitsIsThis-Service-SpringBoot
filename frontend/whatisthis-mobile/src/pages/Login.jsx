@@ -43,34 +43,38 @@ const Login = () => {
           password: "1234",
         }
       );
-      console.log(response);
+
       setUserInfo(response.data.data.employeeinfo);
       setAccessToken(response.data.data.accessToken);
       localStorage.setItem("token", response.data.data.accessToken);
       localStorage.setItem("userInfo", JSON.stringify(response.data.data.employeeinfo));
 
-      console.log("login success");
+      console.log("login success", response.data.data.employeeinfo);
       setState({
         userId: "",
         userPassword: "",
       });
-      // navigate("/");
+      navigate("/");
     } catch (e) {
       console.error(e);
     }
   };
 
-  const test = async () => {
-    try {
-      const response = await AuthHttp({
-        method: "get",
-        url: "/private/requests/assigned",
-      });
-      console.log(response);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const test = async () => {
+  //   try {
+  //     const response = await AuthHttp({
+  //       method: "patch",
+  //       url: `/private/requests/5/status`,
+  //       data: {
+  //         status: "WAITING_FOR_INSPECTION",
+  //       },
+  //     });
+  //     console.log(response);
+  //     navigate("/");
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   return (
     <div className="Login container">
@@ -91,7 +95,7 @@ const Login = () => {
         />
       </div>
       <MyButton color={"white"} text={"로그인"} onClick={handleSubmit} />
-      <MyButton color={"black"} text={"테스트"} onClick={test} />
+      {/* <MyButton color={"black"} text={"테스트"} onClick={test} /> */}
     </div>
   );
 };
