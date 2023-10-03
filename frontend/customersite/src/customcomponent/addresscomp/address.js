@@ -17,21 +17,24 @@ function Address({ selectedAddress, setSelectedAddress }) {
 
   const handleSearch = async () => {
     const KAKAO_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
-
+  
     if (!searchText) {
       console.error("검색어를 입력하세요.");
       return;
     }
-
+  
     try {
-      const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(searchText)}`;
+      // 검색어를 사용자가 입력한 searchText로 설정
+      const query = searchText;
+  
+      const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(query)}`;
       const headers = {
         Authorization: `KakaoAK ${KAKAO_API_KEY}`,
       };
-
+  
       // Kakao API에 GET 요청 보내기
       const response = await axios.get(apiUrl, { headers });
-
+  
       // 응답 데이터로 검색 결과 업데이트
       setSearchResults(response.data.documents);
     } catch (error) {
@@ -76,7 +79,7 @@ function Address({ selectedAddress, setSelectedAddress }) {
       </div>
       <div className="divdiv">
         {/* 검색 결과를 매핑하고 각 항목에 대해 Addresscomp를 렌더링합니다 */}
-        <div>
+        <div style={{maxHeight:'55vh', overflowY:'auto'}}>
           {searchResults.map((result, index) => (
             <Addresscomp
               key={index}
@@ -93,8 +96,14 @@ function Address({ selectedAddress, setSelectedAddress }) {
       {/* 주소 모달 */}
       {showAddressModal && (
         <div className="address-modal">
-          <button className="close-button" onClick={() => setShowAddressModal(false)}>
-            닫기
+          <button className="button minibutton" 
+          style={{
+              backgroundColor: 'white',
+              border: '1px solid #2D4059',
+              fontWeight: 'bold',
+              opacity: '70%',
+          }} onClick={() => setShowAddressModal(false)}>
+            X
           </button>
           <Address showAddressModal={showAddressModal} setShowAddressModal={setShowAddressModal} onSelect={handleInputAddress} />
         </div>

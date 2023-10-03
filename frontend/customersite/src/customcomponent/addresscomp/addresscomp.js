@@ -46,7 +46,7 @@ function Addresscomp({ result, onSelect, showAddressModal, setShowAddressModal }
             )}
           </div>
           {showInputButton && (
-            <button onClick={handleInputClick}>입력하기</button>
+            <button className='button minibuttonss' onClick={handleInputClick}>입력하기</button>
           )}
         </div>
       ) : (

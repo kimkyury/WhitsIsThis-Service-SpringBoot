@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './Maincustompage.css';
 import { Link } from "react-router-dom";
+import { useMediaQuery } from 'react-responsive';
 // import Pdf from './Pdf';
 import Header from '../../customcomponent/customheader/customheader';
 function CustomMain() {
@@ -18,10 +19,19 @@ function CustomMain() {
       setButtonsVisible(true);
     }, 2500);
   }, []);
+  const Desktop = ({ children }) => {
+    const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
+    return isDesktop ? children : null;
+  };
+
+  const Mobile = ({ children }) => {
+    const isMobile = useMediaQuery({ maxDeviceWidth: 1223 });
+    return isMobile ? children : null;
+  };
 
   return (
     <div>
-    <Header/>
+    <Mobile>
     <div style={{       
       display: 'flex',
       alignItems: 'center',
@@ -31,16 +41,22 @@ function CustomMain() {
     }}
     className="roomimg fontb">
       <div className='cbox'>
-
+      <p className={`logo-img ${logoVisible ? "show" : ""}`}>
+          <img 
+            src={`${process.env.PUBLIC_URL}/assets/logo_blue.png`} 
+            alt="로고"
+            style={{ height:'7rem'}} // 이미지를 가로 중앙으로 정렬
+          />
+        </p>
         <div style={{display:'flex', flexDirection: 'column', alignItems: 'center'}}>
           <div style={{ display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <Link to={'/customerreceive'}>
+          <Link  to={'/customerreceive'}>
               <button className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
                 신청하기
               </button>
             </Link>
             <Link to={'/resultconfirm'}>
-              <button  className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
+              <button className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
                 결과확인
               </button>
             </Link>
@@ -50,8 +66,49 @@ function CustomMain() {
       </div>
 {/* <p><img src={`${process.env.PUBLIC_URL}/assets/집2.jfif`}/></p> */}
     </div>
+    </Mobile>
+   
+    <Desktop>
+      <div>
+          <div style={{       
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            // backgroundImage: `url(${process.env.PUBLIC_URL}/assets/배경사진.png)`
+          }}
+          className="roomimg fontb">
+            <div className='cbox'>
+            <p className={`logo-img ${logoVisible ? "show" : ""}`}>
+                <img 
+                  src={`${process.env.PUBLIC_URL}/assets/logo_blue.png`} 
+                  alt="로고"
+                  style={{ height:'7rem'}} // 이미지를 가로 중앙으로 정렬
+                />
+              </p>
+              <div style={{display:'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <div style={{ display:'flex', alignItems:'center'}}>
+                <Link  to={'/customerreceive'}>
+                    <button className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
+                      신청하기
+                    </button>
+                  </Link>
+                  <Link to={'/resultconfirm'}>
+                    <button style={{marginLeft:'5vw'}} className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
+                      결과확인
+                    </button>
+                  </Link>
+                </div>
+          
+              </div>
+            </div>
+
+          </div>
+          </div>
+    </Desktop>
     </div>
   )
 }
 
 export default CustomMain;
+
