@@ -16,6 +16,7 @@
 .cmainbutton {
   width:200px;
   height:200px;
+  /* background-color:#DFF2FF; */
   background-color:#2D4059;
   /* opacity: 80%; */
   box-shadow:0px 5px 10px rgba(0,0,0,1);
@@ -31,9 +32,13 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-left: 0.1rem;
+  /* opacity: 0.4; */
   transform: translateY(25 ,100px); /* 버튼을 아래로 숨김 */
   transition: transform 1s ease; /* 애니메이션 지속 시간 및 가속도 설정 */
   /* opacity: 90%; */
+}
+.cmainbutton:hover {
+  color: #F07B3F
 }
 .roomimg {
   /* background-image: url(`${process.env.PUBLIC_URL}/images/room.svg`); */
@@ -70,7 +75,7 @@
 
 
 .logo-img.show {
-  top: 100px; /* 세로 중앙으로 이동 */
+  top: 50px; /* 세로 중앙으로 이동 */
 }
 .cbox {
   
