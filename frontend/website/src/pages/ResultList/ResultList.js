@@ -7,40 +7,32 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Warning from '../../component/warning/warning';
 import AuthHttp from '../../component/util/AuthHttp';
+
 function ResultList() {
-  // 모달 표시 상태와 선택된 항목을 관리하는 State
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-
-  // 검색어와 현재 페이지 번호를 관리하는 State
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-
-  // API로부터 받아온 데이터를 관리하는 State
   const [dataList, setDataList] = useState([]);
-
-  // 사용자 로그인 상태와 API 요청에 필요한 Access Token을 관리하는 State
   const accessToken = sessionStorage.getItem('accessToken');
   const [isLogin, setIsLogin] = useState(false);
-
-  // React Router의 navigate 함수를 사용하기 위한 객체
   const navigate = useNavigate();
 
-  // API에서 데이터를 가져오는 함수
   const fetchData = async () => {
     try {
       const response = await AuthHttp({
         method: 'get',
         url: '/private/requests/done',
         params: {
-          page: 1,
+          page: currentPage,
         },
       });
-  
+
       if (Array.isArray(response.data.data)) {
-        setDataList(response.data.data);
-        setCurrentPage(1);
+        // If currentPage is 1, replace the dataList with the new data
+        // Otherwise, append the new data to the existing dataList
+        setDataList(currentPage === 1 ? response.data.data : [...dataList, ...response.data.data]);
       } else {
         console.error('데이터 형식이 배열이 아닙니다.');
       }
@@ -48,14 +40,12 @@ function ResultList() {
       console.error('데이터를 가져오는 중 오류가 발생했습니다:', error);
     }
   };
-  
-  // 항목을 클릭했을 때 모달을 표시하는 함수
+
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
     setShowModal(true);
   };
 
-  // 컴포넌트가 로드될 때 데이터를 가져오고 사용자가 로그인한 경우 isLogin 상태를 설정
   useEffect(() => {
     if (accessToken) {
       fetchData();
@@ -67,7 +57,6 @@ function ResultList() {
     }
   }, [currentPage]);
 
-  // 검색어에 따라 데이터를 필터링하는 함수
   const filteredData = Array.isArray(dataList)
     ? dataList.filter((item) =>
         Object.values(item).some((value) => {
@@ -79,29 +68,17 @@ function ResultList() {
       )
     : [];
 
-  // 전체 페이지 수 계산
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // 현재 페이지에서 보여줄 항목의 범위 계산
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // 검색어 입력 시 현재 페이지를 1로 설정
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
     setCurrentPage(1);
   };
 
-  // 데이터 변경 또는 현재 페이지 변경 시 페이지를 조정하는 useEffect
-  useEffect(() => {
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [dataList, currentPage]);
-
-  // 페이지 변경 함수
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
