@@ -17,7 +17,7 @@ a {
   color: inherit; /* 상위 엘리먼트에서 상속받은 글꼴 색상 사용 */
 }
 .item {
-  margin-top:5rem;
+  margin-top:6rem;
   margin-left: 3.5rem;
   font-size: 1.4rem;
   

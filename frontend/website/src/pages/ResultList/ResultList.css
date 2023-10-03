@@ -23,7 +23,7 @@
 }
 .relistforms {
     width: 70vw;
-    height: 5vh;
+    height: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -45,7 +45,7 @@
     width: 51vw; 
     border-radius: 1.4vw; 
     color: #2D4059; 
-    height: 4.2vh; 
+    height: 3rem; 
     display: flex; 
     justify-content: space-between; 
     font-size: 1.6vw; 
@@ -60,7 +60,7 @@
     opacity:90%; 
     width:3vw;
     background-color:#2D4059; 
-    height:4vh;
+    height:2rem;
     border-radius:0.6vw; 
     font-size: 0.8vw; 
     justify-content:center;
@@ -72,12 +72,12 @@
 .itemresult {
   border-bottom: 0.15vw solid black; 
   width: 70vw; 
-  height: 57vh;
+  height: 28rem;
 }
 
 .relist {
     width:  70vw ;
-    height:  5vh ;
+    height:  2.5rem ;
     display:  flex ;
     justify-content:  space-between ;
     align-items:  center ;
@@ -125,7 +125,7 @@
     text-align: center;
     border: 3px solid #2D4059;
     width: 20vw;
-    height: 3vh;
+    height: 1.5rem;
     
 }
 
