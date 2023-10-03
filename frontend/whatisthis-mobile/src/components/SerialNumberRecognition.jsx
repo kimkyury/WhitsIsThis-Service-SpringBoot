@@ -1,21 +1,20 @@
 import { useRef, useState } from "react";
 import MyButton from "./MyButton";
 import { useNavigate } from "react-router-dom";
+import { useWebSocket } from "../utils/WebSocket";
 
 const SerialNumberRecognition = ({
-  addr,
   isOpen,
   buildingId,
   houseId,
+  historyId,
   handleOpenSnumRecognition,
 }) => {
   const navigate = useNavigate();
-
   const [serialNumber, setSerialNumber] = useState("");
-
   const modalStatus = isOpen ? "slide_up" : "slide_down";
-
   const serialNumberInput = useRef();
+  const { ws, receivedMessage } = useWebSocket();
 
   const handleChangeSnum = (e) => {
     setSerialNumber(e.target.value);
@@ -26,13 +25,42 @@ const SerialNumberRecognition = ({
       serialNumberInput.current.focus();
       return;
     }
-    navigate(`/connection/${buildingId}/${houseId}/result`, {
-      state: {
-        addr: addr,
-        serialNumber: serialNumber,
-      },
-      replace: true,
+    handleSend("REGISTER", {
+      historyId: historyId,
+      serialNumber: "DEVICE1",
     });
+
+    if (receivedMessage && receivedMessage.data.message === "SUCCESS") {
+      navigate(`/connection/${buildingId}/${houseId}/result`, {
+        state: {
+          serialNumber: serialNumber,
+          connectState: true,
+        },
+        replace: true,
+      });
+      console.log("얄루");
+    } else {
+      navigate(`/connection/${buildingId}/${houseId}/result`, {
+        state: {
+          serialNumber: serialNumber,
+          connectState: false,
+        },
+        replace: true,
+      });
+    }
+  };
+
+  const handleSend = (type, data) => {
+    if (!ws) {
+      console.log("소켓 없음");
+      return;
+    }
+    const message = {
+      type: type,
+      data: data,
+    };
+    const messageString = JSON.stringify(message, null, 2);
+    ws.send(messageString);
   };
 
   return (
