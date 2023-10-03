@@ -8,7 +8,7 @@ function WebMain() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const imagePaths = [
     "/assets/집2.jfif",
-    "/assets/집1.jpg",
+    // "/assets/집1.jpg",
     "/assets/집3.jfif",
   ];
 

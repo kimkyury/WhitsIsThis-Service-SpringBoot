@@ -13,7 +13,7 @@
   /* border-bottom: 2px solid black; */
 }   
 .footer {
-  position: fixed;
+  position: relative;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -30,7 +30,7 @@ a {
 .item {
   margin-top:3rem;
   margin-left: 5rem;
-  font-size: 1.4rem;
+  font-size: 1.4vw;
   
   font-weight:bold;
 }
@@ -44,7 +44,7 @@ a {
 .minitem {
   margin-top:3rem;
   margin-left: 5rem;
-  font-size: 1.4rem;
+  font-size: 1.4vw;
   
   font-weight:bold;
 }
@@ -65,10 +65,10 @@ a {
 
 }
 .items {
-  margin-top:-17rem;
+  margin-top:-30vh;
   display: flex;
   flex-direction: column; /* 세로로 배치하기 위해 flex-direction을 column으로 설정합니다. */
-  width: 20vw;
+  width: 30vw;
   height: 40vh;
   
   margin-right: -7.2rem;
