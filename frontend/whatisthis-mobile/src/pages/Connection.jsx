@@ -12,8 +12,6 @@ const Connection = () => {
   const { buildingId } = useParams();
   const { houseId } = useParams();
 
-  const { buildingList } = useContext(BuildingDataContext);
-
   const [targetHouse, setTargetHouse] = useState();
   const navigate = useNavigate();
   const { ws, receivedMessage } = useWebSocket();

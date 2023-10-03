@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import MyButton from "../components/MyButton";
 import HouseCard from "../components/HouseCard";
 
-import { BuildingDataContext } from "../App";
 import AuthHttp from "../utils/AuthHttp";
 import { useWebSocket } from "../utils/WebSocket";
 

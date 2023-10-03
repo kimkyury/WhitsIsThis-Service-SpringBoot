@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import MyButton from "../components/MyButton";
 import HouseTodoList from "../components/HouseTodoList";
-import { BuildingDataContext } from "../App";
 import AuthHttp from "../utils/AuthHttp";
 import { useWebSocket } from "../utils/WebSocket";
 
