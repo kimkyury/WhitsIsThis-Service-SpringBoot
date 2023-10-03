@@ -9,7 +9,6 @@
   --background-color: #2d4059;
   --background-camera: rgba(0, 0, 0, 0.7);
   --text-color: #ffffff;
-  font-family: "GmarketSansMedium";
 }
 
 body {
@@ -21,6 +20,7 @@ body {
   min-height: 100vh;
   margin: 0;
   overflow: hidden;
+  font-family: "GmarketSansMedium";
 }
 
 .container {
@@ -235,6 +235,7 @@ body {
   padding-top: 0.5rem;
 
   overflow-y: scroll;
+  overflow-x: hidden;
 
   box-shadow: inset 0rem 0.25rem 0.0625rem rgba(0, 0, 0, 0.25);
 
@@ -267,6 +268,8 @@ body {
 
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  margin-left: 3rem;
+  margin-right: 3rem;
 
   padding: 0.5rem;
 
@@ -327,7 +330,9 @@ body {
   margin-top: 1.5rem;
   margin-bottom: 1rem;
   min-width: 19.5rem;
-  max-width: 19.5rem;
+  max-width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 
   word-break: keep-all;
   overflow-wrap: break-word;
@@ -547,7 +552,9 @@ body {
 }
 .ConnectionResult .building_info {
   min-width: 19.5rem;
-  max-width: 19.5rem;
+  max-width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 .ConnectionResult .connect_info_wrapper {
@@ -606,7 +613,9 @@ h2 {
 }
 .HouseList .building_info {
   min-width: 19.5rem;
-  max-width: 19.5rem;
+  max-width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 .HouseList h1 {
   color: #ffffff;
@@ -795,7 +804,9 @@ h2 {
 }
 .HouseDetail .building_info {
   min-width: 19.5rem;
-  max-width: 19.5rem;
+  max-width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 .HouseDetail .building_title {
   display: flex;
@@ -836,7 +847,8 @@ h2 {
   align-items: center;
   flex-direction: row;
   gap: 0.5rem;
-  overflow: scroll;
+  overflow-y: hidden;
+  overflow-x: scroll;
 
   background-color: white;
   width: 18.5rem;
@@ -1133,7 +1145,8 @@ h3 {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  overflow: scroll;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 .Camera .image_container img {
   margin: 1rem;
@@ -1186,7 +1199,7 @@ h3 {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  overflow: scroll;
+  overflow-y: scroll;
 
   border: none;
   border-radius: 0.5rem;
@@ -1220,6 +1233,7 @@ h3 {
   width: 100%;
   display: flex;
   flex-direction: row;
+  gap: 2.5rem;
   justify-content: space-between;
   margin-top: auto;
   margin-bottom: 2rem;
