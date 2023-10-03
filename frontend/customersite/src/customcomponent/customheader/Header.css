@@ -48,7 +48,7 @@ a {
 
 .minitem:hover {
   color:#F07B3F !important; 
-  font-size:1.2rem;
+  font-size:1vw;
   border-bottom: 2px solid #F07B3F;
   width:3.4rem
 }
@@ -61,7 +61,7 @@ a {
 }
 .item:hover {
   color:#F07B3F !important; 
-  font-size:1.4vw;
+  font-size:1.2vw;
   border-bottom: 2px solid #F07B3F;
   width:4.5rem
 }

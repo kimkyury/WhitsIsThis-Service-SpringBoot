@@ -120,11 +120,12 @@ function Resultconfirm() {
               ref={phoneNumberInputRef}
               value={phoneNumberInput}
               onChange={(e) => setPhoneNumberInput(e.target.value)}
+              style={{marginRight:'1vw', marginLeft:'1vw'}}
             />
             {isSuc ? (
               <button
                 className="button minibutton"
-                style={{ marginLeft: "2vw", marginTop: "0.5vh" }}
+                style={{ marginRight: "1vw", marginTop: "0.5vh" }}
                 onClick={handleSendSMS}
               >
                 확인
@@ -132,7 +133,7 @@ function Resultconfirm() {
             ) : (
               <button
                 className="button minibutton"
-                style={{ marginLeft: "2vw", marginTop: "0.5vh" }}
+                style={{ marginRight: "1vw", marginTop: "0.5vh" }}
                 onClick={handleSendSMS}
               >
                 인증하기
@@ -143,6 +144,7 @@ function Resultconfirm() {
         <div className="middlemodalbox">
           <button
             className="button bigbutton"
+            style={{marginBottom: '5vh'}}
             onClick={handleConfirmation}
             disabled={!isVerified} // 인증이 완료되지 않은 경우 버튼 비활성화
           >

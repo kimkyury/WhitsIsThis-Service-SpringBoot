@@ -25,7 +25,7 @@ function App() {
  
         <Routes>
           {/* <Route path="/start" element={[<WebMainC />]}/> */}
-          <Route path="/" element={[<WebMainC />]} />
+          <Route path="/" element={[<Maincustompage />]} />
           <Route path="/customerreceive" element={[<Customreceivepage />]} />
           <Route path="/fixcustom" element={[<Fixcustom />]} />
           <Route path="/moneyreturn" element={[<Moneyreturn />]} />

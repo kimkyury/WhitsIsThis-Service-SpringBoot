@@ -17,7 +17,7 @@
   width:200px;
   height:200px;
   /* background-color:#DFF2FF; */
-  background-color:#2D4059;
+  background-color: #2D4059;
   /* opacity: 80%; */
   box-shadow:0px 5px 10px rgba(0,0,0,1);
   
@@ -38,7 +38,8 @@
   /* opacity: 90%; */
 }
 .cmainbutton:hover {
-  color: #F07B3F
+  color: #F07B3F;
+  opacity: 1;
 }
 .roomimg {
   /* background-image: url(`${process.env.PUBLIC_URL}/images/room.svg`); */

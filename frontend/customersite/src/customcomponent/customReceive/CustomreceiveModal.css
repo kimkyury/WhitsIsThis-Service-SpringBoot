@@ -1,8 +1,8 @@
 .customreceivediv {
 
   margin-top:1rem;
-  width: 74vw;
-  height: 65rem;
+  /* width: 74vw;
+  height: 65rem; */
 
   /* background-color: #ECECEC; */
   /* border: 2px solid #2D4059; */
@@ -12,6 +12,7 @@
   border-radius: 1rem;
   background-repeat: no-repeat;
   box-shadow: 0px 5px 0px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
 }
 
 .cinput {
