@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./CustomreceiveModal.css";
 import Address from "../addresscomp/address";
-import axios from 'axios';
+import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import '../calendar/calendar.css';
+import "../calendar/calendar.css";
 import Receivesuc from "./receivesuccess";
-import Phoneconfirm from './Phoneconfirm'; // Phoneconfirm 컴포넌트를 import
+import Phoneconfirm from "./Phoneconfirm"; // Phoneconfirm 컴포넌트를 import
 import { useMediaQuery } from "react-responsive";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 function CustomreceiveModal() {
   const navigate = useNavigate();
   // const [requesterPhoneNumber, setRequesterPhoneNumber] = useState(""); // 연락처 상태 추가
@@ -36,8 +36,8 @@ function CustomreceiveModal() {
   const [startDate, endDate] = dateRange;
   const formatDate = (date) => {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}${month}${day}`;
   };
 
@@ -58,7 +58,7 @@ function CustomreceiveModal() {
   };
 
   const handleOpenFileInput = () => {
-    document.getElementById('fileInput').click();
+    document.getElementById("fileInput").click();
   };
 
   const handleApply = async () => {
@@ -66,24 +66,41 @@ function CustomreceiveModal() {
     const formattedEndDate = formatDate(endDate);
 
     if (!selectedAddress) {
-      console.error('주소를 선택해주세요.');
-      alert('주소를 선택해주세요.');
+      console.error("주소를 선택해주세요.");
+      alert("주소를 선택해주세요.");
       return;
     }
 
-    const addressDetail = document.querySelector('.input[placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"]').value;
-    const requestContent = document.querySelector('.input[placeholder="요청 사항을 입력해주십시오."]').value;
-    const requesterName = document.querySelector('.input[placeholder="이름을 입력해주십시오."]').value;
-    const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
+    const addressDetail = document.querySelector(
+      '.input[placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"]'
+    ).value;
+    const requestContent = document.querySelector(
+      '.input[placeholder="요청 사항을 입력해주십시오."]'
+    ).value;
+    const requesterName = document.querySelector(
+      '.input[placeholder="이름을 입력해주십시오."]'
+    ).value;
+    const requesterPhoneNumber = document.querySelector(
+      '.input[placeholder="연락처를 입력해주십시오."]'
+    ).value;
+    const buildingArea = document.querySelector(
+      '.input[placeholder="면적을 입력해주십시오."]'
+    ).value;
 
-    if (!addressDetail || !requestContent || !requesterName || !requesterPhoneNumber) {
-      console.error('필수 정보를 모두 입력해주세요.');
-      alert('필수 정보를 모두 입력해주세요.');
+    if (
+      !addressDetail ||
+      !requestContent ||
+      !requesterName ||
+      !requesterPhoneNumber ||
+      !buildingArea
+    ) {
+      console.error("필수 정보를 모두 입력해주세요.");
+      alert("필수 정보를 모두 입력해주세요.");
       return;
     }
 
     const formData = new FormData();
-    formData.append('warrant', uploadedFile);
+    formData.append("warrant", uploadedFile);
 
     const jsonData = {
       address: selectedAddress,
@@ -93,65 +110,57 @@ function CustomreceiveModal() {
       requestContent: requestContent,
       requesterName: requesterName,
       requesterPhone: requesterPhoneNumber,
-      bankCode: selectedBank, 
+      bankCode: selectedBank,
+      buildingArea: buildingArea,
     };
-    
 
-    formData.append('requestRegisterRequest', JSON.stringify(jsonData));
+    formData.append("requestRegisterRequest", JSON.stringify(jsonData));
     try {
       const response = await axios.post(`${BASE_URL}/api/v1/guest/requests`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
-        responseType: 'blob',
-      }, { withCredentials: true});
-
-      const contentDisposition = response.headers['content-disposition'];
-      const fileName = contentDisposition.split(';')[1].trim().split('=')[1];
-      const blob = new Blob([response.data], { type: 'application/octet-stream' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', fileName);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+        withCredentials: true,
+      });
 
       setIsApplicationSuccess(true);
 
       // 요청이 성공하면 Phoneconfirm 모달을 표시
       setPhoneConfirmVisible(true);
-      navigate('/');
+      alert('신청이 완료되었습니다.');
+      navigate("/");
     } catch (error) {
-      console.error('신청 처리 중 오류가 발생했다.', error);
+      console.error("신청 처리 중 오류가 발생했다.", error);
       console.log(jsonData, formData);
     }
   };
 
   const handleSendSMS = async () => {
     if (!isSuc) {
-      
-      const requesterPhoneNumber = document.querySelector('.input[placeholder="연락처를 입력해주십시오."]').value;
+      const requesterPhoneNumber = document.querySelector(
+        '.input[placeholder="연락처를 입력해주십시오."]'
+      ).value;
       const phone = requesterPhoneNumber;
-      console.log(phone)
+      console.log(phone);
       const requestData = {
         phone: phone,
         // 다른 필요한 데이터를 여기에 추가합니다.
       };
-  
+
       try {
-        const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData, { withCredentials: true});
-  
+        const response = await axios.post(`${BASE_URL}/api/v1/auth/phone/sms`, requestData, {
+          withCredentials: true,
+        });
+
         // SMS 전송 성공 시 phoneConfirm 모달을 화면 중앙으로 보내는 코드
         setPhoneConfirmVisible(true);
-        setRequesterPhone(requesterPhoneNumber)
+        setRequesterPhone(requesterPhoneNumber);
       } catch (error) {
-        console.error('SMS 전송 중 오류 발생:', error);
+        console.error("SMS 전송 중 오류 발생:", error);
         // SMS 전송 중 오류가 발생했을 때의 처리를 여기에 추가합니다.
       }
     }
   };
-  
 
   return (
     <div>
@@ -176,7 +185,7 @@ function CustomreceiveModal() {
             <p className="minititle">은행명 :</p>
             <select
               className="input"
-              style={{width:'7rem', height:'2.5rem', borderRadius:'1vw'}}
+              style={{ width: "7rem", height: "2.5rem", borderRadius: "1vw" }}
               value={selectedBank}
               onChange={(e) => setSelectedBank(e.target.value)}
             >
@@ -198,14 +207,15 @@ function CustomreceiveModal() {
             {/* 은행명 드롭다운 끝 */}
             <p className="minititle">연락처</p>
             <div className="customgrid">
-              <input
-                className="input cinput"
-                placeholder="연락처를 입력해주십시오."
-              />
+              <input className="input cinput" placeholder="연락처를 입력해주십시오." />
               {isSuc ? (
-                <button className="button minibutton" onClick={handleSendSMS}>확인</button>
+                <button className="button minibutton" onClick={handleSendSMS}>
+                  확인
+                </button>
               ) : (
-                <button className="button minibutton" onClick={handleSendSMS}>인증하기</button>
+                <button className="button minibutton" onClick={handleSendSMS}>
+                  인증하기
+                </button>
               )}
             </div>
             <p className="minititle">위임장 사진</p>
@@ -213,13 +223,15 @@ function CustomreceiveModal() {
               <input
                 type="file"
                 id="fileInput"
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
                 onChange={handleFileChange}
               />
-              {uploadedFileName && (
-                <p>{uploadedFileName}</p>
-              )}
-              <button className="button minibutton" style={{ marginTop:'1.5vh', marginLeft:'2vw'}} onClick={handleOpenFileInput}>
+              {uploadedFileName && <p>{uploadedFileName}</p>}
+              <button
+                className="button minibutton"
+                style={{ marginTop: "1.5vh", marginLeft: "2vw" }}
+                onClick={handleOpenFileInput}
+              >
                 찾아보기
               </button>
             </div>
@@ -231,10 +243,7 @@ function CustomreceiveModal() {
                 value={selectedAddress}
                 onChange={(e) => setSelectedAddress(e.target.value)}
               />
-              <button
-                className="button minibutton"
-                onClick={handleOpenAddressModal}
-              >
+              <button className="button minibutton" onClick={handleOpenAddressModal}>
                 주소찾기
               </button>
             </div>
@@ -245,19 +254,19 @@ function CustomreceiveModal() {
               placeholder="상세 주소를 입력해주십시오.(동 호수 포함)"
             />
             <div className="customgridx">
-              <p className="minititle">점검 예정 일자 :</p>
+              <p className="minititle">사전 점검 가능 기간 :</p>
               <DatePicker
-                dateFormat='yyyy.MM.dd'
+                dateFormat="yyyy.MM.dd"
                 shouldCloseOnSelect
                 minDate={new Date()}
                 selectsRange={true}
                 startDate={startDate}
                 endDate={endDate}
                 onChange={(update) => {
-                  setDateRange(update)
+                  setDateRange(update);
                 }}
                 withPortal
-                className='datePicker'
+                className="datePicker"
               />
             </div>
             <p className="minititle">면적</p>
@@ -278,12 +287,21 @@ function CustomreceiveModal() {
             <button className="close-button" onClick={handleCloseAddressModal}>
               닫기
             </button>
-            <Address selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress} onSelect={handleInputAddress} />
+            <Address
+              selectedAddress={selectedAddress}
+              setSelectedAddress={setSelectedAddress}
+              onSelect={handleInputAddress}
+            />
           </div>
         )}
       </div>
       {phoneConfirmVisible && (
-        <Phoneconfirm isSuc={isSuc} setIsSuc={setIsSuc} setPhoneConfirmVisible={setPhoneConfirmVisible} requesterPhoneNumber={requesterPhone} />
+        <Phoneconfirm
+          isSuc={isSuc}
+          setIsSuc={setIsSuc}
+          setPhoneConfirmVisible={setPhoneConfirmVisible}
+          requesterPhoneNumber={requesterPhone}
+        />
       )}
     </div>
   );
