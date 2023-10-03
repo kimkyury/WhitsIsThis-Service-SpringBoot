@@ -200,7 +200,7 @@ class Searching_path(Node):
         
         self.pre_map = floodFill(0, 0, self.pre_map)
         print('Map 전처리')
-        for x in range(0,340,9):
+        for x in range(0,340,10):
             min_y, max_y = INF, 0
             y = 0
             while y < 340:
