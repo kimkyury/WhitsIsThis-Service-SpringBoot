@@ -6,18 +6,36 @@ import SerialNumberRecognition from "../components/SerialNumberRecognition";
 
 import QRrecognition from "../components/QRrecognition";
 import { BuildingDataContext } from "../App";
+import AuthHttp from "../utils/AuthHttp";
+import { useWebSocket } from "../utils/WebSocket";
 const Connection = () => {
   const { buildingId } = useParams();
   const { houseId } = useParams();
 
   const { buildingList } = useContext(BuildingDataContext);
-  const targetBuilding = buildingList[parseInt(buildingId)];
-  const targetHouse =
-    targetBuilding && targetBuilding.requests.find((it) => parseInt(it.id) === parseInt(houseId));
 
+  const [targetHouse, setTargetHouse] = useState();
   const navigate = useNavigate();
+  const { ws, receivedMessage } = useWebSocket();
 
   const [isSnum, setIsSnum] = useState(false);
+
+  useEffect(() => {
+    const getTargetHouse = async () => {
+      try {
+        const response = await AuthHttp({
+          method: "get",
+          url: `/private/requests/${houseId}`,
+        });
+        console.log(response.data.data);
+        setTargetHouse(response.data.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    getTargetHouse();
+    console.log(targetHouse);
+  }, []);
 
   const handleConnectionMethodTymeClick = () => {
     // 카메라 멈추고 시리얼넘버 컴포넌트 스폰 토글..
@@ -27,14 +45,45 @@ const Connection = () => {
     setIsSnum(!isSnum);
   };
 
-  const connect = (serialNumber) => {
-    //시리얼 넘버가 유효한지 확인하는 로직 필요
-    navigate(`/connection/${buildingId}/${houseId}/result`, {
-      state: {
-        serialNumber: serialNumber,
-      },
-      replace: true,
+  const connect = async (serialNumber) => {
+    //소켓 연결
+
+    handleSend("REGISTER", {
+      historyId: targetHouse.history.id,
+      serialNumber: serialNumber,
     });
+
+    if (receivedMessage && receivedMessage.data.message === "SUCCESS") {
+      navigate(`/connection/${buildingId}/${houseId}/result`, {
+        state: {
+          serialNumber: serialNumber,
+          connectState: true,
+        },
+        replace: true,
+      });
+      console.log("얄루");
+    } else {
+      navigate(`/connection/${buildingId}/${houseId}/result`, {
+        state: {
+          serialNumber: serialNumber,
+          connectState: false,
+        },
+        replace: true,
+      });
+    }
+  };
+
+  const handleSend = (type, data) => {
+    if (!ws) {
+      console.log("소켓 없음");
+      return;
+    }
+    const message = {
+      type: type,
+      data: data,
+    };
+    const messageString = JSON.stringify(message, null, 2);
+    ws.send(messageString);
   };
 
   if (!targetHouse) {
@@ -45,7 +94,7 @@ const Connection = () => {
         <div className="header">
           <div className="building_info_wrapper">
             <h2>{targetHouse.addressDetail}</h2>
-            <h4>{targetBuilding.address}</h4>
+            <h4>{targetHouse.address}</h4>
           </div>
           <div className="connection_method_wrapper">
             <img
@@ -72,9 +121,9 @@ const Connection = () => {
         {
           <SerialNumberRecognition
             isOpen={isSnum}
-            addr={targetHouse.address}
             buildingId={buildingId}
             houseId={houseId}
+            historyId={targetHouse.history.id}
             handleOpenSnumRecognition={handleOpenSnumRecognition}
           />
         }

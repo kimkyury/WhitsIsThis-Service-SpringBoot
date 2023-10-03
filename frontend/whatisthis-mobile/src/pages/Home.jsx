@@ -10,55 +10,9 @@ import AuthHttp from "../utils/AuthHttp";
 const Home = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
-  const [workInProgress, setWorkInprogress] = useState(true);
+  const [workInProgress, setWorkInprogress] = useState(false);
 
   const { init } = useContext(BuildingDispatchContext);
-
-  const [socket, setSocket] = useState(null);
-  const [type, setType] = useState("");
-  const [datas, setDatas] = useState({});
-  const [displayMessage, setDisplayMessage] = useState("");
-  const [receivedMessage, setReceivedMessage] = useState("");
-
-  // const handleConnect = () => {
-  //   const ws = new WebSocket(process.env.REACT_APP_WS_BASE_URL);
-
-  //   ws.onopen = () => {
-  //     console.log("connected!!");
-  //     setSocket(ws);
-  //   };
-
-  //   ws.onerror = (error) => {
-  //     console.log("Connection error..");
-  //     console.error(error);
-  //   };
-
-  //   ws.onmessage = (e) => {
-  //     const data = JSON.parse(e.data);
-  //     const formattedData = JSON.stringify(data, null, 2);
-  //     setReceivedMessage(formattedData);
-  //   };
-
-  //   ws.onclose = (e) => {
-  //     alert("소켓 연결 끊김!");
-  //     console.error(e);
-  //   };
-  // };
-
-  const handleSend = (type, data) => {
-    if (!socket) return;
-
-    const message = {
-      type: type,
-      data: data,
-    };
-
-    const messageString = JSON.stringify(message, null, 2);
-
-    setDisplayMessage(JSON.stringify(message, null, 2));
-
-    socket.send(messageString);
-  };
 
   useEffect(() => {
     const getBuildingList = async () => {
@@ -68,13 +22,22 @@ const Home = () => {
           url: "/private/requests/assigned",
         });
         const data = response.data.data;
-        console.log(response.data.data);
+        // console.log(response.data.data);
         if (data.length >= 1) {
           init(data);
+          setWorkInprogress(checkInProgress(data));
         }
       } catch (e) {
         console.error(e);
       }
+    };
+
+    const checkInProgress = (buildingList) => {
+      const isInProgress = buildingList.some((building) => {
+        return building.requests.some((request) => request.status === "IN_PROGRESS");
+      });
+
+      return isInProgress;
     };
 
     const localData = localStorage.getItem("userInfo");
@@ -86,16 +49,13 @@ const Home = () => {
         getBuildingList();
       }
     }
-
-    setType("AUTH");
-    const token = localStorage.getItem("token");
-    setDatas({ accessToken: token });
-
-    handleSend("AUTH", { accessToken: token });
-    // handleConnect();
   }, []);
 
   const logout = async () => {
+    //임시
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("token");
+
     try {
       const response = await AuthHttp({
         method: "post",

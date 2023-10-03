@@ -21,7 +21,11 @@ const Camera = () => {
     const getCameraPermission = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+          video: {
+            facingMode: "environment", // 후면 카메라를 사용하도록 지정
+            width: { ideal: 296 }, // 원하는 비디오 너비
+            height: { ideal: 412 }, // 원하는 비디오 높이
+          },
         });
 
         // 카메라 스트림을 비디오 엘리먼트에 연결합니다.
