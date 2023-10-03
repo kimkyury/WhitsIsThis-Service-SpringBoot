@@ -1,9 +1,3 @@
-// HouseDetail
-// 	AddSection
-// 	SectionList
-// 	SectionDetail
-// 	SectionDetailCamera
-
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -11,6 +5,7 @@ import MyButton from "../components/MyButton";
 import HouseTodoList from "../components/HouseTodoList";
 import { BuildingDataContext } from "../App";
 import AuthHttp from "../utils/AuthHttp";
+import { useWebSocket } from "../utils/WebSocket";
 
 const HouseDetail = () => {
   const navigate = useNavigate();
@@ -23,6 +18,8 @@ const HouseDetail = () => {
 
   // 맵을 만드는지 확인 상태변수
   const [isCreatingMap, setIsCreatingMap] = useState(true);
+
+  const { ws, receivedMessage } = useWebSocket();
 
   // 모든 검사를 마쳤는지 확인
   // 값 받아와서 설정해주기
