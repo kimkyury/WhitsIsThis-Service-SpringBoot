@@ -42,6 +42,7 @@ function Logout() {
     } catch (error) {
       // Handle logout error here
       console.error('로그아웃 실패', error);
+      navigate('/');
 
 
       // Even if there is an error, clear the token from both localStorage and cookies

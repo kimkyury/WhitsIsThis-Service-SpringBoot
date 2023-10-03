@@ -9,6 +9,7 @@ import axios from 'axios';
 import AuthHttp from '../../component/util/AuthHttp';
 import Receivedsitem from './Myreceiveitem';
 import RequestModals from './MyRequestModal';
+import Calendar from '../../component/calendar/calendar';
 function List() {
   const [showModal, setShowModal] = useState(false);
   const [showModals, setShowModals] = useState(false);
@@ -23,7 +24,7 @@ function List() {
   const [isFetching, setIsFetching] = useState(false);
   const [mydata, setMydata] = useState(null);
   const [mdata, setMdata] = useState(null);
-  
+  const [showcal, setShowcal] = useState(false);
   const getRefreshToken = () => {
     return sessionStorage.getItem('accessToken');
   };
@@ -245,6 +246,7 @@ function List() {
         }
       });
       // console.log(formattedDate)
+      setShowcal(true)
       console.log(response);
     }catch(e){
       console.error(e);
@@ -405,7 +407,11 @@ function List() {
             <RequestModals selectedItems={selectedItems} setShowModals={setShowModals} />
           </div>
         )}
-       
+         {/* {showcal && (
+          <div className="modal-container">
+            <Calendar selectedItem={selectedItem} setShowcal={setShowcal} />
+          </div>
+        )} */}
       </div>
     ) : (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>

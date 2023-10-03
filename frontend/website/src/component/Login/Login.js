@@ -35,10 +35,10 @@ function Login() {
         sessionStorage.setItem('password', password)
         // 성공적인 로그인 후 목록 페이지로 리다이렉트합니다
         setAuthenticated(true);
-        if (response.data.data.isInitLoginUser === 0) {
+        if (response.data.data.isInitLoginUser === 1) {
           // isinit이 0이면 "First" 페이지로 이동
           navigate('/first');
-        } else if (response.data.data.isInitLoginUser === 1) {
+        } else if (response.data.data.isInitLoginUser === 0) {
           // isinit이 1이면 "List" 페이지로 이동
           navigate('/list');
         }

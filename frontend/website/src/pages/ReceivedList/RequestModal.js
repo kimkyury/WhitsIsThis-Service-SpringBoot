@@ -95,15 +95,15 @@ function RequestModal({ selectedItem, setShowModal }) {
             <div className="nameVtagv">
               {requestData.data ? (
                 <div>
-                  <p className="nametag" style={{ width: '10vw' }}>
+                  <p className="nametag" style={{ width: '20vw' }}>
                     신청자명
                   </p>
                   <p className="Vtag vtag">{requestData.data.requesterName}</p>
-                  <p className="nametag" style={{ width: '10vw' }}>
+                  <p className="nametag" style={{ width: '20vw' }}>
                     요청사항
                   </p>
                   <p className="Vtag vtag">{requestData.data.requestContent}</p>
-                  <p className="nametag" style={{ width: '10vw' }}>
+                  <p className="nametag" style={{ width: '20vw' }}>
                     연락처
                   </p>
                   <p className="Vtag vtag">{requestData.data.requesterPhone}</p>
@@ -115,27 +115,27 @@ function RequestModal({ selectedItem, setShowModal }) {
             <div>
               {requestData.data ? (
                 <div>
-                  <p className="nametag" style={{ width: '10vw' }}>
+                  <p className="nametag" style={{ width: '20vw' }}>
                     주소
                   </p>
                   <p className="Vtag vtag">
                     {requestData.data.address} {requestData.data.addressDetail}
                   </p>
-                  <p className="nametag" style={{ width: '10vw' }}>
+                  <p className="nametag" style={{ width: '20vw' }}>
                     검사 예정일
                   </p>
                   <p className="Vtag vtag">{requestData.data.inspectionStart} ~ {requestData.data.inspectionEnd}</p>
-                  <p className="nametag" style={{ width: '10vw' }}>
+                  <p className="nametag" style={{ width: '20vw' }}>
                     위임장 사진
                   </p>
                   {requestData.data.warrantUrl ? (
                     <div>
                       {/* <img src={requestData.data.warrantUrl} alt="위임장 사진" /> */}
                       {/* "다운로드" 버튼 추가 */}
-                      <button className='i' style={{ border:'none', backgroundColor:'white'}} onClick={downloadWarrantImage}><BiSolidDownload/>{`${process.env.REACT_APP_S3_BASE_URL}/requestData.data.warrantUrl`}</button>
+                      <button className='i' style={{fontSize:'0.5vw', marginLeft:'5vw', border:'none', backgroundColor:'white'}} onClick={downloadWarrantImage}><BiSolidDownload/>{`${process.env.REACT_APP_S3_BASE_URL}/requestData.data.warrantUrl`}</button>
                     </div>
                   ) : (
-                    <p>No image available</p>
+                    <p style={{marginLeft:'1.3vw', fontSize:'0.5vw'}}>No image available</p>
                   )}
                 </div>
               ) : (

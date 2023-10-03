@@ -95,14 +95,15 @@
 
 .vtag {
   margin-left: 5%; 
-  border-bottom:2px dashed black;
-  width:20vw;
+  /* border-bottom:2px dashed black; */
+  margin-top: -2%;
+    width:20vw;
 
 }
 
 .tagv {
   margin-left: 5%; 
-  border-bottom:2px dashed black; 
+  /* border-bottom:2px dashed black;  */
   width:20vw
 }
 
