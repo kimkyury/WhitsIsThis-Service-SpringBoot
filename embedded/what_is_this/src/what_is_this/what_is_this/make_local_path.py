@@ -55,7 +55,7 @@ class MakeLocalPath(Node):
         self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 10)
         self.global_path_sub = self.create_subscription(Path, '/global_path', self.path_callback, 10)
 
-        self.percent = -1
+        self.percent = 0
         self.is_scan = False
         self.is_odom = False
         self.is_path = False
@@ -69,6 +69,13 @@ class MakeLocalPath(Node):
 
         time_period = 0.05
         self.timer = self.create_timer(time_period, self.timer_callback)
+
+        self.percent_timer = self.create_timer(1, self.percent_callback)
+
+    def percent_callback(self):
+        if self.percent != 0:
+            self.percnet_msg.data = str(self.percent)
+            self.percent_publisher.publish(self.percnet_msg)
 
     # global path msg
     def path_callback(self, msg):
@@ -99,8 +106,8 @@ class MakeLocalPath(Node):
             if current_waypoint != -1:
                 self.percent = round(current_waypoint/len(self.global_path_msg.poses)*100,2)
                 print("{0:<20} >>".format(f"\r진행률 : {self.percent}"),end="")
-                self.percnet_msg.data = str(self.percent)
-                self.percent_publisher.publish(self.percnet_msg)                
+                # self.percnet_msg.data = str(self.percent)
+                # self.percent_publisher.publish(self.percnet_msg)                
 
                 if self.percent > 99.96:
                     self.percent = "100"

@@ -3,12 +3,17 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import OccupancyGrid
+
+import base64
+from PIL import Image
+from io import BytesIO
 import websocket
 import asyncio
 import requests
 import threading
 import time
 import json
+import numpy as np
 
 DEVICE_SERIAL="DEVICE1"
 BASE_URL = "https://j9e203.p.ssafy.io"
@@ -26,8 +31,8 @@ class Web_socket(Node):
         self.subscription = self.create_subscription(LaserScan, 'scan',self.scan_callback,1)
         self.is_scan = False
         # 현재 맵 정보 받아오기
-        # self.map_sub = self.create_subscription(OccupancyGrid, 'map', self.map_callback,0.1)
-        # self.is_map = False
+        self.map_sub = self.create_subscription(OccupancyGrid, 'map', self.map_callback,1)
+        self.is_map = False
         # 현재 진행도 받아오기
         self.percnet_sub = self.create_subscription(String, 'percent', self.percent_callback,1)
         self.is_percent = False        
@@ -61,20 +66,31 @@ class Web_socket(Node):
 
     def percent_callback(self,msg):
         self.is_percent = True
-        self.percnet = msg.data
+        self.percent = msg.data
 
     def check_status(self,msg):
         self.is_status = True
         self.status = msg.data
 
-    # def map_callback(self,msg):
-        # self.is_map=True
-        # map_data=np.array(msg.data)
-        # map_data=map_data.reshape((340,340))
+    def map_callback(self,msg):
+        self.is_map=True
+        map_data=np.array(msg.data)
+        map_data=map_data.reshape((340,340))
         # 대각선 대칭
-        # map_data = np.rot90(map_data, k=1)
-        # map_data = np.flipud(map_data)
-        # self.map_data=map_data
+        map_data = np.rot90(map_data, k=1)
+        map_data = np.flipud(map_data)
+        
+        # 이미지를 'RGB' 모드로 바이트로 변환
+        map_img = Image.fromarray(map_data)
+        buffered = BytesIO()
+        map_img = map_img.convert('RGB')
+        map_img.save(buffered, format="PNG")
+
+        # 바이트 데이터를 base64로 인코딩
+        image_bytes = buffered.getvalue()
+        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+
+        self.map_data = image_base64
     
     def scan_callback(self, msg):
         self.is_scan=True
@@ -122,31 +138,31 @@ class Web_socket(Node):
                     print("{0:<40} >>".format('\rundefined message'), end="")
         
     def w_send(self):
-        try:
-            while True:
-                time.sleep(1)
-                if self.is_status:
-                    self.sed_message = json.dumps({"type":"STATUS","data":{"state" : self.status}})
-                    self.ws.send(self.sed_message)
-                    self.is_status = False
+        # try:
+        while True:
+            time.sleep(1)
+            if self.is_status:
+                self.sed_message = json.dumps({"type":"STATUS","data":{"state" : self.status}})
+                self.ws.send(self.sed_message)
+                self.is_status = False
 
-                if self.is_scan:
-                    self.sed_message = json.dumps({"type":"COORDINATE","data":{"x":self.x,"y":self.y}})
-                    self.ws.send(self.sed_message)
-                    self.is_scan = False
-                
-                if self.is_percent:
-                    self.sed_message = json.dumps({"type":"COMPLETION_RATE","data":{"rate":self.percent}})
-                    self.ws.send(self.sed_message)
-                    self.is_percent = False
-                
-                # if self.is_map:
-                #     self.sed_message = json.dumps({"type":"DRAWING","data":{"image" : self.map_data}})
-                #     self.ws.send(self.sed_message)
-                #     self.is_map = False
+            if self.is_scan:
+                self.sed_message = json.dumps({"type":"COORDINATE","data":{"x":self.x,"y":self.y}})
+                self.ws.send(self.sed_message)
+                self.is_scan = False
+            
+            if self.is_percent:
+                self.sed_message = json.dumps({"type":"COMPLETION_RATE","data":{"rate":self.percent}})
+                self.ws.send(self.sed_message)
+                self.is_percent = False
+            
+            if self.is_map:
+                self.sed_message = json.dumps({"type":"DRAWING","data":{"image" : str(self.map_data)}})
+                self.ws.send(self.sed_message)
+                self.is_map = False
 
-        except:
-            print("{0:<40} >>".format('\rweb socket closed'),end="")
+        # except:
+        #     print("{0:<40} >>".format('\rweb socket closed'),end="")
 
 def main(args=None):
     rclpy.init(args=args)
