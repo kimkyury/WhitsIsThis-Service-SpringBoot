@@ -97,7 +97,7 @@ function Moneyreturn() {
           <div>
             <p className="minititles">예금주명</p>
             <input
-              style={{ width: "70vw", height: "4.6vh" }}
+              style={{ width: "70vw", height: "2rem" }}
               className="inputs"
               placeholder="이름을 입력해주십시오."
               value={refundHolderName}
@@ -118,7 +118,7 @@ function Moneyreturn() {
                 <option value="11">NH농협은행</option>
                 <option value="20">우리은행</option>
                 <option value="31">DGB대구은행</option>
-                <option value="32">부산은행</option>
+                {/* <option value="32">부산은행</option> */}
                 <option value="34">광주은행</option>
                 <option value="37">전북은행</option>
                 <option value="45">새마을금고</option>
@@ -129,7 +129,7 @@ function Moneyreturn() {
             </div>
             <p className="minititles">환불계좌</p>
             <input
-              style={{ width: "70vw", height: "4.6vh" }}
+              style={{ width: "70vw", height: "2rem" }}
               className="inputs"
               placeholder="계좌번호를 입력해주십시오."
               value={refundAccount}

@@ -200,18 +200,18 @@ function Fixcustom() {
         </div>
       </Desktop>
       <Mobile>
-        {" "}
+        {/* {" "} */}
         {/* 하나도 안 건드렸어요.. */}
-        <div className="customreceivedivfix">
+        {/* <div className="customreceivedivfix">
           <div className="moblie-custommodaltitlefix ">
             <p>점검 결과</p>
           </div>
           <div className="circlelinebox">
             <span>
               <div className="flexlinebox">
-                <p className="circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}>
+                <p className="circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}> */}
                   {/* {showCheckmark("WAITING_FOR_INSPECTION")} */}
-                  <p className="listline">대기</p>
+                  {/* <p className="listline">대기</p>
                 </p>
               </div>
             </span>
@@ -219,7 +219,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("IN_PROGRESS")}>
-                  {/* {showCheckmark("IN_PROGRESS")} */}
+      
                   <p className="listline">진행 중</p>
                 </p>
               </div>
@@ -228,7 +228,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("DONE")}>
-                  {/* {showCheckmark("DONE")} */}
+   
                   <p className="listline">완료</p>
                 </p>
               </div>
@@ -253,7 +253,87 @@ function Fixcustom() {
           <div className="middlemodal">
             <button className="button bigbuttons">확인하기</button>
           </div>
+        </div> */}
+        <div className="desk-customreceivedivfix">
+          <div className="desk-custommodaltitle ">
+            <p>점검 결과</p>
+          </div>
+          <div className="circlelinebox">
+            <span>
+              <div className="flexlinebox">
+                <p className="circle" style={getCircleStyle("WAITING_INSPECTION_DATE")}>
+                  {showCheckmark("WAITING_INSPECTION_DATE")}
+                  <p className="listline">확인중</p>
+                </p>
+              </div>
+            </span>
+            <p className="line"></p>
+            <span>
+              <div className="flexlinebox">
+                <p className="circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}>
+                  {showCheckmark("WAITING_FOR_INSPECTION")}
+                  <p className="listline">점검 대기</p>
+                </p>
+              </div>
+            </span>
+            <p className="line"></p>
+            <span>
+              <div className="flexlinebox">
+                <p className="circle" style={getCircleStyle("IN_PROGRESS")}>
+                  {showCheckmark("IN_PROGRESS")}
+                  <p className="listline">진행 중</p>
+                </p>
+              </div>
+            </span>
+            <p className="line"></p>
+            <span>
+              <div className="flexlinebox">
+                <p className="circle" style={getCircleStyle("DONE")}>
+                  {showCheckmark("DONE")}
+                  <p className="listline">완료</p>
+                </p>
+              </div>
+            </span>
+          </div>
+          <div className="middlemodalsx">
+            <div className="boxpage">
+              <div className="vertical-center">
+                <p style={{ marginLeft: "5%" }}>{boxPageText}</p>
+                <p style={{ marginLeft: "5%" }}>{additionalText}</p>{" "}
+                {showDownloadButtons && (
+                  <>
+                    <p
+                      onClick={() => handleReportDownload()}
+                      style={{ marginLeft: "5%", color: "blue" }}
+                    >
+                      보고서 다운로드 : 보고서 URL
+                    </p>
+                    <p
+                      onClick={() => handleZipDownload()}
+                      style={{ marginLeft: "5%", marginTop: "-3%", color: "blue" }}
+                    >
+                      사진 파일 다운로드 : 사진파일.zip
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="middlemodal">
+            <button className="button bigbuttons" onClick={() => handleOk()}>
+              확인하기
+            </button>
+            {showCancelButton && (
+              <button className="button bigbuttons" onClick={() => handleCancellation()}>
+                취소하기
+              </button>
+            )}
+          </div>
         </div>
+
+
+
+
       </Mobile>
     </div>
   );
