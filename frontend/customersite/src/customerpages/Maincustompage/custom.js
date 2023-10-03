@@ -32,5 +32,7 @@ function Custom() {
   </Document>
   )
 }
-
+// style={{backgroundImage: `url(${process.env.PUBLIC_URL}/assets/집2.jfif)`, // 배경 이미지 경로 설정
+// backgroundSize: 'cover', // 이미지를 화면에 맞게 조절)}}>
+// }}
 export default Custom;
