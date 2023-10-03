@@ -65,16 +65,16 @@ function App() {
   };
 
   return (
-    <WebSocketProvider>
-      <BuildingDataContext.Provider value={{ buildingList }}>
-        <BuildingDispatchContext.Provider value={{ init }}>
-          <div className="App">
-            {/* <BrowserRouter>
+    <BrowserRouter basename={BASE_NAME}>
+      <WebSocketProvider>
+        <BuildingDataContext.Provider value={{ buildingList }}>
+          <BuildingDispatchContext.Provider value={{ init }}>
+            <div className="App">
+              {/* <BrowserRouter>
           <Routes>
             <Route path="/health" element={<Health />} />
           </Routes>
         </BrowserRouter> */}
-            <BrowserRouter basename={BASE_NAME}>
               <Routes>
                 <Route path="/test" element={<TestPage />} />
                 <Route path="" element={<Home />} />
@@ -91,11 +91,11 @@ function App() {
                 <Route path="/search/:buildingId" element={<SearchDetail />} />
                 <Route path="/camera" element={<Camera />} />
               </Routes>
-            </BrowserRouter>
-          </div>
-        </BuildingDispatchContext.Provider>
-      </BuildingDataContext.Provider>
-    </WebSocketProvider>
+            </div>
+          </BuildingDispatchContext.Provider>
+        </BuildingDataContext.Provider>
+      </WebSocketProvider>
+    </BrowserRouter>
   );
 }
 
