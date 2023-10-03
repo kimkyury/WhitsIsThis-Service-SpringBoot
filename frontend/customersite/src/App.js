@@ -7,6 +7,8 @@ import Receiveresult from "./customerpages/Customresultpage/Receiveresultpage/Re
 import Resultconfirm from "./customerpages/Customresultpage/resultconfirm/Resultconfirm";
 import Information from "./customerpages/Customresultpage/Informationpage/Information";
 import Health from "./customerpages/Health.jsx";
+import Footer from "../src/customcomponent/customheader/footer";
+import WebMainC from "./customerpages/WebMainC";
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
 
@@ -21,6 +23,7 @@ function App() {
       <Router basename={BASE_NAME}>
         <Routes>
           <Route path="/" element={[<Maincustompage />]} />
+          <Route path="/main" element={[<WebMainC />]}/>
           <Route path="/customerreceive" element={[<Customreceivepage />]} />
           <Route path="/fixcustom" element={[<Fixcustom />]} />
           <Route path="/moneyreturn" element={[<Moneyreturn />]} />
@@ -30,6 +33,7 @@ function App() {
           <Route path="/information" element={[<Information />]} />
         </Routes>
       </Router>
+      <Footer/>
     </div>
   );
 }
