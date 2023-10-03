@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './Login.css';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import AuthHttp from "../util/AuthHttp";
 function 첫번째로그인페이지() {
   const navigate = useNavigate();
   const [username, setUsername] = useState(sessionStorage.getItem('username') || '');
@@ -18,25 +18,12 @@ function 첫번째로그인페이지() {
   const [uploadMessage, setUploadMessage] = useState(''); // 이미지 업로드 메시지
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const refreshToken = sessionStorage.getItem('accessToken');
-  const [upload, setUpload] = useState(null);
+
   const handleImageChange = (e) => {
-    console.log(e);
     const file = e.target.files[0];
     setImage(file);
-  
-    // if (file) {
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     const uploadedImage = e.target.result;
-    //     setImage(uploadedImage);
-    //   };
-    //   reader.readAsDataURL(file);
-    // }
   };
 
-  // const handleimageInput = () => {
-  //   document.getElementById('profileimage').click();
-  // }
   const handleUpdate = () => {
     // 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인합니다.
     if (newPassword !== confirmNewPassword) {
@@ -51,25 +38,39 @@ function 첫번째로그인페이지() {
       password: newPassword,
       phone: newPhone,
     };
+
     if (image) {
       formData.append("profileImage", image);
       formData.append('employeeUpdateRequest', JSON.stringify(jsonData));
-      console.log(formData)
     }
     sendUpdateRequest(formData);
-    // JSON 데이터를 생성합니다.
-
-    // 여기서 API PATCH 요청을 보냅니다.
   };
-  
+
+
+  // const sendUpdateRequest = async (formData) => {
+  //   try {
+  //     const response = await AuthHttp({
+  //       method: 'patch',
+  //       url: `/private/members/employees`,
+  //       data: formData, // Pass the formData here
+  //     });
+  //     sessionStorage.setItem('password', newPassword);
+  //     sessionStorage.setItem('phone', newPhone);
+  //     setPasswordChangeSuccess(true);
+  //     setPhoneChangeSuccess(true);
+  //   } catch (error) {
+  //     console.error("이미지 업로드 실패:", error);
+  //     setUploadMessage('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+  //   }
+  // };
+
   const sendUpdateRequest = (formData) => {
     // axios를 사용하여 PATCH 요청을 보냅니다.
     const headers = {
       'Authorization': `${refreshToken}`,
       'Content-Type': 'multipart/form-data'
     };
-  
-    console.log(headers)
+
     axios
       .patch(`${BASE_URL}/api/v1/private/members/employees`, formData, { headers })
       .then((response) => {
@@ -83,14 +84,17 @@ function 첫번째로그인페이지() {
         //     // 성공적으로 업데이트된 경우
         //     console.log("API 요청 성공:", response.data);
 
-            // 여기서 성공 메시지를 처리하거나 필요한 로직을 추가하세요.
-            // 예를 들어, sessionStorage 업데이트 및 성공 메시지 표시
-            sessionStorage.setItem('password', newPassword);
-            sessionStorage.setItem('phone', newPhone);
-            setPasswordChangeSuccess(true);
-            setPhoneChangeSuccess(true);
-          })
-        
+        // 여기서 성공 메시지를 처리하거나 필요한 로직을 추가하세요.
+        // 예를 들어, sessionStorage 업데이트 및 성공 메시지 표시
+        sessionStorage.setItem('password', newPassword);
+        sessionStorage.setItem('phone', newPhone);
+        setPasswordChangeSuccess(true);
+        setPhoneChangeSuccess(true);
+        alert("변경이 성공했습니다."); // 변경이 성공했음을 알림
+
+        // mypage로 이동
+        navigate('/mypage');
+      })
       .catch((error) => {
         console.error("이미지 업로드 실패:", error);
         setUploadMessage('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
@@ -103,12 +107,22 @@ function 첫번째로그인페이지() {
         <div className="infogridx">
           <div>
             <label htmlFor="profile-image">
-              <img
-                src={image}
-                className="infoimg"
-                style={{ border: '2px solid black', cursor: 'pointer' }}
-                alt="프로필"
-              />
+              {image ? (
+                <img
+                  src={URL.createObjectURL(image)}
+                  className="infoimg"
+                  style={{ border: '2px solid black', cursor: 'pointer' }}
+                  alt="프로필"
+                />
+              ) : (
+                <div
+                  className="infoimg"
+                  style={{textAlign:'center', borderRadius:'50%', width: '6rem', height: '6rem', border: '2px solid black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1rem' }}
+                >
+                  이미지를 선택해주세요
+                
+                </div>
+              )}
             </label>
             <input
               type="file"

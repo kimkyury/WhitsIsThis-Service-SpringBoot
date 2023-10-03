@@ -13,20 +13,23 @@ const getAuthToken = () => {
   return sessionStorage.getItem("accessToken");
 };
 
-const AuthHttp = async (config) => {
+const AuthHttps = async (config) => {
   const token = getAuthToken();
-  const headers = {
-    ...config.headers,
-    Authorization: token,
-  };
-  
 
-  config.headers = headers;
+  const formData = new FormData(); // FormData 객체 생성
 
-console.log(config);
+  for (const key in config.data) {
+    // config.data의 데이터를 FormData에 추가
+    formData.append(key, config.data[key]);
+  }
+
+  formData.append("Authorization", token); // 토큰도 FormData에 추가
 
   try {
-    const response = await api(config);
+    const response = await api({
+      ...config,
+      data: formData, // 변경된 FormData를 config에 할당
+    });
 
     return response;
   } catch (e) {
@@ -74,4 +77,4 @@ console.log(config);
 
 
 
-export default AuthHttp;
+export default AuthHttps;

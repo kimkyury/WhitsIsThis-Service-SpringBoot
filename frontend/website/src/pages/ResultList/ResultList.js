@@ -6,7 +6,7 @@ import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Warning from '../../component/warning/warning';
-
+import AuthHttp from '../../component/util/AuthHttp';
 function ResultList() {
   // 모달 표시 상태와 선택된 항목을 관리하는 State
   const [showModal, setShowModal] = useState(false);
@@ -30,18 +30,14 @@ function ResultList() {
   // API에서 데이터를 가져오는 함수
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/api/v1/private/requests/done`,
-        {
-          params: {
-            page: 1,
-          },
-          headers: {
-            'Authorization': accessToken,
-          },
-        }
-      );
-
+      const response = await AuthHttp({
+        method: 'get',
+        url: '/private/requests/done',
+        params: {
+          page: 1,
+        },
+      });
+  
       if (Array.isArray(response.data.data)) {
         setDataList(response.data.data);
         setCurrentPage(1);
@@ -52,7 +48,7 @@ function ResultList() {
       console.error('데이터를 가져오는 중 오류가 발생했습니다:', error);
     }
   };
-
+  
   // 항목을 클릭했을 때 모달을 표시하는 함수
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);

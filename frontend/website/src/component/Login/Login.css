@@ -11,13 +11,13 @@
   .infocha {
     width: 25.5rem;
     height: 40rem;
-    background-color: whitesmoke;
+    background-color: white;
     opacity: 90%;
     border-radius: 0.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-
+    margin-left:10vw;
     /* border: 2px solid black; */
   }
 
@@ -48,14 +48,14 @@
     width: 23.375rem;
     height: 37.5rem;
     border-radius: 0.5rem;
-    border: 0.2rem solid #2D4059;
+    border: 0.1rem solid black;
     box-shadow: 0px 0.2rem 0.2rem rgba(0,0,0,0.3);
     
   }
 
   .buttonta {
     font-size: 0.05vw;
-    width: 4vw;
+    width: 4rem;
     border-radius: 0.2vw;
     color: black;
     background-color: white;

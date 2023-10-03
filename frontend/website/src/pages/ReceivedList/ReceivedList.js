@@ -182,26 +182,32 @@ function List() {
 
   function handleOnDragEnd(result) {
     if (!result.destination) return;
-
+  
     const sourceIndex = result.source.index;
     const destinationIndex = result.destination.index;
-
+  
+    // 소스와 대상 드롭 컨테이너가 모두 "applicant"인지 확인합니다.
+    if (result.source.droppableId === 'applicant' && result.destination.droppableId === 'applicant') {
+      // "applicant" 컨테이너 내에서 항목을 이동할 수 없도록 합니다.
+      return;
+    }
+  
     if (
       result.source.droppableId === 'applicant' &&
       result.destination.droppableId === 'myApplicant'
     ) {
       const draggedData = applicant[sourceIndex];
-
+  
       setMyApplicant((prevMyApplicant) => {
         const updatedMyApplicant = [...prevMyApplicant];
         updatedMyApplicant.splice(destinationIndex, 0, draggedData);
         return updatedMyApplicant;
       });
-
+  
       const updatedApplicant = [...applicant];
       updatedApplicant.splice(sourceIndex, 1);
       setApplicant(updatedApplicant);
-
+  
       // 패치 요청 보내기
       moveItem(draggedData.id);
     } else if (
@@ -209,38 +215,45 @@ function List() {
       result.destination.droppableId === 'applicant'
     ) {
       const draggedData = myApplicant[sourceIndex];
-
+  
       const updatedApplicant = [...applicant];
       updatedApplicant.splice(destinationIndex, 0, draggedData);
       setApplicant(updatedApplicant);
-
+  
       const updatedMyApplicant = [...myApplicant];
       updatedMyApplicant.splice(sourceIndex, 1);
       setMyApplicant(updatedMyApplicant);
-
+  
       // 패치 요청 보내기
       console.log(draggedData);
       moveItem(draggedData.id);
     }
   }
-
   // 패치 요청을 보내는 함수
 
   const moveItem = async (targetId) =>{
     try{
+      const currentDate = new Date();
+      const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+      
       const response = await AuthHttp({
         method:'patch',
         url:`/private/requests/${targetId}/manager`,
         data:{
-          // 자바스크립트 date 함수 로저걸 포매팅해서 보내면 됨
-          inspectionDate: "2023-10-02"
+          // 자바스크립트 date 함수로 저걸 포매팅해서 보내면 됨
+          inspectionDate: formattedDate
         }
-      })
+      });
+      // console.log(formattedDate)
       console.log(response);
     }catch(e){
       console.error(e);
     }
   }
+  
+  
+  
+  
 
   // const sendPatchRequest = (itemId) => {
   //   if (itemId) {

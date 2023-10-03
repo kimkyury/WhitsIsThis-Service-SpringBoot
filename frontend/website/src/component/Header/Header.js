@@ -72,7 +72,7 @@ function Header(props) {
             내 정보
           </NavLink>
           {/* 로그아웃 버튼 */}
-          <div style={{display:'flex', marginLeft:'15rem', marginTop:'8rem'}}>
+          <div style={{display:'flex', marginLeft:'12rem', marginTop:'12vh'}}>
           <Logout/>
           </div>
           {/* <button onClick={handleLogout}>로그아웃</button> */}
