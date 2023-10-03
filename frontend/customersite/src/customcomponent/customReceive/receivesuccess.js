@@ -5,8 +5,8 @@ function receivesuc() {
     <div>
 
       <div className="customreceivedivsuc">
-    <div className="boxpagemoney">
-      <p style={{marginLeft:'5%'}}>✔ 접수가 완료되었습니다.<br/>
+    <div className="boxpagemoney" style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+      <p style={{marginLeft:'5%', textAlign:'center'}}>✔ 접수가 완료되었습니다.<br/>
         감사합니다.</p>
     </div>
     </div>

@@ -1,76 +1,106 @@
-import React, { useState, useEffect } from "react";
-import './customheader.css'
-function CustomHeader() { // 컴포넌트 이름을 대문자로 변경
-  const [logoVisible, setLogoVisible] = useState(false);
-  const [buttonsVisible, setButtonsVisible] = useState(false);
+import React, { useState } from 'react';
+import './Header.css'
+import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+// import Logout from '../Login/Logout';
+function Header(props) {
+  const [activeLink, setActiveLink] = useState('');
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const linkStyle = {
+    color: 'black',
+    marginRight: '3%',
+    display: 'inline-block',
+  };
 
-  useEffect(() => {
-    // 로고 애니메이션 효과 시작 (1초 후)
-    setTimeout(() => {
-      setLogoVisible(true);
-    }, 1000);
+  const handleLinkClick = (linkName) => {
+    setActiveLink(linkName);
+  };
 
-    // 버튼 애니메이션 효과 시작 (로고가 나타난 후 1초 뒤)
-    setTimeout(() => {
-      setButtonsVisible(true);
-    }, 2500);
-  }, []);
+  // 로그아웃 함수
+
+
+
   return (
     <div className='customheadersdiv'>
-      <p className={`logo-img ${logoVisible ? "show" : ""}`}>
+      {/* <p className={`logo-img ${logoVisible ? "show" : ""}`}>
           <img 
             src={`${process.env.PUBLIC_URL}/assets/로고사진누.png`} 
             alt="로고"
             style={{ height:'5rem', marginTop:'-13vh' }} // 이미지를 가로 중앙으로 정렬
           />
-        </p>
+        </p> */}
       {/* <div className="customheaders">
           <NavLink
+    <div className='fontb'>
+      <div className="header">
+        <img style={{ marginLeft:'5vw',marginTop:'17vh', width: '9vw'}} src={`${process.env.PUBLIC_URL}/assets/logo_blue.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
+        <div className='items'>
+          {/* <NavLink
             to={`/`}
-            className='customheader'
+            style={activeLink === '홈' ? { ...linkStyle, color: 'orange' } : linkStyle}
+            onClick={() => handleLinkClick('홈')}
           >
             홈
+          </NavLink> */}
+          <NavLink
+            to={`/`}
+            className='item'
+            style={activeLink === '접수 목록' ? { ...linkStyle,               
+            color: '#F07B3F', 
+            height:'2rem',
+            width:'5.2rem',
+            borderBottom: '2px solid #F07B3F',
+            fontWeight: 'bold' } : linkStyle}
+            onClick={() => handleLinkClick('접수 목록')}
+          >
+            소개
           </NavLink>
           <NavLink
             to={`/customerreceive`}
-            className='customheader'
+            className='item'
+            style={activeLink === '결과 목록' ? { ...linkStyle,               
+            color: '#F07B3F', 
+            borderBottom: '2px solid #F07B3F',
+            height:'2rem',
+            width:'5.2rem',
+            fontWeight: 'bold'} : linkStyle}
+            onClick={() => handleLinkClick('결과 목록')}
           >
-            신청페이지
-          </NavLink>
-          <NavLink
-            to={`/fixcustom`}
-            className='customheader'
-          >
-            점검결과
-          </NavLink> */}
-          {/* <NavLink
-            to={`/CustomMain/Moneyreturn`}
-            className='customheader'
-          >
-            환불페이지
-          </NavLink>
-          <NavLink
-            to={`/CustomMain/Moneywait`}
-            className='customheader'
-          >
-            입금대기
-          </NavLink> */}
-          {/* <NavLink
-            to={`/receiveresult`}
-            className='customheader'
-          >
-            신청결과
+            신청 하기
           </NavLink>
           <NavLink
             to={`/resultconfirm`}
-            className='customheader'
+            className='item'
+            style={activeLink === '결과 목록' ? { ...linkStyle,               
+            color: '#F07B3F', 
+            borderBottom: '2px solid #F07B3F',
+            height:'2rem',
+            width:'5.2rem',
+            fontWeight: 'bold'} : linkStyle}
+            onClick={() => handleLinkClick('결과 목록')}
           >
             결과확인
           </NavLink>
-        </div> */}
-
-    </div>
+          {/* <NavLink
+            to={`resultconfirm`}
+            className='minitem'
+            style={activeLink === '내 정보' ? { ...linkStyle,               
+            color: '#F07B3F',
+            height:'2rem',
+            width:'4rem',
+            borderBottom: '2px solid #F07B3F',
+            fontWeight: 'bold' } : linkStyle}
+            onClick={() => handleLinkClick('내 정보')}
+          >
+            결과확인
+          </NavLink> */}
+          {/* 로그아웃 버튼 */}
+         
+          {/* <button onClick={handleLogout}>로그아웃</button> */}
+        </div>
+      </div>
+    // </div>
   );
 }
 
-export default CustomHeader;
+export default Header;

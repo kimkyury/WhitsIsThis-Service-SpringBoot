@@ -1,0 +1,18 @@
+.loginform {
+  display:flex; 
+  justify-content:center; 
+  align-items: center;
+  height: 90vh;
+  width: 77vw;
+}
+
+.centerFirst{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 130vh;
+}
+
+.backgr {
+ background-color: #2D4059; 
+}
