@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Building from "../components/Building";
 import { useNavigate } from "react-router-dom";
 
-import { BuildingDataContext, BuildingDispatchContext } from "../App";
+import { BuildingDispatchContext } from "../App";
 import AuthHttp from "../utils/AuthHttp";
 
 // 검색 필터 해줘야해용

@@ -12,7 +12,6 @@ import HouseList from "./pages/HouseList";
 import HouseResult from "./pages/HouseResult";
 import Search from "./pages/Search";
 import SearchDetail from "./pages/SearchDetail";
-import Health from "./pages/Health";
 
 // testpage
 import TestPage from "./test/TestPage";
@@ -66,15 +65,10 @@ function App() {
 
   return (
     <BrowserRouter basename={BASE_NAME}>
-      <WebSocketProvider>
-        <BuildingDataContext.Provider value={{ buildingList }}>
-          <BuildingDispatchContext.Provider value={{ init }}>
+      <BuildingDataContext.Provider value={{ buildingList }}>
+        <BuildingDispatchContext.Provider value={{ init }}>
+          <WebSocketProvider>
             <div className="App">
-              {/* <BrowserRouter>
-          <Routes>
-            <Route path="/health" element={<Health />} />
-          </Routes>
-        </BrowserRouter> */}
               <Routes>
                 <Route path="/test" element={<TestPage />} />
                 <Route path="" element={<Home />} />
@@ -92,9 +86,9 @@ function App() {
                 <Route path="/camera" element={<Camera />} />
               </Routes>
             </div>
-          </BuildingDispatchContext.Provider>
-        </BuildingDataContext.Provider>
-      </WebSocketProvider>
+          </WebSocketProvider>
+        </BuildingDispatchContext.Provider>
+      </BuildingDataContext.Provider>
     </BrowserRouter>
   );
 }

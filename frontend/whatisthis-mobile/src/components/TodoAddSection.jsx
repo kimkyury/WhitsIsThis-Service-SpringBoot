@@ -1,7 +1,6 @@
 import TodoSectionItem from "./TodoSectionItem";
 
 // 닫기는게 오른쪽 열리는게 왼쪽
-import { dummySectionList } from "../utils/DummyData";
 import { useEffect, useState } from "react";
 import AuthHttp from "../utils/AuthHttp";
 

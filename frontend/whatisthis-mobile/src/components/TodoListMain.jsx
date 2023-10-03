@@ -1,4 +1,3 @@
-import { useState } from "react";
 import TodoSectionItem from "./TodoSectionItem";
 
 // 닫기는게 왼쪽 열리는게 오른쪽 디폴트는 고정

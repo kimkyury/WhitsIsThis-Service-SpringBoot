@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import Notification from "../components/Notification";
-import { BuildingDataContext } from "../App";
 import AuthHttp from "../utils/AuthHttp";
 import { useWebSocket } from "../utils/WebSocket";
 
