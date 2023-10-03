@@ -1,34 +1,12 @@
 import TodoSectionItem from "./TodoSectionItem";
 import TodoListItem from "./TodoListItem";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
 import AuthHttp from "../utils/AuthHttp";
-import { useState } from "react";
 
 // 할일이 객체로 이름, 내용, 선택됨, 이미지 를 갖고 있어야 함
 
 const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) => {
   const navigate = useNavigate();
-  const { houseId } = useParams();
-
-  // 렌더링 여러번 되는 문제 개선 필요
-
-  // useEffect(() => {
-  //   const getTodoList = async () => {
-  //     try {
-  //       const response = await AuthHttp({
-  //         method: "patch",
-  //         url: `/private/histories/${houseId}/todolists`,
-  //         data: {
-  //           roomId: targetSection.id,
-  //         },
-  //       });
-  //       console.log(response);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   };
-  // }, []);
 
   const closeSectionDetail = async (roomOrder) => {
     console.log(targetSection);
