@@ -18,6 +18,7 @@ function Phoneconfirm({ requesterPhoneNumber, setPhoneConfirmVisible, isSuc, set
       // 여기에서 모달을 닫아줄 수 있습니다.
       setPhoneConfirmVisible(false);
       setIsSuc(true)
+      alert('인증이 완료되었습니다.')
     } catch (error) {
       // 인증에 실패했을 때 처리
       console.error("인증 실패:", error);

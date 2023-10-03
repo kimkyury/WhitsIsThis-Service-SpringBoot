@@ -127,6 +127,7 @@ function CustomreceiveModal() {
 
       // 요청이 성공하면 Phoneconfirm 모달을 표시
       setPhoneConfirmVisible(true);
+      alert('신청이 완료되었습니다.');
       navigate("/");
     } catch (error) {
       console.error("신청 처리 중 오류가 발생했다.", error);
