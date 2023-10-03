@@ -1,58 +1,208 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './login.css';
-import Header from "../customcomponent/customheader/customheader";
-import Footer from '../customcomponent/customheader/footerdesk';
-function WebMainC() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const imagePaths = [
-    "/assets/집2.jfif",
-    "/assets/집사진.jfif",
-    "/assets/집3.jfif",
-  ];
+import React, { useState } from "react";
+// import "./Fixcustom.css";
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => {
-        const nextIndex = (prevIndex + 1) % imagePaths.length;
-        if (nextIndex === 0) {
-          return 0;
-        } else {
-          return nextIndex;
-        }
-      });
-    }, 5000);
+import { useMediaQuery } from "react-responsive";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+function Fixcustom() {
+  // const navigate = useNavigate();
+  // const location = useLocation();
 
-  const currentImagePath = imagePaths[currentImageIndex];
+  // const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+  // const { id, status, employeeName, inspectionDate, history, payment } = location.state;
+  // const statuses = ["WAITING_INSPECTION_DATE", "WAITING_FOR_INSPECTION", "IN_PROGRESS", "DONE"];
+
+  // const getIndex = (status) => {
+  //   return statuses.indexOf(status);
+  // };
+
+  // // 상태에 따라 원 모양 스타일을 반환하는 함수 정의
+  // const getCircleStyle = (circleStatus) => {
+  //   const statusIdx = getIndex(status);
+  //   const circleStatusIdx = getIndex(circleStatus);
+
+  //   if (circleStatusIdx < statusIdx) return { backgroundColor: "#006400", color: "green" };
+  //   if (circleStatusIdx === statusIdx) {
+  //     return { backgroundColor: "#F07B3F", color: "green" };
+  //   }
+  //   return {};
+  // };
+
+  // // 체크마크 (✔)를 표시할지 여부를 결정하는 함수 정의
+  // const showCheckmark = (circleStatus) => {
+  //   const statusIdx = getIndex(status);
+  //   const circleStatusIdx = getIndex(circleStatus);
+
+  //   if (circleStatusIdx < statusIdx) return "✔";
+  //   if (circleStatusIdx === statusIdx) {
+  //     return ">";
+  //   }
+  //   return "";
+  // };
+
+  // // "대기 중", "진행 중", "완료" 상태에 따른 텍스트 및 다운로드 표시 여부 설정
+  // let boxPageText = "담당자와 점검 일자를 할당 중입니다.";
+  // let additionalText = "빠른 시일 내로 결정됩니다.";
+  // let showCancelButton = true;
+  // let showDownloadButtons = false;
+
+  // if (status === "WAITING_FOR_INSPECTION") {
+  //   boxPageText = `담당자명 : ${employeeName}`;
+  //   additionalText = `점검 시작일시 : ${inspectionDate}`;
+  // }
+  // if (status === "IN_PROGRESS") {
+  //   boxPageText = `담당자명 : ${employeeName}`; // 실제 담당자 이름으로 변경해주세요
+  //   additionalText = `점검을 진행 중입니다.`; // 실제 시작일시로 변경해주세요
+  //   showCancelButton = false;
+  // } else if (status === "DONE") {
+  //   boxPageText = `담당자명 : ${employeeName}`; // 실제 담당자 이름으로 변경해주세요
+  //   additionalText = `점검 완료일시 : ${history.inspectedAt}`; // 실제 완료 일시로 변경해주세요
+  //   showCancelButton = false;
+  //   showDownloadButtons = true; // 완료 상태에서 다운로드 버튼을 표시합니다.
+  // }
+
+  // const handleCancellation = async () => {
+  //   if (!window.confirm("신청을 취소하시겠습니까?")) return;
+
+  //   navigate("/moneyreturn", { state: { payment: payment } });
+  // };
+
+  // const handleOk = () => {
+  //   navigate("/", { replace: true });
+  // };
+
+  // const handleReportDownload = async () => {
+  //   try {
+  //     const response = await axios.get(`${BASE_URL}/api/v1/histories/${history.id}/report`, {
+  //       responseType: "blob",
+  //     });
+
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", "report.pdf");
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   } catch (error) {
+  //     alert("파일이 존재하지 않습니다.");
+  //     console.error("Error downloading the file:", error);
+  //   }
+  // };
+
+  // const handleZipDownload = async () => {
+  //   try {
+  //     const response = await axios.get(`${BASE_URL}/api/v1/histories/${history.id}/zip`, {
+  //       responseType: "blob",
+  //     });
+
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", "zip.zip");
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   } catch (error) {
+  //     alert("파일이 존재하지 않습니다.");
+  //     console.error("Error downloading the file:", error);
+  //   }
+  // };
+
+  // const Desktop = ({ children }) => {
+  //   const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
+  //   return isDesktop ? children : null;
+  // };
+
+  // const Mobile = ({ children }) => {
+  //   const isMobile = useMediaQuery({ maxDeviceWidth: 1223 });
+  //   return isMobile ? children : null;
+  // };
 
   return (
-    <div className='fontb' style={{height:'84vh'}}>
-      <Header />
-      <div  style={{ marginTop: '4vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <img
-          src={currentImagePath}
-          alt="집 이미지"
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: '999',
-            marginLeft:'7vw',
-            width: '60vw',
-            height: '60vh',
-            border: '1.5px solid black',
-          }}
-        />
-      </div>
-      {/* <Footer/> */}
+    <div className="roomimg resrecpage">
+
+<div className="desk-customreceivedivfix" >
+          <div className="desk-custommodaltitle ">
+            <p>점검 결과</p>
+          </div>
+          <div className="circlelinebox">
+            <span>
+              <div className="flexlinebox">
+                <p className="circle" >
+              
+                  <p className="listline">확인중</p>
+                </p>
+              </div>
+            </span>
+            <p className="line"></p>
+            <span>
+              <div className="flexlinebox">
+                <p className="circle">
+                 
+                  <p className="listline">점검 대기</p>
+                </p>
+              </div>
+            </span>
+            <p className="line"></p>
+            <span>
+              <div className="flexlinebox">
+                <p className="circle">
+                  
+                  <p className="listline">진행 중</p>
+                </p>
+              </div>
+            </span>
+            <p className="line"></p>
+            <span>
+              <div className="flexlinebox">
+                <p className="circle" >
+                 
+                  <p className="listline">완료</p>
+                </p>
+              </div>
+            </span>
+          </div>
+          <div className="middlemodalsx">
+            <div className="boxpage">
+              <div className="vertical-center">
+                <p style={{ marginLeft: "5%" }}>a</p>
+                <p style={{ marginLeft: "5%" }}>b</p>{" "}
+                {/* {showDownloadButtons && ( */}
+                  <>
+                    <p
+                      // onClick={() => handleReportDownload()}
+                      style={{ marginLeft: "5%", color: "blue" }}
+                    >
+                      보고서 다운로드 : 보고서 URL
+                    </p>
+                    <p
+                      // onClick={() => handleZipDownload()}
+                      style={{ marginLeft: "5%", marginTop: "-3%", color: "blue" }}
+                    >
+                      사진 파일 다운로드 : 사진파일.zip
+                    </p>
+                  </>
+                {/* )} */}
+              </div>
+            </div>
+          </div>
+          <div className="middlemodal">
+            <button className="button bigbuttons">
+              확인하기
+            </button>
+           
+              <button className="button bigbuttons" >
+                취소하기
+              </button>
+           
+          </div>
+        </div>
+
+
+
     </div>
   );
 }
 
-export default WebMainC;
+export default Fixcustom;

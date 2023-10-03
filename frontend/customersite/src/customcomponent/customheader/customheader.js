@@ -69,7 +69,7 @@ function Header(props) {
             fontWeight: 'bold'} : linkStyle}
             onClick={() => handleLinkClick('결과 목록')}
           >
-            결과확인
+            결과 확인
           </NavLink>
           {/* <NavLink
             to={`resultconfirm`}
