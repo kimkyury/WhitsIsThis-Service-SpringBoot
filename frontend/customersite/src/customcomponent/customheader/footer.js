@@ -1,14 +1,14 @@
 import React from "react";
-
+import './Header.css'
 function Footer() {
   return (
     <div className='fontb'>
       <div className="footer">
 
       <p>
-        <span>저자 : cocoder</span><br/>
-        <span>이메일 : cocoder16@gmail.com</span><br/>
-        <span>Copyright 2020. cocoder. All Rights Reserved.</span>
+        <span>Corp : 이게모징 </span><br/>
+        <span>대표 : 신성환</span><br/>
+        <span>Copyright 2023. 이게모징. All Rights Reserved.</span>
     </p>
       </div>
     </div>

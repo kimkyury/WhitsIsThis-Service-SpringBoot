@@ -3,7 +3,7 @@ import './Maincustompage.css';
 import { Link } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
 import Header from '../../customcomponent/customheader/customheader';
-
+import WebMainC from "../WebMainC";
 function CustomMain() {
   const [logoVisible, setLogoVisible] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(false);
@@ -49,12 +49,12 @@ function CustomMain() {
   }, []);
 
   const Desktop = ({ children }) => {
-    const isDesktop = useMediaQuery({ minDeviceWidth: 1224 });
+    const isDesktop = useMediaQuery({ minDeviceWidth: 901 });
     return isDesktop ? children : null;
   };
 
   const Mobile = ({ children }) => {
-    const isMobile = useMediaQuery({ maxDeviceWidth: 1223 });
+    const isMobile = useMediaQuery({ maxDeviceWidth: 900 });
     return isMobile ? children : null;
   };
 
@@ -99,7 +99,8 @@ function CustomMain() {
     </Mobile>
    
     <Desktop>
-        <div className="roomimg fontb">
+      <WebMainC/>
+        {/* <div className="roomimg fontb">
           <div className="desktop-diagonal-line">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="-13 0 50 100" preserveAspectRatio="none" width="100VW" height="100vh" >
             <path d="M10 0 C15 180, 50 -500,50 4000 V0 H100 Z" fill="#6EC5FF" />
@@ -166,7 +167,7 @@ function CustomMain() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </Desktop>
     </div>
   )

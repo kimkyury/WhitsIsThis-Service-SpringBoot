@@ -9,6 +9,7 @@ import Information from "./customerpages/Customresultpage/Informationpage/Inform
 import Health from "./customerpages/Health.jsx";
 import Footer from "../src/customcomponent/customheader/footer";
 import WebMainC from "./customerpages/WebMainC";
+
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
 
@@ -21,9 +22,10 @@ function App() {
       </Router>
 
       <Router basename={BASE_NAME}>
+ 
         <Routes>
-          <Route path="/" element={[<Maincustompage />]} />
-          <Route path="/main" element={[<WebMainC />]}/>
+          {/* <Route path="/start" element={[<WebMainC />]}/> */}
+          <Route path="/" element={[<WebMainC />]} />
           <Route path="/customerreceive" element={[<Customreceivepage />]} />
           <Route path="/fixcustom" element={[<Fixcustom />]} />
           <Route path="/moneyreturn" element={[<Moneyreturn />]} />
