@@ -23,7 +23,7 @@ function Header(props) {
   return (
     <div className='fontb'>
       <div className="header">
-        <img style={{ marginLeft:'3rem',marginTop:'5rem', width: '8rem', height:'8rem' }} src={`${process.env.PUBLIC_URL}/assets/logo.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
+        <img style={{ marginLeft:'4rem',marginTop:'8rem', width: '8rem' }} src={`${process.env.PUBLIC_URL}/assets/logo.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
         <div className='items'>
           {/* <NavLink
             to={`/`}
@@ -43,7 +43,7 @@ function Header(props) {
             fontWeight: 'bold' } : linkStyle}
             onClick={() => handleLinkClick('접수 목록')}
           >
-            접수 목록
+            소개
           </NavLink>
           <NavLink
             to={`/resultList`}
@@ -56,7 +56,7 @@ function Header(props) {
             fontWeight: 'bold'} : linkStyle}
             onClick={() => handleLinkClick('결과 목록')}
           >
-            결과 목록
+            신청하기
           </NavLink>
           <NavLink
             to={`/mypage`}
@@ -69,12 +69,12 @@ function Header(props) {
             fontWeight: 'bold' } : linkStyle}
             onClick={() => handleLinkClick('내 정보')}
           >
-            내 정보
+            결과확인
           </NavLink>
           {/* 로그아웃 버튼 */}
-          <div style={{display:'flex', marginLeft:'12rem', marginTop:'12vh'}}>
+          {/* <div style={{display:'flex', marginLeft:'12rem', marginTop:'12vh'}}>
           <Logout/>
-          </div>
+          </div> */}
           {/* <button onClick={handleLogout}>로그아웃</button> */}
         </div>
       </div>

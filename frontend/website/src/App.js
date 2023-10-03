@@ -12,7 +12,8 @@ import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 import Cookies from 'js-cookie';
 import First from "./pages/WebMain/First";
 import RList from "./pages/ResultList/ResultLists";
-
+import WebMains from "../src/pages/WebMain/WebMainC";
+import Footer from '../src/component/Header/Footer/footer';
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
   const access = sessionStorage.getItem('refreshToken');
@@ -24,6 +25,7 @@ function App() {
         <div style={{ display: 'flex' }}>
           <Header />
           <Routes>
+          <Route path='/CC' element={<WebMains/>} />
             <Route path='/first' element={<First />} />
             <Route path="/" element={<WebMain />} />
             <Route path="/list" element={<List />} />
@@ -40,6 +42,7 @@ function App() {
             />
           </Routes>
         </div>
+      <Footer/>
       </Router>
     </div>
   );

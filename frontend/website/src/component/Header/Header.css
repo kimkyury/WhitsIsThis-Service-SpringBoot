@@ -12,13 +12,24 @@
   /* background-color: #2D4059; */
   /* border-bottom: 2px solid black; */
 }   
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #F0F0F0; /* 푸터의 배경색을 원하는 색상으로 설정합니다. */
+  /* color: white; 푸터 텍스트 색상을 원하는 색상으로 설정합니다. */
+  text-align: center;
+  padding: 15px 0; /* 필요에 따라 여백을 조절합니다. */
+}
+
 a {
   text-decoration: none; /* 밑줄 없애기 */
   color: inherit; /* 상위 엘리먼트에서 상속받은 글꼴 색상 사용 */
 }
 .item {
-  margin-top:6rem;
-  margin-left: 3.5rem;
+  margin-top:3rem;
+  margin-left: 5rem;
   font-size: 1.4rem;
   
   font-weight:bold;
@@ -31,8 +42,8 @@ a {
   width:3.4rem
 }
 .minitem {
-  margin-top:5rem;
-  margin-left: 3.5rem;
+  margin-top:3rem;
+  margin-left: 5rem;
   font-size: 1.4rem;
   
   font-weight:bold;
@@ -54,7 +65,7 @@ a {
 
 }
 .items {
-  margin-top:-12rem;
+  margin-top:-17rem;
   display: flex;
   flex-direction: column; /* 세로로 배치하기 위해 flex-direction을 column으로 설정합니다. */
   width: 20vw;
