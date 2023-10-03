@@ -34,7 +34,6 @@ export const WebSocketProvider = ({ children }) => {
 
     setWs(socket);
   }, []);
-  console.log(receivedMessage);
   const handleReceivedMessage = (data) => {
     setReceivedMessage(data);
   };
