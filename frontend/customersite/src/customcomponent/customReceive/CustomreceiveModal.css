@@ -21,12 +21,19 @@
   margin-right: 2vw;
   /* border-radius: 0.2rem; */
 }
-
+/* 
 .cinputss {
   width:27rem;
+  height:1.5rem; */
+  /* border-radius: 0.2rem; */
+/* } */
+
+.cinputss {
+  width:40vw;
   height:1.5rem;
   /* border-radius: 0.2rem; */
 }
+
 
 
 .cinputs {
@@ -235,11 +242,11 @@
   top: 56%;
   left: 50%;
   border:none;
-  transform: translate(-50%, -50%);
+  transform: translate(-110%, -50%);
   /* border:1px solid black; */
   /* 위의 속성을 사용하여 가로와 세로로 중앙에 정렬합니다. */
-  background-color: white;
-  width: 85vw; /* 모달의 폭을 설정하세요. */
+  /* background-color: white; */
+  width: 40vw; /* 모달의 폭을 설정하세요. */
   height: 5vh; /* 모달의 높이를 설정하세요. */
   z-index: 9999; /* 다른 요소 위로 모달을 표시합니다. */
   /* 필요한 다른 스타일을 추가하세요. */

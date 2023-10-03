@@ -23,7 +23,7 @@ function Header(props) {
   return (
     <div className='fontb'>
       <div className="header">
-        <img style={{ marginLeft:'5vw',marginTop:'17vh', width: '9vw'}} src={`${process.env.PUBLIC_URL}/assets/logo_blue.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
+        <img style={{ marginLeft:'5vw',marginTop:'17vh', width: '9vw'}} src={`${process.env.PUBLIC_URL}/assets/로고사진누.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
         <div className='items'>
           {/* <NavLink
             to={`/`}
