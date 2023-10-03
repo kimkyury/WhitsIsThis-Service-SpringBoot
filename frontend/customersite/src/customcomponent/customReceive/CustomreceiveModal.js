@@ -196,7 +196,7 @@ function CustomreceiveModal() {
               <option value="11">NH농협은행</option>
               <option value="20">우리은행</option>
               <option value="31">DGB대구은행</option>
-              <option value="32">부산은행</option>
+              {/* <option value="32">부산은행</option> */}
               <option value="34">광주은행</option>
               <option value="37">전북은행</option>
               <option value="45">새마을금고</option>
