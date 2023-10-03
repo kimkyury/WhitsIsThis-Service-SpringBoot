@@ -43,7 +43,7 @@ function Header(props) {
             fontWeight: 'bold' } : linkStyle}
             onClick={() => handleLinkClick('접수 목록')}
           >
-            소개
+            접수내역
           </NavLink>
           <NavLink
             to={`/resultList`}
@@ -56,7 +56,7 @@ function Header(props) {
             fontWeight: 'bold'} : linkStyle}
             onClick={() => handleLinkClick('결과 목록')}
           >
-            신청하기
+            결과내역
           </NavLink>
           <NavLink
             to={`/mypage`}
@@ -69,12 +69,12 @@ function Header(props) {
             fontWeight: 'bold' } : linkStyle}
             onClick={() => handleLinkClick('내 정보')}
           >
-            결과확인
+            내정보
           </NavLink>
           {/* 로그아웃 버튼 */}
-          {/* <div style={{display:'flex', marginLeft:'12rem', marginTop:'12vh'}}>
+          <div style={{display:'flex', marginLeft:'12rem', marginTop:'12vh'}}>
           <Logout/>
-          </div> */}
+          </div>
           {/* <button onClick={handleLogout}>로그아웃</button> */}
         </div>
       </div>
