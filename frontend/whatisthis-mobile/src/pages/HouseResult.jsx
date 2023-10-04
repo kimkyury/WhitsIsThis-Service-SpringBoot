@@ -60,6 +60,10 @@ const HouseResult = () => {
     }
   };
 
+  const showReport = () => {
+    navigate(`/test`);
+  };
+
   if (!result) {
     return <div className="HouseResult">로딩중입니다...</div>;
   } else {
@@ -108,12 +112,7 @@ const HouseResult = () => {
             })}
         </div>
         <div className="button_wrapper">
-          <Notification
-            text={"보고서 확인"}
-            type={"left"}
-            color={"grey"}
-            onClick={() => navigate("/test")}
-          />
+          <Notification text={"보고서 확인"} type={"left"} color={"grey"} onClick={showReport} />
           <Notification
             text={"완료승인"}
             type={"right"}
