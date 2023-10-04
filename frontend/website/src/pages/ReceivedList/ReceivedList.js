@@ -412,6 +412,7 @@ function List() {
             <Calendar selectedItem={selectedItem} setShowcal={setShowcal} />
           </div>
         )} */}
+        {/* showcal는 내 접수 넘어가쓸때 true하고 selectedItem, setshowcal, datainspectionstart, end */}
       </div>
     ) : (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>

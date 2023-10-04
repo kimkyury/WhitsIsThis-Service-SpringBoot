@@ -3,6 +3,7 @@ import './Login.css';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthHttp from "../util/AuthHttp";
+import Cookies from 'js-cookie';
 function 첫번째로그인페이지() {
   const navigate = useNavigate();
   const [username, setUsername] = useState(sessionStorage.getItem('username') || '');
@@ -63,6 +64,52 @@ function 첫번째로그인페이지() {
   //     setUploadMessage('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
   //   }
   // };
+  // const handleLogout = async () => {
+  //   try {
+  //     const accessToken = sessionStorage.getItem('accessToken');
+
+  //     if (accessToken) {
+  //       // Send a POST request to the logout API with accessToken in Authorization header
+  //       await axios.post(
+  //         `${BASE_URL}/api/v1/private/auth/logout`,
+  //         {},
+  //         {
+  //           headers: {
+  //             Authorization: `${accessToken}`,
+  //           },
+  //         }
+  //       );
+  //     }
+
+  //     // Assuming the logout was successful, clear the token from localStorage
+  //     localStorage.removeItem('accessToken');
+  //     // Cookies.remove('accessToken');
+  //     sessionStorage.removeItem('imageurl');
+  //     sessionStorage.removeItem('username');
+  //     sessionStorage.removeItem('role');
+  //     sessionStorage.removeItem('name');
+  //     sessionStorage.removeItem('phone');
+  //     sessionStorage.removeItem('accessToken');
+  //     // sessionStorage.clear();
+  //     // Cookies.clear();
+  //     // Optionally, you can clear other data from localStorage as well, e.g., username
+  //     localStorage.removeItem('username');
+  //     // Redirect the user to the webmain page
+  //     window.location.href = '/';
+  //     navigate('/');
+
+  //     console.log('로그아웃 성공')
+  //   } catch (error) {
+  //     // Handle logout error here
+  //     console.error('로그아웃 실패', error);
+  //     navigate('/');
+
+
+  //     // Even if there is an error, clear the token from both localStorage and cookies
+ 
+  //     // navigate('/');
+  //   }
+  // };
 
   const sendUpdateRequest = (formData) => {
     // axios를 사용하여 PATCH 요청을 보냅니다.
@@ -73,7 +120,7 @@ function 첫번째로그인페이지() {
 
     axios
       .patch(`${BASE_URL}/api/v1/private/members/employees`, formData, { headers })
-      .then((response) => {
+      .then(async (response) => {
         // 성공적으로 업데이트된 경우
         console.log("이미지 업로드 성공:", response.data);
 
@@ -93,7 +140,19 @@ function 첫번째로그인페이지() {
         alert("변경이 성공했습니다."); // 변경이 성공했음을 알림
 
         // mypage로 이동
-        navigate('/mypage');
+        localStorage.removeItem('accessToken');
+        Cookies.remove('accessToken');
+        sessionStorage.removeItem('imageurl');
+        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('role');
+        sessionStorage.removeItem('name');
+        sessionStorage.removeItem('phone');
+        sessionStorage.removeItem('accessToken');
+        // sessionStorage.clear();
+        // Cookies.clear();
+        // Optionally, you can clear other data from localStorage as well, e.g., username
+        localStorage.removeItem('username');
+        window.location.href='/';
       })
       .catch((error) => {
         console.error("이미지 업로드 실패:", error);

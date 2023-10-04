@@ -22,7 +22,15 @@ function Header(props) {
       setImageurl(null);
       setName(null);
     };
-  }, []);
+  }, [view]);
+
+  useEffect(() => {
+    if (username && imageurl && name) setView(true);
+
+    return () => {
+      setView(false);
+    };
+  }, [username, imageurl, name]);
 
   const linkStyle = {
     color: "black",
@@ -54,12 +62,9 @@ function Header(props) {
             홈
           </NavLink> */}
           {/* 로그아웃 버튼 */}
-          {username && imageurl && name && (
+          {view && (
             <div
-              onClick={() => {
-                setView(!view);
-              }}
-              className="item"
+              className="useritem"
               style={{
                 display: "flex",
                 alignItems: "center",

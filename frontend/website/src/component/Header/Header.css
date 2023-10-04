@@ -35,6 +35,14 @@ a {
   font-weight:bold;
 }
 
+.useritem {
+  margin-top:3rem;
+  margin-left: 5rem;
+  font-size: 1.4vw;
+  
+  font-weight:bold;
+}
+
 .minitem:hover {
   color:#F07B3F !important; 
   font-size:1.2rem;

@@ -37,7 +37,9 @@ function Logout() {
       // Optionally, you can clear other data from localStorage as well, e.g., username
       localStorage.removeItem('username');
       // Redirect the user to the webmain page
+      window.location.href = '/';
       navigate('/');
+
       console.log('로그아웃 성공')
     } catch (error) {
       // Handle logout error here

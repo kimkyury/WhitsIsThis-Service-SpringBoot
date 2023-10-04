@@ -10,109 +10,11 @@ import {
   StyleSheet,
   Text,
 } from "@react-pdf/renderer";
-
-// function History() {
-//   const [data, setData] = useState('');
-
-//   useEffect(() => {
-//     fetchMyData();
-//   }, []);
-
-//   const fetchMyData = async () => {
-//     const id = 1;
-
-//     try {
-//       const response = await AuthHttp({
-//         method: 'get',
-//         url: `/private/histories/${id}`,
-//         params: {
-//           id: 1
-//         }
-//       });
-//       console.log(response.data);
-//       setData(response.data);
-//     } catch(e) {
-//       console.error(e);
-//     }
-//   }
-
-//   // console.log(data);
-//   // console.log(data.message)
-//   // console.log(data.data.todolist[0].todolist)
-//   const styles = StyleSheet.create({
-//         page: {
-//             textAlign: 'center',
-//             margin: 30,
-//             fontSize: 30,
-//             // border: '2px solid black',
-//         },
-//         text: {
-//             color: '#228b22',
-//         },
-//       layout: {
-//               marginTop: 30,
-//               flexDirection: 'row',
-//               justifyContent: 'space-between'
-//           },
-//       image: {
-//         width: 300,
-//         height: 200,
-//       }
-//   });
-//   console.log(data)
-//   return (
-//     <PDFViewer>
-//     <Document>
-//       <Page style={styles.page}>
-//         <View>
-//           <Text>
-//             {data.message}
-//           </Text>
-//         </View>
-//         <View style={styles.layout}>
-//         {/* <Text style={styles.text}>Hello</Text>
-
-//         <Image
-//         src={`${process.env.PUBLIC_URL}/assets/집1.jpg`}
-//         style={styles.image} /> */}
-//         </View>
-
-//       </Page>
-//     </Document>
-//     </PDFViewer>
-//   )
-// }
-
-// export default History;
-// import React from 'react';
-// import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { BiCheck } from "react-icons/bi"; // react-icons에서 BiCheck 아이콘을 가져옵니다.
 
 Font.register({
   family: "MyKoreanFont",
   src: `${process.env.PUBLIC_URL}/assets/fonts/JeonjuCraft_Go_Regular.ttf`,
-});
-const styles = StyleSheet.create({
-  document: {
-    width: "100%",
-    minHeight: "80vh",
-  },
-  page: {
-    flexDirection: "row",
-    backgroundColor: "#E4E4E4",
-    // width:'1000'
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-  image: {
-    width: 400,
-    height: 200,
-  },
-  text: {
-    fontFamily: "MyKoreanFont", // 한글 폰트 적용
-  },
 });
 
 const MyDocument = ({ data }) => {
@@ -125,9 +27,8 @@ const MyDocument = ({ data }) => {
           method: "get",
           url: `/private/histories/1`,
         });
-        console.log(response.data.data);
+        console.log(response);
         setMydata(response.data.data);
-        // setMdata(response.data.data.requests)
       } catch (e) {
         console.error(e);
       }
@@ -135,28 +36,49 @@ const MyDocument = ({ data }) => {
     fetchMyData();
   }, []);
 
+  const renderCheckIcon = (isChecked) => {
+    console.log("isChecked:", isChecked);
+
+    if (isChecked) {
+      console.log("Rendering checkmark icon.");
+      // 아이콘 컴포넌트를 JSX로 렌더링합니다.
+      return <Text style={{ color: 'green' }}>●</Text>;
+    } else {
+      console.log("Not rendering checkmark icon.");
+      return '○';
+      
+    }
+  };
+
   return (
     <PDFViewer style={styles.document}>
       <Document>
-        <Page size="A4" style={styles.page}>
-          <Image style={styles.image} src={`${process.env.PUBLIC_URL}/assets/집1.jpg`} />
+        <Page>
+          <View style={{ display: "flex", alignItems: "center", marginTop: "20vh" }}>
+            <Image style={styles.images} src={`${process.env.PUBLIC_URL}/assets/logo.png`} />
+            <Text style={styles.texts}>담당자명 : 홍길동</Text>
+            <Text style={styles.textk}>점검완료일자 : 2023-10-04</Text>
+          </View>
         </Page>
         <Page size="A4" style={styles.page}>
           <View style={styles.section}>
-            {/* <Text style={styles.text}>{data}</Text> */}
             {myData &&
               myData.todolist.map((it) => (
-                <View View key={it.roomOrder}>
-                  <Text style={styles.text}>
-                    {it.roomOrder} {it.roomName}
-                  </Text>
-
-                  {it.todolist &&
-                    it.todolist.map((data) => (
-                      <View key={data.content}>
-                        <Text style={styles.text}>{data.content}</Text>
-                        <Text style={styles.text}>{data.isChecked}</Text>
-
+                <View style={styles.gridContainer} key={it.roomOrder}>
+                  <View style={styles.leftColumn}>
+                    <Text style={styles.title}>
+                      {it.roomOrder}. {it.roomName}
+                    </Text>
+                  </View>
+                  <View style={styles.rightColumn}>
+                    {it.todolist &&
+                      it.todolist.map((data) => (
+                        <View key={data.content} style={{ marginBottom: "1.5vh", marginTop:'3.5vh', marginRight:'2vh' }}>
+                      <Text style={styles.textgrid}>{renderCheckIcon(data.isChecked)} {data.content}</Text>
+                      
+                     
+                      
+                      <View style={styles.imageContainer}>
                         {data.images &&
                           data.images.map((image) => (
                             <Image
@@ -166,38 +88,97 @@ const MyDocument = ({ data }) => {
                             />
                           ))}
                       </View>
-                    ))}
+                    </View>
+                      ))}
+                  </View>
                 </View>
               ))}
-
-            {/* {myData&&myData.todolist.map((it)=>{
-             {it && it.todolist.map((data) => {
-              // console.log(data.isChecked)
-              return(
-                <Text style={styles.text}>{data.isChecked}</Text>
-              )
-            })}
-          })}
-      {myData && myData.todolist.map((it) => {
-        return it && it.todolist.map((data) => {
-          // console.log(data.images)
-          return data.images && data.images.map((image) => {
-            // console.log(image.imageUrl);
-            return (
-              // <Image style={styles.text}>{image.imageUrl}</Image>
-              <Image
-              style={styles.image}
-              src={`${process.env.REACT_APP_S3_BASE_URL}${image.imageUrl}`}
-            />
-            );
-          });
-        });
-      })} */}
           </View>
         </Page>
       </Document>
     </PDFViewer>
   );
 };
+
+const styles = StyleSheet.create({
+  document: {
+    width: "100%",
+    minHeight: "80vh",
+  },
+  page: {
+    flexDirection: "row",
+    backgroundColor: "white",
+  },
+  textgrid: {
+    fontFamily: "MyKoreanFont",
+    display:'flex',
+    justifyContent:'space-between',
+    marginBottom: "10px", flexDirection: 'row', 
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    flexGrow: 1,
+  },
+  imageContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  image: {
+    width: 150,
+    height: 100,
+    marginRight: 10,
+    marginTop: 10,
+  },
+  images: {
+    width: 300,
+  },
+  text: {
+    fontFamily: "MyKoreanFont",
+    // margin:'5vh',
+  },
+  texts: {
+    fontFamily: "MyKoreanFont",
+    marginTop: "40vh",
+    fontWeight: "bold",
+  },
+  textk: {
+    margin: "1vh",
+    fontFamily: "MyKoreanFont",
+    fontWeight: "bold",
+  },
+  title: {
+    fontFamily: "MyKoreanFont",
+    fontSize: "4vw",
+    fontWeight: "bold",
+  },
+  gridContainer: {
+    display: "flex",
+    flexDirection: "row",
+    borderBottom: "2px solid black",
+    borderTop: "2px solid black",
+    marginBottom: "10px",
+    padding: "10px",
+  },
+  leftColumn: {
+    width: "25%",
+    borderRight: "2px solid black",
+    padding: "10px",
+  },
+  rightColumn: {
+    width: "75%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    margin: "10px",
+  },
+  gridItem: {
+    width: "33.33%",
+    border: "2px solid black",
+    padding: "10px",
+    boxSizing: "border-box",
+  },
+});
 
 export default MyDocument;
