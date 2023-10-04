@@ -37,7 +37,7 @@ const TodoListItem = ({
     <div className="TodoListItem">
       <div className="header">
         <input id={todoListId} type="checkbox" checked={isChecked} onChange={handleCheckBoxState} />
-        <h2>항목이름 간단하게</h2>
+        <h2>{todoListItem.content}</h2>
         <div className="image_wrapper" onClick={handleOpenCamera}>
           <img src={process.env.PUBLIC_URL + `/assets/camera.png`} alt="" />
         </div>

@@ -13,11 +13,13 @@ import HouseResult from "./pages/HouseResult";
 import Search from "./pages/Search";
 import SearchDetail from "./pages/SearchDetail";
 
-// testpage
-import TestPage from "./test/TestPage";
 import Camera from "./pages/Camera";
 import AuthHttp from "./utils/AuthHttp";
 import { WebSocketProvider } from "./utils/WebSocket";
+
+// testpage
+import TestPage from "./test/TestPage";
+import MyDocument from "./test/MyDocument";
 
 const reducer = (state, action) => {
   let newState = [];
@@ -70,7 +72,7 @@ function App() {
           <WebSocketProvider>
             <div className="App">
               <Routes>
-                <Route path="/test" element={<TestPage />} />
+                <Route path="/test" element={<MyDocument />} />
                 <Route path="" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/connection/:buildingId/:houseId" element={<Connection />} />

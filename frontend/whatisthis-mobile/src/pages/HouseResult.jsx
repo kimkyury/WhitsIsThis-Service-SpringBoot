@@ -76,7 +76,8 @@ const HouseResult = () => {
               console.log(damage);
               return (
                 <div key={damage.id} className="result_item">
-                  <h2>[IOT]{damage.category}</h2>
+                  <h2>[IOT] 손상발견</h2>
+                  <h4>항목 : {damage.category}</h4>
                 </div>
               );
             })}
@@ -85,7 +86,7 @@ const HouseResult = () => {
               console.log(device);
               return (
                 <div key={device.id} className="result_item">
-                  <h2>[IOT]{device.category}</h2>
+                  <h2>[IOT] {device.category}</h2>
                   <h4>{device.isWorked ? "정상작동" : "작동불가"}</h4>1
                 </div>
               );
@@ -96,7 +97,7 @@ const HouseResult = () => {
                 if (todo.isChecked === true) {
                   return (
                     <div key={todo.id} className="result_item">
-                      <h2>[IP]{room.roomName}</h2>
+                      <h2>[IP] {room.roomName}</h2>
                       <h4>{todo.content}</h4>
                     </div>
                   );
@@ -107,7 +108,12 @@ const HouseResult = () => {
             })}
         </div>
         <div className="button_wrapper">
-          <Notification text={"보고서 확인"} type={"left"} color={"grey"} />
+          <Notification
+            text={"보고서 확인"}
+            type={"left"}
+            color={"grey"}
+            onClick={navigate("/test")}
+          />
           <Notification
             text={"완료승인"}
             type={"right"}

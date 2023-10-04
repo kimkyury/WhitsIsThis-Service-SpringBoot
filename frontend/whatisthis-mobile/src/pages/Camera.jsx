@@ -149,8 +149,8 @@ const Camera = () => {
       <div className="result_wrapper">
         <div className="title">
           {/* 투두 리스트 이름 짧게..*/}
-          {/* <h2>{receivedInfo.todoListContent}</h2> */}
-          <h2>List Name</h2>
+          <h2>{receivedInfo.todoListContent}</h2>
+          {/* <h2>List Name</h2> */}
         </div>
         <div className="image_container">
           {capturedImage &&
