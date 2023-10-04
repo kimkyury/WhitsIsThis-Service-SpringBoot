@@ -80,7 +80,8 @@ function CustomMain() {
     className="roomimg fontb" >
                 <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
           <img
-            src={currentImagePath}
+            // src={currentImagePath}
+            src={`${process.env.PUBLIC_URL}/assets/mapping.gif`}
             alt="집 이미지"
             style={{
               height: '100%',
@@ -131,7 +132,8 @@ function CustomMain() {
       <Header />
       <div  style={{ marginTop: '4vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <img
-          src={currentImagePath}
+          // src={currentImagePath}
+          src={`${process.env.PUBLIC_URL}/assets/mapping.gif`}
           alt="집 이미지"
           style={{
             position: 'absolute',
