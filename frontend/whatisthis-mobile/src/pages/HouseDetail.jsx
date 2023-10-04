@@ -48,7 +48,6 @@ const HouseDetail = () => {
           method: "get",
           url: `/histories/${historyId}/drawing`,
         });
-        console.log(response);
         // setTargetHouse(response.data.data);
       } catch (e) {
         console.error(e);
@@ -135,7 +134,7 @@ const HouseDetail = () => {
 
         <div className="map_wrapper">
           {/* 받아온 map 표시 */}
-          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
+          <img src={receivedMessage && receivedMessage.data.image} alt="map" />
         </div>
         <div className="carousel">
           {/* <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
