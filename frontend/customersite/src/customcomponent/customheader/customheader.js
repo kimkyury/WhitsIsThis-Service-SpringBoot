@@ -21,16 +21,6 @@ function Header(props) {
 
 
   return (
-    <div className='customheadersdiv'>
-      {/* <p className={`logo-img ${logoVisible ? "show" : ""}`}>
-          <img 
-            src={`${process.env.PUBLIC_URL}/assets/로고사진누.png`} 
-            alt="로고"
-            style={{ height:'5rem', marginTop:'-13vh' }} // 이미지를 가로 중앙으로 정렬
-          />
-        </p> */}
-      {/* <div className="customheaders">
-          <NavLink
     <div className='fontb'>
       <div className="header">
         <img style={{ marginLeft:'5vw',marginTop:'17vh', width: '9vw'}} src={`${process.env.PUBLIC_URL}/assets/로고사진누.png`} alt='logo' /> {/* 로고 이미지를 표시합니다. */}
@@ -99,7 +89,7 @@ function Header(props) {
           {/* <button onClick={handleLogout}>로그아웃</button> */}
         </div>
       </div>
-    // </div>
+    </div>
   );
 }
 
