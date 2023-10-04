@@ -3,18 +3,23 @@ package com.mo.whatisthis.apis.history.services;
 import com.mo.whatisthis.apis.history.entities.HistoryEntity;
 import com.mo.whatisthis.apis.history.repositories.HistoryRepository;
 import com.mo.whatisthis.apis.history.responses.AllHistoryResponse;
+import com.mo.whatisthis.apis.history.responses.DamagedHistoryResponse;
 import com.mo.whatisthis.apis.history.responses.IntegratedHistoryResponse;
 import com.mo.whatisthis.apis.request.entities.RequestEntity;
 import com.mo.whatisthis.apis.request.entities.RequestEntity.Status;
 import com.mo.whatisthis.apis.request.repositories.RequestRepository;
+import com.mo.whatisthis.apis.todolist.responses.TodolistImageResponse;
+import com.mo.whatisthis.apis.todolist.responses.TodolistResponse;
 import com.mo.whatisthis.apis.todolist.responses.TodolistWrapperResponse;
 import com.mo.whatisthis.apis.todolist.services.TodolistService;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.s3.services.S3Service;
 import com.mo.whatisthis.supports.codes.ErrorCode;
 import com.mo.whatisthis.supports.utils.AWSS3ResponseUtil;
+import com.mo.whatisthis.supports.utils.WebSocketUtils;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +79,7 @@ public class HistoryService {
     }
 
     @Transactional
-    public void uploadReport(Long id, MultipartFile report) throws IOException {
+    public String uploadReport(Long id, MultipartFile report) throws IOException {
         String url = s3Service.saveFile(report);
 
         HistoryEntity historyEntity = historyRepository.findById(id)
@@ -91,6 +96,32 @@ public class HistoryService {
 
         historyRepository.save(historyEntity);
         requestRepository.save(requestEntity);
+
+        return url;
+    }
+
+    public void packToZip(Long id, String reportUrl) throws IOException {
+        List<String> keys = new ArrayList<>();
+        keys.add(reportUrl);
+        
+        AllHistoryResponse allHistoryResponse = getAllHistory(id);
+
+        for (DamagedHistoryResponse damagedHistoryResponse : allHistoryResponse.getHistory()
+                                                                               .getDamaged()) {
+            keys.add(damagedHistoryResponse.getImageUrl());
+        }
+        keys.add(allHistoryResponse.getHistory()
+                                   .getDrawingUrl());
+        for (TodolistWrapperResponse todolistWrapperResponse : allHistoryResponse.getTodolist()) {
+            for (TodolistResponse todolistResponse : todolistWrapperResponse.getTodolist()) {
+                for (TodolistImageResponse todolistImageResponse : todolistResponse.getImages()) {
+                    keys.add(todolistImageResponse.getImageUrl());
+                }
+            }
+        }
+
+        byte[] zip = s3Service.downloadFilesAsZip(keys);
+        uploadZip(id, WebSocketUtils.convertToMultipartFile(zip, "zip.zip"));
     }
 
     @Transactional
