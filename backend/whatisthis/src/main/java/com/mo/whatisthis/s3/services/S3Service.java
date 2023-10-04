@@ -10,8 +10,12 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.supports.codes.ErrorCode;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -68,4 +72,19 @@ public class S3Service {
         }
     }
 
+    public byte[] downloadFilesAsZip(List<String> s3Keys) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+            for (String key : s3Keys) {
+                S3Object o = amazonS3.getObject(new GetObjectRequest(bucket, key));
+                S3ObjectInputStream objectInputStream = o.getObjectContent();
+                byte[] bytes = IOUtils.toByteArray(objectInputStream);
+
+                zos.putNextEntry(new ZipEntry(key));
+                zos.write(bytes);
+                zos.closeEntry();
+            }
+        }
+        return baos.toByteArray();
+    }
 }

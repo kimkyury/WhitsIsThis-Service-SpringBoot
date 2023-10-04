@@ -51,16 +51,8 @@ public class HistoryPrivateController {
     @PostMapping("/{id}/report")
     public ResponseEntity<SuccessResponse<String>> uploadReport(@PathVariable Long id,
         @RequestPart("report") MultipartFile multipartFile) throws IOException {
-        historyService.uploadReport(id, multipartFile);
-
-        return createSuccessResponse(SuccessCode.OK, "업로드 성공");
-    }
-
-    @Operation(summary = "압축 파일 업로드", tags = {"4. History"})
-    @PostMapping("/{id}/zip")
-    public ResponseEntity<SuccessResponse<String>> uploadZip(@PathVariable Long id,
-        @RequestPart("zip") MultipartFile multipartFile) throws IOException {
-        historyService.uploadZip(id, multipartFile);
+        String url = historyService.uploadReport(id, multipartFile);
+        historyService.packToZip(id, url);
 
         return createSuccessResponse(SuccessCode.OK, "업로드 성공");
     }
