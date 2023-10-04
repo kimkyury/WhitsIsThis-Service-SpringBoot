@@ -41,7 +41,7 @@ const Login = () => {
 
     const messageString = JSON.stringify(message, null, 2);
 
-    // setDisplayMessage(JSON.stringify(message, null, 2));
+    console.log(messageString);
     ws.send(messageString);
     console.log(receivedMessage);
   };
@@ -66,25 +66,20 @@ const Login = () => {
         }
       );
 
-      // setUserInfo(response.data.data.employeeinfo);
-      // setAccessToken(response.data.data.accessToken);
       localStorage.setItem("token", response.data.data.accessToken);
       localStorage.setItem("userInfo", JSON.stringify(response.data.data.employeeinfo));
 
-      console.log("login success", response.data.data.employeeinfo);
+      // console.log("login success", response.data.data.employeeinfo);
       setState({
         userId: "",
         userPassword: "",
       });
 
-      // setType("AUTH");
       const token = localStorage.getItem("token");
-      // setDatas({ accessToken: token });
 
       handleSend("AUTH", { accessToken: token });
 
-      // handleSend("COMMAND", { command: "END", serialNumber: "DEVICE1" });
-      // handleConnect();
+      // handleSend("COMMAND", { command: "END", serialNumber: "DEVICE4" });
 
       // navigate("/");
     } catch (e) {

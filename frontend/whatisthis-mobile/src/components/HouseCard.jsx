@@ -1,14 +1,26 @@
 import { useEffect, useState } from "react";
 import CircularProgressBar from "../test/CircularProgressBar";
+import { useWebSocket } from "../utils/WebSocket";
 
-const HouseCard = ({ houseInfo, onClick, currentPercentage }) => {
+const HouseCard = ({ houseInfo, onClick, percentageObj }) => {
+  // console.log(houseInfo);
   const [progressPercentage, setProgressPercentage] = useState(0);
+
+  // const { ws, receivedMessage } = useWebSocket();
+  const [currentPercentage, setCurrentPercentage] = useState(0);
+
+  const [isSearching, setIsSearching] = useState(false);
 
   const checkBox = document.getElementById("card-" + houseInfo.id);
 
   useEffect(() => {
+    if (houseInfo.historyId === percentageObj.historyId) {
+      setCurrentPercentage(percentageObj.percentage);
+      setIsSearching(percentageObj.isSearching);
+    }
     if (houseInfo.status === "DONE") {
-      currentPercentage = 100;
+      setCurrentPercentage(100);
+      // currentPercentage = 100;
     }
     const timer = setInterval(() => {
       if (progressPercentage < currentPercentage) {
@@ -23,9 +35,7 @@ const HouseCard = ({ houseInfo, onClick, currentPercentage }) => {
     });
 
     return () => clearInterval(timer);
-  }, [progressPercentage]);
-
-  // 퍼센트 100퍼이면 다른거 보여줘야함
+  }, [percentageObj, currentPercentage, progressPercentage]);
 
   return (
     <div className="HouseCard" onClick={onClick}>
@@ -36,7 +46,7 @@ const HouseCard = ({ houseInfo, onClick, currentPercentage }) => {
           <div className="houseinfo_wrapper ">
             <h2 className="title">{houseInfo.addressDetail}</h2>
             <h3 className="address">{houseInfo.address}</h3>
-            <h2 className="work_name">작업이름</h2>
+            <h2 className="work_name">{isSearching ? "탐색중" : "대기중"}</h2>
           </div>
         </div>
         <div

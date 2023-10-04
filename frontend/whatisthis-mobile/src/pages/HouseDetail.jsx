@@ -57,6 +57,38 @@ const HouseDetail = () => {
     getTargetHouse();
   }, []);
 
+  useEffect(() => {
+    if (!ws) return;
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      // if (data.data.historyId !== targetHouse.history.id) {
+      //   return;
+      // }
+      console.log("하우수디테이루", data);
+      if (data.data.state && data.data.state === "FINDING") {
+        console.log("hello");
+        setIsCreatingMap(false);
+      }
+      if (data.type && data.type === "COMPLETION_RATE") {
+        if (isCreatingMap === true) {
+          setIsCreatingMap(false);
+        }
+        if (data.data.rate * 100 > 100) {
+          setProcessPercentage(100);
+          //연결 끊기
+          const message = {
+            type: "COMMAND",
+            data: { command: "END", serialNumber: data.data.serialNumber },
+          };
+          const messageString = JSON.stringify(message, null, 2);
+          ws.send(messageString);
+        } else {
+          setProcessPercentage(data.data.rate * 100);
+        }
+      }
+    };
+  }, [ws]);
+
   const handleOpenTodoList = () => {
     setIsOpenTodoList(!isOpenTodoList);
   };
@@ -78,7 +110,7 @@ const HouseDetail = () => {
     return <div className="HouseDetail">로딩중입니다...</div>;
   } else {
     //  소켓에서 날아온 정보 처리방식 변경해야함
-    return receivedMessage && receivedMessage.type === "DRAWING" ? (
+    return isCreatingMap ? (
       <div className="HouseDetail container">
         <div className="building_info_wrapper">
           <div className="building_info">
