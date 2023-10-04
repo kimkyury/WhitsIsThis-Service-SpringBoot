@@ -7,8 +7,6 @@ const TodoListItem = ({
   todoListItem,
   openCamera,
 }) => {
-  //체크 됐을 때 상태, input 내용, 찍은 사진을 다 갖고 있어야함
-  // 위에서 props로 받아와야 함.
   const [isChecked, setIsChecked] = useState(false);
   const [description, setDescription] = useState("");
   const [imageList, setImageList] = useState();

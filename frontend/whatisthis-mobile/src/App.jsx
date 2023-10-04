@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useReducer } from "react";
 
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -14,12 +14,7 @@ import Search from "./pages/Search";
 import SearchDetail from "./pages/SearchDetail";
 
 import Camera from "./pages/Camera";
-import AuthHttp from "./utils/AuthHttp";
 import { WebSocketProvider } from "./utils/WebSocket";
-
-// testpage
-import TestPage from "./test/TestPage";
-import MyDocument from "./test/MyDocument";
 
 const reducer = (state, action) => {
   let newState = [];
@@ -54,7 +49,6 @@ export const BuildingDispatchContext = React.createContext();
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
 
-  const [isLogin, setIsLogin] = useState(false);
   const [buildingList, dispatch] = useReducer(reducer, []);
 
   //INIT
@@ -72,7 +66,6 @@ function App() {
           <WebSocketProvider>
             <div className="App">
               <Routes>
-                <Route path="/test" element={<MyDocument />} />
                 <Route path="" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/connection/:buildingId/:houseId" element={<Connection />} />

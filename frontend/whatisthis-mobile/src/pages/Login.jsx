@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MyButton from "../components/MyButton";
@@ -22,9 +22,6 @@ const Login = () => {
     });
   };
 
-  const [userInfo, setUserInfo] = useState();
-  const [accessToken, setAccessToken] = useState("");
-
   const userIdInput = useRef();
   const userPasswordInput = useRef();
 
@@ -33,17 +30,12 @@ const Login = () => {
       console.log("소켓 없음");
       return;
     }
-
     const message = {
       type: type,
       data: data,
     };
-
     const messageString = JSON.stringify(message, null, 2);
-
-    console.log(messageString);
     ws.send(messageString);
-    console.log(receivedMessage);
   };
 
   const handleSubmit = async () => {
@@ -78,8 +70,6 @@ const Login = () => {
       const token = localStorage.getItem("token");
 
       handleSend("AUTH", { accessToken: token });
-
-      // handleSend("COMMAND", { command: "END", serialNumber: "DEVICE4" });
 
       // navigate("/");
     } catch (e) {

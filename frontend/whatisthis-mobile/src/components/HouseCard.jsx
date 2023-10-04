@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import CircularProgressBar from "../test/CircularProgressBar";
-import { useWebSocket } from "../utils/WebSocket";
 
 const HouseCard = ({ houseInfo, onClick, percentageObj }) => {
-  // console.log(houseInfo);
   const [progressPercentage, setProgressPercentage] = useState(0);
 
-  // const { ws, receivedMessage } = useWebSocket();
   const [currentPercentage, setCurrentPercentage] = useState(0);
 
   const [isSearching, setIsSearching] = useState(false);
@@ -14,13 +11,12 @@ const HouseCard = ({ houseInfo, onClick, percentageObj }) => {
   const checkBox = document.getElementById("card-" + houseInfo.id);
 
   useEffect(() => {
-    if (houseInfo.historyId === percentageObj.historyId) {
-      setCurrentPercentage(percentageObj.percentage);
+    if (parseInt(houseInfo.historyId) === parseInt(percentageObj.historyId)) {
+      setCurrentPercentage(parseInt(percentageObj.percentage));
       setIsSearching(percentageObj.isSearching);
     }
     if (houseInfo.status === "DONE") {
       setCurrentPercentage(100);
-      // currentPercentage = 100;
     }
     const timer = setInterval(() => {
       if (progressPercentage < currentPercentage) {

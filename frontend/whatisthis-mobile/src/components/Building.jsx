@@ -4,7 +4,6 @@ const Building = ({ buildingData, onClick }) => {
   const getFinishedRequest = () => {
     const doneItems = buildingData.requests.filter((it) => it.status === "DONE");
 
-    // reduce 메서드를 사용하여 doneItems 배열의 길이(개수)를 계산합니다.
     return doneItems.length;
   };
 
