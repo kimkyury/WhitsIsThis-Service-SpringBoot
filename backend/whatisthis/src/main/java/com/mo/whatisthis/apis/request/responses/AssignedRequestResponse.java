@@ -17,16 +17,17 @@ public class AssignedRequestResponse {
     private String address;
     private List<Request> requests;
 
-    public AssignedRequestResponse(RequestEntity requestEntity) {
+    public AssignedRequestResponse(RequestEntity requestEntity, Long historyId) {
         this.address = requestEntity.getAddress();
         requests = new ArrayList<>();
 
-        add(requestEntity);
+        add(requestEntity, historyId);
     }
 
-    public void add(RequestEntity requestEntity) {
+    public void add(RequestEntity requestEntity, Long historyId) {
         requests.add(new Request(
             requestEntity.getId(),
+            historyId,
             requestEntity.getAddressDetail(),
             requestEntity.getStatus(),
             requestEntity.getRequesterName(),
@@ -42,6 +43,7 @@ public class AssignedRequestResponse {
     class Request {
 
         private Long id;
+        private Long historyId;
         private String addressDetail;
         private RequestEntity.Status status;
         private String requestName;
@@ -49,9 +51,10 @@ public class AssignedRequestResponse {
         private String requestContent;
         private LocalDateTime requestedAt;
 
-        public Request(Long id, String addressDetail, Status status, String requestName,
+        public Request(Long id, Long historyId, String addressDetail, Status status, String requestName,
             String requestPhone, String requestContent, LocalDateTime requestedAt) {
             this.id = id;
+            this.historyId = historyId;
             this.addressDetail = addressDetail;
             this.status = status;
             this.requestName = requestName;
@@ -60,9 +63,10 @@ public class AssignedRequestResponse {
             this.requestedAt = requestedAt;
         }
 
-        public Request(Long id, String addressDetail, Status status, String requestName,
+        public Request(Long id, Long historyId, String addressDetail, Status status, String requestName,
             String requestPhone, String requestContent) {
             this.id = id;
+            this.historyId = historyId;
             this.addressDetail = addressDetail;
             this.status = status;
             this.requestName = requestName;
