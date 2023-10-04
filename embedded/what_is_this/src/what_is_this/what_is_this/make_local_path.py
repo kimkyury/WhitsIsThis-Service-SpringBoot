@@ -9,13 +9,14 @@ from math import sqrt,cos,sin
 import os
 import numpy as np
 import cv2
+import base64
 
 class MakeLocalPath(Node):
     def __init__(self):
         super().__init__('local_path')
+
         self.local_path_pub = self.create_publisher(Path, '/local_path', 10)
-        self.obstacle_pos_pub = self.create_publisher(PoseStamped, '/obstacle', 1)
-        self.obstacle_img_pub = self.create_publisher(CompressedImage, '/ob/compressed', 1)
+        self.obstacle_pub = self.create_publisher(String, '/obstacle', 1)
         self.status_publisher = self.create_publisher(String, 'result', 1)
         self.percent_publisher = self.create_publisher(String, 'percent', 1)
         self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 10)
@@ -36,6 +37,7 @@ class MakeLocalPath(Node):
 
         self.local_path_size = 30
         self.prev_waypoint = 0
+        self.obstacle_msg = String()
         self.percnet_msg = String()
         self.result_msg = String()
         self.odom_msg = Odometry()
@@ -43,7 +45,7 @@ class MakeLocalPath(Node):
         self.map_center = [-9,10]
         self.map_size = [17,17]
         self.map_resolution = 0.05
-        time_period = 0.1
+        time_period = 0.05
         self.timer = self.create_timer(time_period, self.timer_callback)
         self.percent_timer = self.create_timer(1, self.percent_callback)
 
@@ -51,15 +53,11 @@ class MakeLocalPath(Node):
     def img_callback(self, msg):
         np_arr = np.frombuffer(msg.data, np.uint8)
         self.img_bgr = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-        # cv2.imshow('img0',self.img_bgr)
-        # cv2.waitKey(1)
 
     def img2_callback(self, msg):
         self.obstacle_img = msg
         np_arr2 = np.frombuffer(msg.data, np.uint8)
         self.img_bgr2 = cv2.imdecode(np_arr2, cv2.IMREAD_COLOR)
-        # cv2.imshow('img1',self.img_bgr2)
-        # cv2.waitKey(1)
 
     # global path msg
     def path_callback(self, msg):
@@ -83,7 +81,6 @@ class MakeLocalPath(Node):
             print("radar error")
         elif self.img_bgr is None:
             print("img error")
-
         else :
             theta = self.radar_scan.time_increment
             if -90 <= theta <= 180 : 
@@ -101,7 +98,6 @@ class MakeLocalPath(Node):
                 box_y1 = y
                 box_y2 = y + h
                 obstacle_pose = PoseStamped()
-                obstacle_img = None
                 if check_y <= box_y2 and (box_x1 < check_x + 180 or box_x2 > check_x - 180):            
                     obstacle = [ 0.3 * cos(theta) + self.radar_scan.range_min,0.3 * sin(theta) + self.radar_scan.scan_time]
                     obstacle = self.pose_to_grid_cell(obstacle)
@@ -109,16 +105,17 @@ class MakeLocalPath(Node):
                     for pose in self.pose_array_msg.poses :
                         dis_to_obstacle = sqrt(pow(pose.pose.position.x - obstacle[0], 2) +
                                                pow(pose.pose.position.y - obstacle[1], 2))
-                        if dis_to_obstacle < 20 :
+                        if dis_to_obstacle < 30 :
                             flag = False 
                             break
                             # Set orientation and other fields if needed
                     if flag : 
-                        obstacle_pose.pose.position.x = obstacle[0]
-                        obstacle_pose.pose.position.y = obstacle[1]
                         self.pose_array_msg.poses.append(obstacle_pose)
-                        self.obstacle_pos_pub.publish(obstacle_pose)
-                        self.obstacle_img_pub.publish(self.obstacle_img)
+                        img_data = self.obstacle_img.data
+                        image_base64 = base64.b64encode(img_data).decode('utf-8')
+                        ob_pos = "{} {} ".format(round(obstacle[0],2), round(obstacle[1],2))
+                        self.obstacle_msg.data = ob_pos + image_base64
+                        self.obstacle_pub.publish(self.obstacle_msg)
 
             current_pose = [self.radar_scan.range_min,self.radar_scan.scan_time]
             current_pose = self.pose_to_grid_cell(current_pose)
