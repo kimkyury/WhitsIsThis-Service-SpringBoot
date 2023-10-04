@@ -14,13 +14,13 @@ from queue import PriorityQueue
 class MoveForMap(Node) : 
     def __init__(self):
         super().__init__('move_for_map')
-        self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 10)
-        self.status_sub = self.create_subscription(TurtlebotStatus,'/turtlebot_status',self.status_callback,10)
-        self.cmd_vel_pub = self.create_publisher(Twist,'cmd_vel', 10)
+        self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 1)
+        self.status_sub = self.create_subscription(TurtlebotStatus,'/turtlebot_status',self.status_callback,1)
+        self.cmd_vel_pub = self.create_publisher(Twist,'cmd_vel', 20)
         
         # 메인과 상태 pub, sub
         self.status_publisher = self.create_publisher(String, 'result', 1)
-        self.status_subscriber = self.create_subscription(String, 'progress', self.check_bot_status, 10)
+        self.status_subscriber = self.create_subscription(String, 'progress', self.check_bot_status, 1)
         self.status = None
         self.result_msg = String()
         
@@ -46,13 +46,10 @@ class MoveForMap(Node) :
         range_data = msg.ranges
         min_data = 100.0
         min_theta = 360
-        for i in range(0, 359):
-            if(0 < i < 180):
-                pass
-            else :
-                if(0 < range_data[i] < min_data) : 
-                    min_data = range_data[i]
-                    min_theta = i 
+        for i in range(181, 359):
+            if(0 < range_data[i] < min_data) : 
+                min_data = range_data[i]
+                min_theta = i 
         if self.start == False : 
             if(85 < msg.time_increment < 95) : 
                 self.angular_speed = 0.0

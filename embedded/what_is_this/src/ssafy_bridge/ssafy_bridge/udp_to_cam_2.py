@@ -33,7 +33,7 @@ class IMGPublisher(Node):
 
         self.udp_parser2 = UDP_CAM_Parser(ip=params_cam_2["localIP"], port=params_cam_2["localPort"], params_cam=params_cam_2)
 
-        self.publisher2 = self.create_publisher(CompressedImage, '/obstacle/compressed', 2)
+        self.publisher2 = self.create_publisher(CompressedImage, '/obstacle/compressed', 5)
         self.timer_period = 1/5  # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
 

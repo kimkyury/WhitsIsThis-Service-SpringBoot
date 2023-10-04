@@ -19,8 +19,8 @@ class MakeLocalPath(Node):
         self.obstacle_pub = self.create_publisher(String, '/obstacle', 1)
         self.status_publisher = self.create_publisher(String, 'result', 1)
         self.percent_publisher = self.create_publisher(String, 'percent', 1)
-        self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 10)
-        self.global_path_sub = self.create_subscription(Path, 'global_path', self.path_callback, 10)
+        self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 1)
+        self.global_path_sub = self.create_subscription(Path, 'global_path', self.path_callback, 1)
         self.img_sub = self.create_subscription(CompressedImage,'/image_jpeg/compressed',self.img_callback,2)
         self.img_sub2 = self.create_subscription(CompressedImage,'/obstacle/compressed',self.img2_callback,2)
 
