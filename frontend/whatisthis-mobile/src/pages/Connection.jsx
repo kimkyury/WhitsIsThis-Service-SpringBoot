@@ -45,13 +45,14 @@ const Connection = () => {
 
   const connect = async (serialNumber) => {
     //소켓 연결
-
+    console.log("target", targetHouse.history.id, "serialNumber", serialNumber);
     handleSend("REGISTER", {
       historyId: targetHouse.history.id,
       serialNumber: serialNumber,
     });
 
-    if (receivedMessage && receivedMessage.data.message === "SUCCESS") {
+    // if (receivedMessage && receivedMessage.data.message === "SUCCESS") {
+    if (receivedMessage) {
       navigate(`/connection/${buildingId}/${houseId}/result`, {
         state: {
           serialNumber: serialNumber,

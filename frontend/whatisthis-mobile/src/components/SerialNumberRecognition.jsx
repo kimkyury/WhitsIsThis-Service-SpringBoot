@@ -25,12 +25,16 @@ const SerialNumberRecognition = ({
       serialNumberInput.current.focus();
       return;
     }
+    console.log("target", historyId, "serialNumber", serialNumber);
+
     handleSend("REGISTER", {
       historyId: historyId,
-      serialNumber: "DEVICE1",
+      serialNumber: serialNumber,
     });
 
-    if (receivedMessage && receivedMessage.data.message === "SUCCESS") {
+    if (receivedMessage) {
+      // if (receivedMessage && receivedMessage.data.message === "SUCCESS") {
+      console.log(receivedMessage);
       navigate(`/connection/${buildingId}/${houseId}/result`, {
         state: {
           serialNumber: serialNumber,
@@ -40,6 +44,7 @@ const SerialNumberRecognition = ({
       });
       console.log("얄루");
     } else {
+      console.log(receivedMessage);
       navigate(`/connection/${buildingId}/${houseId}/result`, {
         state: {
           serialNumber: serialNumber,

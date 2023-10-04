@@ -4,14 +4,14 @@
   "icons": [
 
     {
-      "src": "%PUBLIC_URL%/assets/pavicon_192.png",
+      "src": "/assets/pavicon_192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
 
     },
     {
-      "src": "%PUBLIC_URL%/assets/pavicon_512.png",
+      "src": "/assets/pavicon_512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
