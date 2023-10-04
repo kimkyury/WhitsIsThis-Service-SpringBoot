@@ -14,7 +14,7 @@ import time
 import json
 import numpy as np
 
-DEVICE_SERIAL="DEVICE1"
+DEVICE_SERIAL="DEVICE2"
 BASE_URL = "https://j9e203.p.ssafy.io"
 WS_BASE_URL = "wss://j9e203.p.ssafy.io/ws"
 
@@ -34,7 +34,10 @@ class Web_socket(Node):
         self.is_map = False
         # 현재 진행도 받아오기
         self.percnet_sub = self.create_subscription(String, 'percent', self.percent_callback,1)
-        self.is_percent = False        
+        self.is_percent = False
+        # 현재 진행도 받아오기
+        self.obstacle_sub = self.create_subscription(String, 'obstacle', self.obstacle_callback,1)
+        self.is_obstacle = False          
 
         self.serial_number = DEVICE_SERIAL
         self.result_msg = String()
@@ -45,6 +48,9 @@ class Web_socket(Node):
         self.x = "0"
         self.y = "0"
         self.map_data = None
+        self.ob_x = 0
+        self.ob_y = 0
+        self.ob_img = None
         self.get_token()
 
         print("{0:<40} >>".format('\rAttempting a WebSocket connection.'),end="")
@@ -63,6 +69,10 @@ class Web_socket(Node):
 
         thread_r.start()
         thread_s.start()
+    
+    def obstacle_callback(self,msg):
+        self.is_obstacle =True
+        self.ob_x, self.ob_y, self.ob_img = (msg.data).split(" ")
 
     def percent_callback(self,msg):
         self.is_percent = True
@@ -175,6 +185,11 @@ class Web_socket(Node):
                     self.sed_message = json.dumps({"type":"DRAWING","data":{"image" : str(self.map_data)}})
                     self.ws.send(self.sed_message)
                     self.is_map = False
+                
+                if self.is_obstacle:
+                    self.sed_message = json.dumps({"type":"DAMAGED","data":{"image" : self.ob_img,"x":self.ob_x,"y":self.ob_y,"category": "HOLE"}})
+                    self.ws.send(self.sed_message)
+                    self.is_obstacle = False
 
         except:
             print("{0:<40} >>".format('\rweb socket closed'),end="")
