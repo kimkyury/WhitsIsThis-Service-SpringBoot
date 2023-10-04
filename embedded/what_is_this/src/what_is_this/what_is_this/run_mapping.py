@@ -186,7 +186,7 @@ class Mapper(Node):
         self.status = msg.data
         if self.status == "SKIP_MAPPING":
             pkg_path =os.getcwd()
-            back_folder='what_is_this'
+            back_folder='src\what_is_this'
             folder_name='map'
             file_name='map.txt'
             full_path=os.path.join(pkg_path,back_folder,folder_name,file_name)
