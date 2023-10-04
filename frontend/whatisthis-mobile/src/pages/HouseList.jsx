@@ -14,6 +14,12 @@ const HouseList = () => {
 
   const [houseList, setHouseList] = useState();
 
+  const [percentageObj, setPercentageObj] = useState({
+    historyId: -1,
+    percentage: 0,
+    isSearching: false,
+  });
+
   useEffect(() => {
     const getBuildingList = async () => {
       try {
@@ -31,6 +37,8 @@ const HouseList = () => {
       }
     };
     getBuildingList();
+
+    console.log(houseList);
 
     const getHouseList = (buildings) => {
       if (buildings) {
@@ -60,32 +68,44 @@ const HouseList = () => {
         );
       }
     };
-
-    // console.log(
-    //   buildings &&
-    //     buildings
-    //       .map((building) => {
-    //         const requests = building.requests.map((request) => {
-    //           const newRequest = { ...request };
-    //           newRequest.address = building.address;
-    //           return newRequest;
-    //         });
-
-    //         return requests;
-    //       })
-    //       .flat()
-    //       .filter((request) => request.status === "IN_PROGRESS" || request.status === "DONE")
-    //       .sort((a, b) => {
-    //         if (a.status === "DONE" && b.status !== "DONE") {
-    //           return 1;
-    //         } else if (a.status !== "DONE" && b.status === "DONE") {
-    //           return -1;
-    //         } else {
-    //           return 0;
-    //         }
-    //       })
-    // );
   }, []);
+
+  useEffect(() => {
+    // console.log(houseInfo.historyId, " ", receivedMessage);
+    if (!ws) return;
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      console.log(data);
+      // if (houseInfo.historyId !== data.data.historyId) {
+      //   return;
+      // }
+      // console.log(houseInfo.historyId, "카두입미다", data);
+
+      if (data.type && data.type === "COMPLETION_RATE") {
+        if (data.data.rate * 100 > 100) {
+          setPercentageObj({
+            historyId: data.data.historyId,
+            percentage: 100,
+            isSearching: true,
+          });
+          //연결 끊기
+          const message = {
+            type: "COMMAND",
+            //디바이스가 어느거랑 연결돼있는지 알아야 함
+            data: { command: "END", serialNumber: data.data.serialNumber },
+          };
+          const messageString = JSON.stringify(message, null, 2);
+          ws.send(messageString);
+        } else {
+          setPercentageObj({
+            historyId: data.data.historyId,
+            percentage: data.data.rate * 100,
+            isSearching: true,
+          });
+        }
+      }
+    };
+  }, [ws]);
 
   const handleHouseCardClick = (houseInfo) => {
     if (houseInfo.status !== "DONE") {
@@ -115,11 +135,12 @@ const HouseList = () => {
         <div className="house_card_wrapper">
           {houseList &&
             houseList.map((it, idx) => {
+              // console.log(it);
               return (
                 <HouseCard
                   key={idx}
                   houseInfo={it}
-                  currentPercentage={Math.floor(Math.random() * 100) + 1}
+                  percentageObj={percentageObj}
                   // onclick 할 때 houseinfo 등 percentage 정보를 넘겨줘서 100프로이면 바로 결과창으로 보내던지
                   onClick={() => handleHouseCardClick(it)}
                 />
