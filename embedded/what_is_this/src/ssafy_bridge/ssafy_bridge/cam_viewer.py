@@ -16,13 +16,13 @@ class IMGParser(Node):
             CompressedImage,
             '/image_jpeg/compressed',
             self.img_callback,
-            10)
+            5)
         
         self.subscription2 = self.create_subscription(
             CompressedImage,
             '/obstacle/compressed',
             self.img2_callback,
-            10)
+            5)
 
     def img_callback(self, msg):
 
@@ -31,6 +31,7 @@ class IMGParser(Node):
 
         cv2.imshow("Image window", img_bgr)
         cv2.waitKey(1)
+
     def img2_callback(self, msg):
 
         np_arr2 = np.frombuffer(msg.data, np.uint8)
