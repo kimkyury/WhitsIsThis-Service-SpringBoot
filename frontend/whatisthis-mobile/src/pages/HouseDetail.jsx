@@ -8,16 +8,16 @@ import { useWebSocket } from "../utils/WebSocket";
 
 const HouseDetail = () => {
   const navigate = useNavigate();
-
   const { houseId } = useParams();
-
   const [targetHouse, setTargetHouse] = useState();
-
   const [isOpenTodoList, setIsOpenTodoList] = useState(false);
 
-  // 맵을 만드는지 확인 상태변수
-  const [isCreatingMap, setIsCreatingMap] = useState(true);
+  const [processPercentage, setProcessPercentage] = useState(0);
 
+  // 맵을 만드는지 확인 상태변수
+  const [map, setMap] = useState();
+
+  const [isCreatingMap, setIsCreatingMap] = useState(true);
   const { ws, receivedMessage } = useWebSocket();
 
   // 모든 검사를 마쳤는지 확인
@@ -34,11 +34,27 @@ const HouseDetail = () => {
           url: `/private/requests/${houseId}`,
         });
         console.log(response.data.data);
+        getMap(response.data.data.history.id);
         setTargetHouse(response.data.data);
       } catch (e) {
         console.error(e);
       }
     };
+
+    // 도면 가져오는 api필요
+    const getMap = async (historyId) => {
+      try {
+        const response = await AuthHttp({
+          method: "get",
+          url: `/histories/${historyId}/drawing`,
+        });
+        console.log(response);
+        // setTargetHouse(response.data.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
     getTargetHouse();
   }, []);
 
@@ -50,11 +66,20 @@ const HouseDetail = () => {
     setIsFinish(state);
   };
 
+  const getPercentage = () => {
+    const rate = receivedMessage?.data?.rate;
+    if (rate) {
+      setProcessPercentage(rate);
+      return rate;
+    }
+    return processPercentage;
+  };
+
   if (!targetHouse) {
     return <div className="HouseDetail">로딩중입니다...</div>;
   } else {
-    // 작업 상태가 도면을 만드는 중이면 도면을 만드는 로딩 사진 아니면 디테일 보여줌
-    return isCreatingMap ? (
+    //  소켓에서 날아온 정보 처리방식 변경해야함
+    return receivedMessage && receivedMessage.type === "DRAWING" ? (
       <div className="HouseDetail container">
         <div className="building_info_wrapper">
           <div className="building_info">
@@ -102,22 +127,23 @@ const HouseDetail = () => {
           <div className="building_info">
             <div className="building_title">
               <h1>{targetHouse.addressDetail}</h1>
-              <h1 className="proecss_percentge">NN%</h1>
+              <h1 className="proecss_percentge">{getPercentage()}%</h1>
             </div>
             <h3>{targetHouse.address}</h3>
           </div>
         </div>
 
         <div className="map_wrapper">
+          {/* 받아온 map 표시 */}
           <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
         </div>
         <div className="carousel">
+          {/* <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
           <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
           <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
           <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
           <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
-          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
-          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
+          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" /> */}
         </div>
 
         <div className="button_wrapper">
