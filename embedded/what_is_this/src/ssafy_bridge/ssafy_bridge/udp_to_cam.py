@@ -25,6 +25,23 @@ params_cam_0 = {
     "ROLL": 0
 }
 
+params_cam_2 = {
+    "SOCKET_TYPE": 'JPG',
+    "WIDTH": 320, # image width
+    "HEIGHT": 240, # image height
+    "FOV": 60, # Field of view
+    "localIP": "127.0.0.1",
+    "localPort": 1233,
+    "Block_SIZE": int(65000),
+    "UnitBlock_HEIGHT": int(30),
+    "X": 1.7, # meter
+    "Y": 0,
+    "Z": 1.2,
+    "YAW": 0, # deg
+    "PITCH": -5,
+    "ROLL": 0
+}
+
 
 class IMGPublisher(Node):
 
@@ -32,17 +49,20 @@ class IMGPublisher(Node):
         super().__init__(node_name='image_convertor')
 
         self.udp_parser = UDP_CAM_Parser(ip=params_cam_0["localIP"], port=params_cam_0["localPort"], params_cam=params_cam_0)
+        self.udp_parser2 = UDP_CAM_Parser(ip=params_cam_2["localIP"], port=params_cam_2["localPort"], params_cam=params_cam_2)
 
         self.publisher_ = self.create_publisher(CompressedImage, '/image_jpeg/compressed', 10)
-        
+        self.publisher2 = self.create_publisher(CompressedImage, '/obstacle/compressed', 10)
         self.timer_period = 1/20  # seconds
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
 
         self.img_msg = CompressedImage()
+        self.img_msg2 = CompressedImage()
 
     def timer_callback(self):
 
         self.udp_parser.recv_udp_data()
+        self.udp_parser2.recv_udp_data()
 
         if len(self.udp_parser.img_byte)==0:
 
@@ -53,8 +73,13 @@ class IMGPublisher(Node):
             self.img_msg.format = "jpeg"
 
             self.img_msg.data = self.udp_parser.img_byte
+            
+            self.img_msg2.format = "jpeg"
+
+            self.img_msg2.data = self.udp_parser2.img_byte
 
             self.publisher_.publish(self.img_msg)
+            self.publisher2.publish(self.img_msg2)
 
 
 
