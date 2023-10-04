@@ -177,7 +177,7 @@ class Searching_path(Node):
         
     def check_status(self,msg):
         self.status = msg.data
-        if self.status == "CALCULATE_PATH":
+        if self.status == "CALCULATE_PATH" and self.is_map:
             self.path_pub()
     
     def grid_cell_to_pose(self,grid_cell):

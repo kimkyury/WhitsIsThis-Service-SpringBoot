@@ -14,14 +14,14 @@ class MakeLocalPath(Node):
     def __init__(self):
         super().__init__('local_path')
         self.local_path_pub = self.create_publisher(Path, '/local_path', 10)
-        self.obstacle_pos_pub = self.create_publisher(PoseStamped, '/obstacle', 10)
-        self.obstacle_img_pub = self.create_publisher(CompressedImage, '/ob/compressed', 10)
+        self.obstacle_pos_pub = self.create_publisher(PoseStamped, '/obstacle', 1)
+        self.obstacle_img_pub = self.create_publisher(CompressedImage, '/ob/compressed', 1)
         self.status_publisher = self.create_publisher(String, 'result', 1)
         self.percent_publisher = self.create_publisher(String, 'percent', 1)
         self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 10)
         self.global_path_sub = self.create_subscription(Path, 'global_path', self.path_callback, 10)
-        self.img_sub = self.create_subscription(CompressedImage,'/image_jpeg/compressed',self.img_callback,10)
-        self.img_sub2 = self.create_subscription(CompressedImage,'/obstacle/compressed',self.img2_callback,10)
+        self.img_sub = self.create_subscription(CompressedImage,'/image_jpeg/compressed',self.img_callback,2)
+        self.img_sub2 = self.create_subscription(CompressedImage,'/obstacle/compressed',self.img2_callback,2)
 
         self.percent = 0
         self.img_bgr = None  
@@ -43,7 +43,7 @@ class MakeLocalPath(Node):
         self.map_center = [-9,10]
         self.map_size = [17,17]
         self.map_resolution = 0.05
-        time_period = 0.05
+        time_period = 0.1
         self.timer = self.create_timer(time_period, self.timer_callback)
         self.percent_timer = self.create_timer(1, self.percent_callback)
 
@@ -51,15 +51,15 @@ class MakeLocalPath(Node):
     def img_callback(self, msg):
         np_arr = np.frombuffer(msg.data, np.uint8)
         self.img_bgr = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-        cv2.imshow('img0',self.img_bgr)
-        cv2.waitKey(1)
+        # cv2.imshow('img0',self.img_bgr)
+        # cv2.waitKey(1)
 
     def img2_callback(self, msg):
         self.obstacle_img = msg
         np_arr2 = np.frombuffer(msg.data, np.uint8)
         self.img_bgr2 = cv2.imdecode(np_arr2, cv2.IMREAD_COLOR)
-        cv2.imshow('img1',self.img_bgr2)
-        cv2.waitKey(1)
+        # cv2.imshow('img1',self.img_bgr2)
+        # cv2.waitKey(1)
 
     # global path msg
     def path_callback(self, msg):

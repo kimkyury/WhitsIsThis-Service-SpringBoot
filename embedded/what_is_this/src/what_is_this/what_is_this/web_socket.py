@@ -41,6 +41,7 @@ class Web_socket(Node):
         self.token = None
         self.sed_message = None
         self.rev_message = None
+        self.status = ""
         self.x = "0"
         self.y = "0"
         self.map_data = None
@@ -68,10 +69,12 @@ class Web_socket(Node):
         self.percent = msg.data
 
     def check_status(self,msg):
+        if self.status == msg.data:return
         self.is_status = True
         self.status = msg.data
 
     def map_callback(self,msg):
+        if self.status == "MAPPING":return
         self.is_map=True
         map_data=np.array(msg.data)
         map_data=map_data.reshape((340,340))
@@ -150,31 +153,31 @@ class Web_socket(Node):
                     print("{0:<40} >>".format('\rundefined message'), end="")
         
     def w_send(self):
-        # try:
-        while True:
-            time.sleep(1)
-            if self.is_status:
-                self.sed_message = json.dumps({"type":"STATUS","data":{"state" : self.status}})
-                self.ws.send(self.sed_message)
-                self.is_status = False
+        try:
+            while True:
+                time.sleep(2)
+                if self.is_status:
+                    self.sed_message = json.dumps({"type":"STATUS","data":{"state" : self.status}})
+                    self.ws.send(self.sed_message)
+                    self.is_status = False
 
-            if self.is_scan:
-                self.sed_message = json.dumps({"type":"COORDINATE","data":{"x":self.x,"y":self.y}})
-                self.ws.send(self.sed_message)
-                self.is_scan = False
-            
-            if self.is_percent:
-                self.sed_message = json.dumps({"type":"COMPLETION_RATE","data":{"rate":self.percent}})
-                self.ws.send(self.sed_message)
-                self.is_percent = False
-            
-            if self.is_map:
-                self.sed_message = json.dumps({"type":"DRAWING","data":{"image" : str(self.map_data)}})
-                self.ws.send(self.sed_message)
-                self.is_map = False
+                if self.is_scan:
+                    self.sed_message = json.dumps({"type":"COORDINATE","data":{"x":self.x,"y":self.y}})
+                    self.ws.send(self.sed_message)
+                    self.is_scan = False
+                
+                if self.is_percent:
+                    self.sed_message = json.dumps({"type":"COMPLETION_RATE","data":{"rate":self.percent}})
+                    self.ws.send(self.sed_message)
+                    self.is_percent = False
+                
+                if self.is_map:
+                    self.sed_message = json.dumps({"type":"DRAWING","data":{"image" : str(self.map_data)}})
+                    self.ws.send(self.sed_message)
+                    self.is_map = False
 
-        # except:
-        #     print("{0:<40} >>".format('\rweb socket closed'),end="")
+        except:
+            print("{0:<40} >>".format('\rweb socket closed'),end="")
 
 def main(args=None):
     rclpy.init(args=args)
