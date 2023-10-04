@@ -112,7 +112,7 @@ const HouseResult = () => {
             text={"보고서 확인"}
             type={"left"}
             color={"grey"}
-            onClick={navigate("/test")}
+            onClick={() => navigate("/test")}
           />
           <Notification
             text={"완료승인"}
