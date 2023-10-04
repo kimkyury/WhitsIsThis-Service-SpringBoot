@@ -14,15 +14,19 @@ class MakeLocalPath(Node):
     def __init__(self):
         super().__init__('local_path')
         self.local_path_pub = self.create_publisher(Path, '/local_path', 10)
-        self.obstacle_pub = self.create_publisher(PoseArray, '/obstacle', 10)
+        self.obstacle_pos_pub = self.create_publisher(PoseStamped, '/obstacle', 10)
+        self.obstacle_img_pub = self.create_publisher(CompressedImage, '/ob/compressed', 10)
         self.status_publisher = self.create_publisher(String, 'result', 1)
+        self.percent_publisher = self.create_publisher(String, 'percent', 1)
         self.scan_sub = self.create_subscription(LaserScan, '/scan', self.scan_callback, 10)
         self.global_path_sub = self.create_subscription(Path, 'global_path', self.path_callback, 10)
         self.img_sub = self.create_subscription(CompressedImage,'/image_jpeg/compressed',self.img_callback,10)
         self.img_sub2 = self.create_subscription(CompressedImage,'/obstacle/compressed',self.img2_callback,10)
 
+        self.percent = 0
         self.img_bgr = None  
         self.img_bgr2 = None       
+        self.obstacle_img = None
         self.is_scan = False
         self.is_odom = False
         self.is_path = False
@@ -32,6 +36,8 @@ class MakeLocalPath(Node):
 
         self.local_path_size = 30
         self.prev_waypoint = 0
+        self.percnet_msg = String()
+        self.result_msg = String()
         self.odom_msg = Odometry()
         self.global_path_msg = Path()
         self.map_center = [-9,10]
@@ -39,6 +45,7 @@ class MakeLocalPath(Node):
         self.map_resolution = 0.05
         time_period = 0.05
         self.timer = self.create_timer(time_period, self.timer_callback)
+        self.percent_timer = self.create_timer(1, self.percent_callback)
 
     #img msg
     def img_callback(self, msg):
@@ -48,6 +55,7 @@ class MakeLocalPath(Node):
         cv2.waitKey(1)
 
     def img2_callback(self, msg):
+        self.obstacle_img = msg
         np_arr2 = np.frombuffer(msg.data, np.uint8)
         self.img_bgr2 = cv2.imdecode(np_arr2, cv2.IMREAD_COLOR)
         cv2.imshow('img1',self.img_bgr2)
@@ -62,6 +70,11 @@ class MakeLocalPath(Node):
     def scan_callback(self, msg):
         self.is_scan = True
         self.radar_scan = msg
+
+    def percent_callback(self):
+        if self.percent != 0:
+            self.percnet_msg.data = str(self.percent)
+            self.percent_publisher.publish(self.percnet_msg)
 
     # local path make
     def timer_callback(self):
@@ -88,28 +101,27 @@ class MakeLocalPath(Node):
                 box_y1 = y
                 box_y2 = y + h
                 obstacle_pose = PoseStamped()
-                
-                if check_y <= box_y2 and (box_x1 < check_x + 180 or box_x2 > check_x - 180):
-                    print("탐색영역 내부에 장애물이 있습니다",box_x1 , box_x2 , box_y1 , box_y2)
-                    
-                    obstacle_pose.pose.position.x = 0.3 * cos(theta) + self.radar_scan.range_min
-                    obstacle_pose.pose.position.y = 0.3 * sin(theta) + self.radar_scan.scan_time
-                    
-                    obstacle_pose = self.pose_to_grid_cell(obstacle_pose.pose.position.x,obstacle_pose.pose.position.y)
+                obstacle_img = None
+                if check_y <= box_y2 and (box_x1 < check_x + 180 or box_x2 > check_x - 180):            
+                    obstacle = [ 0.3 * cos(theta) + self.radar_scan.range_min,0.3 * sin(theta) + self.radar_scan.scan_time]
+                    obstacle = self.pose_to_grid_cell(obstacle)
                     flag = True
                     for pose in self.pose_array_msg.poses :
-                        dis_to_obstacle = sqrt(pow(pose[0] - obstacle_pose[0], 2) +
-                                               pow(pose[1] - obstacle_pose[1], 2))
+                        dis_to_obstacle = sqrt(pow(pose.pose.position.x - obstacle[0], 2) +
+                                               pow(pose.pose.position.y - obstacle[1], 2))
                         if dis_to_obstacle < 20 :
                             flag = False 
                             break
                             # Set orientation and other fields if needed
                     if flag : 
+                        obstacle_pose.pose.position.x = obstacle[0]
+                        obstacle_pose.pose.position.y = obstacle[1]
                         self.pose_array_msg.poses.append(obstacle_pose)
-                        print(self.pose_array_msg.poses)
+                        self.obstacle_pos_pub.publish(obstacle_pose)
+                        self.obstacle_img_pub.publish(self.obstacle_img)
+
             current_pose = [self.radar_scan.range_min,self.radar_scan.scan_time]
             current_pose = self.pose_to_grid_cell(current_pose)
-            
             local_path = Path()
             local_path.header.frame_id = '/map'
 
@@ -124,8 +136,15 @@ class MakeLocalPath(Node):
                         current_waypoint = i
             
             if current_waypoint != -1:
-                percent = round(current_waypoint/len(self.global_path_msg.poses)*100,2)
-                print("{0:<20} >>".format(f"\r진행률 : {percent}"),end="")
+                self.percent = round(current_waypoint/len(self.global_path_msg.poses)*100,2)
+                print("{0:<20} >>".format(f"\r진행률 : {self.percent}"),end="")
+                if self.percent > 99.96:
+                    self.percent = "100"
+                    self.percnet_msg.data = str(self.percent)
+                    self.percent_publisher.publish(self.percnet_msg) 
+                    self.result_msg.data = "END_FINDING"
+                    self.status_publisher.publish(self.result_msg)
+
                 if current_waypoint + self.local_path_size < len(self.global_path_msg.poses):
                     for num in range(current_waypoint, current_waypoint + self.local_path_size):
                         tmp_pose = PoseStamped()
@@ -143,7 +162,6 @@ class MakeLocalPath(Node):
 
             self.local_path_pub.publish(local_path)
             self.prev_waypoint = current_waypoint
-            self.obstacle_pub.publish(self.pose_array_msg)
             
 
     def find_bbox(self):
@@ -166,17 +184,16 @@ class MakeLocalPath(Node):
         return bounding_boxes
     
     
-    # def pose_to_grid_cell(self,pose):
-    #     pose_x = (pose[0] +9 + (self.map_size[0]*self.map_resolution)/2) / self.map_resolution
-    #     pose_y = (pose[1] -2 + (self.map_size[1]*self.map_resolution)/2) / self.map_resolution
-    #     print("current pose : ", pose_x, pose_y)
-    #     return [pose_x,pose_y]
+    def pose_to_grid_cell(self,pose):
+        pose_x = (pose[0] +9 + (self.map_size[0]*self.map_resolution)/2) / self.map_resolution
+        pose_y = (pose[1] -2 + (self.map_size[1]*self.map_resolution)/2) / self.map_resolution
+        return [pose_x,pose_y]
 
-    def grid_cell_to_pose(self,grid_cell):
-        x = grid_cell[0] * self.map_resolution + self.map_center[0] - (self.map_size[0] * self.map_resolution) / 2
-        y = grid_cell[1] * self.map_resolution + self.map_center[1] - (self.map_size[1] * self.map_resolution) / 2
-        print("current pose : ", x, y)
-        return [x,y]
+    # def grid_cell_to_pose(self,grid_cell):
+    #     x = grid_cell[0] * self.map_resolution + self.map_center[0] - (self.map_size[0] * self.map_resolution) / 2
+    #     y = grid_cell[1] * self.map_resolution + self.map_center[1] - (self.map_size[1] * self.map_resolution) / 2
+    #     print("current pose : ", x, y)
+    #     return [x,y]
     
 
 def main(args=None):
