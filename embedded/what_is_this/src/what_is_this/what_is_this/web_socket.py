@@ -8,7 +8,6 @@ import base64
 from PIL import Image
 from io import BytesIO
 import websocket
-import asyncio
 import requests
 import threading
 import time
@@ -79,9 +78,22 @@ class Web_socket(Node):
         # 대각선 대칭
         map_data = np.rot90(map_data, k=1)
         map_data = np.flipud(map_data)
+
+        map_datas=np.zeros((340,340,3), dtype=np.uint8)
         
+        for x in range(340):
+            for y in range(340):
+                if map_data[x][y] == 60:
+                    map_datas[x][y] = (248,243,252)
+                elif map_data[x][y] == 127:
+                    map_datas[x][y] = (254,208,129)
+                elif map_data[x][y] == 100:
+                    map_datas[x][y] = (249,108,108)
+                else:
+                    map_datas[x][y] = (248,243,252)
+
         # 이미지를 'RGB' 모드로 바이트로 변환
-        map_img = Image.fromarray(map_data)
+        map_img = Image.fromarray(map_datas)
         buffered = BytesIO()
         map_img = map_img.convert('RGB')
         map_img.save(buffered, format="PNG")
