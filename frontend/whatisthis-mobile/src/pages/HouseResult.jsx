@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Notification from "../components/Notification";
 import AuthHttp from "../utils/AuthHttp";
+import MyButton from "../components/MyButton";
 
 const HouseResult = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const HouseResult = () => {
 
   const [targetHouse, setTargetHouse] = useState();
   const [result, setResult] = useState();
+  const [isFinish, setIsFinish] = useState(false);
 
   useEffect(() => {
     const getTargetHouse = async () => {
@@ -20,6 +22,7 @@ const HouseResult = () => {
           url: `/private/requests/${houseId}`,
         });
         setTargetHouse(response.data.data);
+        setIsFinish(response.data.data.status === "DONE" ? true : false);
         getResult(response.data.data.history.id);
       } catch (e) {
         console.error(e);
@@ -32,7 +35,6 @@ const HouseResult = () => {
           method: "get",
           url: `/private/histories/${historyId}`,
         });
-        // console.log(response.data.data);
         setResult(response.data.data);
       } catch (e) {
         console.error(e);
@@ -43,8 +45,6 @@ const HouseResult = () => {
   }, []);
 
   const handleAcceptClick = async () => {
-    //승인 했을 때 발생될 로직
-
     try {
       const response = await AuthHttp({
         method: "patch",
@@ -60,12 +60,25 @@ const HouseResult = () => {
     }
   };
 
-  const showReport = () => {
-    navigate(`/test`);
+  const exportReport = () => {
+    // 보고서 생성
+    setIsFinish(true);
   };
 
   if (!result) {
-    return <div className="HouseResult">로딩중입니다...</div>;
+    return (
+      <div className="HouseResult">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <span className="loader2"></span>
+          <div style={{ marginTop: "1rem" }}>로딩중입니다</div>
+          <MyButton
+            text={"처음으로"}
+            color={"orange"}
+            onClick={() => navigate("/", { replace: true })}
+          />
+        </div>
+      </div>
+    );
   } else {
     return (
       <div className="HouseResult container">
@@ -112,12 +125,13 @@ const HouseResult = () => {
             })}
         </div>
         <div className="button_wrapper">
-          <Notification text={"보고서 확인"} type={"left"} color={"grey"} onClick={showReport} />
+          <Notification text={"보고서 전송"} type={"left"} color={"grey"} onClick={exportReport} />
           <Notification
             text={"완료승인"}
             type={"right"}
             color={"green"}
             onClick={handleAcceptClick}
+            isFinish={isFinish}
           />
         </div>
       </div>

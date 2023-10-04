@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import MyButton from "../components/MyButton";
 import SerialNumberRecognition from "../components/SerialNumberRecognition";
 
 import QRrecognition from "../components/QRrecognition";
-import { BuildingDataContext } from "../App";
 import AuthHttp from "../utils/AuthHttp";
 import { useWebSocket } from "../utils/WebSocket";
 const Connection = () => {
@@ -25,18 +24,16 @@ const Connection = () => {
           method: "get",
           url: `/private/requests/${houseId}`,
         });
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setTargetHouse(response.data.data);
       } catch (e) {
         console.error(e);
       }
     };
     getTargetHouse();
-    console.log(targetHouse);
   }, []);
 
   const handleConnectionMethodTymeClick = () => {
-    // 카메라 멈추고 시리얼넘버 컴포넌트 스폰 토글..
     setIsSnum(!isSnum);
   };
   const handleOpenSnumRecognition = () => {
@@ -44,7 +41,6 @@ const Connection = () => {
   };
 
   const connect = async (serialNumber) => {
-    //소켓 연결
     console.log("target", targetHouse.history.id, "serialNumber", serialNumber);
     handleSend("REGISTER", {
       historyId: targetHouse.history.id,
@@ -86,7 +82,19 @@ const Connection = () => {
   };
 
   if (!targetHouse) {
-    return <div className="Connection">로딩중입니다...</div>;
+    return (
+      <div className="Connection">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <span className="loader2"></span>
+          <div style={{ marginTop: "1rem" }}>로딩중입니다</div>
+          <MyButton
+            text={"처음으로"}
+            color={"orange"}
+            onClick={() => navigate("/", { replace: true })}
+          />
+        </div>
+      </div>
+    );
   } else {
     return (
       <div className="Connection container">

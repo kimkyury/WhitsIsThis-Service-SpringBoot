@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { getBuildingName } from "../utils/ParseAddress";
@@ -8,6 +8,7 @@ import HouseInfo from "../components/HouseInfo";
 
 // buildinglist 를 context 로 받아와도 될듯
 import { BuildingDataContext } from "../App";
+import MyButton from "../components/MyButton";
 
 const SearchDetail = () => {
   const { buildingId } = useParams();
@@ -15,7 +16,6 @@ const SearchDetail = () => {
 
   const { buildingList } = useContext(BuildingDataContext);
   const houseList = buildingList[parseInt(buildingId)];
-  console.log(houseList);
 
   const handleHouseInfoClick = (info) => {
     if (info.status === "DONE") {
@@ -30,7 +30,19 @@ const SearchDetail = () => {
   };
 
   if (!houseList) {
-    return <div className="SearchDetail">로딩중입니다...</div>;
+    return (
+      <div className="SearchDetail">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <span className="loader2"></span>
+          <div style={{ marginTop: "1rem" }}>로딩중입니다</div>
+          <MyButton
+            text={"처음으로"}
+            color={"orange"}
+            onClick={() => navigate("/", { replace: true })}
+          />
+        </div>
+      </div>
+    );
   } else {
     return (
       <div className="SearchDetail container">

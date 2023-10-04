@@ -82,7 +82,7 @@ const HouseList = () => {
       // console.log(houseInfo.historyId, "카두입미다", data);
 
       if (data.type && data.type === "COMPLETION_RATE") {
-        if (data.data.rate * 100 > 100) {
+        if (data.data.rate >= 98) {
           setPercentageObj({
             historyId: data.data.historyId,
             percentage: 100,
@@ -91,7 +91,6 @@ const HouseList = () => {
           //연결 끊기
           const message = {
             type: "COMMAND",
-            //디바이스가 어느거랑 연결돼있는지 알아야 함
             data: { command: "END", serialNumber: data.data.serialNumber },
           };
           const messageString = JSON.stringify(message, null, 2);
@@ -99,7 +98,7 @@ const HouseList = () => {
         } else {
           setPercentageObj({
             historyId: data.data.historyId,
-            percentage: data.data.rate * 100,
+            percentage: data.data.rate,
             isSearching: true,
           });
         }
@@ -107,16 +106,33 @@ const HouseList = () => {
     };
   }, [ws]);
 
-  const handleHouseCardClick = (houseInfo) => {
+  const handleHouseCardClick = (houseInfo, percentageObj) => {
     if (houseInfo.status !== "DONE") {
-      navigate(`/house/${houseInfo.id}`);
+      navigate(`/house/${houseInfo.id}`, {
+        state: {
+          historyId: houseInfo.historyId,
+          isFinding: true,
+        },
+      });
     } else {
       navigate(`/house/${houseInfo.id}/result`);
     }
   };
 
   if (!houseList) {
-    return <div className="HouseList">로딩중입니다...</div>;
+    return (
+      <div className="HouseList ">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <span className="loader2"></span>
+          <div style={{ marginTop: "1rem" }}>로딩중입니다</div>
+          <MyButton
+            text={"처음으로"}
+            color={"orange"}
+            onClick={() => navigate("/", { replace: true })}
+          />
+        </div>
+      </div>
+    );
   } else {
     return (
       <div className="HouseList container">
@@ -142,7 +158,7 @@ const HouseList = () => {
                   houseInfo={it}
                   percentageObj={percentageObj}
                   // onclick 할 때 houseinfo 등 percentage 정보를 넘겨줘서 100프로이면 바로 결과창으로 보내던지
-                  onClick={() => handleHouseCardClick(it)}
+                  onClick={() => handleHouseCardClick(it, percentageObj)}
                 />
               );
             })}
