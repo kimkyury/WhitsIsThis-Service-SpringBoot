@@ -42,7 +42,6 @@ const SerialNumberRecognition = ({
         },
         replace: true,
       });
-      console.log("얄루");
     } else {
       console.log(receivedMessage);
       navigate(`/connection/${buildingId}/${houseId}/result`, {

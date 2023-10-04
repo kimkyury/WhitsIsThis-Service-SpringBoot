@@ -1,4 +1,4 @@
-const Notification = ({ text, type, onClick, color }) => {
+const Notification = ({ text, type, onClick, color, isFinish }) => {
   const btnType = ["left", "right"].includes(type) ? type : "default";
   const btnColor = ["orange", "green", "grey"].includes(color) ? color : "grey";
 
@@ -8,8 +8,10 @@ const Notification = ({ text, type, onClick, color }) => {
         "Notification",
         `Notification_${btnType}`,
         `Notification_${btnColor}`,
+        isFinish ? "" : "MyButton_disable",
       ].join(" ")}
       onClick={onClick}
+      disabled={!isFinish}
     >
       {text}
     </button>
@@ -19,6 +21,7 @@ const Notification = ({ text, type, onClick, color }) => {
 Notification.defaultProps = {
   type: "default",
   color: "grey",
+  isFinish: true,
 };
 
 export default Notification;

@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import MyButton from "../components/MyButton";
 import HouseTodoList from "../components/HouseTodoList";
@@ -12,43 +12,29 @@ const HouseDetail = () => {
   const [targetHouse, setTargetHouse] = useState();
   const [isOpenTodoList, setIsOpenTodoList] = useState(false);
 
+  const historyId = useLocation().state.historyId;
+  const isFinding = useLocation().state.isFinding;
+
   const [processPercentage, setProcessPercentage] = useState(0);
 
-  // 맵을 만드는지 확인 상태변수
-  const [map, setMap] = useState();
-
-  const [isCreatingMap, setIsCreatingMap] = useState(true);
+  const [isCreatingMap, setIsCreatingMap] = useState(isFinding);
   const { ws, receivedMessage } = useWebSocket();
 
-  // 모든 검사를 마쳤는지 확인
-  // 값 받아와서 설정해주기
-  const [isFinish, setIsFinish] = useState(false);
+  const [isTodoFinish, setTodoFinish] = useState(false);
+  const [isInspectFinish, setIsInspectFinish] = useState(false);
+
+  const [damagedImage, setDamagedImage] = useState([]);
 
   useEffect(() => {
-    console.log(targetHouse);
-    // setIsFinish(targetHouse && targetHouse.status === "DONE" ? true : false);
     const getTargetHouse = async () => {
       try {
         const response = await AuthHttp({
           method: "get",
           url: `/private/requests/${houseId}`,
         });
-        console.log(response.data.data);
-        getMap(response.data.data.history.id);
+        // console.log(response.data.data);
+        // getMap(response.data.data.history.id);
         setTargetHouse(response.data.data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    // 도면 가져오는 api필요
-    const getMap = async (historyId) => {
-      try {
-        const response = await AuthHttp({
-          method: "get",
-          url: `/histories/${historyId}/drawing`,
-        });
-        // setTargetHouse(response.data.data);
       } catch (e) {
         console.error(e);
       }
@@ -61,19 +47,29 @@ const HouseDetail = () => {
     if (!ws) return;
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      // if (data.data.historyId !== targetHouse.history.id) {
-      //   return;
-      // }
-      console.log("하우수디테이루", data);
+
+      // console.log(data.data.historyId, historyId);
+
+      if (parseInt(data.data.historyId) !== parseInt(historyId)) {
+        return;
+      }
+
+      if (data.type === "DAMAGED") {
+        console.error("하우수디테이루", data);
+      } else {
+        console.log("하우수디테이루", data);
+      }
+
       if (data.data.state && data.data.state === "FINDING") {
         console.log("hello");
         setIsCreatingMap(false);
+        return;
       }
       if (data.type && data.type === "COMPLETION_RATE") {
         if (isCreatingMap === true) {
           setIsCreatingMap(false);
         }
-        if (data.data.rate * 100 > 100) {
+        if (data.data.rate >= 98) {
           setProcessPercentage(100);
           //연결 끊기
           const message = {
@@ -82,9 +78,17 @@ const HouseDetail = () => {
           };
           const messageString = JSON.stringify(message, null, 2);
           ws.send(messageString);
+          setIsInspectFinish(true);
         } else {
-          setProcessPercentage(data.data.rate * 100);
+          setProcessPercentage(parseInt(data.data.rate));
         }
+      }
+      if (data.type && data.type === "DAMAGED") {
+        console.log("damage", data.data.image);
+        if (isCreatingMap === true) {
+          setIsCreatingMap(false);
+        }
+        setDamagedImage((prevData) => [data.data, ...prevData]);
       }
     };
   }, [ws]);
@@ -94,22 +98,37 @@ const HouseDetail = () => {
   };
 
   const handleIsFinish = (state) => {
-    setIsFinish(state);
+    setTodoFinish(state);
   };
 
   const getPercentage = () => {
     const rate = receivedMessage?.data?.rate;
     if (rate) {
-      setProcessPercentage(rate);
+      setProcessPercentage(parseInt(rate));
       return rate;
     }
     return processPercentage;
   };
 
+  const endInspection = () => {
+    navigate(`/house/${houseId}/result`);
+  };
+
   if (!targetHouse) {
-    return <div className="HouseDetail">로딩중입니다...</div>;
+    return (
+      <div className="HouseDetail">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <span className="loader2"></span>
+          <div style={{ marginTop: "1rem" }}>로딩중입니다</div>
+          <MyButton
+            text={"처음으로"}
+            color={"orange"}
+            onClick={() => navigate("/", { replace: true })}
+          />
+        </div>
+      </div>
+    );
   } else {
-    //  소켓에서 날아온 정보 처리방식 변경해야함
     return isCreatingMap ? (
       <div className="HouseDetail container">
         <div className="building_info_wrapper">
@@ -138,11 +157,10 @@ const HouseDetail = () => {
             text={"점검완료"}
             color={"green"}
             onClick={() => navigate(`/house/${houseId}/result`)}
-            isFinish={isFinish}
+            isFinish={isTodoFinish && isInspectFinish}
           />
         </div>
 
-        {/* 닫겼다가 다시 열릴때 새 페이지를 보여줄까 아니면 기존 상태 그대로 보여주는게 나을까 */}
         {
           <HouseTodoList
             handleIsFinish={handleIsFinish}
@@ -165,16 +183,17 @@ const HouseDetail = () => {
         </div>
 
         <div className="map_wrapper">
-          {/* 받아온 map 표시 */}
-          <img src={receivedMessage && receivedMessage.data.image} alt="map" />
+          {receivedMessage && receivedMessage.data.image ? (
+            <img src={receivedMessage.data.image} alt="map" />
+          ) : (
+            <img src={process.env.PUBLIC_URL + "/assets/image_none.png"} alt="nomap" />
+          )}
         </div>
         <div className="carousel">
-          {/* <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
-          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
-          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
-          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
-          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" />
-          <img src={process.env.PUBLIC_URL + `/assets/image_none.png`} alt="map" /> */}
+          {damagedImage &&
+            damagedImage.map((image, idx) => {
+              return <img key={idx} src={image.image} alt="dmagedImg" />;
+            })}
         </div>
 
         <div className="button_wrapper">
@@ -182,12 +201,11 @@ const HouseDetail = () => {
           <MyButton
             text={"점검완료"}
             color={"green"}
-            onClick={() => navigate(`/house/${houseId}/result`)}
-            isFinish={isFinish}
+            onClick={endInspection}
+            isFinish={isTodoFinish && isInspectFinish}
           />
         </div>
 
-        {/* 닫겼다가 다시 열릴때 새 페이지를 보여줄까 아니면 기존 상태 그대로 보여주는게 나을까 */}
         {
           <HouseTodoList
             handleIsFinish={handleIsFinish}

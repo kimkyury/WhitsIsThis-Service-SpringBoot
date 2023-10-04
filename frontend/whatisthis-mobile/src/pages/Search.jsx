@@ -4,18 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 import { BuildingDispatchContext } from "../App";
 import AuthHttp from "../utils/AuthHttp";
-
-// 검색 필터 해줘야해용
+import MyButton from "../components/MyButton";
 
 const Search = () => {
   const navigate = useNavigate();
   const [searchWord, setSearchWord] = useState("");
-  // const { buildingList } = useContext(BuildingDataContext);
   const [buildingList, setBuildingList] = useState();
   const { init } = useContext(BuildingDispatchContext);
 
   const [filteredBuilding, setFilteredBuilding] = useState();
-  // 새로고침되면 다시 불러오게끔 로직 수정 해야함
 
   useEffect(() => {
     const getBuildingList = async () => {
@@ -25,7 +22,6 @@ const Search = () => {
           url: "/private/requests/assigned",
         });
         const data = response.data.data;
-        console.log(response.data.data);
         if (data.length >= 1) {
           setBuildingList(data);
           setFilteredBuilding(data);
@@ -56,7 +52,19 @@ const Search = () => {
   };
 
   if (!buildingList) {
-    return <div className="Search">로딩중입니다...</div>;
+    return (
+      <div className="Search">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <span className="loader2"></span>
+          <div style={{ marginTop: "1rem" }}>로딩중입니다</div>
+          <MyButton
+            text={"처음으로"}
+            color={"orange"}
+            onClick={() => navigate("/", { replace: true })}
+          />
+        </div>
+      </div>
+    );
   } else {
     return (
       <div className="Search container">

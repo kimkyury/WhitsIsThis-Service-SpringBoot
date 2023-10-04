@@ -23,7 +23,6 @@ const HouseTodoList = ({
   const [targetSection, setTargetSection] = useState({});
 
   useEffect(() => {
-    // axios로 리스트 가져오는 등..
     const getSectionList = async () => {
       try {
         const response = await AuthHttp({
@@ -32,20 +31,11 @@ const HouseTodoList = ({
         });
 
         setSectionList(response.data.data);
-        // checkAllTodoIsDone(response.data.data);
       } catch (e) {
         console.error(e);
       }
     };
 
-    const checkAllTodoIsDone = (sectionList) => {
-      const mergedTodolist = sectionList.reduce((total, currentObj) => {
-        return total.concat(currentObj.todolist);
-      }, []);
-      const state = mergedTodolist.every((it) => it.isChecked);
-
-      handleIsFinish(state);
-    };
     getSectionList();
   }, []);
 
@@ -58,7 +48,6 @@ const HouseTodoList = ({
       return;
     }
 
-    // sectionId 추가
     try {
       const response = await AuthHttp({
         method: "post",
@@ -90,13 +79,11 @@ const HouseTodoList = ({
       setIsSectionDetail(!isSectionDetail);
       return;
     }
-    const targetTodoLists = sectionList.find((it) => it.roomOrder === section.roomOrder);
     setIsListMain(!isListMain);
     setIsSectionDetail(!isSectionDetail);
   };
 
   const handleMenu = async () => {
-    // 여기 울트라 초 슈퍼 하드코딩, 고쳐야함.
     const mergedTodolist = sectionList.reduce((total, currentObj) => {
       return total.concat(currentObj.todolist);
     }, []);

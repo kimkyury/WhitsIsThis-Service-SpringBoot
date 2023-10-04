@@ -1,9 +1,7 @@
 import TodoSectionItem from "./TodoSectionItem";
 import TodoListItem from "./TodoListItem";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthHttp from "../utils/AuthHttp";
-
-// 할일이 객체로 이름, 내용, 선택됨, 이미지 를 갖고 있어야 함
 
 const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) => {
   const navigate = useNavigate();
@@ -20,7 +18,6 @@ const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) =>
             significant: todo.significant,
           },
         });
-        // console.log(response);
       } catch (e) {
         console.error(e);
       }
@@ -32,15 +29,10 @@ const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) =>
 
   const handleCheckboxChange = (id, value) => {
     targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id)).isChecked = value;
-
-    const currentState = targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id));
-    // console.log(currentState);
   };
 
   const handleDescriptionChange = (id, value) => {
     targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id)).significant = value;
-    const currentState = targetSection.todolist.find((it) => parseInt(it.id) === parseInt(id));
-    // console.log(currentState);
   };
 
   const openCamera = (todoListItemId, todoListContent) => {
@@ -48,7 +40,6 @@ const SectionDetail = ({ targetSection, isSectionDetail, handleSectionOpen }) =>
     const targetTodoItem = targetSection.todolist.find(
       (it) => parseInt(it.id) === parseInt(todoListItemId)
     );
-    // console.log(buildingId, houseId);
     navigate(`/camera`, {
       state: {
         todoListId: todoListItemId,

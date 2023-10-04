@@ -34,6 +34,9 @@ body {
   /* overflow: auto; */
 }
 
+.error {
+  margin-top: 2rem;
+}
 /* common Button */
 .MyButton {
   /* background-color: white; */
@@ -98,6 +101,11 @@ body {
   margin-left: auto;
   border-radius: 1rem 0 0 1rem;
 }
+.Notification_disable {
+  background-color: rgba(91, 91, 91, 0.4) !important;
+  color: #929292 !important;
+}
+
 .Notification_grey {
   background-color: #7a7a7a;
   color: #fcfcfd;
@@ -863,7 +871,7 @@ h2 {
   color: black;
 }
 .HouseDetail .carousel img {
-  height: 15rem;
+  height: 14rem;
 }
 
 .HouseDetail .button_wrapper {
@@ -1268,6 +1276,37 @@ h3 {
   display: inline-block;
   box-sizing: border-box;
   animation: rotation 3s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader2 {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loader2::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  background: #ff3d00;
+  width: 3px;
+  height: 24px;
+  transform: translateX(-50%);
 }
 
 @keyframes rotation {

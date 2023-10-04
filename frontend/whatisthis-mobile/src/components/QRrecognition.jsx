@@ -18,7 +18,7 @@ const QRrecognition = ({ connect }) => {
       <QrReader
         className="camera_frame"
         onResult={(result, error) => handleScan(result, error)}
-        facingMode="environment"
+        videoStyle={{ facingMode: "environment" }}
       />
     </>
   );

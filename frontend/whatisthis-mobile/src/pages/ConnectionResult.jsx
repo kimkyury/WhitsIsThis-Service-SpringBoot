@@ -1,9 +1,10 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import Notification from "../components/Notification";
 import AuthHttp from "../utils/AuthHttp";
 import { useWebSocket } from "../utils/WebSocket";
+import MyButton from "../components/MyButton";
 
 const ConnectionResult = () => {
   const navigate = useNavigate();
@@ -27,12 +28,9 @@ const ConnectionResult = () => {
       }
     };
     getTargetHouse();
-    // console.log(targetHouse);
   }, []);
 
   const startWorking = async () => {
-    // houselist 추가하는 로직
-
     try {
       // start가 정상적으로 전달 됐는지 몰라도 되려나..?
       handleSend("COMMAND", {
@@ -69,7 +67,19 @@ const ConnectionResult = () => {
   };
 
   if (!targetHouse) {
-    return <div className="ConnectionResult">로딩중입니다...</div>;
+    return (
+      <div className="ConnectionResult">
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <span className="loader2"></span>
+          <div style={{ marginTop: "1rem" }}>로딩중입니다</div>
+          <MyButton
+            text={"처음으로"}
+            color={"orange"}
+            onClick={() => navigate("/", { replace: true })}
+          />
+        </div>
+      </div>
+    );
   } else {
     return (
       <div className="ConnectionResult container">

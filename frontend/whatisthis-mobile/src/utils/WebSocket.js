@@ -23,7 +23,6 @@ export const WebSocketProvider = ({ children }) => {
 
     socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      //   const formattedData = JSON.stringify(data, null, 2);
       console.log("수신 메시지", data);
       if (data.historyId) {
         console.log(data.historyId);

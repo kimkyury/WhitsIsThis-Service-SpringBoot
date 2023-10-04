@@ -22,7 +22,6 @@ const Home = () => {
           url: "/private/requests/assigned",
         });
         const data = response.data.data;
-        // console.log(response.data.data);
         if (data.length >= 1) {
           init(data);
           setWorkInprogress(checkInProgress(data));
@@ -74,7 +73,6 @@ const Home = () => {
   };
 
   const moveToWorkInProgress = () => {
-    //진행중인 작업이 있으면 활성화 하고 해당 houselist 로 보내벌임
     navigate("/houselist");
   };
 
