@@ -29,8 +29,8 @@ class followTheCarrot(Node):
         super().__init__('path_tracking')
         self.cmd_pub = self.create_publisher(Twist, 'cmd_vel', 10)
         self.subscription = self.create_subscription(Odometry,'/odom',self.odom_callback,10)
-        self.status_sub = self.create_subscription(TurtlebotStatus,'/turtlebot_status',self.status_callback,10)
-        self.main_status_sub =  self.create_subscription(String, 'progress', self.check_status, 10)
+        self.status_sub = self.create_subscription(TurtlebotStatus,'/turtlebot_status',self.status_callback,1)
+        self.main_status_sub =  self.create_subscription(String, 'progress', self.check_status, 1)
         self.path_sub = self.create_subscription(Path,'/local_path',self.path_callback,10)
         self.status_publisher = self.create_publisher(String, 'result', 1)
 
@@ -42,6 +42,7 @@ class followTheCarrot(Node):
         self.is_path=False
         self.is_status=False
         self.status=False
+        self.main_status = ""
 
         self.result_msg=String()
         self.odom_msg=Odometry()            
@@ -55,13 +56,11 @@ class followTheCarrot(Node):
         self.max_lfd=1.0
 
     def check_status(self,msg):
-        if msg.data == "WAIT_FINDING":
+        self.main_status = msg.data
+        if self.main_status == "WAIT_FINDING":
             self.status = True
             self.result_msg.data = "FINDING"
             self.status_publisher.publish(self.result_msg)
-        else:
-            if msg.data != "WATI_FINDING" or msg.data != "FINDING":
-                self.status = False
             
     def timer_callback(self):
 
@@ -107,20 +106,21 @@ class followTheCarrot(Node):
                     local_forward_point = det_trans_matrix.dot(global_forward_point)
                     theta = -atan2(local_forward_point[1], local_forward_point[0])
 
-                    out_vel = 0.35
-                    out_rad_vel = 1.5*theta
+                    out_vel = 0.3
+                    out_rad_vel = 2*theta
                     self.cmd_msg.linear.x=out_vel
                     self.cmd_msg.angular.z=out_rad_vel
                     self.cmd_pub.publish(self.cmd_msg)
            
             else :
-                # print("no found forward point, traking finished")
-                self.cmd_msg.linear.x=0.0
-                self.cmd_msg.angular.z=0.0
-                self.status = False
-                # self.result_msg.data = "END_FINDING"
-                # self.status_publisher.publish(self.result_msg)
-                self.cmd_pub.publish(self.cmd_msg)     
+                if self.main_status == "FINISH" or self.main_status == "WORK_STOP":
+                    # print("no found forward point, traking finished")
+                    self.cmd_msg.linear.x=0.0
+                    self.cmd_msg.angular.z=0.0
+                    self.status = False
+                    # self.result_msg.data = "END_FINDING"
+                    # self.status_publisher.publish(self.result_msg)
+                    self.cmd_pub.publish(self.cmd_msg)     
 
     def odom_callback(self, msg):
         self.is_odom=True
