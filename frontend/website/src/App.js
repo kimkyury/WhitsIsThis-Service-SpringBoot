@@ -14,6 +14,7 @@ import First from "./pages/WebMain/First";
 import RList from "./pages/ResultList/ResultLists";
 import WebMains from "../src/pages/WebMain/WebMainC";
 import Footer from '../src/component/Header/Footer/footer';
+import Pdf from '../src/pages/WebMain/Pdf';
 function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
   const access = sessionStorage.getItem('refreshToken');
@@ -25,6 +26,7 @@ function App() {
         <div style={{ display: 'flex' }}>
           <Header />
           <Routes>
+            <Route path='/his' element={<Pdf/>}/>
           <Route path='/CC' element={<WebMains/>} />
             <Route path='/first' element={<First />} />
             <Route path="/" element={<WebMain />} />
@@ -42,7 +44,7 @@ function App() {
             />
           </Routes>
         </div>
-      <Footer/>
+      {/* <Footer/> */}
       </Router>
     </div>
   );
