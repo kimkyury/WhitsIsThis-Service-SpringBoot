@@ -21,6 +21,12 @@
   margin-right: 2vw;
   /* border-radius: 0.2rem; */
 }
+.cinputinp {
+  width:27rem;
+  height:1.5rem;
+  margin-left: 2rem;
+  /* border-radius: 0.2rem; */
+}
 /* 
 .cinputss {
   width:27rem;
@@ -102,7 +108,7 @@
 .middlemodal {
   display:flex;
   justify-content: center;
-  
+  gap: 1vw;
 }
 
 

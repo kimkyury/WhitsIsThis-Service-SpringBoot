@@ -121,16 +121,15 @@ function Fixcustom() {
 
   return (
     <div className="roomimg resrecpage">
-
-<div className="desk-customreceivedivfix" >
-          <div className="desk-custommodaltitle ">
+      <div className="desk-customreceivedivfix">
+<div className="desk-custommodaltitle ">
             <p>점검 결과</p>
           </div>
           <div className="circlelinebox">
             <span>
               <div className="flexlinebox">
-                <p className="circle" >
-              
+                <p className="circle">
+                  {/* {showCheckmark("WAITING_INSPECTION_DATE")} */}
                   <p className="listline">확인중</p>
                 </p>
               </div>
@@ -139,7 +138,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle">
-                 
+                  {/* {showCheckmark("WAITING_FOR_INSPECTION")} */}
                   <p className="listline">점검 대기</p>
                 </p>
               </div>
@@ -148,7 +147,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle">
-                  
+                  {/* {showCheckmark("IN_PROGRESS")} */}
                   <p className="listline">진행 중</p>
                 </p>
               </div>
@@ -157,17 +156,17 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" >
-                 
+                  {/* {showCheckmark("DONE")} */}
                   <p className="listline">완료</p>
                 </p>
               </div>
             </span>
           </div>
           <div className="middlemodalsx">
-            <div className="boxpage">
+            <div className="desk-boxpage">
               <div className="vertical-center">
-                <p style={{ marginLeft: "5%" }}>a</p>
-                <p style={{ marginLeft: "5%" }}>b</p>{" "}
+                <p style={{ marginLeft: "5%" }}>s</p>
+                <p style={{ marginLeft: "5%" }}>d</p>{" "}
                 {/* {showDownloadButtons && ( */}
                   <>
                     <p
@@ -188,20 +187,17 @@ function Fixcustom() {
             </div>
           </div>
           <div className="middlemodal">
-            <button className="button bigbuttons">
+            <button className="button bigbuttons" >
               확인하기
             </button>
-           
+ 
               <button className="button bigbuttons" >
                 취소하기
               </button>
-           
+            
           </div>
         </div>
-
-
-
-    </div>
+        </div>
   );
 }
 

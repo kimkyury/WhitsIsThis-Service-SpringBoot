@@ -7,9 +7,11 @@ function Addresscomp({ result, onSelect, showAddressModal, setShowAddressModal }
   const handleInputClick = () => {
     if (result) {
       onSelect(result);
+      setShowAddressModal(false)
+      console.log(result)
     }
     setShowInputButton(false);
-
+    setShowAddressModal(false)
     // 모달을 닫기 위해 setShowAddressModal 함수 호출
     // setShowAddressModal(false);
   };

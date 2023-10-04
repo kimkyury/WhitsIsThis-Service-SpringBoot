@@ -13,10 +13,13 @@ function CustomMain() {
 
   // 이미지 파일 경로 목록
   const imagePaths = [
-    "/assets/집2.jfif",
-    "/assets/집사진.jfif",
-    "/assets/집3.jfif",
-    "/assets/집5.jfif",
+    "/assets/image (74).png",
+    "/assets/image (72).png",
+    // "/assets/집8.svg",
+    // "/assets/집10.svg",
+    // "/assets/image (75).png",
+    "/assets/image (69).png",
+    "/assets/mapping.gif",
     // "/assets/방사진.svg"
     // "/assets/방.svg",
     // "/assets/방사진.svg",
@@ -74,7 +77,7 @@ function CustomMain() {
       // backgroundImage: `url(${process.env.PUBLIC_URL}/assets/배경사진.png)`
     }}
 
-    className="roomimg fontb">
+    className="roomimg fontb" >
                 <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
           <img
             src={currentImagePath}
@@ -85,10 +88,10 @@ function CustomMain() {
               left: '0',
               top: '0',
               zIndex: '999',
-              // marginLeft:'vw',
-              // marginTop:'27vh',
-              width: '100vw',
-              height:'100vh',
+              marginLeft:'7vw',
+              marginTop:'32vh',
+              width: '86vw',
+              height:'25vh',
               // borderRadius:'4vw',
               // boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.4)',
               // border:'1.5px solid black',
@@ -103,8 +106,8 @@ function CustomMain() {
             style={{ height:'7rem', zIndex:'999'}} // 이미지를 가로 중앙으로 정렬
           />
         </p>
-        <div style={{display:'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <div style={{ zIndex:'999', opacity:'0.8', display:'flex', flexDirection:'column', alignItems:'center'}}>
+        <div className="buttonbox2" style={{display:'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <div style={{ marginTop:'25rem', zIndex:'999', opacity:'0.8', display:'flex', alignItems:'center', gap:'1rem'}}>
           <Link  to={'/customerreceive'}>
               <button className={`cmainbutton ${buttonsVisible ? "show" : ""}`}>
                 신청하기
@@ -132,13 +135,14 @@ function CustomMain() {
           alt="집 이미지"
           style={{
             position: 'absolute',
-            left: '50%',
-            top: '50%',
+            left: '51%',
+            top: '42%',
             transform: 'translate(-50%, -50%)',
             zIndex: '999',
             marginLeft:'7vw',
-            width: '60vw',
-            height: '60vh',
+            width: '75vw',
+            height: '75vh',
+            
             border: '1.5px solid black',
           }}
         />

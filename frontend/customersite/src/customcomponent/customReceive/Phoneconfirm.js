@@ -35,7 +35,7 @@ function Phoneconfirm({ requesterPhoneNumber, setPhoneConfirmVisible, isSuc, set
       <div className="customreceivedivconfirms">
         <div className="customgrid">
           <input
-            className="input cinputss"
+            className="input cinputinp"
             placeholder="인증번호를 입력해주십시오."
             style={{ borderBottom: '0.1rem solid black' }}
             value={authCode}

@@ -129,36 +129,36 @@ function Fixcustom() {
           <div className="circlelinebox">
             <span>
               <div className="flexlinebox">
-                <p className="desk-circle" style={getCircleStyle("WAITING_INSPECTION_DATE")}>
+                <p className="circle" style={getCircleStyle("WAITING_INSPECTION_DATE")}>
                   {showCheckmark("WAITING_INSPECTION_DATE")}
-                  <p className="desk-listline">확인중</p>
+                  <p className="listline">확인중</p>
                 </p>
               </div>
             </span>
-            <p className="desk-line"></p>
+            <p className="line"></p>
             <span>
               <div className="flexlinebox">
-                <p className="desk-circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}>
+                <p className="circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}>
                   {showCheckmark("WAITING_FOR_INSPECTION")}
-                  <p className="desk-listline">점검 대기</p>
+                  <p className="listline">점검 대기</p>
                 </p>
               </div>
             </span>
-            <p className="desk-line"></p>
+            <p className="line"></p>
             <span>
               <div className="flexlinebox">
-                <p className="desk-circle" style={getCircleStyle("IN_PROGRESS")}>
+                <p className="circle" style={getCircleStyle("IN_PROGRESS")}>
                   {showCheckmark("IN_PROGRESS")}
-                  <p className="desk-listline">진행 중</p>
+                  <p className="listline">진행 중</p>
                 </p>
               </div>
             </span>
-            <p className="desk-line"></p>
+            <p className="line"></p>
             <span>
               <div className="flexlinebox">
-                <p className="desk-circle" style={getCircleStyle("DONE")}>
+                <p className="circle" style={getCircleStyle("DONE")}>
                   {showCheckmark("DONE")}
-                  <p className="desk-listline">완료</p>
+                  <p className="listline">완료</p>
                 </p>
               </div>
             </span>
@@ -188,11 +188,11 @@ function Fixcustom() {
             </div>
           </div>
           <div className="middlemodal">
-            <button className="button desk-bigbuttons" onClick={() => handleOk()}>
+            <button className="button bigbuttons" onClick={() => handleOk()}>
               확인하기
             </button>
             {showCancelButton && (
-              <button className="button desk-bigbuttons" onClick={() => handleCancellation()}>
+              <button className="button bigbuttons" onClick={() => handleCancellation()}>
                 취소하기
               </button>
             )}

@@ -3,7 +3,7 @@ import "./address.css";
 import Addresscomp from "./addresscomp";
 import axios from "axios";
 
-function Address({ selectedAddress, setSelectedAddress }) {
+function Address({ selectedAddress, setSelectedAddress}) {
   const [searchText, setSearchText] = useState(""); // 입력 필드 값
   const [searchResults, setSearchResults] = useState([]); // 검색 결과
   const [showAddressModal, setShowAddressModal] = useState(false); // 주소 모달 표시 여부

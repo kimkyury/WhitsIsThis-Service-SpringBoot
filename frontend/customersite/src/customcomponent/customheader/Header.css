@@ -76,7 +76,7 @@ a {
 
 }
 .items {
-  margin-top:-35vh;
+  margin-top:-45vh;
   display: flex;
   flex-direction: column; /* 세로로 배치하기 위해 flex-direction을 column으로 설정합니다. */
   width: 30vw;

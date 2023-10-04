@@ -21,7 +21,7 @@
 
 .desk-customreceivedivfix {
   margin-top: 1rem;
-  width: 4z;
+  width: 40vw;
   height: 40rem;
 
   background-color: white;
@@ -66,8 +66,8 @@
 }
 
 .desk-boxpage {
-  margin-top: -4rem;
-  width: 32rem;
+  margin-top: 0rem;
+  width: 24rem;
   height: 10rem;
   border-radius: 0.5rem;
   border: 0.1rem solid black;
@@ -83,8 +83,8 @@
 
 .circle {
   border-radius: 100%;
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 4rem;
+  height: 4rem;
   background-color: #ececec;
   text-align: center;
 }
