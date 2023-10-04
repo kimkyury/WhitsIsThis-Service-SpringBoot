@@ -49,10 +49,16 @@ a {
   font-weight:bold;
 }
 .item:hover {
-  color:#F07B3F !important; 
+  color:#F07B3F;
   font-size:1.2rem;
   border-bottom: 2px solid #F07B3F;
   width:4.5rem
+}
+.item.noHover:hover {
+  color: inherit;
+  font-size: inherit;
+  border-bottom: none;
+  width: auto;
 }
 .itemposition {
   display: grid;
@@ -65,11 +71,10 @@ a {
 
 }
 .items {
-  margin-top:-30vh;
+  margin-top: -30vh;
   display: flex;
-  flex-direction: column; /* 세로로 배치하기 위해 flex-direction을 column으로 설정합니다. */
+  flex-direction: column;
   width: 30vw;
   height: 40vh;
-  
-  margin-right: -7.2rem;
+  justify-content: center;
 }
