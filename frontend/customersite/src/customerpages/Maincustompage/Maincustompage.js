@@ -13,12 +13,12 @@ function CustomMain() {
 
   // 이미지 파일 경로 목록
   const imagePaths = [
-    "/assets/image (74).png",
-    "/assets/image (72).png",
+    "/assets/집11.jpg",
+    "/assets/집12.jpg",
     // "/assets/집8.svg",
     // "/assets/집10.svg",
     // "/assets/image (75).png",
-    "/assets/image (69).png",
+    "/assets/집13.jpg",
     "/assets/mapping.gif",
     // "/assets/방사진.svg"
     // "/assets/방.svg",
