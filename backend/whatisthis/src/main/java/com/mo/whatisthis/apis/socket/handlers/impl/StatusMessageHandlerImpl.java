@@ -38,6 +38,7 @@ public class StatusMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
             // Todo: JSON형식 유효성 검사
             saveDataAtMap(dataMap, DataType.historyId, historyId);
+            saveDataAtMap(dataMap, DataType.serialNumber, senderDevice);
             String sendMessage = convertMessageToString(SendType.STATUS, dataMap);
             sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
 
