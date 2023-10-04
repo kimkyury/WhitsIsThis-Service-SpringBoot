@@ -11,6 +11,8 @@ import Receivedsitem from './Myreceiveitem';
 import RequestModals from './MyRequestModal';
 import Calendar from '../../component/calendar/calendar';
 function List() {
+  const [insdate, setInsdate] = useState();
+  const [selectedDate, setSelectedDate] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showModals, setShowModals] = useState(false);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -25,6 +27,8 @@ function List() {
   const [mydata, setMydata] = useState(null);
   const [mdata, setMdata] = useState(null);
   const [showcal, setShowcal] = useState(false);
+  const [selectDate, setSelectDate] = useState();
+  const [selectedDatemax, setSelectedDatemax] = useState();
   const getRefreshToken = () => {
     return sessionStorage.getItem('accessToken');
   };
@@ -62,6 +66,7 @@ function List() {
   getData(1)
   fetchMyData();
   }, []);
+  
   const fetchMyData =  async() => {
     try {
       const response = await AuthHttp({
@@ -106,48 +111,6 @@ function List() {
     }
 
   }
-
-  // const fetchData = (page, endpoint) => {
-  //   setIsFetching(true);
-
-  //   const headers = {
-  //     'Authorization': `${accessToken}`,
-  //   };
-
-  //   axios.get(`${BASE_URL}/api/v1/private/requests/waiting?page=${page}`, {
-  //     headers: headers,
-  //   })
-  //     .then((response) => {
-  //       const data = response.data;
-  //       if (data.status === 200) {
-  //         const responseData = data.data;
-  //         const uniqueData = responseData.filter((newData) => {
-  //           return !myApplicant.some((existingData) => existingData.id === newData.id);
-  //         });
-
-  //         setMyApplicant((prevData) =>
-  //           page === 1 ? uniqueData : [...prevData, ...uniqueData]
-  //         );
-
-  //         if (data.hasNextPage) {
-  //           setCurrentPage(page + 1);
-  //         } else {
-  //           setIsFetching(false);
-  //         }
-  //       } else {
-  //         console.error('API 오류:', data.message);
-  //         setIsFetching(false);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error('데이터 가져오기 오류:', error);
-  //       setIsFetching(false);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   fetchData(currentPage, 'waiting');
-  // }, [currentPage]);
 
   const applicantContainerRef = useRef(null);
   const myApplicantContainerRef = useRef(null);
@@ -224,8 +187,11 @@ function List() {
       const updatedMyApplicant = [...myApplicant];
       updatedMyApplicant.splice(sourceIndex, 1);
       setMyApplicant(updatedMyApplicant);
-  
+      setShowcal(true)
       // 패치 요청 보내기
+      setSelectDate(draggedData.inspectionStart)
+      setSelectedDatemax(draggedData.inspectionEnd)
+      // console.log(draggedData.inspectionEnd, draggedData.inspectionEnd)
       console.log(draggedData);
       moveItem(draggedData.id);
     }
@@ -234,64 +200,27 @@ function List() {
 
   const moveItem = async (targetId) =>{
     try{
-      const currentDate = new Date();
-      const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
-      
+      // const currentDate = new Date();
+      // const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+
       const response = await AuthHttp({
         method:'patch',
         url:`/private/requests/${targetId}/manager`,
         data:{
           // 자바스크립트 date 함수로 저걸 포매팅해서 보내면 됨
-          inspectionDate: formattedDate
+          inspectionDate: insdate
         }
       });
+      console.log(insdate)
       // console.log(formattedDate)
-      setShowcal(true)
+      setShowcal(false)
       console.log(response);
     }catch(e){
       console.error(e);
+      console.log(insdate)
+      
     }
   }
-  
-  
-  
-  
-
-  // const sendPatchRequest = (itemId) => {
-  //   if (itemId) {
-  //     moveItem(itemId);
-
-  //     const patchUrl = `${BASE_URL}/api/v1/private/requests/${itemId}/manager`;
-
-  //     const headers = {
-  //       'Authorization': `${accessToken}`,
-  //     };
-
-  //     // 업데이트할 데이터를 요청 본문에 포함
-  //     const requestData = {
-  //       // 업데이트할 데이터의 필드 및 값
-  //       // 예: fieldName: updatedValue
-  //     };
-
-  //     axios.patch(patchUrl, requestData,
-  //       {params: {
-  //         id: itemId,
-  //       },},
-  //       { headers })
-  //       .then((response) => {
-  //         const data = response.data;
-  //         if (data.status === 200) {
-  //           // 패치 요청이 성공하면 처리할 내용을 추가
-  //           console.log('패치 요청이 성공했습니다.');
-  //         } else {
-  //           console.error('API 오류:', data.message);
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error('패치 요청 오류:', error);
-  //       });
-  //   }
-  // };
 
   return (
     isLogin ? (
@@ -407,11 +336,19 @@ function List() {
             <RequestModals selectedItems={selectedItems} setShowModals={setShowModals} />
           </div>
         )}
-         {/* {showcal && (
-          <div className="modal-container">
-            <Calendar selectedItem={selectedItem} setShowcal={setShowcal} />
-          </div>
-        )} */}
+         {showcal && (
+       
+            <Calendar 
+            setInsdate={setInsdate} 
+            selectdate={selectDate} 
+            selectedDatemax={selectedDatemax} 
+            setShowcal={setShowcal} 
+            selectedDate={selectedDate} 
+            setSelectedDate={setSelectedDate} 
+            insdate={insdate}
+            />
+       
+        )}
         {/* showcal는 내 접수 넘어가쓸때 true하고 selectedItem, setshowcal, datainspectionstart, end */}
       </div>
     ) : (
