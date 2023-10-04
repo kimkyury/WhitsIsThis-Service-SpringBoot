@@ -106,8 +106,9 @@ class followTheCarrot(Node):
                     local_forward_point = det_trans_matrix.dot(global_forward_point)
                     theta = -atan2(local_forward_point[1], local_forward_point[0])
 
-                    out_vel = 0.3
-                    out_rad_vel = 2*theta
+                    out_vel = 1*exp((-1)*(abs(theta))/(2*sqrt(2))) * 0.5
+                    out_rad_vel =theta
+
                     self.cmd_msg.linear.x=out_vel
                     self.cmd_msg.angular.z=out_rad_vel
                     self.cmd_pub.publish(self.cmd_msg)
