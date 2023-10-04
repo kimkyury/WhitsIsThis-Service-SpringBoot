@@ -60,7 +60,7 @@ class followTheCarrot(Node):
             self.result_msg.data = "FINDING"
             self.status_publisher.publish(self.result_msg)
         else:
-            if msg.data != "FINDING":
+            if msg.data != "WATI_FINDING" or msg.data != "FINDING":
                 self.status = False
             
     def timer_callback(self):
