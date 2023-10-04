@@ -83,8 +83,11 @@ public class RequestService {
 
     public void cancelRequest(HttpServletRequest request) {
 
-        String requestPhone = (String)request.getSession().getAttribute("phone");
-        Long requestId = requestRepository.findByRequesterPhone(requestPhone).get().getId();
+        String requestPhone = (String) request.getSession()
+                                              .getAttribute("phone");
+        Long requestId = requestRepository.findByRequesterPhone(requestPhone)
+                                          .get()
+                                          .getId();
 
         requestRepository.findById(requestId)
                          .ifPresent(
@@ -97,7 +100,8 @@ public class RequestService {
 
     public RequestDetailRequests findRequestForCustomer(HttpServletRequest request) {
 
-        String requesterPhone = (String)request.getSession().getAttribute("phone");
+        String requesterPhone = (String) request.getSession()
+                                                .getAttribute("phone");
         RequestEntity requestEntityByPhone = requestRepository.findByRequesterPhone(requesterPhone)
                                                               .orElseThrow(
                                                                   () -> new CustomException(
@@ -135,11 +139,20 @@ public class RequestService {
                 requestEntity.getAddress());
 
             if (assignedRequestResponse == null) {
-                assignedRequestResponse = new AssignedRequestResponse(requestEntity);
+                assignedRequestResponse = new AssignedRequestResponse(requestEntity,
+                    historyRepository.findByRequestId(
+                                         requestEntity.getId())
+                                     .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST))
+                                     .getId());
 
                 assignedRequestResponseMap.put(requestEntity.getAddress(), assignedRequestResponse);
             } else {
-                assignedRequestResponse.add(requestEntity);
+                assignedRequestResponse.add(requestEntity, historyRepository.findByRequestId(
+                                                                                requestEntity.getId())
+                                                                            .orElseThrow(
+                                                                                () -> new CustomException(
+                                                                                    ErrorCode.BAD_REQUEST))
+                                                                            .getId());
             }
         }
 
