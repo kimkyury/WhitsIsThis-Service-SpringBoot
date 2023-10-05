@@ -44,8 +44,14 @@ public class CommonCode {
         NOT_INCLUDE_ISWORKED, // hasType
         NOT_INCLUDE_RATE,
 
+        IS_NOT_REGISTER_DEVICE,
         INVALID_STATE_TYPE,
         INVALID_COMMAND_TYPE,
         INVALID_DRAWING_STATUS,
+
+        NOT_EXIST_DEVICE,
+        NOT_CONNECT_DEVICE,
+        NOT_EXIST_EMPLOYEE,
+        NOT_EXIST_HISTORY;
     }
 }

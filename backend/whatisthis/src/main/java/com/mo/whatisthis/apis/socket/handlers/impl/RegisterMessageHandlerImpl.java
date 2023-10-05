@@ -1,7 +1,10 @@
 package com.mo.whatisthis.apis.socket.handlers.impl;
 
+import com.mo.whatisthis.apis.history.repositories.HistoryRepository;
+import com.mo.whatisthis.apis.member.repositories.MemberRepository;
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.MessageError;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
@@ -14,12 +17,18 @@ import org.springframework.web.socket.WebSocketSession;
 public class RegisterMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
     private final RedisService redisService;
+    private final HistoryRepository historyRepository;
+    private final MemberRepository memberRepository;
 
     public RegisterMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
-        RedisService redisService) {
+        RedisService redisService,
+        HistoryRepository historyRepository,
+        MemberRepository memberRepository) {
         super(socketProvider, jwtTokenProvider);
         this.redisService = redisService;
+        this.historyRepository = historyRepository;
+        this.memberRepository = memberRepository;
     }
 
 
@@ -28,16 +37,34 @@ public class RegisterMessageHandlerImpl extends AbstractMessageHandlerInterface 
         // Employee가 Device를 등록하는 메시지
 
         String senderEmployee = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
-        String historyId = getDataAtMap(dataMap, DataType.historyId);
+
+        String historyIdStr = getDataAtMap(dataMap, DataType.historyId);
+        if (historyIdStr == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_HISTORYID);
+            return;
+        }
         String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
+        if (serialNumber == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_SERIALNUMBER);
+            return;
+        }
+        if (memberRepository.findByUsername(serialNumber).isEmpty()){
+            sendErrorMessage(session, MessageError.NOT_EXIST_DEVICE);
+            return;
+        }
+        if (historyRepository.findById(Long.valueOf(historyIdStr))
+                             .isEmpty()) {
+            sendErrorMessage(session, MessageError.NOT_EXIST_HISTORY);
+            return;
+        }
 
-        // For Command에서 DB-Requets 상태 변경
-        saveAttributeAtSession(session, SessionKey.HISTORY_ID, historyId);
-
-        redisService.saveData("device:" + serialNumber, senderEmployee + "/" + historyId);
+        saveAttributeAtSession(session, SessionKey.HISTORY_ID, historyIdStr);
+        redisService.saveData("device:" + serialNumber, senderEmployee + "/" + historyIdStr);
 
         String message = createSuccessMessage();
         socketProvider.sendMessageToEmployee(session, senderEmployee, message);
     }
+
+
 }
 

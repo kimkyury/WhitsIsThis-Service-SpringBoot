@@ -38,6 +38,7 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
     }
 
 
+
     protected String getAttributeAtSession(WebSocketSession session, SessionKey key) {
         return (String) session.getAttributes()
                                .get(key.name());
@@ -133,6 +134,4 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
