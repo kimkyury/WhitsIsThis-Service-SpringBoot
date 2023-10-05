@@ -76,6 +76,12 @@ public class S3Service {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (ZipOutputStream zos = new ZipOutputStream(baos)) {
             for (String key : s3Keys) {
+                int idx = key.lastIndexOf('/');
+
+                if (idx > -1) {
+                    key = key.substring(idx + 1);
+                }
+                
                 S3Object o = amazonS3.getObject(new GetObjectRequest(bucket, key));
                 S3ObjectInputStream objectInputStream = o.getObjectContent();
                 byte[] bytes = IOUtils.toByteArray(objectInputStream);

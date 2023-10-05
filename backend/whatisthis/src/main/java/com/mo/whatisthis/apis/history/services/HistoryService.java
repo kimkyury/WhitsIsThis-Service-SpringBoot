@@ -103,19 +103,37 @@ public class HistoryService {
     public void packToZip(Long id, String reportUrl) throws IOException {
         List<String> keys = new ArrayList<>();
         keys.add(reportUrl);
-        
+
         AllHistoryResponse allHistoryResponse = getAllHistory(id);
 
-        for (DamagedHistoryResponse damagedHistoryResponse : allHistoryResponse.getHistory()
-                                                                               .getDamaged()) {
-            keys.add(damagedHistoryResponse.getImageUrl());
+        if (allHistoryResponse.getHistory() != null && allHistoryResponse.getHistory()
+                                                                         .getDamaged() != null) {
+            for (DamagedHistoryResponse damagedHistoryResponse : allHistoryResponse.getHistory()
+                                                                                   .getDamaged()) {
+                if (damagedHistoryResponse.getImageUrl() != null) {
+                    keys.add(damagedHistoryResponse.getImageUrl());
+                }
+            }
         }
-        keys.add(allHistoryResponse.getHistory()
-                                   .getDrawingUrl());
-        for (TodolistWrapperResponse todolistWrapperResponse : allHistoryResponse.getTodolist()) {
-            for (TodolistResponse todolistResponse : todolistWrapperResponse.getTodolist()) {
-                for (TodolistImageResponse todolistImageResponse : todolistResponse.getImages()) {
-                    keys.add(todolistImageResponse.getImageUrl());
+
+        if (allHistoryResponse.getHistory() != null && allHistoryResponse.getHistory()
+                                                                         .getDrawingUrl() != null) {
+            keys.add(allHistoryResponse.getHistory()
+                                       .getDrawingUrl());
+        }
+
+        if (allHistoryResponse.getTodolist() != null) {
+            for (TodolistWrapperResponse todolistWrapperResponse : allHistoryResponse.getTodolist()) {
+                if (todolistWrapperResponse.getTodolist() != null) {
+                    for (TodolistResponse todolistResponse : todolistWrapperResponse.getTodolist()) {
+                        if (todolistResponse.getImages() != null) {
+                            for (TodolistImageResponse todolistImageResponse : todolistResponse.getImages()) {
+                                if (todolistImageResponse.getImageUrl() != null) {
+                                    keys.add(todolistImageResponse.getImageUrl());
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
