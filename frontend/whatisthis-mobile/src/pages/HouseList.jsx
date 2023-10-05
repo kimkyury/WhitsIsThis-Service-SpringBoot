@@ -75,7 +75,7 @@ const HouseList = () => {
     if (!ws) return;
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      console.log(data);
+      console.log("리스트", data);
       // if (houseInfo.historyId !== data.data.historyId) {
       //   return;
       // }

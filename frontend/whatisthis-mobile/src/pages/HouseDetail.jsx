@@ -48,7 +48,7 @@ const HouseDetail = () => {
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
 
-      // console.log(data.data.historyId, historyId);
+      console.log(data.data.historyId, historyId);
 
       if (parseInt(data.data.historyId) !== parseInt(historyId)) {
         return;
