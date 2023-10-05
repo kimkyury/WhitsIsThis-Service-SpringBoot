@@ -17,6 +17,7 @@
   justify-content: center;
   /* align-items: center; */
   height: 100%; /* 컨테이너의 높이를 100%로 설정하여 세로 중앙 정렬합니다. */
+  
 }
 
 .desk-customreceivedivfix {
@@ -58,11 +59,17 @@
 
 .boxpage {
   margin-top: -1rem;
+<<<<<<< HEAD
   width: 30rem;
+=======
+  width: 100vw;
+>>>>>>> b2c409412324832e30b6d07bd0a4eff1ed208db2
   height: 10rem;
   border-radius: 0.5rem;
   border: 0.1rem solid black;
   align-items: center;
+
+
 }
 
 .desk-boxpage {
@@ -106,7 +113,10 @@
   width: 4rem;
   border: 0.02rem solid black;
 }
-
+.moline {
+  width: 2rem;
+  border: 0.01rem solid black;
+}
 .lines {
   width: 10rem;
   border: 0.05rem solid black;

@@ -17,7 +17,7 @@ function Fixcustom() {
   const getIndex = (status) => {
     return statuses.indexOf(status);
   };
-
+  console.log(inspectionDate)
   // 상태에 따라 원 모양 스타일을 반환하는 함수 정의
   const getCircleStyle = (circleStatus) => {
     const statusIdx = getIndex(status);
@@ -43,19 +43,19 @@ function Fixcustom() {
   // };
 
   // "대기 중", "진행 중", "완료" 상태에 따른 텍스트 및 다운로드 표시 여부 설정
-  const [formatins, setFormatins] = useState();
-  const [formatat, setFormatAt] = useState();
-  const dateObject = inspectionDate(year, month - 1, day, hours, minutes, seconds);
+  // const [formatins, setFormatins] = useState();
+  // const [formatat, setFormatAt] = useState();
+  // const dateObject = inspectionDate(year, month - 1, day, hours, minutes, seconds);
 
-  // 날짜를 원하는 형식으로 포맷팅
-  const formattedDate = `${dateObject.getFullYear()}-${(dateObject.getMonth() + 1).toString().padStart(2, '0')}-${dateObject.getDate().toString().padStart(2, '0')} ${dateObject.getHours().toString().padStart(2, '0')}:${dateObject.getMinutes().toString().padStart(2, '0')}:${dateObject.getSeconds().toString().padStart(2, '0')}`;
-  setFormatins(formattedDate)
-  const dateObjects = history.insplectedAt(year, month - 1, day, hours, minutes, seconds);
+  // // 날짜를 원하는 형식으로 포맷팅
+  // const formattedDate = `${dateObject.getFullYear()}-${(dateObject.getMonth() + 1).toString().padStart(2, '0')}-${dateObject.getDate().toString().padStart(2, '0')} ${dateObject.getHours().toString().padStart(2, '0')}:${dateObject.getMinutes().toString().padStart(2, '0')}:${dateObject.getSeconds().toString().padStart(2, '0')}`;
+  // setFormatins(formattedDate)
+  // const dateObjects = history.insplectedAt(year, month - 1, day, hours, minutes, seconds);
 
-  // 날짜를 원하는 형식으로 포맷팅
-  const formattedDates = `${dateObject.getFullYear()}-${(dateObject.getMonth() + 1).toString().padStart(2, '0')}-${dateObject.getDate().toString().padStart(2, '0')} ${dateObject.getHours().toString().padStart(2, '0')}:${dateObject.getMinutes().toString().padStart(2, '0')}:${dateObject.getSeconds().toString().padStart(2, '0')}`;
+  // // 날짜를 원하는 형식으로 포맷팅
+  // const formattedDates = `${dateObject.getFullYear()}-${(dateObject.getMonth() + 1).toString().padStart(2, '0')}-${dateObject.getDate().toString().padStart(2, '0')} ${dateObject.getHours().toString().padStart(2, '0')}:${dateObject.getMinutes().toString().padStart(2, '0')}:${dateObject.getSeconds().toString().padStart(2, '0')}`;
 
-  setFormatAt(formattedDates)
+  // setFormatAt(formattedDates)
   let boxPageText = "담당자와 점검 일자를 할당 중입니다.";
   let additionalText = "빠른 시일 내로 결정됩니다.";
   let showCancelButton = true;
@@ -63,7 +63,7 @@ function Fixcustom() {
 
   if (status === "WAITING_FOR_INSPECTION") {
     boxPageText = `담당자명 : ${employeeName}`;
-    additionalText = `점검 시작일시 : ${formattedDate}`;
+    additionalText = `점검 시작일시 : ${inspectionDate[0]}-${inspectionDate[1]}-${inspectionDate[2]}`;
   }
   if (status === "IN_PROGRESS") {
     boxPageText = `담당자명 : ${employeeName}`; // 실제 담당자 이름으로 변경해주세요
@@ -71,7 +71,7 @@ function Fixcustom() {
     showCancelButton = false;
   } else if (status === "DONE") {
     boxPageText = `담당자명 : ${employeeName}`; // 실제 담당자 이름으로 변경해주세요
-    additionalText = `점검 완료일시 : ${formatat}`; // 실제 완료 일시로 변경해주세요
+    additionalText = `점검 완료일시 : ${history.inspectedAt[0]}-${history.inspectedAt[1]}-${history.inspectedAt[2]}`; // 실제 완료 일시로 변경해주세요
     showCancelButton = false;
     showDownloadButtons = true; // 완료 상태에서 다운로드 버튼을 표시합니다.
   }
@@ -201,7 +201,7 @@ function Fixcustom() {
             </div>
           </div>
           <div className="middlemodal">
-            <button className="button bigbuttons" onClick={() => handleOk()}>
+            <button className="button bigbuttons" onClick={() => handleOk()} >
               확인하기
             </button>
             {showCancelButton && (
@@ -308,7 +308,8 @@ function Fixcustom() {
               </div>
             </span>
           </div>
-          <div className="middlemodalsx">
+          <div style={{display:'flex', justifyContent:'center'}}>
+          <div className="middlemodalsxmo">
             <div className="boxpage">
               <div className="vertical-center">
                 <p style={{ marginLeft: "5%" }}>{boxPageText}</p>
@@ -329,18 +330,29 @@ function Fixcustom() {
                     </p>
                   </>
                 )}
+                </div>
               </div>
             </div>
           </div>
+          <div style={{display:'flex', justifyContent:'center'}}>
           <div className="middlemodal">
+<<<<<<< HEAD
             <button className="button bigbuttonsmo" onClick={() => handleOk()}>
               확인하기
             </button>
             {showCancelButton && (
               <button className="button bigbuttonsmo" onClick={() => handleCancellation()}>
+=======
+            <button className="button bigbuttonsmo" onClick={() => handleOk()} style={{width:'30vw',fontSize:'0.8rem'}}>
+              확인하기
+            </button>
+            {showCancelButton && (
+              <button className="button bigbuttonsmo" onClick={() => handleCancellation()} style={{width:'30vw',fontSize:'0.8rem'}}>
+>>>>>>> b2c409412324832e30b6d07bd0a4eff1ed208db2
                 취소하기
               </button>
             )}
+            </div>
           </div>
         </div>
 

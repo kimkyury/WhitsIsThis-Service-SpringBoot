@@ -121,8 +121,8 @@ function Fixcustom() {
 
   return (
     <div className="roomimg resrecpage">
-      <div className="desk-customreceivedivfix">
-<div className="desk-custommodaltitle ">
+    <div className="desk-customreceivedivfix">
+          <div className="desk-custommodaltitle " style={{fontSize:'10vw'}}>
             <p>점검 결과</p>
           </div>
           <div className="circlelinebox">
@@ -134,16 +134,16 @@ function Fixcustom() {
                 </p>
               </div>
             </span>
-            <p className="line"></p>
+            <p className="moline"></p>
             <span>
               <div className="flexlinebox">
-                <p className="circle">
+                <p className="circle" >
                   {/* {showCheckmark("WAITING_FOR_INSPECTION")} */}
                   <p className="listline">점검 대기</p>
                 </p>
               </div>
             </span>
-            <p className="line"></p>
+            <p className="moline"></p>
             <span>
               <div className="flexlinebox">
                 <p className="circle">
@@ -152,23 +152,23 @@ function Fixcustom() {
                 </p>
               </div>
             </span>
-            <p className="line"></p>
+            <p className="moline"></p>
             <span>
               <div className="flexlinebox">
-                <p className="circle" >
+                <p className="circle">
                   {/* {showCheckmark("DONE")} */}
                   <p className="listline">완료</p>
                 </p>
               </div>
             </span>
           </div>
-          <div className="middlemodalsx">
-            <div className="desk-boxpage">
-              <div className="vertical-center">
-                <p style={{ marginLeft: "5%" }}>s</p>
-                <p style={{ marginLeft: "5%" }}>d</p>{" "}
-                {/* {showDownloadButtons && ( */}
-                  <>
+          <div style={{display:'flex', justifyContent:'center'}}>
+          <div className="middlemodalsxmo">
+            <div className="boxpage">
+              <div className="vertical-center" >
+                <p style={{ marginLeft: "5%" }}>saddsfa</p>
+                <p style={{ marginLeft: "5%" }}>sadf</p>{" "}
+         
                     <p
                       // onClick={() => handleReportDownload()}
                       style={{ marginLeft: "5%", color: "blue" }}
@@ -181,22 +181,23 @@ function Fixcustom() {
                     >
                       사진 파일 다운로드 : 사진파일.zip
                     </p>
-                  </>
-                {/* )} */}
+                    </div>
               </div>
             </div>
           </div>
+          <div style={{display:'flex', justifyContent:'center'}}>
           <div className="middlemodal">
-            <button className="button bigbuttons" >
+            <button className="button bigbuttons" style={{width:'30vw',fontSize:'0.8rem'}}>
               확인하기
             </button>
- 
-              <button className="button bigbuttons" >
+          
+              <button className="button bigbuttons"style={{width:'30vw', fontSize:'0.8rem'}}>
                 취소하기
               </button>
-            
+              </div>
           </div>
         </div>
+
         </div>
   );
 }
