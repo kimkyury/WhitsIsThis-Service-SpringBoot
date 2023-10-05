@@ -2,14 +2,14 @@
 
 ## 🔎 목차
 
-1. <a href="#subject">🎯 기술 스택</a>
-1. <a href="#mainContents">⭐️ 주요 기능</a>
-1. <a href="#systemArchitecture">⚙ 시스템 아키텍쳐</a>
+1. <a href="#functions">🚀 구현 사항</a>
+1. <a href="#advantages">🌟 기술 특장점</a>
+1. <a href="#pipeline">🎞️ CI/CD 파이프라인 구조도</a>
 1. <a href="#skills">🛠️ 기술 스택</a>
 1. <a href="#directories">🗂️ 파일 구조</a>
 1. <a href="#erd">💾 ERD</a>
-1. <a href="#contents">🖥️ 화면 소개</a>
-1. <a href="#developers">👥 팀원 소개</a>
+1. <a href="#swagger">💾 Swagger API docs</a>
+1. <a href="#retrospective">✒ 회고</a>
 
 <br/>
 
@@ -383,5 +383,11 @@ DB 설계 단계에서는 쿼리의 성능 최적화와 프로젝트의 구조�
 ### **🍊 이동규**
 
 **CI/CD 경험**
+
+프로젝트를 진행하면서 Gitlab, Jenkins, Nginx, Docker, 그리고 AWS EC2를 활용하여 Spring Boot와 React 기반의 CI/CD 환경을 구축했습니다. 이 과정은 이번 프로젝트에서 사용한 기술을 모두 어느정도 알고 있어야 가능하다고 생각이 들어 뿌듯했습니다. 특히, 민감 정보를 AWS S3에 저장하고, 빌드를 할 때 다운로드 받아 사용한 방법이 매우 인상적이었습니다.
+
+**DB 설계와 트랜잭션**
+
+마무리 단계에 접어들고 나니 설계에 대해 미숙한 부분이 있었던 것 같습니다. 신청자가 중복되지 않게 미리 삭제를 하고 새로 추가하는 방식을 사용했지만, Transactional 어노테이션으로 트랜잭션 단위를 지정하다 보니 신청자에 unique 설정이 걸리지 않는 문제점이 발생했습니다. 이러한 문제점이 있다는 것을 인지했고, 다음부터는 최대한 무결성을 보장하는 방향으로 설계를 해야겠습니다.
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
