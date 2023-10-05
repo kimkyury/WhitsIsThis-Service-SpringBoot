@@ -156,10 +156,25 @@ function List() {
 
     const date = prompt("날짜를 입력해주세요 : yyyy-MM-dd");
 
-    var dateRegex = /^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$/;
+    const dateRegex = /^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$/;
+    
     if (!dateRegex.test(date)) {
-      alert("형식이 잘못되었습니다.");
+      alert("날짜 형식이 잘못되었습니다.");
       return;
+    } else {
+      // 입력한 날짜를 Date 객체로 변환
+      const enteredDate = new Date(date);
+      
+      // 현재 날짜를 가져오기
+      const currentDate = new Date();
+      
+      // 입력한 날짜가 오늘보다 이전인지 확인
+      if (enteredDate < currentDate) {
+        alert("입력한 날짜가 오늘보다 이전입니다. 오늘 이후의 날짜를 선택해주세요.");
+        return;
+      } else {
+        alert("입력한 날짜는 유효합니다.");
+      }
     }
 
     if (

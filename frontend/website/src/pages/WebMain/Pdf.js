@@ -17,15 +17,22 @@ Font.register({
   src: `${process.env.PUBLIC_URL}/assets/fonts/JeonjuCraft_Go_Regular.ttf`,
 });
 
-const MyDocument = ({ data }) => {
+const MyDocument = ({ data}) => {
   const [myData, setMydata] = useState();
+  // const [inspectedAt, setInspectedAt] = useState(data.data.history.inspectedAt);
+  const [finish, setFinish] = useState(new Date());
 
   useEffect(() => {
+    
     const fetchMyData = async () => {
+      console.log(data)
+      console.log("-----");
+      if (!data)
+      return;
       try {
         const response = await AuthHttp({
           method: "get",
-          url: `/private/histories/1`,
+          url: `/private/histories/${data.data.history.id}`,
         });
         console.log(response);
         setMydata(response.data.data);
@@ -33,8 +40,10 @@ const MyDocument = ({ data }) => {
         console.error(e);
       }
     };
-    fetchMyData();
-  }, []);
+
+      fetchMyData();
+  
+  }, [data]);
 
   const renderCheckIcon = (isChecked) => {
     console.log("isChecked:", isChecked);
@@ -56,8 +65,8 @@ const MyDocument = ({ data }) => {
         <Page>
           <View style={{ display: "flex", alignItems: "center", marginTop: "20vh" }}>
             <Image style={styles.images} src={`${process.env.PUBLIC_URL}/assets/logo.png`} />
-            <Text style={styles.texts}>담당자명 : 홍길동</Text>
-            <Text style={styles.textk}>점검완료일자 : 2023-10-04</Text>
+            <Text style={styles.texts}>담당자명 : {data&&data.data.employeeName}</Text>
+            {/* <Text style={styles.textk}>점검완료일자 :{data&&`${data.data.history.inspectedAt[0]}-${data.data.history.inspectedAt[1]}-${data.data.history.inspectedAt[2]}`}</Text> */}
           </View>
         </Page>
         <Page size="A4" style={styles.page}>
@@ -75,7 +84,7 @@ const MyDocument = ({ data }) => {
                       it.todolist.map((data) => (
                         <View key={data.content} style={{ marginBottom: "1.5vh", marginTop:'3.5vh', marginRight:'2vh' }}>
                       <Text style={styles.textgrid}>{renderCheckIcon(data.isChecked)} {data.content}</Text>
-                      
+              
                      
                       
                       <View style={styles.imageContainer}>
@@ -103,7 +112,10 @@ const MyDocument = ({ data }) => {
 const styles = StyleSheet.create({
   document: {
     width: "100%",
-    minHeight: "80vh",
+    minHeight: "75vh",
+    border:'2px solid black',
+    overflowY:'hidden'
+
   },
   page: {
     flexDirection: "row",
@@ -114,6 +126,7 @@ const styles = StyleSheet.create({
     display:'flex',
     justifyContent:'space-between',
     marginBottom: "10px", flexDirection: 'row', 
+    marginRight:'10vw',
   },
   section: {
     margin: 10,

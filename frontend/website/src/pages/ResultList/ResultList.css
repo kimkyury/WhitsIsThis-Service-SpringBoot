@@ -45,10 +45,10 @@
     width: 51vw; 
     border-radius: 1.4vw; 
     color: #2D4059; 
-    height: 3rem; 
+    height: 1rem; 
     display: flex; 
     justify-content: space-between; 
-    font-size: 1.6vw; 
+    font-size: 1.3vw; 
     font-weight: bold;
 }
 

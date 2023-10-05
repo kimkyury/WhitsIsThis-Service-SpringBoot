@@ -95,6 +95,21 @@
   justify-content: center;
 }
 
+.Modalboxinpu {
+  width: 57vw;
+  height: 90vh;
+  margin-left: 15vw;
+  border: 0.1vw solid black;
+  box-shadow: 0.05vw 0.15vw 0.15vw rgba(0, 0, 0, 0.5);
+  border-radius: 0.42vw;
+  /* margin-top: -40vh; */
+  /* display: flex; */
+  /* justify-content: center; */
+  background-color: white; 
+  display: flex; 
+  justify-content: center;
+}
+
 .gridmodal {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -46,6 +46,7 @@ function ResultList() {
     setSelectedItem(itemData);
     setShowModal(true);
     // setShowpdf(itemdata)
+    console.log(itemData)
   };
 
   useEffect(() => {
@@ -69,7 +70,7 @@ function ResultList() {
         })
       )
     : [];
-
+    
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const indexOfLastItem = currentPage * itemsPerPage;
