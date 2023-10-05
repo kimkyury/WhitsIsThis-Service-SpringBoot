@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.socket.handlers.impl;
 
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.MessageError;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
@@ -32,11 +33,12 @@ public class DrawingRouteMessageHandlerImpl extends AbstractMessageHandlerInterf
         this.awss3ResponseUtil = awss3ResponseUtil;
     }
 
-
     @Override
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
 
-        // Device가 Employee에게 보내는 Message
+        if (!isValidMessageForm(session, dataMap)) {
+            return;
+        }
 
         String senderDevice = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
         String receiverEmployeeNo = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
@@ -51,6 +53,7 @@ public class DrawingRouteMessageHandlerImpl extends AbstractMessageHandlerInterf
             String imgUrl = awss3ResponseUtil.concatURL(s3Service.saveFile(multipartFile));
             saveDataAtMap(dataMap, DataType.image, imgUrl);
         } catch (IOException e) {
+            sendErrorMessage(session, MessageError.DB_ACCESS_ERROR);
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
@@ -59,6 +62,18 @@ public class DrawingRouteMessageHandlerImpl extends AbstractMessageHandlerInterf
 
         sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
 
+    }
+
+    @Override
+    public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap) {
+
+        String image = getDataAtMap(dataMap, DataType.image);
+        if (image == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_IMAGE);
+            return false;
+        }
+
+        return true;
     }
 }
 

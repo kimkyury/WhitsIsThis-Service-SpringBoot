@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mo.whatisthis.apis.member.entities.MemberEntity.Role;
 import com.mo.whatisthis.apis.socket.dto.MessageDto;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.MessageError;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.handlers.interfaces.MessageHandlerInterface;
@@ -36,25 +37,30 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
 
     }
 
+    public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap){
+        return true;
+    }
+
 
     protected String getAttributeAtSession(WebSocketSession session, SessionKey key) {
         return (String) session.getAttributes()
                                .get(key.name());
     }
 
-    protected void saveAttributeAtSession(WebSocketSession session, SessionKey key, String value){
-        session.getAttributes().put(key.name(), value);
+    protected void saveAttributeAtSession(WebSocketSession session, SessionKey key, String value) {
+        session.getAttributes()
+               .put(key.name(), value);
     }
 
     protected String getDataAtMap(Map<String, String> map, DataType key) {
         return map.get(key.name());
     }
 
-    protected void saveDataAtMap(Map<String, String> map, DataType key, String value){
+    protected void saveDataAtMap(Map<String, String> map, DataType key, String value) {
         map.put(key.name(), value);
     }
 
-    protected void removeDataAtMap(Map<String, String> map, DataType key){
+    protected void removeDataAtMap(Map<String, String> map, DataType key) {
         map.remove(key.name());
     }
 
@@ -77,19 +83,29 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
         socketProvider.sendMessageToEmployee(session, employeeNo, sendMessage);
     }
 
-    protected void addDeviceToMapAndSendResponse(WebSocketSession session, String serialNumber){
+    protected void addDeviceToMapAndSendResponse(WebSocketSession session, String serialNumber) {
         socketProvider.addDeviceToSocket(serialNumber, session);
         String sendMessage = createSuccessMessage();
         socketProvider.sendMessageToDevice(session, serialNumber, sendMessage);
     }
 
-    protected void sendMessageToEmployee(WebSocketSession session, String sender, String receiver, String message){
+    protected void sendErrorMessage(WebSocketSession session, MessageError errorText) {
+        Map<String, String> errorData = new HashMap<>();
+        errorData.put(DataType.message.name(), errorText.name());
+        String errorMessage = convertMessageToString(SendType.SYSTEM_MESSAGE, errorData);
+
+        socketProvider.sendMessage(session, errorMessage);
+    }
+
+    protected void sendMessageToEmployee(WebSocketSession session, String sender, String receiver,
+        String message) {
         socketProvider.sendMessageToEmployee(session, receiver, message);
         String resultMessage = createSuccessMessage();
         socketProvider.sendMessageToDevice(session, sender, resultMessage);
     }
 
-    protected void sendMessageToDevice(WebSocketSession session, String sender, String receiver, String message){
+    protected void sendMessageToDevice(WebSocketSession session, String sender, String receiver,
+        String message) {
         socketProvider.sendMessageToDevice(session, receiver, message);
         String resultMessage = createSuccessMessage();
         socketProvider.sendMessageToEmployee(session, sender, resultMessage);
@@ -121,7 +137,4 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
 }

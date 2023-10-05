@@ -26,6 +26,7 @@ public class SocketProvider {
 
     private static ObjectMapper objectMapper;
 
+
     public SocketProvider() {
         this.employeeByHistoryMap = new ConcurrentHashMap<>();
         this.deviceBySerialNumberMap = new ConcurrentHashMap<>();
@@ -80,6 +81,11 @@ public class SocketProvider {
         } catch (IOException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public WebSocketSession getDeviceSession(String serialNumber) {
+        WebSocketSession deviceSession = deviceBySerialNumberMap.get(serialNumber);
+        return deviceSession;
     }
 
     public void sendMessageToDevice(WebSocketSession senderSession, String serialNumber,
@@ -142,5 +148,19 @@ public class SocketProvider {
         }
     }
 
+    public boolean existDevice(String serialNumber) {
+        WebSocketSession deviceSession = deviceBySerialNumberMap.get(serialNumber);
+        if (deviceSession == null) {
+            return false;
+        }
+        return true;
+    }
 
+    public boolean existEmployee(String employeeNo) {
+        WebSocketSession employeeSession = employeeByHistoryMap.get(employeeNo);
+        if (employeeSession == null) {
+            return false;
+        }
+        return true;
+    }
 }
