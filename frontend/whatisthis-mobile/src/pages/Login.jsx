@@ -52,9 +52,14 @@ const Login = () => {
     try {
       const response = await axios.post(
         process.env.REACT_APP_BASE_URL + `/api/v1/auth/employees/login`,
+        // {
+        //   username: "1234",
+        //   password: "1234",
+        // }
+
         {
-          username: "1234",
-          password: "1234",
+          username: state.userId,
+          password: state.userPassword,
         }
       );
 
@@ -73,6 +78,7 @@ const Login = () => {
 
       // navigate("/");
     } catch (e) {
+      alert("로그인 실패ToT");
       console.error(e);
     }
   };
@@ -87,23 +93,23 @@ const Login = () => {
         },
       });
       console.log(response);
-      // navigate("/");
-    } catch (e) {
-      console.error(e);
-    }
-    try {
-      const response = await AuthHttp({
-        method: "patch",
-        url: `/private/requests/2/status`,
-        data: {
-          status: "WAITING_FOR_INSPECTION",
-        },
-      });
-      console.log(response);
       navigate("/");
     } catch (e) {
       console.error(e);
     }
+    // try {
+    //   const response = await AuthHttp({
+    //     method: "patch",
+    //     url: `/private/requests/2/status`,
+    //     data: {
+    //       status: "WAITING_FOR_INSPECTION",
+    //     },
+    //   });
+    //   console.log(response);
+    //   navigate("/");
+    // } catch (e) {
+    //   console.error(e);
+    // }
   };
 
   return (
