@@ -22,9 +22,12 @@ import com.mo.whatisthis.apis.socket.services.SocketProvider;
 import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.redis.services.RedisService;
 import com.mo.whatisthis.supports.codes.ErrorCode;
+
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -58,7 +61,9 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
 
         this.socketProvider = socketProvider;
         this.redisService = redisService;
-        this.handlers = Map.of(
+
+        // handlers를 Final로 지정했기에 어느정도 안전성이 있으나, 확실한 안정성 명시를 위해 unmodifiableMap 이용
+        this.handlers = Collections.unmodifiableMap(Map.of(
             SendType.AUTH, authMessageHandler,
             SendType.IOT_DEVICE, iotDeviceMessageHandler,
             SendType.REGISTER, registerMessageHandler,
@@ -68,7 +73,8 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
             SendType.DRAWING, drawingMessageHandler,
             SendType.DRAWING_ROUTE, drawingRouteMessageHandler,
             SendType.STATUS, statusMessageHandler,
-            SendType.COMPLETION_RATE, completionRateMessageHandler);
+            SendType.COMPLETION_RATE, completionRateMessageHandler)
+        );
     }
 
     @Override
@@ -76,18 +82,17 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
 
         try {
             MessageDto messageRequest = convertMessageToDto(session, message);
+            if (messageRequest == null) {
+                String errorText = "Please Confirm your MessageType, It is not valid type. (AUTH, REGISTER, COMMAND, COORDINATE, DRAWING, DAMAGED, STATUS, IOT_DEVICE, DRAWING_ROUTE, COMPLETION_RATE, SYSTEM_MESSAGE) 중 하나여야 합니다. ";
+                sendErrorMessage(session, errorText);
+                return;
+            }
 
             SendType type = messageRequest.getType();
             Map<String, String> dataMap = messageRequest.getData();
-
             MessageHandlerInterface handler = handlers.get(type);
+            handler.handle(session, dataMap);
 
-            if (handler == null) {
-                String errorText = "Please Confirm your MessageType, It is not valid type. (하지만 완벽한데도 에러가 난다면 백엔드에게 연락주세요. ) ";
-                sendErrorMessage(session, errorText);
-            }else{
-                handler.handle(session, dataMap);
-            }
         } catch (IllegalArgumentException | NullPointerException e) {
             e.printStackTrace();
 
@@ -96,11 +101,10 @@ public class MessageWebSocketHandler extends TextWebSocketHandler {
                 "input data is invalid. (하지만 완벽한데도 에러가 난다면 백엔드에게 연락주세요. )");
             String errorMessage = convertMessageToString(SendType.SYSTEM_MESSAGE, map);
             socketProvider.sendMessage(session, errorMessage);
-
         }
     }
 
-    public void closeSession(WebSocketSession session){
+    public void closeSession(WebSocketSession session) {
         try {
             session.close();
         } catch (IOException e) {

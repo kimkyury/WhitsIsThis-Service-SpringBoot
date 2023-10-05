@@ -2,6 +2,7 @@ package com.mo.whatisthis.apis.socket.handlers.impl;
 
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.MessageError;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
@@ -30,19 +31,23 @@ public class AuthMessageHandlerImpl extends AbstractMessageHandlerInterface {
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
 
         String accessToken = getDataAtMap(dataMap, DataType.accessToken);
+        if(accessToken == null){
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_ACCESSTOKEN);
+            return;
+        }
+
         Claims claims = getClaimsByToken(accessToken);
         String memberNo = getInfoAtClaim(claims, MEMBER_NO_KEY);
         String role = getInfoAtClaim(claims, AUTHORITIES_KEY);
         saveAttributeAtSession(session, SessionKey.ROLE, role);
 
         if (isEmployee(role)) {
-
             saveAttributeAtSession(session, SessionKey.EMPLOYEE_NO, memberNo);
             // 소켓 연결 대상 추가와 정상 작동 ResponseMessage 를 보냄
             addEmployeeToMapAndSendResponse(session, memberNo);
 
         } else {
-
+            // HTTP로 Device의 Register여부를 확인한 상태
             String[] redisData = redisService.getValue("device:" + memberNo)
                                              .split("/");
 

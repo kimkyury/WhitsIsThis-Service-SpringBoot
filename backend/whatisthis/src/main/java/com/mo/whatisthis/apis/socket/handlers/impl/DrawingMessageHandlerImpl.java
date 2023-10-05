@@ -3,6 +3,7 @@ package com.mo.whatisthis.apis.socket.handlers.impl;
 import com.mo.whatisthis.apis.history.services.HistoryService;
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.MessageError;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
@@ -33,7 +34,9 @@ public class DrawingMessageHandlerImpl extends AbstractMessageHandlerInterface {
     @Override
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
 
-        // Device가 Employee에게 보내는 Message
+        if (!isValidMessageForm(session, dataMap)) {
+            return;
+        }
 
         String senderDevice = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
         String receiverEmployeeNo = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
@@ -56,6 +59,18 @@ public class DrawingMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
         sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
 
+    }
+
+    @Override
+    public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap) {
+
+        String image = getDataAtMap(dataMap, DataType.image);
+        if (image == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_IMAGE);
+            return false;
+        }
+
+        return true;
     }
 }
 
