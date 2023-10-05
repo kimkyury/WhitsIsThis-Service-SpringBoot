@@ -31,16 +31,16 @@ function Fixcustom() {
   };
 
   // 체크마크 (✔)를 표시할지 여부를 결정하는 함수 정의
-  const showCheckmark = (circleStatus) => {
-    const statusIdx = getIndex(status);
-    const circleStatusIdx = getIndex(circleStatus);
+  // const showCheckmark = (circleStatus) => {
+  //   const statusIdx = getIndex(status);
+  //   const circleStatusIdx = getIndex(circleStatus);
 
-    if (circleStatusIdx < statusIdx) return "✔";
-    if (circleStatusIdx === statusIdx) {
-      return ">";
-    }
-    return "";
-  };
+  //   if (circleStatusIdx < statusIdx) return "✔";
+  //   if (circleStatusIdx === statusIdx) {
+  //     return ">";
+  //   }
+  //   return "";
+  // };
 
   // "대기 중", "진행 중", "완료" 상태에 따른 텍스트 및 다운로드 표시 여부 설정
   let boxPageText = "담당자와 점검 일자를 할당 중입니다.";
@@ -130,7 +130,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("WAITING_INSPECTION_DATE")}>
-                  {showCheckmark("WAITING_INSPECTION_DATE")}
+                  {/* {showCheckmark("WAITING_INSPECTION_DATE")} */}
                   <p className="listline">확인중</p>
                 </p>
               </div>
@@ -139,7 +139,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}>
-                  {showCheckmark("WAITING_FOR_INSPECTION")}
+                  {/* {showCheckmark("WAITING_FOR_INSPECTION")} */}
                   <p className="listline">점검 대기</p>
                 </p>
               </div>
@@ -148,7 +148,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("IN_PROGRESS")}>
-                  {showCheckmark("IN_PROGRESS")}
+                  {/* {showCheckmark("IN_PROGRESS")} */}
                   <p className="listline">진행 중</p>
                 </p>
               </div>
@@ -157,7 +157,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("DONE")}>
-                  {showCheckmark("DONE")}
+                  {/* {showCheckmark("DONE")} */}
                   <p className="listline">완료</p>
                 </p>
               </div>
@@ -262,7 +262,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("WAITING_INSPECTION_DATE")}>
-                  {showCheckmark("WAITING_INSPECTION_DATE")}
+                  {/* {showCheckmark("WAITING_INSPECTION_DATE")} */}
                   <p className="listline">확인중</p>
                 </p>
               </div>
@@ -271,7 +271,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}>
-                  {showCheckmark("WAITING_FOR_INSPECTION")}
+                  {/* {showCheckmark("WAITING_FOR_INSPECTION")} */}
                   <p className="listline">점검 대기</p>
                 </p>
               </div>
@@ -280,7 +280,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("IN_PROGRESS")}>
-                  {showCheckmark("IN_PROGRESS")}
+                  {/* {showCheckmark("IN_PROGRESS")} */}
                   <p className="listline">진행 중</p>
                 </p>
               </div>
@@ -289,7 +289,7 @@ function Fixcustom() {
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("DONE")}>
-                  {showCheckmark("DONE")}
+                  {/* {showCheckmark("DONE")} */}
                   <p className="listline">완료</p>
                 </p>
               </div>

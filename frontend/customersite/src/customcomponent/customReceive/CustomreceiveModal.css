@@ -222,6 +222,14 @@
   /* margin-bottom:5rem; */
 }
 
+
+.bigbuttonsmo {
+  width: 10rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  margin-top:5rem
+  /* margin-bottom:5rem; */
+}
 .button:hover {
   /* background-image: linear-gradient(to right, #2D4059, #2D4080); */
   opacity:30%;

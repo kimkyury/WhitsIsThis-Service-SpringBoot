@@ -81,7 +81,7 @@ function CustomMain() {
                 <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
           <img
             // src={currentImagePath}
-            src={`${process.env.PUBLIC_URL}/${currentImagePath}`}
+            src={`${process.env.PUBLIC_URL}${currentImagePath}`}
             alt="집 이미지"
             style={{
               height: '100%',
@@ -133,7 +133,7 @@ function CustomMain() {
       <div  style={{ marginTop: '4vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <img
     
-          src={`${process.env.PUBLIC_URL}/${currentImagePath}`}
+          src={`${process.env.PUBLIC_URL}${currentImagePath}`}
           alt="집 이미지"
           style={{
             position: 'absolute',

@@ -285,7 +285,7 @@ function CustomreceiveModal() {
         {showAddressModal && (
           <div className="address-modal">
             <button className="close-button" onClick={handleCloseAddressModal}>
-              닫기
+              확인
             </button>
             <Address
               selectedAddress={selectedAddress}
