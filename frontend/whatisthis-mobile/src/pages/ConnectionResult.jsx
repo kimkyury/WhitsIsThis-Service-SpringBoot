@@ -15,6 +15,8 @@ const ConnectionResult = () => {
   const [targetHouse, setTargetHouse] = useState();
   const { ws, receivedMessage } = useWebSocket();
 
+  const [canStart, setCanStart] = useState(false);
+
   useEffect(() => {
     const getTargetHouse = async () => {
       try {
@@ -29,6 +31,26 @@ const ConnectionResult = () => {
     };
     getTargetHouse();
   }, []);
+
+  useEffect(() => {
+    // console.log(houseInfo.historyId, " ", receivedMessage);
+    if (!ws) return;
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      console.log("연결결과", data);
+      if (targetHouse.historyId === data.data.historyId) {
+        if (data.data.state && data.data.state === "WAIT_WORK") {
+          console.log("통신 성공");
+          setCanStart(true);
+        }
+        return;
+      }
+      // console.log(houseInfo.historyId, "카두입미다", data);
+
+      if (data.type && data.type === "COMPLETION_RATE") {
+      }
+    };
+  }, [ws]);
 
   const startWorking = async () => {
     try {
@@ -108,6 +130,7 @@ const ConnectionResult = () => {
                 type={"right"}
                 color={"green"}
                 onClick={startWorking}
+                isFinish={canStart}
               />
               <Notification
                 text={"기기변경"}
