@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 function Logout() {
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
   const handleLogout = async () => {
     try {
       const accessToken = sessionStorage.getItem("accessToken");

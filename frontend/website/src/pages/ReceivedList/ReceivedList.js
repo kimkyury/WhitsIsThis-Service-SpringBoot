@@ -10,6 +10,7 @@ import AuthHttp from "../../component/util/AuthHttp";
 import Receivedsitem from "./Myreceiveitem";
 import RequestModals from "./MyRequestModal";
 import Calendar from "../../component/calendar/calendar";
+
 function List() {
   const [insect, setInsect] = useState();
   const [insdate, setInsdate] = useState(new Date());
@@ -30,6 +31,7 @@ function List() {
   const [showcal, setShowcal] = useState(false);
   const [selectDate, setSelectDate] = useState();
   const [selectedDatemax, setSelectedDatemax] = useState();
+
   const getRefreshToken = () => {
     return sessionStorage.getItem("accessToken");
   };
@@ -44,6 +46,7 @@ function List() {
     setSelectedItems(itemData);
     setShowModals(true);
   };
+
   const filteredData = applicant.filter((data) =>
     Object.values(data).some(
       (value) =>
@@ -58,7 +61,6 @@ function List() {
   useEffect(() => {
     setMyApplicant([]);
     getData(currentPage);
-
     fetchMyData();
   }, [currentPage]);
 
@@ -68,19 +70,23 @@ function List() {
         method: "get",
         url: `/private/requests/assigned`,
       });
-      console.log(response.data);
-      console.log(response.data.data[0].requests[0]);
-      setMydata(response.data.data);
-      console.log(response.data.data);
-      // setMdata(response.data.data.requests)
+      if (response.data.data && response.data.data[0] && response.data.data[0].requests) {
+        console.log(response.data);
+        console.log(response.data.data[0].requests[0]);
+        setMydata(response.data.data);
+        console.log(response.data.data);
+        setMdata(response.data.data.requests);
+      } else {
+        console.log("requests는 정의되지 않았거나 null입니다.");
+      }
     } catch (e) {
       console.error(e);
     }
   };
 
-  // console.log(mydata)
   const getData = async (page) => {
     try {
+      setIsFetching(true);
       const response = await AuthHttp({
         method: "get",
         url: `/private/requests/waiting?page=${page}`,
@@ -108,19 +114,19 @@ function List() {
   const myApplicantContainerRef = useRef(null);
 
   const handleApplicantScroll = () => {
-    const element = applicantContainerRef.current;
+    const element = myApplicantContainerRef.current;
     if (
       element &&
       element.scrollHeight - element.scrollTop === element.clientHeight &&
       !isFetching
     ) {
       const nextPage = currentPage + 1;
-      getData(nextPage, "waiting");
+      getData(nextPage);
     }
   };
 
   useEffect(() => {
-    const element = applicantContainerRef.current;
+    const element = myApplicantContainerRef.current;
     if (element) {
       element.addEventListener("scroll", handleApplicantScroll);
       return () => {
@@ -141,19 +147,16 @@ function List() {
     const sourceIndex = result.source.index;
     const destinationIndex = result.destination.index;
 
-    // 소스와 대상 드롭 컨테이너가 모두 "applicant"인지 확인합니다.
     if (
       result.source.droppableId === "applicant" &&
       result.destination.droppableId === "applicant"
     ) {
-      // "applicant" 컨테이너 내에서 항목을 이동할 수 없도록 합니다.
       return;
     }
 
     const date = prompt("날짜를 입력해주세요 : yyyy-MM-dd");
 
-    var dateRegex =
-    /^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$/
+    var dateRegex = /^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$/;
     if (!dateRegex.test(date)) {
       alert("형식이 잘못되었습니다.");
       return;
@@ -175,8 +178,7 @@ function List() {
       updatedApplicant.splice(sourceIndex, 1);
       setApplicant(updatedApplicant);
 
-      moveItem(draggedData.id, date)
-      // 패치 요청 보내기
+      moveItem(draggedData.id, date);
     } else if (
       result.source.droppableId === "myApplicant" &&
       result.destination.droppableId === "applicant"
@@ -191,17 +193,14 @@ function List() {
       updatedMyApplicant.splice(sourceIndex, 1);
       setMyApplicant(updatedMyApplicant);
       setShowcal(true);
-      // 패치 요청 보내기
       setSelectDate(draggedData.inspectionStart);
       setSelectedDatemax(draggedData.inspectionEnd);
       console.log(insdate);
-      // console.log(draggedData.inspectionEnd, draggedData.inspectionEnd)
       console.log(draggedData);
       setInsect(insdate);
-      moveItem(draggedData.id, date)
+      moveItem(draggedData.id, date);
     }
   }
-  // 패치 요청을 보내는 함수
 
   const moveItem = async (targetId, date) => {
     try {
@@ -214,12 +213,10 @@ function List() {
         method: "patch",
         url: `/private/requests/${targetId}/manager`,
         data: {
-          // 자바스크립트 date 함수로 저걸 포매팅해서 보내면 됨
           inspectionDate: date,
         },
       });
       console.log("After : " + insdate);
-      // console.log(formattedDate)
       setShowcal(false);
       console.log(response);
     } catch (e) {
@@ -227,7 +224,7 @@ function List() {
       console.log("Error : " + insdate);
     }
   };
-  console.log(insdate);
+
   return isLogin ? (
     <div className="fontb" style={{ marginTop: "7vh" }}>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -343,23 +340,6 @@ function List() {
           <RequestModals selectedItems={selectedItems} setShowModals={setShowModals} />
         </div>
       )}
-
-      {/* {showcal && (
-       <div className="modal-containers">
-            <Calendar 
-            setInsdate={setInsdate} 
-            selectdate={selectDate} 
-            selectedDatemax={selectedDatemax} 
-            setShowcal={setShowcal} 
-            selectedDate={selectedDate} 
-            setSelectedDate={setSelectedDate} 
-            insdate={insdate}
-            
-            />
-       
-          </div>
-        )} */}
-      {/* showcal는 내 접수 넘어가쓸때 true하고 selectedItem, setshowcal, datainspectionstart, end */}
     </div>
   ) : (
     <div

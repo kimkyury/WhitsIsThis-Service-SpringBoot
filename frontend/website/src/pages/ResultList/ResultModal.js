@@ -1,5 +1,5 @@
 import React from "react";
-
+import Pdf from '../WebMain/Pdf';
 function ResultModal({ selectedItem, setShowModal }) {
   if (!selectedItem) {
     return null;
@@ -27,10 +27,8 @@ function ResultModal({ selectedItem, setShowModal }) {
       
         <div>
           결과화면입니다.(PDF)
-          <p>신청자명: {consumer}</p>
-          <p>연락처: {phonenumber}</p>
-          <p>주소: {address}</p>
-          <p>점검완료일자: {finishdate}</p>
+          <Pdf/>
+          <p>zip다운로드</p>
         </div>
       </div>
 
