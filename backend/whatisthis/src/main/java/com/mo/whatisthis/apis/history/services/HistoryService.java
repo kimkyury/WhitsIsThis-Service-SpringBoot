@@ -110,11 +110,14 @@ public class HistoryService {
                                                                          .getDamaged() != null) {
             for (DamagedHistoryResponse damagedHistoryResponse : allHistoryResponse.getHistory()
                                                                                    .getDamaged()) {
-                keys.add(damagedHistoryResponse.getImageUrl());
+                if (damagedHistoryResponse.getImageUrl() != null) {
+                    keys.add(damagedHistoryResponse.getImageUrl());
+                }
             }
         }
 
-        if (allHistoryResponse.getHistory() != null) {
+        if (allHistoryResponse.getHistory() != null && allHistoryResponse.getHistory()
+                                                                         .getDrawingUrl() != null) {
             keys.add(allHistoryResponse.getHistory()
                                        .getDrawingUrl());
         }
@@ -125,7 +128,9 @@ public class HistoryService {
                     for (TodolistResponse todolistResponse : todolistWrapperResponse.getTodolist()) {
                         if (todolistResponse.getImages() != null) {
                             for (TodolistImageResponse todolistImageResponse : todolistResponse.getImages()) {
-                                keys.add(todolistImageResponse.getImageUrl());
+                                if (todolistImageResponse.getImageUrl() != null) {
+                                    keys.add(todolistImageResponse.getImageUrl());
+                                }
                             }
                         }
                     }
