@@ -53,6 +53,7 @@ public class DrawingRouteMessageHandlerImpl extends AbstractMessageHandlerInterf
             String imgUrl = awss3ResponseUtil.concatURL(s3Service.saveFile(multipartFile));
             saveDataAtMap(dataMap, DataType.image, imgUrl);
         } catch (IOException e) {
+            sendErrorMessage(session, MessageError.DB_ACCESS_ERROR);
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 

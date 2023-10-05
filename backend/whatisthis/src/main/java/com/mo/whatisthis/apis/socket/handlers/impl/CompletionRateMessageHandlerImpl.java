@@ -25,7 +25,6 @@ public class CompletionRateMessageHandlerImpl extends AbstractMessageHandlerInte
         if (!isValidMessageForm(session, dataMap)) {
             return;
         }
-        ;
 
         String senderDevice = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
         String receiverEmployeeNo = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);

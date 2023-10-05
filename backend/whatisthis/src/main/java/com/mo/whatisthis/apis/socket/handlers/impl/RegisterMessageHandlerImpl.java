@@ -35,28 +35,13 @@ public class RegisterMessageHandlerImpl extends AbstractMessageHandlerInterface 
     @Override
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
         // Employee가 Device를 등록하는 메시지
+        if (!isValidMessageForm(session, dataMap)) {
+            return;
+        }
 
         String senderEmployee = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
-
         String historyIdStr = getDataAtMap(dataMap, DataType.historyId);
-        if (historyIdStr == null) {
-            sendErrorMessage(session, MessageError.NOT_INCLUDE_HISTORYID);
-            return;
-        }
         String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
-        if (serialNumber == null) {
-            sendErrorMessage(session, MessageError.NOT_INCLUDE_SERIALNUMBER);
-            return;
-        }
-        if (memberRepository.findByUsername(serialNumber)
-                            .isEmpty()) {
-            sendErrorMessage(session, MessageError.NOT_EXIST_DEVICE);
-            return;
-        }
-        if (historyRepository.findById(Long.valueOf(historyIdStr)) == null) {
-            sendErrorMessage(session, MessageError.NOT_EXIST_HISTORY);
-            return;
-        }
 
         saveAttributeAtSession(session, SessionKey.HISTORY_ID, historyIdStr);
         redisService.saveData("device:" + serialNumber, senderEmployee + "/" + historyIdStr);
@@ -65,6 +50,33 @@ public class RegisterMessageHandlerImpl extends AbstractMessageHandlerInterface 
         socketProvider.sendMessageToEmployee(session, senderEmployee, message);
     }
 
+    @Override
+    public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap) {
 
+        String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
+        if (serialNumber == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_SERIALNUMBER);
+            return false;
+        }
+
+        String historyIdStr = getDataAtMap(dataMap, DataType.historyId);
+        if (historyIdStr == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_HISTORYID);
+            return false;
+        }
+
+        if (memberRepository.findByUsername(serialNumber)
+                            .isEmpty()) {
+            sendErrorMessage(session, MessageError.NOT_EXIST_DEVICE);
+            return false;
+        }
+        if (historyRepository.findById(Long.valueOf(historyIdStr)) == null) {
+            sendErrorMessage(session, MessageError.NOT_EXIST_HISTORY);
+            return false;
+        }
+
+
+        return true;
+    }
 }
 
