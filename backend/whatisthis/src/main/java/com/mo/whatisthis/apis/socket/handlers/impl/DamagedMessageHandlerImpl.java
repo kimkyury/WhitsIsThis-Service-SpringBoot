@@ -56,7 +56,6 @@ public class DamagedMessageHandlerImpl extends AbstractMessageHandlerInterface {
                 Long.valueOf(historyId), multipartFile, x, y, category);
             saveDataAtMap(dataMap, DataType.image, imgUrl);
         } catch (IOException e) {
-            //TODO: Send Error Message
             sendErrorMessage(session, MessageError.DB_ACCESS_ERROR);
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }

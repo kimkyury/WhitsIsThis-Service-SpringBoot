@@ -47,26 +47,30 @@ public class AuthMessageHandlerImpl extends AbstractMessageHandlerInterface {
             addEmployeeToMapAndSendResponse(session, memberNo);
 
         } else {
-            // HTTP로 Device의 Register여부를 확인한 상태
-            String[] redisData = redisService.getValue("device:" + memberNo)
-                                             .split("/");
-
-            String employeeNo = redisData[0];
-            String historyId = redisData[1];
-
-            saveAttributeAtSession(session, SessionKey.HISTORY_ID, historyId);
-            saveAttributeAtSession(session, SessionKey.EMPLOYEE_NO, employeeNo);
-            saveAttributeAtSession(session, SessionKey.SERIAL_NUMBER, memberNo);
-
-            addDeviceToMapAndSendResponse(session, memberNo);
-
-            Map<String, String> sendDataMap = new HashMap<>();
-            saveDataAtMap(sendDataMap, DataType.historyId, historyId);
-            saveDataAtMap(sendDataMap, DataType.state, "CONNECTED");
-            String sendMessage = convertMessageToString(SendType.STATUS, sendDataMap);
-
-            socketProvider.sendMessageToEmployee(session, employeeNo, sendMessage);
+            deviceProcedure(session, memberNo);
         }
+    }
 
+    private void deviceProcedure(WebSocketSession session, String memberNo){
+
+        // HTTP로 Device의 Register여부를 확인한 상태
+        String[] redisData = redisService.getValue("device:" + memberNo)
+                                         .split("/");
+
+        String employeeNo = redisData[0];
+        String historyId = redisData[1];
+
+        saveAttributeAtSession(session, SessionKey.HISTORY_ID, historyId);
+        saveAttributeAtSession(session, SessionKey.EMPLOYEE_NO, employeeNo);
+        saveAttributeAtSession(session, SessionKey.SERIAL_NUMBER, memberNo);
+
+        addDeviceToMapAndSendResponse(session, memberNo);
+
+        Map<String, String> sendDataMap = new HashMap<>();
+        saveDataAtMap(sendDataMap, DataType.historyId, historyId);
+        saveDataAtMap(sendDataMap, DataType.state, "CONNECTED");
+        String sendMessage = convertMessageToString(SendType.STATUS, sendDataMap);
+
+        socketProvider.sendMessageToEmployee(session, employeeNo, sendMessage);
     }
 }
