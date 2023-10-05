@@ -213,60 +213,6 @@ function Fixcustom() {
         </div>
       </Desktop>
       <Mobile>
-        {/* {" "} */}
-        {/* 하나도 안 건드렸어요.. */}
-        {/* <div className="customreceivedivfix">
-          <div className="moblie-custommodaltitlefix ">
-            <p>점검 결과</p>
-          </div>
-          <div className="circlelinebox">
-            <span>
-              <div className="flexlinebox">
-                <p className="circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}> */}
-                  {/* {showCheckmark("WAITING_FOR_INSPECTION")} */}
-                  {/* <p className="listline">대기</p>
-                </p>
-              </div>
-            </span>
-            <p className="line"></p>
-            <span>
-              <div className="flexlinebox">
-                <p className="circle" style={getCircleStyle("IN_PROGRESS")}>
-      
-                  <p className="listline">진행 중</p>
-                </p>
-              </div>
-            </span>
-            <p className="line"></p>
-            <span>
-              <div className="flexlinebox">
-                <p className="circle" style={getCircleStyle("DONE")}>
-   
-                  <p className="listline">완료</p>
-                </p>
-              </div>
-            </span>
-          </div>
-          <div className="middlemodalsx">
-            <div className="boxpage">
-              <div className="vertical-center">
-                <p style={{ marginLeft: "5%" }}>{boxPageText}</p>
-                <p style={{ marginLeft: "5%" }}>{additionalText}</p>
-                {showDownloadButtons && (
-                  <>
-                    <p style={{ marginLeft: "5%" }}>보고서 다운로드 : 보고서 URL</p>
-                    <p style={{ marginLeft: "5%", marginTop: "-3%" }}>
-                      사진 파일 다운로드 : 사진파일.zip
-                    </p>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="middlemodal">
-            <button className="button bigbuttons">확인하기</button>
-          </div>
-        </div> */}
         <div className="desk-customreceivedivfix">
           <div className="custommodaltitle ">
             <p>점검 결과</p>
@@ -336,19 +282,11 @@ function Fixcustom() {
           </div>
           <div style={{display:'flex', justifyContent:'center'}}>
           <div className="middlemodal">
-<<<<<<< HEAD
-            <button className="button bigbuttonsmo" onClick={() => handleOk()}>
-              확인하기
-            </button>
-            {showCancelButton && (
-              <button className="button bigbuttonsmo" onClick={() => handleCancellation()}>
-=======
             <button className="button bigbuttonsmo" onClick={() => handleOk()} style={{width:'30vw',fontSize:'0.8rem'}}>
               확인하기
             </button>
             {showCancelButton && (
               <button className="button bigbuttonsmo" onClick={() => handleCancellation()} style={{width:'30vw',fontSize:'0.8rem'}}>
->>>>>>> b2c409412324832e30b6d07bd0a4eff1ed208db2
                 취소하기
               </button>
             )}
