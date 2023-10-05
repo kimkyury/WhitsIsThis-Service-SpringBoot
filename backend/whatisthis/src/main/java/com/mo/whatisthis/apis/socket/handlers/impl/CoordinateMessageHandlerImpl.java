@@ -22,16 +22,14 @@ public class CoordinateMessageHandlerImpl extends AbstractMessageHandlerInterfac
     @Override
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
 
-        if(!isValidMessageForm(session, dataMap)){
+        if (!isValidMessageForm(session, dataMap)) {
             return;
-        };
-        // Device가 Employee에게 보내는 Message
+        }
 
         String senderDevice = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
         String receiverEmployeeNo = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
         String historyId = getAttributeAtSession(session, SessionKey.HISTORY_ID);
-
-        // Todo: JSON형식 유효성 검사
+        
         saveDataAtMap(dataMap, DataType.historyId, historyId);
         String sendMessage = convertMessageToString(SendType.COORDINATE, dataMap);
 
@@ -42,13 +40,13 @@ public class CoordinateMessageHandlerImpl extends AbstractMessageHandlerInterfac
     public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap) {
 
         String x = getDataAtMap(dataMap, DataType.x);
-        if ( x == null){
+        if (x == null) {
             sendErrorMessage(session, MessageError.NOT_INCLUDE_X);
             return false;
         }
 
         String y = getDataAtMap(dataMap, DataType.y);
-        if ( y == null){
+        if (y == null) {
             sendErrorMessage(session, MessageError.NOT_INCLUDE_Y);
             return false;
         }

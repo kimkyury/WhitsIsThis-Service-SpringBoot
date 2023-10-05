@@ -51,6 +51,7 @@ public class DrawingMessageHandlerImpl extends AbstractMessageHandlerInterface {
             String imgUrl = historyService.uploadDrawing(Long.valueOf(historyId), multipartFile);
             saveDataAtMap(dataMap, DataType.image, imgUrl);
         } catch (IOException e) {
+            sendErrorMessage(session, MessageError.DB_ACCESS_ERROR);
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
@@ -58,7 +59,6 @@ public class DrawingMessageHandlerImpl extends AbstractMessageHandlerInterface {
         String sendMessage = convertMessageToString(SendType.DRAWING, dataMap);
 
         sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
-
     }
 
     @Override

@@ -28,41 +28,30 @@ public class StatusMessageHandlerImpl extends AbstractMessageHandlerInterface {
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
 
         // Device가 Employee에게 보내는 Message
+        if (!isValidMessageForm(session, dataMap)) {
+            return;
+        }
 
         String senderDevice = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
         String receiverEmployeeNo = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
         String historyId = getAttributeAtSession(session, SessionKey.HISTORY_ID);
 
-        String state = dataMap.get(DataType.state.name());
+        saveDataAtMap(dataMap, DataType.historyId, historyId);
+        saveDataAtMap(dataMap, DataType.serialNumber, senderDevice);
+        String sendMessage = convertMessageToString(SendType.STATUS, dataMap);
+        sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
 
-        try {
-            StateType.valueOf(state);
-
-            // Todo: JSON형식 유효성 검사
-            saveDataAtMap(dataMap, DataType.historyId, historyId);
-            saveDataAtMap(dataMap, DataType.serialNumber, senderDevice);
-            String sendMessage = convertMessageToString(SendType.STATUS, dataMap);
-            sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
-
-        } catch (IllegalArgumentException | NullPointerException e) {
-            Map<String, String> errorDataMap = new HashMap<>();
-            errorDataMap.put(DataType.message.name(),
-                "State value is invalid. ");
-            String message = convertMessageToString(SendType.SYSTEM_MESSAGE, errorDataMap);
-            socketProvider.sendMessageToDevice(session, senderDevice, message);
-        }
     }
 
     @Override
     public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap) {
-
 
         String state = getDataAtMap(dataMap, DataType.state);
         if (state == null) {
             sendErrorMessage(session, MessageError.NOT_INCLUDE_STATE);
             return false;
         }
-        try{
+        try {
             StateType.valueOf(state);
         } catch (IllegalArgumentException e) {
             sendErrorMessage(session, MessageError.INVALID_STATE_TYPE);
