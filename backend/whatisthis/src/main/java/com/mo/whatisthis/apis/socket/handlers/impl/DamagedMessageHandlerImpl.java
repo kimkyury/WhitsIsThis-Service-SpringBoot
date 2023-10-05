@@ -4,6 +4,7 @@ import com.mo.whatisthis.apis.history.entities.DamagedHistoryEntity.Category;
 import com.mo.whatisthis.apis.history.services.DamagedHistoryService;
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.MessageError;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
@@ -33,7 +34,9 @@ public class DamagedMessageHandlerImpl extends AbstractMessageHandlerInterface {
     @Override
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
 
-        // Device가 Employee에게 보내는 Message
+        if (!isValidMessageForm(session, dataMap)) {
+            return;
+        }
 
         String senderDevice = getAttributeAtSession(session, SessionKey.SERIAL_NUMBER);
         String receiverEmployeeNo = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
@@ -54,6 +57,7 @@ public class DamagedMessageHandlerImpl extends AbstractMessageHandlerInterface {
             saveDataAtMap(dataMap, DataType.image, imgUrl);
         } catch (IOException e) {
             //TODO: Send Error Message
+            sendErrorMessage(session, MessageError.DB_ACCESS_ERROR);
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
@@ -61,6 +65,42 @@ public class DamagedMessageHandlerImpl extends AbstractMessageHandlerInterface {
         String sendMessage = convertMessageToString(SendType.DAMAGED, dataMap);
 
         sendMessageToEmployee(session, senderDevice, receiverEmployeeNo, sendMessage);
+    }
+
+    @Override
+    public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap) {
+
+        String x = getDataAtMap(dataMap, DataType.x);
+        if (x == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_X);
+            return false;
+        }
+
+        String y = getDataAtMap(dataMap, DataType.y);
+        if (y == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_Y);
+            return false;
+        }
+
+        String image = getDataAtMap(dataMap, DataType.image);
+        if (image == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_IMAGE);
+            return false;
+        }
+
+        String category = getDataAtMap(dataMap, DataType.category);
+        if (category == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_CATEGORY);
+            return false;
+        }
+        try {
+            Category.valueOf(category);
+        } catch (IllegalArgumentException e) {
+            sendErrorMessage(session, MessageError.INVALID_CATEGORY_TYPE);
+            return false;
+        }
+
+        return true;
     }
 }
 

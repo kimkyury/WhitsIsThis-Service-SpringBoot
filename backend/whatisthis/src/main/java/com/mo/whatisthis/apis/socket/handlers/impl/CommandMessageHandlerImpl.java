@@ -7,13 +7,12 @@ import com.mo.whatisthis.apis.request.repositories.RequestRepository;
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.CommandCode;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.MessageError;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
-import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
-import com.mo.whatisthis.supports.codes.ErrorCode;
-import java.util.HashMap;
+import com.mo.whatisthis.redis.services.RedisService;
 import java.util.Map;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Component;
@@ -24,57 +23,95 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
     private final RequestRepository requestRepository;
     private final HistoryRepository historyRepository;
+    private final RedisService redisService;
 
     public CommandMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
         RequestRepository requestRepository,
-        HistoryRepository historyRepository) {
+        HistoryRepository historyRepository,
+        RedisService redisService) {
         super(socketProvider, jwtTokenProvider);
         this.requestRepository = requestRepository;
         this.historyRepository = historyRepository;
+        this.redisService = redisService;
     }
 
     @Override
     @Transactional
     public void handle(WebSocketSession session, Map<String, String> dataMap) {
-        // Employee가 Device에게 보내는 메시지 (START, END)
+
+        if (!isValidMessageForm(session, dataMap)) {
+            return;
+        }
 
         String senderEmployee = getAttributeAtSession(session, SessionKey.EMPLOYEE_NO);
         String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
         String command = getDataAtMap(dataMap, DataType.command);
 
-        Long historyId = Long.valueOf(getAttributeAtSession(session, SessionKey.HISTORY_ID));
+        WebSocketSession targetDeviceSession = socketProvider.getDeviceSession(serialNumber);
+        Long historyId = Long.valueOf(
+            getAttributeAtSession(targetDeviceSession, SessionKey.HISTORY_ID));
+
+        updateRequest(historyId, command);
+
+        String sendMessage = convertMessageToString(SendType.COMMAND, dataMap);
+        sendMessageToDevice(session, senderEmployee, serialNumber, sendMessage);
+
+        if (command.equals(CommandCode.END.name())) {
+            socketProvider.closeConnectionDevice(session, serialNumber, 1000, sendMessage);
+        }
+    }
+
+    public void updateRequest(Long historyId, String command) {
+
+        // HistoryId는 RegisterHandler 에서 검증된 상태
         Long requestId = historyRepository.findById(historyId)
                                           .get()
                                           .getRequestId();
+        System.out.println("request Id >>>>> " + requestId);
+
         RequestEntity request = requestRepository.findById(requestId)
                                                  .get();
-
-        try {
-
-            if (command.equals(CommandCode.START.name())) {
-
-                request.setStatus(Status.IN_PROGRESS);
-                requestRepository.save(request);
-            } else if (command.equals(CommandCode.END.name())) {
-
-                request.setStatus(Status.DONE);
-                requestRepository.save(request);
-            }
-            CommandCode.valueOf(command);
-            String sendMessage = convertMessageToString(SendType.COMMAND, dataMap);
-            sendMessageToDevice(session, senderEmployee, serialNumber, sendMessage);
-            if (command.equals(CommandCode.END.name())) {
-                socketProvider.closeConnectionDevice(session, serialNumber, 1000, sendMessage);
-            }
-
-        } catch (IllegalArgumentException | NullPointerException e) {
-            Map<String, String> errorDataMap = new HashMap<>();
-            errorDataMap.put(DataType.message.name(),
-                "Command value is invalid. (You can only use the words 'START' or 'END' )");
-            String message = convertMessageToString(SendType.SYSTEM_MESSAGE, errorDataMap);
-            socketProvider.sendMessageToEmployee(session, senderEmployee, message);
+        if (command.equals(CommandCode.START.name())) {
+            request.setStatus(Status.IN_PROGRESS);
+            requestRepository.save(request);
+        } else if (command.equals(CommandCode.END.name())) {
+            request.setStatus(Status.DONE);
+            requestRepository.save(request);
         }
+    }
+
+    @Override
+    public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap) {
+
+        String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
+        if (serialNumber == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_SERIALNUMBER);
+            return false;
+        }
+        if(redisService.getValue("device:" + serialNumber) == null){
+            sendErrorMessage(session, MessageError.IS_NOT_REGISTER_DEVICE);
+            return false;
+        }
+        if (!socketProvider.existDevice(serialNumber)) {
+            sendErrorMessage(session, MessageError.NOT_CONNECT_DEVICE);
+            return false;
+        }
+
+        // CheckData, command
+        String command = getDataAtMap(dataMap, DataType.command);
+        if (command == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_COMMAND);
+            return false;
+        }
+        try {
+            CommandCode.valueOf(command);
+        } catch (IllegalArgumentException e) {
+            sendErrorMessage(session, MessageError.INVALID_COMMAND_TYPE);
+            return false;
+        }
+
+        return true;
     }
 }
 
