@@ -15,7 +15,7 @@ class MakeLocalPath(Node):
     def __init__(self):
         super().__init__('local_path')
 
-        self.local_path_pub = self.create_publisher(Path, '/local_path', 10)
+        self.local_path_pub = self.create_publisher(Path, '/local_path', 20)
         self.obstacle_pub = self.create_publisher(String, '/obstacle', 1)
         self.status_publisher = self.create_publisher(String, 'result', 1)
         self.percent_publisher = self.create_publisher(String, 'percent', 1)

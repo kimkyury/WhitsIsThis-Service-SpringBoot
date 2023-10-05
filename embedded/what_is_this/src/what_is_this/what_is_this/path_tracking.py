@@ -27,7 +27,7 @@ class followTheCarrot(Node):
 
     def __init__(self):
         super().__init__('path_tracking')
-        self.cmd_pub = self.create_publisher(Twist, 'cmd_vel', 10)
+        self.cmd_pub = self.create_publisher(Twist, 'cmd_vel', 20)
         self.subscription = self.create_subscription(Odometry,'/odom',self.odom_callback,10)
         self.status_sub = self.create_subscription(TurtlebotStatus,'/turtlebot_status',self.status_callback,1)
         self.main_status_sub =  self.create_subscription(String, 'progress', self.check_status, 1)

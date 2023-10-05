@@ -14,7 +14,7 @@ import time
 import json
 import numpy as np
 
-DEVICE_SERIAL="DEVICE4"
+DEVICE_SERIAL="DEVICE3"
 BASE_URL = "https://j9e203.p.ssafy.io"
 WS_BASE_URL = "wss://j9e203.p.ssafy.io/ws"
 
