@@ -65,7 +65,7 @@ class followTheCarrot(Node):
     def timer_callback(self):
 
         if self.is_status and self.is_odom ==True and self.is_path==True:
-            if self.status and len(self.path_msg.poses)> 1:
+            if self.status and len(self.path_msg.poses)> 1 and self.main_status == "FINDING":
                 self.is_look_forward_point= False
                 
                 # 로봇의 현재 위치를 나타내는 변수
