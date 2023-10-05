@@ -30,4 +30,22 @@ public class CommonCode {
         ERROR,                            // 혹시 통신중 에러가 난다면 바꿔두긴 하지만 아마 기계가 꺼지도록 할 것 같습니다.
         WORK_STOP               // 직원이 언제든 END 명령을 주었을 때, 소켓통신이 끊깁니다. }
     }
+
+    public enum MessageError {
+        NOT_INCLUDE_ACCESSTOKEN,
+        NOT_INCLUDE_IMAGE,
+        NOT_INCLUDE_X,
+        NOT_INCLUDE_Y,
+        NOT_INCLUDE_CATEGORY, // hasType
+        NOT_INCLUDE_STATE, // hasType
+        NOT_INCLUDE_COMMAND, // hasType
+        NOT_INCLUDE_HISTORYID,
+        NOT_INCLUDE_SERIALNUMBER,
+        NOT_INCLUDE_ISWORKED, // hasType
+        NOT_INCLUDE_RATE,
+
+        INVALID_STATE_TYPE,
+        INVALID_COMMAND_TYPE,
+        INVALID_DRAWING_STATUS,
+    }
 }
