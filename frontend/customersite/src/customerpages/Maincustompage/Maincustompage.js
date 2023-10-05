@@ -13,12 +13,12 @@ function CustomMain() {
 
   // 이미지 파일 경로 목록
   const imagePaths = [
-    "/assets/집11.jpg",
-    "/assets/집12.jpg",
+    "/assets/house1.jpg",
+    "/assets/house2.jpg",
     // "/assets/집8.svg",
-    // "/assets/집10.svg",
+    // "/assets/house0.svg",
     // "/assets/image (75).png",
-    "/assets/집13.jpg",
+    "/assets/house3.jpg",
     "/assets/mapping.gif",
     // "/assets/방사진.svg"
     // "/assets/방.svg",
@@ -81,7 +81,7 @@ function CustomMain() {
                 <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
           <img
             // src={currentImagePath}
-            src={`${process.env.PUBLIC_URL}/assets/mapping.gif`}
+            src={`${process.env.PUBLIC_URL}/${currentImagePath}`}
             alt="집 이미지"
             style={{
               height: '100%',
@@ -132,8 +132,8 @@ function CustomMain() {
       <Header />
       <div  style={{ marginTop: '4vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <img
-          // src={currentImagePath}
-          src={`${process.env.PUBLIC_URL}/assets/mapping.gif`}
+    
+          src={`${process.env.PUBLIC_URL}/${currentImagePath}`}
           alt="집 이미지"
           style={{
             position: 'absolute',
