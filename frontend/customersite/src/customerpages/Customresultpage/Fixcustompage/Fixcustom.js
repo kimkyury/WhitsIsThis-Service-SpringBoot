@@ -43,6 +43,19 @@ function Fixcustom() {
   // };
 
   // "대기 중", "진행 중", "완료" 상태에 따른 텍스트 및 다운로드 표시 여부 설정
+  const [formatins, setFormatins] = useState();
+  const [formatat, setFormatAt] = useState();
+  const dateObject = inspectionDate(year, month - 1, day, hours, minutes, seconds);
+
+  // 날짜를 원하는 형식으로 포맷팅
+  const formattedDate = `${dateObject.getFullYear()}-${(dateObject.getMonth() + 1).toString().padStart(2, '0')}-${dateObject.getDate().toString().padStart(2, '0')} ${dateObject.getHours().toString().padStart(2, '0')}:${dateObject.getMinutes().toString().padStart(2, '0')}:${dateObject.getSeconds().toString().padStart(2, '0')}`;
+  setFormatins(formattedDate)
+  const dateObjects = history.insplectedAt(year, month - 1, day, hours, minutes, seconds);
+
+  // 날짜를 원하는 형식으로 포맷팅
+  const formattedDates = `${dateObject.getFullYear()}-${(dateObject.getMonth() + 1).toString().padStart(2, '0')}-${dateObject.getDate().toString().padStart(2, '0')} ${dateObject.getHours().toString().padStart(2, '0')}:${dateObject.getMinutes().toString().padStart(2, '0')}:${dateObject.getSeconds().toString().padStart(2, '0')}`;
+
+  setFormatAt(formattedDates)
   let boxPageText = "담당자와 점검 일자를 할당 중입니다.";
   let additionalText = "빠른 시일 내로 결정됩니다.";
   let showCancelButton = true;
@@ -50,7 +63,7 @@ function Fixcustom() {
 
   if (status === "WAITING_FOR_INSPECTION") {
     boxPageText = `담당자명 : ${employeeName}`;
-    additionalText = `점검 시작일시 : ${inspectionDate}`;
+    additionalText = `점검 시작일시 : ${formattedDate}`;
   }
   if (status === "IN_PROGRESS") {
     boxPageText = `담당자명 : ${employeeName}`; // 실제 담당자 이름으로 변경해주세요
@@ -58,7 +71,7 @@ function Fixcustom() {
     showCancelButton = false;
   } else if (status === "DONE") {
     boxPageText = `담당자명 : ${employeeName}`; // 실제 담당자 이름으로 변경해주세요
-    additionalText = `점검 완료일시 : ${history.inspectedAt}`; // 실제 완료 일시로 변경해주세요
+    additionalText = `점검 완료일시 : ${formatat}`; // 실제 완료 일시로 변경해주세요
     showCancelButton = false;
     showDownloadButtons = true; // 완료 상태에서 다운로드 버튼을 표시합니다.
   }
