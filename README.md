@@ -11,7 +11,7 @@ Member : 신성환, 조은정
 
 
 
-## :computer:Development Environment
+## :computer: Development Environment
 
 Device : Turtle Bot Burger (In Simulation)
 
@@ -35,7 +35,7 @@ cuDNN : 7.6.4
 
 
 
-## :bookmark_tabs:Installation
+## :bookmark_tabs: Installation
 
 - ROS 설치 후 패키지 빌드 (In x64 Native Tools Command Prompt For VS 2019)
 
@@ -153,7 +153,7 @@ cuDNN : 7.6.4
 
 
 
-## :foggy:Role
+## :foggy: Role
 
 - 신성환
   - Turtle bot status 관리
@@ -163,4 +163,7 @@ cuDNN : 7.6.4
   - 경로 생성 알고리즘 작성
   - Gird/Cell 좌표 변환 및 데이터 이미지화
 - 조은정
-  - 
+  - 역할 기입
+
+
+
