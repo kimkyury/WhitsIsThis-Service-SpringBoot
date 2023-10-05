@@ -1,15 +1,12 @@
 <center><h1>Outline of IoT</h1></center>
 
-
 Duration : August 21, 2023 (Mon) ~ October 6, 2023 (Fri)
 
 Theme : 신축 건축물의 사전점검/홈체크 서비스
 
-Service Name : ***이게뭐징 (What is this)***
+Service Name : **_이게뭐징 (What is this)_**
 
-Member : 신성환, 조은정 
-
-
+Member : 신성환, 조은정
 
 ## :computer: Development Environment
 
@@ -33,8 +30,6 @@ CUDA Toolkit : 10.1
 
 cuDNN : 7.6.4
 
-
-
 ## :bookmark_tabs: Installation
 
 - ROS 설치 후 패키지 빌드 (In x64 Native Tools Command Prompt For VS 2019)
@@ -44,8 +39,6 @@ cuDNN : 7.6.4
   cd C:\your\package\path\path
   colcon build
   ```
-
-
 
 - 패키지 실행
 
@@ -65,43 +58,39 @@ cuDNN : 7.6.4
   ros2 launch C:\your\package\path\src\what_is_this\launch\what_is_this_launch.py
   ```
 
-
-
 ## 📺File Path
 
-  ```
-  embedded
-  ├ what_is_this
-  │ ├ ssafy_bridge
-  │ ├ ssafy_msgs
-  │ └ what_is_this
-  │   ├ launch
-  │   │ └ what_is_this_launch.py
-  │   ├ map
-  │   │ └ map.txt
-  │   ├ resource
-  │   │ └ what_is_this
-  │   ├ test
-  │   │ ├ test_copyright.py
-  │   │ ├ test_flake8.py
-  │   │ └ test_pep257.py
-  │   ├ what_is_this
-  │   │ ├ make_local_path.py
-  │   │ ├ move_for_map.py
-  │   │ ├ odom.py
-  │   │ ├ path_tracking.py
-  │   │ ├ run_mapping.py
-  │   │ ├ searching_global_path.py
-  │   │ ├ web_socket.py
-  │   │ ├ what_is_this_main.py
-  │   │ └ utilst.py
-  │   ├ package.xml
-  │   ├ setup.cfg
-  │   └ setup.py
-  └ img <- images
-  ```
-
-
+```
+embedded
+├ what_is_this
+│ ├ ssafy_bridge
+│ ├ ssafy_msgs
+│ └ what_is_this
+│   ├ launch
+│   │ └ what_is_this_launch.py
+│   ├ map
+│   │ └ map.txt
+│   ├ resource
+│   │ └ what_is_this
+│   ├ test
+│   │ ├ test_copyright.py
+│   │ ├ test_flake8.py
+│   │ └ test_pep257.py
+│   ├ what_is_this
+│   │ ├ make_local_path.py
+│   │ ├ move_for_map.py
+│   │ ├ odom.py
+│   │ ├ path_tracking.py
+│   │ ├ run_mapping.py
+│   │ ├ searching_global_path.py
+│   │ ├ web_socket.py
+│   │ ├ what_is_this_main.py
+│   │ └ utilst.py
+│   ├ package.xml
+│   ├ setup.cfg
+│   └ setup.py
+└ img <- images
+```
 
 ## 🧬Architecture Diagram
 
@@ -112,8 +101,6 @@ cuDNN : 7.6.4
 - ROS
 
 ![img](./embedded/what_is_this/img/architecture2.png)
-
-
 
 ## ⚙Tech
 
@@ -145,13 +132,9 @@ cuDNN : 7.6.4
 
 ![img](./embedded/what_is_this/img/find2.gif)
 
-
-
 - 경로 생성의 경우 탐색 경로 간격을 조절할 수 있다.
 
 ![img](./embedded/what_is_this/img/path.gif)![img](./embedded/what_is_this/img/path2.gif)
-
-
 
 ## :foggy: Role
 
@@ -163,7 +146,6 @@ cuDNN : 7.6.4
   - 경로 생성 알고리즘 작성
   - Gird/Cell 좌표 변환 및 데이터 이미지화
 - 조은정
-  - 역할 기입
-
-
-
+  - SLAM 구현
+  - 흠집 정보 확인 & 이미지 생성 및 흠집 좌표 생성
+  - 지역 경로 생성
