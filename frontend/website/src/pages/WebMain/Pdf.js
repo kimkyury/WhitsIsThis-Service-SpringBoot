@@ -7,17 +7,21 @@ import {
   PDFViewer,
   Document,
   Page,
+  pdf,
   StyleSheet,
   Text,
 } from "@react-pdf/renderer";
 import { BiCheck } from "react-icons/bi"; // react-icons에서 BiCheck 아이콘을 가져옵니다.
-
+import Subpdf from './Subpdf';
 Font.register({
   family: "MyKoreanFont",
   src: `${process.env.PUBLIC_URL}/assets/fonts/JeonjuCraft_Go_Regular.ttf`,
 });
 
 const MyDocument = ({ data}) => {
+
+const blob = data&&pdf(Subpdf(data)).toBlob();
+console.log(blob);
   const [myData, setMydata] = useState();
   // const [inspectedAt, setInspectedAt] = useState(data.data.history.inspectedAt);
   const [finish, setFinish] = useState(new Date());
@@ -58,15 +62,16 @@ const MyDocument = ({ data}) => {
       
     }
   };
+  // console.log(myData.history)
 
   return (
     <PDFViewer style={styles.document}>
-      <Document>
+      {/* <Document>
         <Page>
           <View style={{ display: "flex", alignItems: "center", marginTop: "20vh" }}>
             <Image style={styles.images} src={`${process.env.PUBLIC_URL}/assets/logo.png`} />
             <Text style={styles.texts}>담당자명 : {data&&data.data.employeeName}</Text>
-            {/* <Text style={styles.textk}>점검완료일자 :{data&&`${data.data.history.inspectedAt[0]}-${data.data.history.inspectedAt[1]}-${data.data.history.inspectedAt[2]}`}</Text> */}
+           
           </View>
         </Page>
         <Page size="A4" style={styles.page}>
@@ -96,20 +101,46 @@ const MyDocument = ({ data}) => {
                               src={`${process.env.REACT_APP_S3_BASE_URL}${image.imageUrl}`}
                             />
                           ))}
+                          
                       </View>
+                      
                     </View>
                       ))}
+                <View style={styles.border}>
+                  <Text style={styles.text}>기기 손상 정보</Text>
+                  <View>
+                  {myData && myData.history && myData.history && myData.history.damaged.map((damage) => (
+                    <View >
+                    <Image
+                    
+                    key={damage.id}
+                    style={styles.imagede}
+                    src={damage.imageUrl} 
+                    />
+                    <Text>{damage.category}</Text>
+                    </View>
+                    ))}
+                    </View>
+            </View>
                   </View>
+                  
                 </View>
+                
               ))}
+  
           </View>
         </Page>
-      </Document>
+      </Document> */}{data&&
+      <Subpdf data={data}/>
+      }
     </PDFViewer>
   );
 };
 
 const styles = StyleSheet.create({
+  mar: {
+    marginRight:'10vw'
+  },
   document: {
     width: "100%",
     minHeight: "75vh",
@@ -138,11 +169,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  border: {
+    borderTop:'2px solid black',
+    width:'100vw',
+    paddingTop:'1vh'
+  },
+  imageContainers: {
+    display: "flex",
+    // flexDirection: "row",
+    alignItems: "center",
+    borderTop:'2px solid black',
+  },
   image: {
     width: 150,
     height: 100,
     marginRight: 10,
     marginTop: 10,
+  },
+  imagede: {
+    width: 200,
+    height: 150,
+    marginRight: '10vw',
+    marginTop: 10,
+    
   },
   images: {
     width: 300,

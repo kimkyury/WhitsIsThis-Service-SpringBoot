@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Pdf from '../WebMain/Pdf';
 import AuthHttp from "../../component/util/AuthHttp";
 import axios from 'axios';
+import SubPdf from '../WebMain/Subpdf';
+import PDFLink from '../../pages/WebMain/Pdflink';
 function ResultModal({ selectedItem, setShowModal }) {
   const [apiData, setApiData] = useState(null);
   
@@ -25,6 +27,9 @@ function ResultModal({ selectedItem, setShowModal }) {
       console.error("Error downloading the file:", error);
     }
   };
+
+
+
 
 
 
@@ -74,8 +79,9 @@ function ResultModal({ selectedItem, setShowModal }) {
         </button>
         </p>
         <div>
+      
           {/* API에서 받아온 데이터를 Pdf 컴포넌트로 전달합니다. */}
-          <Pdf data={apiData} />
+          <SubPdf data={apiData} />
           <a onClick={() => handleZipDownload()}>사진집 다운로드</a>
         </div>
       </div>
