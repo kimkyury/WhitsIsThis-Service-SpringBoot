@@ -255,7 +255,7 @@ function Fixcustom() {
           </div>
         </div> */}
         <div className="desk-customreceivedivfix">
-          <div className="desk-custommodaltitle ">
+          <div className="custommodaltitle ">
             <p>점검 결과</p>
           </div>
           <div className="circlelinebox">
@@ -320,11 +320,11 @@ function Fixcustom() {
             </div>
           </div>
           <div className="middlemodal">
-            <button className="button bigbuttons" onClick={() => handleOk()}>
+            <button className="button bigbuttonsmo" onClick={() => handleOk()}>
               확인하기
             </button>
             {showCancelButton && (
-              <button className="button bigbuttons" onClick={() => handleCancellation()}>
+              <button className="button bigbuttonsmo" onClick={() => handleCancellation()}>
                 취소하기
               </button>
             )}

@@ -58,7 +58,7 @@
 
 .boxpage {
   margin-top: -1rem;
-  width: 22rem;
+  width: 30rem;
   height: 10rem;
   border-radius: 0.5rem;
   border: 0.1rem solid black;
@@ -98,7 +98,7 @@
   text-align: center;
 }
 .line {
-  width: 2rem;
+  width: 4rem;
   border: 0.01rem solid black;
 }
 .desk-line {
