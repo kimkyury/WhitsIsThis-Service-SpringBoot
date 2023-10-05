@@ -88,9 +88,11 @@ const MyDocument = ({ data }) => {
               <p>
               <button onClick={() => postPDFToServer(blob)}>PDF 업로드하기</button>
               </p>
-              <a href={url} download="myDocument.pdf">
-                다운로드
+              <div style={{display:'flex', marginTop:'20vh', justifyContent:'flex-end'}}>
+              <a className="download"  href={url} download="myDocument.pdf">
+                PDF 다운로드
               </a>
+              </div>
               {/* PDF 업로드 버튼 */}
             </div>
           );

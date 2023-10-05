@@ -41,8 +41,13 @@
   justify-content: center;
 }
 
+.download:hover {
+  border-bottom: 2px solid black;
+  color:#2D4059
+}
+
 .resmodalform {
-    width: 51vw; 
+    width: 35vw; 
     border-radius: 1.4vw; 
     color: #2D4059; 
     height: 1rem; 
@@ -67,6 +72,7 @@
     align-items:center;
     position: relative; 
     z-index: 1;
+    /* margin */
 }
 
 .itemresult {
