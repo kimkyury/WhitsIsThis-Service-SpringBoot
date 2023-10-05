@@ -74,6 +74,13 @@
   transform: translate(-50%, -50%);
 
 }
+/* .modal-containers {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+} */
 
 .Modalbox {
   width: 57vw;

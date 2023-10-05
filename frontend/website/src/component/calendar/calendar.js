@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './calendar.css';
 
 function Calendar({ insdate, selectedDatemax, selectdate, setInsdate }) {
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const originalDate = new Date(selectedDate);
   
   // 연도, 월, 일 추출
@@ -13,8 +13,11 @@ function Calendar({ insdate, selectedDatemax, selectdate, setInsdate }) {
   const day = originalDate.getDate().toString().padStart(2, '0');
   
   // 포맷팅된 날짜 생성
-  const formattedDates = `${year}.${month}.${day}`;
-  setInsdate(formattedDates)
+  const formattedDates = `${year}-${month}-${day}`;
+  useEffect(() => {
+    // formattedDates가 변경될 때마다 insdate 상태를 업데이트합니다.
+    setInsdate(formattedDates);
+  }, [formattedDates]);
   // const originalDateString = "Thu Oct 26 2023 00:00:00 GMT+0900 (한국 표준시)";
   // Date 객체 생성
   
@@ -22,7 +25,7 @@ function Calendar({ insdate, selectedDatemax, selectdate, setInsdate }) {
   
   // 초기 선택된 날짜를 설정합니다.
   
-  const formattedDate = new Date(selectedDatemax[0], selectedDatemax[1] - 1, selectedDatemax[2]+1);
+      const formattedDate = new Date(selectedDatemax[0], selectedDatemax[1] - 1, selectedDatemax[2]+1);
   
         // 원하는 형식으로 포맷팅 ('YYYY-MM-DD' 형식)
         const formattedDateString = formattedDate.toISOString().split('T')[0];
@@ -57,6 +60,7 @@ function Calendar({ insdate, selectedDatemax, selectdate, setInsdate }) {
         maxDate={selectedDateMax} // selectDate 이후로 선택 가능
         selected={selectedDate} // 선택된 날짜를 표시
         onChange={handleDateChange}
+        placeholderText="날짜를 선택해주세요" 
         withPortal
         className="datePicker"
       />
