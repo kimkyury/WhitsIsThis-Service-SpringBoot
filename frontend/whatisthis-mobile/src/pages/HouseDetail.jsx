@@ -18,6 +18,7 @@ const HouseDetail = () => {
   const [processPercentage, setProcessPercentage] = useState(0);
 
   const [isCreatingMap, setIsCreatingMap] = useState(isFinding);
+  const [map, setMap] = useState(null);
   const { ws, receivedMessage } = useWebSocket();
 
   const [isTodoFinish, setTodoFinish] = useState(false);
@@ -58,6 +59,10 @@ const HouseDetail = () => {
         console.error("하우수디테이루", data);
       } else {
         console.log("하우수디테이루", data);
+      }
+
+      if (data.type === "DRAWING") {
+        setMap(data.data.image);
       }
 
       if (data.data.state && data.data.state === "FINDING") {
@@ -183,8 +188,8 @@ const HouseDetail = () => {
         </div>
 
         <div className="map_wrapper">
-          {receivedMessage && receivedMessage.data.image ? (
-            <img src={receivedMessage.data.image} alt="map" />
+          {map ? (
+            <img src={map} alt="map" />
           ) : (
             <img src={process.env.PUBLIC_URL + "/assets/image_none.png"} alt="nomap" />
           )}
