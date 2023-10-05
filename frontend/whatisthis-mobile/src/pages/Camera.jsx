@@ -104,7 +104,7 @@ const Camera = () => {
             console.error(e);
           }
         });
-      await Promise.all(uploadCycle);
+      uploadCycle && (await Promise.all(uploadCycle));
     }
 
     const deleteCycle =
@@ -123,7 +123,7 @@ const Camera = () => {
         }
       });
 
-    await Promise.all(deleteCycle);
+    deleteCycle && (await Promise.all(deleteCycle));
 
     navigate(-1);
   };
