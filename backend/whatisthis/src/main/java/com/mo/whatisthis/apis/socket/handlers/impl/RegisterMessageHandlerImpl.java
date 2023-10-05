@@ -48,12 +48,12 @@ public class RegisterMessageHandlerImpl extends AbstractMessageHandlerInterface 
             sendErrorMessage(session, MessageError.NOT_INCLUDE_SERIALNUMBER);
             return;
         }
-        if (memberRepository.findByUsername(serialNumber).isEmpty()){
+        if (memberRepository.findByUsername(serialNumber)
+                            .isEmpty()) {
             sendErrorMessage(session, MessageError.NOT_EXIST_DEVICE);
             return;
         }
-        if (historyRepository.findById(Long.valueOf(historyIdStr))
-                             .isEmpty()) {
+        if (historyRepository.findById(Long.valueOf(historyIdStr)) == null) {
             sendErrorMessage(session, MessageError.NOT_EXIST_HISTORY);
             return;
         }
