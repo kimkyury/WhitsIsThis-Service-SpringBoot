@@ -122,7 +122,7 @@ function Fixcustom() {
   return (
     <div className="roomimg resrecpage">
     <div className="desk-customreceivedivfix">
-          <div className="desk-custommodaltitle " style={{fontSize:'10vw'}}>
+          <div className="custommodaltitle " style={{fontSize:'10vw'}}>
             <p>점검 결과</p>
           </div>
           <div className="circlelinebox">
