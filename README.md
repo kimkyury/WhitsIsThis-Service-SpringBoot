@@ -173,7 +173,7 @@
 
 <a name="pipeline"></a>
 
-<img src="./image/프레젠테이션1.jpg">
+<img src="./image/presentation.jpg">
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
