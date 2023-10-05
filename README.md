@@ -348,7 +348,7 @@
 
 <a name="erd"></a>
 
-<img src="./contents/images/erd.png">
+<img src="./image/erd.png">
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
@@ -358,7 +358,7 @@
 
 <a name="swagger"></a>
 
-<img src="./contents/images/swagger.png">
+<img src="./image/swagger.png">
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
