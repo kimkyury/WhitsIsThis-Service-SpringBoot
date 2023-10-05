@@ -76,7 +76,7 @@ class MakeLocalPath(Node):
 
     # local path make
     def timer_callback(self):
-        if self.is_scan and  self.img_bgr is not None:
+        if self.is_scan and self.is_path and self.img_bgr is not None:
             theta = self.radar_scan.time_increment
             if -90 <= theta <= 180 : 
                 theta += 90
@@ -161,7 +161,7 @@ class MakeLocalPath(Node):
                 if current_waypoint != -1:
                     self.percent = round(current_waypoint/len(self.global_path_msg.poses)*100,2)
                     print("{0:<20} >>".format(f"\r진행률 : {self.percent}"),end="")
-                    if self.percent > 99.96:
+                    if self.percent > 99.90:
                         self.percent = "100"
                         self.percnet_msg.data = str(self.percent)
                         self.percent_publisher.publish(self.percnet_msg) 
