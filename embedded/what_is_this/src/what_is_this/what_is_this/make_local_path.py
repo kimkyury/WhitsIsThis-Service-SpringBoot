@@ -93,14 +93,14 @@ class MakeLocalPath(Node):
                 box_y1 = y
                 box_y2 = y + h
                 obstacle_pose = PoseStamped()
-                if box_y1 <= check_y <= box_y2 and (box_x1 < check_x + 100 or box_x2 > check_x - 100):
+                if box_y1 <= check_y <= box_y2 and (box_x1 < check_x + 80 or box_x2 > check_x - 80):
                     obstacle_pos = [ 0.3 * cos(theta) + self.radar_scan.range_min, 0.3 * sin(theta) + self.radar_scan.scan_time]
                     obstacle_pos = self.grid_cell_to_pose(obstacle_pos)
                     flag = True
                     for pose in self.pose_array_msg.poses :
                         dis_to_obstacle = sqrt(pow(pose.pose.position.x - obstacle_pos[0], 2) +
                                                pow(pose.pose.position.y - obstacle_pos[1], 2))
-                        if dis_to_obstacle < 0.06 :
+                        if dis_to_obstacle < 0.1 :
                             flag = False 
                             break
                             # Set orientation and other fields if needed
@@ -161,7 +161,7 @@ class MakeLocalPath(Node):
                 if current_waypoint != -1:
                     self.percent = round(current_waypoint/len(self.global_path_msg.poses)*100,2)
                     print("{0:<20} >>".format(f"\r진행률 : {self.percent}"),end="")
-                    if self.percent > 99.90:
+                    if self.percent > 97:
                         self.percent = "100"
                         self.percnet_msg.data = str(self.percent)
                         self.percent_publisher.publish(self.percnet_msg) 
@@ -179,7 +179,7 @@ class MakeLocalPath(Node):
                         for num in range(current_waypoint, len(self.global_path_msg.poses)):
                             tmp_pose = PoseStamped()
                             tmp_pose.pose.position.x = self.global_path_msg.poses[num].pose.position.x
-                            tmp_pose.pose.position.y = self.global_path_msg.poses[num].pose.position.yddddd
+                            tmp_pose.pose.position.y = self.global_path_msg.poses[num].pose.position.y
                             tmp_pose.pose.orientation.w = 1.0
                             local_path.poses.append(tmp_pose)
 

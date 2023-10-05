@@ -24,14 +24,6 @@ params_map = {
     "MAPVIS_RESIZE_SCALE" : 2.0
 }
 
-def cell_to_grid(x, y):
-    pose_x = (float(x) - params_map["MAP_CENTER"][0] + (params_map["MAP_SIZE"][0]*params_map["MAP_RESOLUTION"])/2) / params_map["MAP_RESOLUTION"]
-    pose_y = (float(y) - params_map["MAP_CENTER"][1] + (params_map["MAP_SIZE"][1]*params_map["MAP_RESOLUTION"])/2) / params_map["MAP_RESOLUTION"]
-    pose = np.array([pose_x, pose_y]).reshape(-1).astype(np.int)
-    pose[0] = pose[0] if pose[0] > 0 else 340 + pose[0]
-    pose[1] = pose[1] if pose[1] > 0 else 340 + pose[1]
-    return pose
-
 DEVICE_SERIAL="DEVICE2"
 BASE_URL = "https://j9e203.p.ssafy.io"
 WS_BASE_URL = "wss://j9e203.p.ssafy.io/ws"
@@ -56,6 +48,13 @@ class Web_socket(Node):
         # 현재 진행도 받아오기
         self.obstacle_sub = self.create_subscription(String, 'obstacle', self.obstacle_callback,1)
         self.is_obstacle = False          
+
+        self.map_center = params_map["MAP_CENTER"]
+        self.map_resolution = params_map["MAP_RESOLUTION"]
+        self.map_size = np.array(params_map["MAP_SIZE"]) / self.map_resolution
+
+        self.pose_x = 0
+        self.pose_y = 0
 
         self.serial_number = DEVICE_SERIAL
         self.result_msg = String()
@@ -97,7 +96,6 @@ class Web_socket(Node):
         self.percent = msg.data
 
     def check_status(self,msg):
-        if self.status == msg.data:return
         self.is_status = True
         self.status = msg.data
 
@@ -140,13 +138,25 @@ class Web_socket(Node):
         self.x=str(round(msg.range_min,4))
         self.y=str(round(msg.scan_time,4))
 
+    def convert(self, x, y):
+        pose_x=float(x)
+        pose_y=float(y)
+        pose = np.array([[pose_x],[pose_y]])
+        self.pose_x = (pose[0] - self.map_center[0] + (self.map_size[0]*self.map_resolution)/2) / self.map_resolution
+        self.pose_y = (pose[1] - self.map_center[1] + (self.map_size[1]*self.map_resolution)/2) / self.map_resolution
+        pose = np.array([self.pose_x, self.pose_y]).reshape(-1).astype(np.int)
+        self.pose_x = pose[0] if pose[0] > 0 else 340+pose[0]
+        self.pose_y = pose[1] if pose[1] > 0 else 340+pose[1]
+        self.pose_x = str(self.pose_x)
+        self.pose_y = str(self.pose_y)
+
     def say(self,message):
         print("\n" + "="*40 + "\n\n{0:<40}\n\n".format(f'\r{message}') + "="*40)
 
     def get_token(self):
         cnt = 0
         print("{0:<40} >>".format('\rRequesting a token.'),end="")
-        while self.token == None and cnt < 10:
+        while self.token == None and cnt < 100:
             response = requests.post(f"{BASE_URL}/api/v1/auth/devices/login",
                                         json={"serialNumber": self.serial_number}).json()
             if response['status'] == 200:
@@ -179,40 +189,40 @@ class Web_socket(Node):
                     break
                 else:
                     print("{0:<40} >>".format('\rundefined message'), end="")
-    
+        
     def w_send(self):
-        # try:
-        while True:
-            time.sleep(2)
-            if self.is_status:
-                self.sed_message = json.dumps({"type":"STATUS","data":{"state" : self.status}})
-                self.ws.send(self.sed_message)
-                self.is_status = False
+        try:
+            while True:
+                time.sleep(2)
+                if self.is_status:
+                    self.sed_message = json.dumps({"type":"STATUS","data":{"state" : self.status}})
+                    self.ws.send(self.sed_message)
+                    self.is_status = False
 
-            if self.is_scan:
-                pose = cell_to_grid(self.x, self.y)
-                self.sed_message = json.dumps({"type":"COORDINATE","data":{"x":str(pose[0]),"y":str(pose[1])}})
-                self.ws.send(self.sed_message)
-                self.is_scan = False
-            
-            if self.is_percent:
-                self.sed_message = json.dumps({"type":"COMPLETION_RATE","data":{"rate":self.percent}})
-                self.ws.send(self.sed_message)
-                self.is_percent = False
-            
-            if self.is_map:
-                self.sed_message = json.dumps({"type":"DRAWING","data":{"image" : str(self.map_data)}})
-                self.ws.send(self.sed_message)
-                self.is_map = False
-            
-            if self.is_obstacle:
-                pose = cell_to_grid(self.ob_x, self.ob_y)
-                self.sed_message = json.dumps({"type":"DAMAGED","data":{"image" : self.ob_img,"x":str(pose[0]),"y":str(pose[1]),"category": "HOLE"}})
-                self.ws.send(self.sed_message)
-                self.is_obstacle = False
+                if self.is_scan:
+                    self.convert(self.x, self.y)
+                    self.sed_message = json.dumps({"type":"COORDINATE","data":{"x":self.pose_x,"y":self.pose_y}})
+                    self.ws.send(self.sed_message)
+                    self.is_scan = False
+                
+                if self.is_percent:
+                    self.sed_message = json.dumps({"type":"COMPLETION_RATE","data":{"rate":self.percent}})
+                    self.ws.send(self.sed_message)
+                    self.is_percent = False
+                
+                if self.is_map:
+                    self.sed_message = json.dumps({"type":"DRAWING","data":{"image" : str(self.map_data)}})
+                    self.ws.send(self.sed_message)
+                    self.is_map = False
+                
+                if self.is_obstacle:
+                    self.convert(self.ob_x, self.ob_y)
+                    self.sed_message = json.dumps({"type":"DAMAGED","data":{"image" : self.ob_img,"x":self.pose_x,"y":self.pose_y,"category": "HOLE"}})
+                    self.ws.send(self.sed_message)
+                    self.is_obstacle = False
 
-        # except:
-        #     print("{0:<40} >>".format('\rweb socket closed'),end="")
+        except:
+            print("{0:<40} >>".format('\rweb socket closed'),end="")
 
 def main(args=None):
     rclpy.init(args=args)
