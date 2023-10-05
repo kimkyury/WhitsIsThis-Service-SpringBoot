@@ -226,7 +226,7 @@ function Fixcustom() {
                 </p>
               </div>
             </span>
-            <p className="line"></p>
+            <p className="moline"></p>
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("WAITING_FOR_INSPECTION")}>
@@ -235,7 +235,7 @@ function Fixcustom() {
                 </p>
               </div>
             </span>
-            <p className="line"></p>
+            <p className="moline"></p>
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("IN_PROGRESS")}>
@@ -244,7 +244,7 @@ function Fixcustom() {
                 </p>
               </div>
             </span>
-            <p className="line"></p>
+            <p className="moline"></p>
             <span>
               <div className="flexlinebox">
                 <p className="circle" style={getCircleStyle("DONE")}>
