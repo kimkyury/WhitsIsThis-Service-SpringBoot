@@ -81,7 +81,7 @@ function ResultModal({ selectedItem, setShowModal }) {
         <div>
       
           {/* API에서 받아온 데이터를 Pdf 컴포넌트로 전달합니다. */}
-          <SubPdf data={apiData} />
+          <Pdf data={apiData} />
           <a onClick={() => handleZipDownload()}>사진집 다운로드</a>
         </div>
       </div>
