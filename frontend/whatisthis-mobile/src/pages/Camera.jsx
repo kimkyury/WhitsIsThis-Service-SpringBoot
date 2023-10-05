@@ -17,7 +17,7 @@ const Camera = () => {
 
   useEffect(() => {
     setCapturedImage(receivedInfo.images);
-    setExistingImageId(receivedInfo.images.map((it) => it.id));
+    setExistingImageId(receivedInfo.images && receivedInfo.images.map((it) => it.id));
     const getCameraPermission = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -107,19 +107,21 @@ const Camera = () => {
       await Promise.all(uploadCycle);
     }
 
-    const deleteCycle = existingImageId.map(async (id) => {
-      const checkIdIsExist = capturedImage.find((image) => image.id === id);
-      if (!checkIdIsExist) {
-        try {
-          const response = await AuthHttp({
-            method: "delete",
-            url: `/private/todolists/images/${id}`,
-          });
-        } catch (e) {
-          console.error(e);
+    const deleteCycle =
+      existingImageId &&
+      existingImageId.map(async (id) => {
+        const checkIdIsExist = capturedImage.find((image) => image.id === id);
+        if (!checkIdIsExist) {
+          try {
+            const response = await AuthHttp({
+              method: "delete",
+              url: `/private/todolists/images/${id}`,
+            });
+          } catch (e) {
+            console.error(e);
+          }
         }
-      }
-    });
+      });
 
     await Promise.all(deleteCycle);
 

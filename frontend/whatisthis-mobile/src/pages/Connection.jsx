@@ -52,6 +52,7 @@ const Connection = () => {
       navigate(`/connection/${buildingId}/${houseId}/result`, {
         state: {
           serialNumber: serialNumber,
+          historyId: targetHouse.history.id,
           connectState: true,
         },
         replace: true,
@@ -61,6 +62,7 @@ const Connection = () => {
       navigate(`/connection/${buildingId}/${houseId}/result`, {
         state: {
           serialNumber: serialNumber,
+          historyId: targetHouse.history.id,
           connectState: false,
         },
         replace: true,
