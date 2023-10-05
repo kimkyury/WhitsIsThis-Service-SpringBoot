@@ -4,149 +4,173 @@ import {
   Font,
   Image,
   View,
-  PDFViewer,
   Document,
   Page,
-  pdf,
   StyleSheet,
   Text,
+  PDFViewer,
 } from "@react-pdf/renderer";
-import { BiCheck } from "react-icons/bi"; // react-icons에서 BiCheck 아이콘을 가져옵니다.
-import Subpdf from './Subpdf';
+import { useBlob, BlobProvider } from "@react-pdf/renderer";
+
+import axios from 'axios';
 Font.register({
   family: "MyKoreanFont",
   src: `${process.env.PUBLIC_URL}/assets/fonts/JeonjuCraft_Go_Regular.ttf`,
 });
 
-const MyDocument = ({ data}) => {
-
-const blob = data&&pdf(Subpdf(data)).toBlob();
-console.log(blob);
+const MyDocument = ({ data }) => {
   const [myData, setMydata] = useState();
-  // const [inspectedAt, setInspectedAt] = useState(data.data.history.inspectedAt);
-  const [finish, setFinish] = useState(new Date());
+  const componentRef = React.createRef();
 
   useEffect(() => {
-    
     const fetchMyData = async () => {
-      console.log(data)
-      console.log("-----");
-      if (!data)
-      return;
+      if (!data) return;
       try {
         const response = await AuthHttp({
           method: "get",
           url: `/private/histories/${data.data.history.id}`,
         });
-        console.log(response);
         setMydata(response.data.data);
+        console.log(response.data.data)
       } catch (e) {
         console.error(e);
       }
     };
 
-      fetchMyData();
-  
+    fetchMyData();
   }, [data]);
 
+  // renderCheckIcon 함수를 MyDocument 내에서 정의
   const renderCheckIcon = (isChecked) => {
-    console.log("isChecked:", isChecked);
-
     if (isChecked) {
-      console.log("Rendering checkmark icon.");
-      // 아이콘 컴포넌트를 JSX로 렌더링합니다.
       return <Text style={{ color: 'green' }}>●</Text>;
     } else {
-      console.log("Not rendering checkmark icon.");
       return '○';
-      
     }
   };
-  // console.log(myData.history)
 
+  // PDF 데이터를 서버로 업로드하는 함수
+  const postPDFToServer = async (pdfData) => {
+    if (!data) {
+        console.error("myData가 정의되지 않았습니다. 데이터를 불러오는 중일 수 있습니다.");
+        return;
+    }
+    console.log(pdfData)
+
+    try {
+        const formData = new FormData();
+        formData.append("report", new Blob([pdfData], { type: "application/pdf" }), "myDocument.pdf");
+        const response = await axios.post(
+            `${process.env.REACT_APP_BASE_URL}/api/v1/private/histories/${data.data.history.id}/report`, 
+            formData, 
+            {
+                headers: {
+                    Authorization: sessionStorage.getItem('accessToken')
+                }
+            }
+        );
+    } catch (error) {
+        console.error("PDF 업로드 중 오류 발생", error);
+    }
+};
   return (
-    <PDFViewer style={styles.document}>
-      {/* <Document>
-        <Page>
-          <View style={{ display: "flex", alignItems: "center", marginTop: "20vh" }}>
-            <Image style={styles.images} src={`${process.env.PUBLIC_URL}/assets/logo.png`} />
-            <Text style={styles.texts}>담당자명 : {data&&data.data.employeeName}</Text>
-           
-          </View>
-        </Page>
-        <Page size="A4" style={styles.page}>
-          <View style={styles.section}>
-            {myData &&
-              myData.todolist.map((it) => (
-                <View style={styles.gridContainer} key={it.roomOrder}>
-                  <View style={styles.leftColumn}>
-                    <Text style={styles.title}>
-                      {it.roomOrder}. {it.roomName}
-                    </Text>
-                  </View>
-                  <View style={styles.rightColumn}>
-                    {it.todolist &&
-                      it.todolist.map((data) => (
-                        <View key={data.content} style={{ marginBottom: "1.5vh", marginTop:'3.5vh', marginRight:'2vh' }}>
-                      <Text style={styles.textgrid}>{renderCheckIcon(data.isChecked)} {data.content}</Text>
-              
-                     
-                      
-                      <View style={styles.imageContainer}>
-                        {data.images &&
-                          data.images.map((image) => (
-                            <Image
-                              key={image.imageUrl}
-                              style={styles.image}
-                              src={`${process.env.REACT_APP_S3_BASE_URL}${image.imageUrl}`}
-                            />
-                          ))}
-                          
-                      </View>
-                      
-                    </View>
+    <div>
+      <BlobProvider document={<MyPdfDocument data={myData} renderCheckIcon={renderCheckIcon} />} >
+        {({ blob, url, loading, error }) => {
+          if (loading) {
+            return <p>PDF 생성 중...</p>;
+          }
+          if (error) {
+            return <p>PDF 생성 오류: {error.message}</p>;
+          }
+          return (
+            <div>
+              <p>
+              <button onClick={() => postPDFToServer(blob)}>PDF 업로드하기</button>
+              </p>
+              <a href={url} download="myDocument.pdf">
+                다운로드
+              </a>
+              {/* PDF 업로드 버튼 */}
+            </div>
+          );
+        }}
+      </BlobProvider>
+      <div style={{ display: 'none' }}>
+        <div ref={componentRef}>
+          {/* renderCheckIcon 함수를 props로 전달 */}
+          <MyPdfDocument data={myData} renderCheckIcon={renderCheckIcon} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MyPdfDocument = ({ data, renderCheckIcon }) => {
+  return (
+    // <PDFViewer>
+    <Document>
+      <Page>
+        <View style={{ display: "flex", alignItems: "center", marginTop: "20vh" }}>
+          <Image style={styles.images} src={`${process.env.PUBLIC_URL}/assets/logo.png`} />
+          <Text style={styles.texts}>이게모징손상보고서</Text>
+        </View>
+      </Page>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.section}>
+          {data && data.todolist.map((it) => (
+            <View style={styles.gridContainer} key={it.roomOrder}>
+              <View style={styles.leftColumn}>
+                <Text style={styles.title}>
+                  {it.roomOrder}. {it.roomName}
+                </Text>
+              </View>
+              <View style={styles.rightColumn}>
+                {it.todolist && it.todolist.map((data) => (
+                  <View key={data.content} style={{ marginBottom: "1.5vh", marginTop: '3.5vh', marginRight: '2vh' }}>
+                    <Text style={styles.textgrid}>{renderCheckIcon(data.isChecked)} {data.content}</Text>
+                    <View style={styles.imageContainer}>
+                      {data.images && data.images.map((image) => (
+                        <Image
+                          key={image.imageUrl}
+                          style={styles.image}
+                          src={`${process.env.REACT_APP_S3_BASE_URL}${image.imageUrl}`}
+                        />
                       ))}
+                    </View>
+                  </View>
+                ))}
                 <View style={styles.border}>
                   <Text style={styles.text}>기기 손상 정보</Text>
                   <View>
-                  {myData && myData.history && myData.history && myData.history.damaged.map((damage) => (
-                    <View >
-                    <Image
-                    
-                    key={damage.id}
-                    style={styles.imagede}
-                    src={damage.imageUrl} 
-                    />
-                    <Text>{damage.category}</Text>
-                    </View>
+                    {data && data.history && data.history.damaged.map((damage) => (
+                      <View>
+                        <Image
+                          key={damage.id}
+                          style={styles.imagede}
+                          src={damage.imageUrl}
+                        />
+                        <Text>{damage.category}</Text>
+                      </View>
                     ))}
-                    </View>
-            </View>
                   </View>
-                  
                 </View>
-                
-              ))}
-  
-          </View>
-        </Page>
-      </Document> */}{data&&
-      <Subpdf data={data}/>
-      }
-    </PDFViewer>
+              </View>
+            </View>
+          ))}
+        </View>
+      </Page>
+    </Document>
+    // </PDFViewer>
   );
 };
 
 const styles = StyleSheet.create({
-  mar: {
-    marginRight:'10vw'
-  },
   document: {
     width: "100%",
     minHeight: "75vh",
-    border:'2px solid black',
-    overflowY:'hidden'
-
+    border: '2px solid black',
+    overflowY: 'hidden'
   },
   page: {
     flexDirection: "row",
@@ -154,10 +178,10 @@ const styles = StyleSheet.create({
   },
   textgrid: {
     fontFamily: "MyKoreanFont",
-    display:'flex',
-    justifyContent:'space-between',
-    marginBottom: "10px", flexDirection: 'row', 
-    marginRight:'10vw',
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: "10px", flexDirection: 'row',
+    marginRight: '10vw',
   },
   section: {
     margin: 10,
@@ -170,15 +194,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   border: {
-    borderTop:'2px solid black',
-    width:'100vw',
-    paddingTop:'1vh'
+    borderTop: '2px solid black',
+    width: '100vw',
+    paddingTop: '1vh'
   },
   imageContainers: {
     display: "flex",
-    // flexDirection: "row",
     alignItems: "center",
-    borderTop:'2px solid black',
+    borderTop: '2px solid black',
   },
   image: {
     width: 150,
@@ -191,14 +214,12 @@ const styles = StyleSheet.create({
     height: 150,
     marginRight: '10vw',
     marginTop: 10,
-    
   },
   images: {
     width: 300,
   },
   text: {
     fontFamily: "MyKoreanFont",
-    // margin:'5vh',
   },
   texts: {
     fontFamily: "MyKoreanFont",
