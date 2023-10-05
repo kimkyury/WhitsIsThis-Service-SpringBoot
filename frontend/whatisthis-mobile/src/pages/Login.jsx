@@ -87,7 +87,31 @@ const Login = () => {
   //   try {
   //     const response = await AuthHttp({
   //       method: "patch",
-  //       url: `/private/requests/1/status`,
+  //       url: `/private/requests/122/status`,
+  //       data: {
+  //         status: "WAITING_FOR_INSPECTION",
+  //       },
+  //     });
+  //     console.log(response);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  //   try {
+  //     const response = await AuthHttp({
+  //       method: "patch",
+  //       url: `/private/requests/125/status`,
+  //       data: {
+  //         status: "WAITING_FOR_INSPECTION",
+  //       },
+  //     });
+  //     console.log(response);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  //   try {
+  //     const response = await AuthHttp({
+  //       method: "patch",
+  //       url: `/private/requests/127/status`,
   //       data: {
   //         status: "WAITING_FOR_INSPECTION",
   //       },
@@ -97,19 +121,6 @@ const Login = () => {
   //   } catch (e) {
   //     console.error(e);
   //   }
-  // try {
-  //   const response = await AuthHttp({
-  //     method: "patch",
-  //     url: `/private/requests/2/status`,
-  //     data: {
-  //       status: "WAITING_FOR_INSPECTION",
-  //     },
-  //   });
-  //   console.log(response);
-  //   navigate("/");
-  // } catch (e) {
-  //   console.error(e);
-  // }
   // };
 
   return (

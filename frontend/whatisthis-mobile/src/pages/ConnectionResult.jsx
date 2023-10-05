@@ -10,7 +10,8 @@ const ConnectionResult = () => {
   const navigate = useNavigate();
 
   const { buildingId, houseId } = useParams();
-  const { serialNumber, connectState } = useLocation().state;
+  const { serialNumber, connectState, historyId } = useLocation().state;
+  console.log(useLocation().state);
 
   const [targetHouse, setTargetHouse] = useState();
   const { ws, receivedMessage } = useWebSocket();
@@ -38,16 +39,13 @@ const ConnectionResult = () => {
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
       console.log("연결결과", data);
-      if (targetHouse.historyId === data.data.historyId) {
+      if (parseInt(historyId) === parseInt(data.data.historyId)) {
+        console.log(historyId);
         if (data.data.state && data.data.state === "WAIT_WORK") {
           console.log("통신 성공");
           setCanStart(true);
         }
         return;
-      }
-      // console.log(houseInfo.historyId, "카두입미다", data);
-
-      if (data.type && data.type === "COMPLETION_RATE") {
       }
     };
   }, [ws]);

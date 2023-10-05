@@ -38,6 +38,8 @@ const SerialNumberRecognition = ({
       navigate(`/connection/${buildingId}/${houseId}/result`, {
         state: {
           serialNumber: serialNumber,
+          historyId: historyId,
+
           connectState: true,
         },
         replace: true,
@@ -47,6 +49,8 @@ const SerialNumberRecognition = ({
       navigate(`/connection/${buildingId}/${houseId}/result`, {
         state: {
           serialNumber: serialNumber,
+          historyId: historyId,
+
           connectState: false,
         },
         replace: true,

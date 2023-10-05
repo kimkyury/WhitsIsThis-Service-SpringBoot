@@ -38,8 +38,6 @@ const HouseList = () => {
     };
     getBuildingList();
 
-    console.log(houseList);
-
     const getHouseList = (buildings) => {
       if (buildings) {
         setHouseList(
