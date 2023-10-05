@@ -6,7 +6,7 @@ import SubPdf from '../WebMain/Subpdf';
 import PDFLink from '../../pages/WebMain/Pdflink';
 function ResultModal({ selectedItem, setShowModal }) {
   const [apiData, setApiData] = useState(null);
-  
+  const [showUp, setShowUp] = useState(true);
   const closeModal = () => {
     setShowModal(false);
   };
@@ -81,9 +81,11 @@ function ResultModal({ selectedItem, setShowModal }) {
         <div>
       
           {/* API에서 받아온 데이터를 Pdf 컴포넌트로 전달합니다. */}
-          <Pdf data={apiData} />
+          <Pdf data={apiData} showUp={showUp} setShowUp={setShowUp} />
           <div style={{display:'flex', justifyContent:'flex-end'}}>
+            {!showUp && (
           <a className="download" onClick={() => handleZipDownload()}>사진.zip 다운로드</a>
+            )}
           </div>
         </div>
       </div>

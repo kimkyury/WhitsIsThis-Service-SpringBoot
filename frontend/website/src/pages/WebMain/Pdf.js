@@ -18,10 +18,10 @@ Font.register({
   src: `${process.env.PUBLIC_URL}/assets/fonts/JeonjuCraft_Go_Regular.ttf`,
 });
 
-const MyDocument = ({ data }) => {
+const MyDocument = ({ data, showUp, setShowUp }) => {
   const [myData, setMydata] = useState();
   const componentRef = React.createRef();
-
+  
   useEffect(() => {
     const fetchMyData = async () => {
       if (!data) return;
@@ -69,6 +69,8 @@ const MyDocument = ({ data }) => {
                 }
             }
         );
+        alert('업로드가 완료되었습니다!!')
+        setShowUp(false)
     } catch (error) {
         console.error("PDF 업로드 중 오류 발생", error);
     }
@@ -85,14 +87,17 @@ const MyDocument = ({ data }) => {
           }
           return (
             <div>
+               {showUp && (
               <p>
               <button onClick={() => postPDFToServer(blob)}>PDF 업로드하기</button>
-              </p>
-              <div style={{display:'flex', marginTop:'20vh', justifyContent:'flex-end'}}>
+              </p>)}
+              {!showUp && (
+              <div style={{display:'flex', marginTop:'25vh', justifyContent:'flex-end'}}>
               <a className="download"  href={url} download="myDocument.pdf">
                 PDF 다운로드
               </a>
               </div>
+              )}
               {/* PDF 업로드 버튼 */}
             </div>
           );
@@ -183,7 +188,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: "10px", flexDirection: 'row',
-    marginRight: '10vw',
+    width: '100vw'
   },
   section: {
     margin: 10,
