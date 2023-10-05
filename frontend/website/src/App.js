@@ -27,7 +27,7 @@ function App() {
         <div style={{ display: 'flex' }}>
           <Header />
           <Routes>
-            <Route path='/his' element={<Calendar/>}/>
+            <Route path='/his' element={<Pdf/>}/>
           <Route path='/CC' element={<WebMains/>} />
             <Route path='/first' element={<First />} />
             <Route path="/" element={<WebMain />} />

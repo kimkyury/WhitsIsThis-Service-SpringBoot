@@ -17,6 +17,7 @@ function ResultList() {
   const [dataList, setDataList] = useState([]);
   const accessToken = sessionStorage.getItem('accessToken');
   const [isLogin, setIsLogin] = useState(false);
+  const [showpdf, setShowpdf] = useState(null);
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -44,6 +45,7 @@ function ResultList() {
   const handleItemClick = (itemData) => {
     setSelectedItem(itemData);
     setShowModal(true);
+    // setShowpdf(itemdata)
   };
 
   useEffect(() => {
