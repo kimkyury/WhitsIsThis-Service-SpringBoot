@@ -11,7 +11,7 @@ public class CommonCode {
     }
 
     public enum DataType {
-        accessToken, image, x, y, category, state, command, historyId, serialNumber, isWorked, rate, text, message;
+        accessToken, image, x, y, category, state, command, historyId, serialNumber, isWorked, rate, message;
     }
 
     public enum CommandCode {
@@ -41,17 +41,18 @@ public class CommonCode {
         NOT_INCLUDE_COMMAND, // hasType
         NOT_INCLUDE_HISTORYID,
         NOT_INCLUDE_SERIALNUMBER,
-        NOT_INCLUDE_ISWORKED, // hasType
         NOT_INCLUDE_RATE,
 
         IS_NOT_REGISTER_DEVICE,
         INVALID_STATE_TYPE,
         INVALID_COMMAND_TYPE,
-        INVALID_DRAWING_STATUS,
+        INVALID_CATEGORY_TYPE,
 
         NOT_EXIST_DEVICE,
         NOT_CONNECT_DEVICE,
-        NOT_EXIST_EMPLOYEE,
-        NOT_EXIST_HISTORY;
+        NOT_EXIST_EMPLOYEE, //TODO: Turtle봇이 존재하지 않는 Employee에게 전송시.
+        NOT_EXIST_HISTORY,
+
+        DB_ACCESS_ERROR;
     }
 }

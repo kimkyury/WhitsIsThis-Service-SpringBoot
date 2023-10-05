@@ -11,12 +11,9 @@ import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.MessageError;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.services.SocketProvider;
-import com.mo.whatisthis.exception.CustomException;
 import com.mo.whatisthis.jwt.services.JwtTokenProvider;
-import com.mo.whatisthis.supports.codes.ErrorCode;
-import java.util.HashMap;
+import com.mo.whatisthis.redis.services.RedisService;
 import java.util.Map;
-import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
@@ -26,14 +23,17 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
 
     private final RequestRepository requestRepository;
     private final HistoryRepository historyRepository;
+    private final RedisService redisService;
 
     public CommandMessageHandlerImpl(
         SocketProvider socketProvider, JwtTokenProvider jwtTokenProvider,
         RequestRepository requestRepository,
-        HistoryRepository historyRepository) {
+        HistoryRepository historyRepository,
+        RedisService redisService) {
         super(socketProvider, jwtTokenProvider);
         this.requestRepository = requestRepository;
         this.historyRepository = historyRepository;
+        this.redisService = redisService;
     }
 
     @Override
@@ -81,11 +81,16 @@ public class CommandMessageHandlerImpl extends AbstractMessageHandlerInterface {
         }
     }
 
+    @Override
     public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap) {
 
         String serialNumber = getDataAtMap(dataMap, DataType.serialNumber);
         if (serialNumber == null) {
             sendErrorMessage(session, MessageError.NOT_INCLUDE_SERIALNUMBER);
+            return false;
+        }
+        if(redisService.getValue("device:" + serialNumber) == null){
+            sendErrorMessage(session, MessageError.IS_NOT_REGISTER_DEVICE);
             return false;
         }
         if (!socketProvider.existDevice(serialNumber)) {

@@ -1,8 +1,10 @@
 package com.mo.whatisthis.apis.socket.handlers.impl;
 
+import com.mo.whatisthis.apis.history.entities.DamagedHistoryEntity.Category;
 import com.mo.whatisthis.apis.socket.handlers.common.AbstractMessageHandlerInterface;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.CommandCode;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.DataType;
+import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.MessageError;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SendType;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.SessionKey;
 import com.mo.whatisthis.apis.socket.handlers.common.CommonCode.StateType;
@@ -48,8 +50,25 @@ public class StatusMessageHandlerImpl extends AbstractMessageHandlerInterface {
             String message = convertMessageToString(SendType.SYSTEM_MESSAGE, errorDataMap);
             socketProvider.sendMessageToDevice(session, senderDevice, message);
         }
+    }
+
+    @Override
+    public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap) {
 
 
+        String state = getDataAtMap(dataMap, DataType.state);
+        if (state == null) {
+            sendErrorMessage(session, MessageError.NOT_INCLUDE_STATE);
+            return false;
+        }
+        try{
+            StateType.valueOf(state);
+        } catch (IllegalArgumentException e) {
+            sendErrorMessage(session, MessageError.INVALID_STATE_TYPE);
+            return false;
+        }
+
+        return true;
     }
 }
 

@@ -37,6 +37,9 @@ public class AbstractMessageHandlerInterface implements MessageHandlerInterface 
 
     }
 
+    public boolean isValidMessageForm(WebSocketSession session, Map<String, String> dataMap){
+        return true;
+    }
 
 
     protected String getAttributeAtSession(WebSocketSession session, SessionKey key) {
