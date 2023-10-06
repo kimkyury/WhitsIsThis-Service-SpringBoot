@@ -1,0 +1,19 @@
+.customheader {
+  margin-left: 3vw;
+  font-size: 1.3vw;
+}
+
+.customheaders {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.customheadersdiv {
+  border: 2px solid black;
+  width: 100vw;
+  height: 6vh;
+  border:none;
+  /* background-color: #2D4059; */
+  /* background-image: url(`${process.env.PUBLIC_URL}/assets/방사진.svg`); */
+  background-size: cover;
+}

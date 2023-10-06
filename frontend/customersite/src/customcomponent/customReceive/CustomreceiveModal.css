@@ -1,0 +1,267 @@
+.customreceivediv {
+
+  margin-top:1rem;
+  /* width: 74vw;
+  height: 65rem; */
+
+  /* background-color: #ECECEC; */
+  /* border: 2px solid #2D4059; */
+  opacity: 90%;
+  border: 0.2rem solid #2D4059;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+  background-repeat: no-repeat;
+  box-shadow: 0px 5px 0px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+}
+
+.cinput {
+  width:45vw;
+  height:2.5vh;
+  margin-right: 2vw;
+  /* border-radius: 0.2rem; */
+}
+.cinputinp {
+  width:29vw;
+  height:1.5rem;
+  margin-left: 2rem;
+  /* border-radius: 0.2rem; */
+}
+/* 
+.cinputss {
+  width:27rem;
+  height:1.5rem; */
+  /* border-radius: 0.2rem; */
+/* } */
+
+.cinputss {
+  width:40vw;
+  height:1.5rem;
+  /* border-radius: 0.2rem; */
+}
+
+
+
+.cinputs {
+  width:30vw;
+  height:3vh;
+  /* border-radius: 0.2rem; */
+}
+.desk-cinput {
+  width:33rem;
+  height:3rem;
+  border-radius: 0.2rem;
+}
+.customgridx {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row; /* 가로로 정렬 */
+  align-items: center; /* 수직 가운데 정렬 (선택 사항) */
+  justify-content: space-between;
+  /* width: 35vw; */
+}
+.desktop-view {
+  height: 90rem;
+  width: 50rem; /* 원하는 데스크톱 뷰 높이 */
+}
+
+.customreceivedivsuc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top:2rem;
+  width: 45rem;
+  height: 14rem;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+.customreceivedivconfirms {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-top:2rem; */
+  width: 80vw;
+  height: 3vh;
+  margin-top: 1vh;
+  margin-left:3vw;
+  /* background-color: white; */
+  /* opacity: 90%; */
+  /* border: 2px solid white; */
+  /* margin-bottom: 5vh; */
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+
+
+.customgrid {
+  display:flex;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+  height: 2.3rem;
+}
+
+.middlemodal {
+  display:flex;
+  justify-content: center;
+  gap: 1vw;
+}
+
+
+.middlemodalbox {
+  display:flex;
+  justify-content: center;
+  margin-top:-5%;
+}
+.middlemodalreturn {
+  display:flex;
+  justify-content: center;
+  margin-top:-7%;
+  
+}
+
+.custommodaltitle {
+  color: #2D4059;
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+
+}
+
+.button {
+  background-color: white;
+  border: 1px solid #2D4059;
+  /* color: white; */
+  font-weight: bold;
+  /* border-radius: 10rem; */
+  opacity: 70%;
+}
+
+.input {
+  /* background-color: #ECF0F3; */
+  /* border-radius: 0.4rem; */
+  /* box-shadow: 0px 0.15rem 0px rgba(0, 0, 0, 0.5); */
+  /* border-bottom: 1px solid black; */
+  border: none;
+  border-bottom: 1px solid black;
+  font-size: 0.1vw;
+  padding-left:0.4rem;
+  opacity: 60%;
+
+}
+.address-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  z-index: 1000;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 1.2rem;
+  max-width: 70rem; /* 모달의 최대 너비를 설정하세요 */
+}
+
+.close-button {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  cursor: pointer;
+}
+
+.minititle {
+  font-size: 1.1rem;
+  font-weight: bold;
+  /* margin-left: 5%; */
+}
+
+.desktoprectitle {
+  font-size: 2rem;
+  font-weight: bold;
+  /* margin-left: 5%; */
+}
+.minibutton {
+  width:3.8rem;
+  height:1.5rem;
+  font-size: 0.5rem;
+}
+.minibuttonss {
+  width:3.4rem;
+  height:1.5rem;
+  font-size: 0.1rem;
+  margin-left: 0.4rem;
+}
+
+
+.desk-minibutton {
+
+  width:5rem;
+  height: 3rem;
+  font-size: 1rem;
+}
+
+.bigbutton {
+  width: 7rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  margin-top: 7rem;
+  border-radius: 0.3rem;
+  /* margin-bottom:5rem; */
+}
+
+.bigbuttons {
+  width: 8rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  margin-top:5rem
+  /* margin-bottom:5rem; */
+}
+
+
+.bigbuttonsmo {
+  width: 12rem;
+  height: 2rem;
+  font-size: 1rem;
+  margin-top:5rem
+  /* margin-bottom:5rem; */
+}
+.button:hover {
+  /* background-image: linear-gradient(to right, #2D4059, #2D4080); */
+  opacity:30%;
+}
+
+.bigbuttons {
+  width: 7rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  margin-top:2rem;
+  border-radius: 0.3rem;
+  /* margin-bottom:2rem; */
+}
+
+.desk-bigbuttons {
+  width: 10rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  /* margin-top:rem */
+}
+.phone-confirm-modal {
+
+  position: fixed;
+  top: 56%;
+  left: 50%;
+  border:none;
+  transform: translate(-110%, -50%);
+  /* border:1px solid black; */
+  /* 위의 속성을 사용하여 가로와 세로로 중앙에 정렬합니다. */
+  /* background-color: white; */
+  width: 40vw; /* 모달의 폭을 설정하세요. */
+  height: 5vh; /* 모달의 높이를 설정하세요. */
+  z-index: 9999; /* 다른 요소 위로 모달을 표시합니다. */
+  /* 필요한 다른 스타일을 추가하세요. */
+}

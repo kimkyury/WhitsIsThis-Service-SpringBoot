@@ -1,0 +1,86 @@
+.header {
+  /* margin-top:1%; */
+  height: 100vh;
+  width: 18rem;
+  display: grid;
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* background-color: rgb(229, 246, 251); */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  /* background-color: #2D4059; */
+  /* border-bottom: 2px solid black; */
+}   
+.footer {
+  position: relative;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 12vh;
+  background-color: #F0F0F0; /* 푸터의 배경색을 원하는 색상으로 설정합니다. */
+  /* color: white; 푸터 텍스트 색상을 원하는 색상으로 설정합니다. */
+  text-align: center;
+  padding: 15px 0; /* 필요에 따라 여백을 조절합니다. */
+}
+.footers {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #F0F0F0; /* 푸터의 배경색을 원하는 색상으로 설정합니다. */
+  /* color: white; 푸터 텍스트 색상을 원하는 색상으로 설정합니다. */
+  text-align: center;
+  padding: 15px 0; /* 필요에 따라 여백을 조절합니다. */
+}
+
+a {
+  text-decoration: none; /* 밑줄 없애기 */
+  color: inherit; /* 상위 엘리먼트에서 상속받은 글꼴 색상 사용 */
+}
+.item {
+  margin-top:6vh;
+  margin-left: 6vw;
+  font-size: 1.4vw;
+  
+  font-weight:bold;
+}
+
+.minitem:hover {
+  color:#F07B3F !important; 
+  font-size:1.2vw;
+  /* border-bottom: 2px solid #F07B3F; */
+  width:3.4rem
+}
+.minitem {
+  margin-top:3rem;
+  margin-left: 5rem;
+  font-size: 1.4vw;
+  
+  font-weight:bold;
+}
+.item:hover {
+  color:#F07B3F !important; 
+  font-size:1.2vw;
+  /* border-bottom: 2px solid #F07B3F; */
+  width: 5vw
+}
+.itemposition {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+
+.activeLink {
+  color: #F07B3F; /* 활성화된 링크의 글꼴 색상을 변경 */
+  border-bottom: 1px solid #F07B3F;
+
+}
+.items {
+  margin-top:-45vh;
+  display: flex;
+  flex-direction: column; /* 세로로 배치하기 위해 flex-direction을 column으로 설정합니다. */
+  width: 30vw;
+  height: 40vh;
+  
+  margin-right: -7.2rem;
+}

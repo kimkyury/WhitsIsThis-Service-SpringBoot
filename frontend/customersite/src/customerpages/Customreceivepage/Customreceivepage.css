@@ -1,0 +1,12 @@
+.modalbox {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 2px solid black; */
+  padding-bottom: 5rem;
+}
+
+.backgr {
+  background-image: 'linear-gradient(to Bottom, #5894D8, #D7E7FC)', 
+  
+}
