@@ -1,0 +1,43 @@
+.Menu {
+  margin-left:5%;
+  height:31vw;
+  width:21vh;
+  box-shadow: 0.105vw 0.25vw 0.25vw rgba(0, 0, 0, 0.5);
+  /* border-radius:8px; */
+  border: 2px solid gainsboro
+}
+.selecte {
+  margin-left:10%;
+  font-size:1.4vw;
+  font-weight: bold;
+  color: #F07B3F; /* Change to your desired highlight color */
+  border-bottom: 0.21vw solid #F07B3F;
+}
+.ptag:hover {
+  margin-left:10%;
+  font-size:1.4vw;
+  font-weight: bold;
+  color: #F07B3F; /* Change to your desired highlight color */
+  /* border-bottom: 0.21vw solid #F07B3F; */
+  cursor: pointer;
+}
+
+.ptag {
+  margin-left:10%;
+  font-size:1.4vw;
+  font-weight: bold;
+  color: black;
+}
+
+.ImgPTag {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 5vh;
+  font-weight: bold;
+  font-size: 1.6vw;
+  border-radius: 100%; /* 이미지를 원형태로 유지 */
+  width: 50%; /* 이미지의 너비를 조정합니다. */
+
+
+  /* 다른 스타일 속성을 필요에 따라 조절하세요. */
+}

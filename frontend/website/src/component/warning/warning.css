@@ -1,0 +1,13 @@
+.warnbutton {
+  background-color: #2D4059;
+  color: white;
+  font-weight: bold;
+  width: 8rem;
+  height: 2rem;
+  border-radius: 3rem;
+  border: none;
+}
+
+.warnbutton:hover {
+  background-image: linear-gradient(to right, #2D4059, #2D4080);
+}
