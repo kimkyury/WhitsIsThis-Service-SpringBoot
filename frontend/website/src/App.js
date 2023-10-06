@@ -20,7 +20,7 @@ function App() {
   const BASE_NAME = process.env.REACT_APP_BASE_NAME || "";
   const access = sessionStorage.getItem('refreshToken');
   const isAuthenticated = !!access;
-
+// asdf
   return (
     <div className='fontb'>
       <Router basename={BASE_NAME}>
