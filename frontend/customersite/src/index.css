@@ -1,0 +1,33 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@font-face {
+  font-family: "SUITER";
+  src: url("../public/assets/fonts/SUITE-woff2/SUITE-Regular.woff2");
+}
+
+@font-face {
+  font-family: "SUITEB";
+  src: url("../public/assets/fonts/SUITE-woff2/SUITE-Bold.woff2");
+}
+
+:root {
+  font-family:'SUITEB';
+}
+
+.fontb {
+  font-family: 'SUITEB';
+  font-weight: 500;
+
+}

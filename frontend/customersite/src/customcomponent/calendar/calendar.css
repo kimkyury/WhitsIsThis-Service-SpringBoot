@@ -1,0 +1,34 @@
+
+
+.datePicker {
+  display: flex;
+  align-items: center;
+  border: 1px solid black;
+  /* border-radius: 4px; */
+  background-color: white;
+  box-sizing: border-box;
+  width: 30vw;
+  height: 2rem;
+  color: #2D4059;
+  text-align: center;
+  /* padding-right: 14px; */
+  margin-left:1rem;
+  opacity:60%
+
+}
+
+.desktop-datePicker {
+  display: flex;
+  align-items: center;
+  border: 1px solid gray;
+  border-radius: 4px;
+  background-color: #2D4059;
+  box-sizing: border-box;
+  width: 25rem;
+  height: 3rem;
+  color: white;
+  text-align: center;
+  /* padding-right: 14px; */
+  margin-left:1rem;
+
+}

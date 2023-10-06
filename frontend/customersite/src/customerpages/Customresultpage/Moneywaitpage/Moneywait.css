@@ -1,0 +1,13 @@
+.boxpagemoney {
+  width: 60vw;
+  height: 16vh;
+  border-radius: 1vw;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: bold;
+  margin-top:3vh;
+  margin-bottom:3vh;
+}

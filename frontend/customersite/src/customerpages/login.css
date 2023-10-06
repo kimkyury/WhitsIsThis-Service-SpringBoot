@@ -1,0 +1,27 @@
+.loginform {
+  display:flex; 
+  justify-content:center; 
+  align-items: center;
+  height: 90vh;
+  width: 77vw;
+}
+
+.centerFirst{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 130vh;
+}
+
+.backgr {
+ background-color: #2D4059; 
+}
+
+.middlemodalsxmo {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:70vw;
+  margin-top:3rem;
+  margin-bottom: 3%;
+}

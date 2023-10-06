@@ -1,0 +1,72 @@
+.minititles {
+  font-size: 2vw;
+  font-weight: bold;
+  /* margin-left: 5%; */
+}
+
+
+.inputs {
+  /* background-color: #ECF0F3; */
+  /* border-radius: 0.4vw; */
+  /* box-shadow: 0.01vw 0.15vw 0px rgba(0, 0, 0, 0.5); */
+  border: none;
+  border-bottom: 0.1vw solid black;
+  font-size: 1.4vw;
+  padding-left:0.8vw;
+  height: 6vh;
+
+}
+
+
+.customreceivedivc {
+
+  margin-top:5vh;
+  width: 52vw;
+  height: 95vh;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+
+.customreceivedivm {
+
+  margin-top:5vh;
+  width: 80vw;
+  height: 55vh;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+
+.desk-customreceivedivm {
+
+  margin-top:5vh;
+  width: 50rem;
+  height: 30rem;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 5vh;
+  border-radius: 2.6vw;
+  background-repeat: no-repeat;
+}
+.select-container {
+  position: relative;
+}
+
+.select-dropdown {
+  position: absolute;
+  bottom: -100%; /* 옵션 목록을 위로 이동 */
+  left: 0;
+  width: 100%;
+  z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
+}

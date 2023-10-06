@@ -1,0 +1,149 @@
+.customreceivedivfix {
+  margin-top: 1rem;
+  width: 20rem;
+  height: 35rem;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 1rem;
+  border-radius: 1.5rem;
+  background-repeat: no-repeat;
+}
+
+.vertical-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  height: 100%; /* 컨테이너의 높이를 100%로 설정하여 세로 중앙 정렬합니다. */
+  
+}
+
+.desk-customreceivedivfix {
+  margin-top: 1rem;
+  width: 40vw;
+  height: 40rem;
+
+  background-color: white;
+  opacity: 90%;
+  border: 2px solid white;
+  margin-bottom: 1rem;
+  border-radius: 1.5rem;
+  background-repeat: no-repeat;
+}
+
+.circlelinebox {
+  margin-top: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexlinebox {
+  display: flex;
+  align-items: center;
+}
+.customreceivedivwait {
+  margin-top: 1rem;
+  width: 80vw;
+  height: 30rem;
+
+  background-color: white;
+  opacity: 90%;
+  border: 0.1rem solid white;
+  margin-bottom: 1rem;
+  border-radius: 2rem;
+  background-repeat: no-repeat;
+}
+
+.boxpage {
+  margin-top: -1rem;
+  width: 100vw;
+  height: 10rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid black;
+  align-items: center;
+
+
+}
+
+.desk-boxpage {
+  margin-top: 0rem;
+  width: 24rem;
+  height: 10rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid black;
+}
+
+.desk-custommodaltitle {
+  color: #2d4059;
+  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.circle {
+  border-radius: 100%;
+  width: 4rem;
+  height: 4rem;
+  background-color: #ececec;
+  text-align: center;
+}
+
+.desk-circle {
+  margin-top: -4rem;
+  border-radius: 100%;
+  width: 8rem;
+  height: 8rem;
+  background-color: #ececec;
+  text-align: center;
+}
+.line {
+  width: 3rem;
+  border: 0.01rem solid black;
+}
+.desk-line {
+  margin-top: -4rem;
+  width: 4rem;
+  border: 0.02rem solid black;
+}
+.moline {
+  width: 2rem;
+  border: 0.01rem solid black;
+}
+.lines {
+  width: 10rem;
+  border: 0.05rem solid black;
+}
+
+.listline {
+  font-size: 0.5rem;
+  font-weight: bold;
+  margin-top: 5rem;
+}
+
+.desk-listline {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 9rem;
+}
+
+.moblie-custommodaltitlefix {
+  color: #2d4059;
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.desk-download {
+  marginleft: "5%";
+  margintop: "10px";
+  padding: "8px 12px";
+  cursor: "pointer";
+  border: "1px solid #ccc";
+  borderradius: "4px";
+  transition: "background-color 0.3s ease";
+}
