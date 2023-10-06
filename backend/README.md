@@ -17,14 +17,14 @@
 
 <a name="functions"></a>
 
--   SpringSecurity & JWT기반 회원 보안
--   문자SMS & Redis & Session 기반 비회원 보안
--   Gitlab, Jenkins, Nginx, Docker, AWS EC2를 활용한 Spring Boot, React CI/CD 구축
--   IOT기기와 App에대한 Socket통신 구현
--   Toss를 통한 가상계좌 이체 서비스 구현
--   Naver SMS API를 이용한 휴대폰 인증 구현
--   AWS EC2, S3를 활용한 이미지/설정 파일 관리
--   Swagger API 문서환경 구축
+- SpringSecurity & JWT기반 회원 보안
+- 문자SMS & Redis & Session 기반 비회원 보안
+- Gitlab, Jenkins, Nginx, Docker, AWS EC2를 활용한 Spring Boot, React CI/CD 구축
+- IoT기기와 App 사이의 Socket통신 구현
+- Toss를 통한 가상계좌 이체 서비스 구현
+- Naver SMS API를 이용한 휴대폰 인증 구현
+- AWS EC2, S3를 활용한 이미지/설정 파일 관리
+- Swagger API 문서환경 구축
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
@@ -34,12 +34,12 @@
 
 <a name="advantages"></a>
 
-### ✔️ Web Socket JSON형식을 통한 메시지 유형 분류
+### ✔️ Web Socket 메시지 JSON을 통한 유형 분류
 
 이미지 들어갈 곳
 
--   JSON형식을 통하여 SpringBoot서버에서 각 요구사항에 따른 비즈니스 로직이 동작됨
-    -   예를 들어, `AUTH` Type의 JSON형식을 메시지로 받았다면
+-   JSON을 통하여 Spring Boot 서버에서 각 요구사항에 따른 비즈니스 로직이 동작됨
+    -   예를 들어, `AUTH` Type의 JSON을 메시지로 받았다면
         ```jsx
         {
             "type" : "AUTH",
@@ -364,11 +364,9 @@
 
 <br/>
 
-## 👥 회고
+## ✒ 회고
 
 <a name="retrospective"></a>
-
-## ✒ 회고
 
 ### **🍊 김규리**
 
