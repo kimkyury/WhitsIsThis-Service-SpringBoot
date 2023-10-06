@@ -1,0 +1,24 @@
+{
+  "short_name": "이게모징",
+  "name": "WhatIsThis?",
+  "icons": [
+
+    {
+      "src": "/assets/pavicon_192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+
+    },
+    {
+      "src": "/assets/pavicon_512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "fullscreen",
+  "theme_color": "#ff874a",
+  "background_color": "#2d4059"
+}
