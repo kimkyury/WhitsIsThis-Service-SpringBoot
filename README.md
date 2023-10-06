@@ -71,6 +71,13 @@
 - Customer Web
 - Employee Web
 - Employee Application
+  - 모바일 서비스 제공 UI/UX 제작
+  - 언어친숙도를 높이고자 라이브러리 사용 최소화
+  - 토큰 기반 autherized axios 통신
+  - 소켓 통신을 통해 진행 상황 실시간 정보 출력
+  - PWA를 통해 모바일 서비스 제공
+  - 컨텍스트 활용 등 불필요한 구간에서 데이터 호출, 전달 감소
+  - 컴포넌트 분할
 
 <br/>
 
