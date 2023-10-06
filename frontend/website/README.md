@@ -1,5 +1,3 @@
-E203
-
 # Outline of FrontEnd
 
 Duration : August 21, 2023 (Mon) ~ October 6, 2023 (Fri)
