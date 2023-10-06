@@ -57,6 +57,6 @@
 
 |   **Name**   |                 신성환                 |                 김규리                 |                 이동규                 |                 조병철                 |                 조은정                 |                 홍진환                 |
 | :----------: | :------------------------------------: | :------------------------------------: | :------------------------------------: | :------------------------------------: | :------------------------------------: | :------------------------------------: |
-| **Profile**  | ![image](./contents/images/신성환.png) | ![image](./contents/images/김규리.png) | ![image](./contents/images/이동규.jpg) | ![image](./contents/images/조병철.jpg) | ![image](./contents/images/조은정.jpg) | ![image](./contents/images/홍진환.png) |
+| **Profile**  | ![image](./contents/images/신성환.png) | ![image](./contents/images/김규리.png) | ![image](./contents/images/이동규.png) | ![image](./contents/images/조병철.png) | ![image](./contents/images/조은정.png) | ![image](./contents/images/홍진환.png) |
 | **Position** |         Embedded <br/> Leader          |                Backend                 |                Backend                 |        Frontend <br/> Embedded         |                Embedded                |                Frontend                |
 |   **Git**    |  [GitHub](https://github.com/hw2ny1)   | [GitHub](https://github.com/kimkyury)  |  [GitHub](https://github.com/unit74)   | [GitHub](https://github.com/RED202301) | [GitHub](https://github.com/jeunjeong) |  [GitHub](https://github.com/bbang7)   |
