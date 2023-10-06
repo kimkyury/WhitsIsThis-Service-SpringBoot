@@ -1,0 +1,78 @@
+.addressbox {
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
+  width: 20rem;
+  height: 40rem;
+  background-color: #ECECEC;
+  border-radius: 0.4rem;
+  /* border: 2px solid black; */
+}
+.textinput {
+  border-radius: 0.4rem;
+  width: 16rem;
+  height: 3rem;
+  padding-left:0.6rem;
+  background-color: white;
+  border: none;
+  box-shadow: 0px 0.1rem 0px rgba(0, 0, 0, 0.5);
+}
+.addresstitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:6rem;
+  height: 2rem;
+
+  background-color: #2D4059;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align:center;
+  border-radius: 0.4rem;
+  /* margin-left: 0.4rem; */
+}
+
+.searchbox {
+  margin-top: 0.5rem;
+  height: 3rem;
+  width: 18rem;
+  background-color: #2D4059;
+  font-size: 1rem;
+  color: white;
+  margin-left: 0.5rem;
+  border-radius: 2rem;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-left: 0.9rem;
+}
+
+.divdiv {
+  display:flex; 
+  justify-content:center;
+}
+
+.compbox {
+  /* display: flex; */
+  width: 18rem;
+  height: 9rem;
+  background-color: white;
+  border-radius: 0.8rem;
+  box-shadow: 0px 0.1rem 0px rgba(0, 0, 0, 0.5);
+
+  
+}
+
+.comptitlebox {
+  font-weight:bold; 
+  font-size: 1rem;
+  margin-left: 0.7rem;
+  color: black
+}
+
+.compbox:hover {
+  background-image: linear-gradient(to right, #2D4059, #2D4080);
+  
+}
