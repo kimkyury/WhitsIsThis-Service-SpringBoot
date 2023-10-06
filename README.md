@@ -37,7 +37,7 @@
 
 ### 이게MO징의 차별성
 
-- **AI 탑재가 된 자율주행 Bot**을 통해, 직원의 업무를 보조하여 **손상결함(바닥 흠집, 곰팡이 등)**을 발견
+- **AI 탑재가 된 자율주행 Bot**을 통해, 직원의 업무를 보조하여 __손상결함(바닥 흠집, 곰팡이 등)__을 발견
 - Application을 통해 **직원과의 점검내용을 교차 편집**
 - Application으로 작성된 **결함내역을 자동으로 PDF파일로 변환**하여 Web에서 조회가능
 
@@ -45,9 +45,33 @@
 
 ## 👨‍👩‍👧‍👦 Outline of MO (주요 기능)
 
-- [Embedded](./embedded)
-- [Backend](./backend)
-- [Frontend](./frontend)
+### 🔗 [Go! Embedded ReadMe](./embedded)
+
+- Token 기반 기기 인증
+- Web Socket구현
+- 자율 주행 경로 생성 알고리즘 구현
+- Grid/Cell 좌표 변환 및 데이터 이미지화
+- SLAM 구현
+- 흠집 정보 확인 및 이미지/흠집좌표 생성
+- 지역 경로 생성
+
+### 🔗 [Go! Backend ReadMe](./backend)
+
+- Spring Boot, React CI/CD 구축
+- Spring Security & JWT기반 회원 보안
+- 문자SMS & Redis & Session 기반 비회원 보안
+- Gitlab, Jenkins, Nginx, Docker, AWS EC2를 활용한 
+- IoT기기와 App 사이의 Socket통신 구현
+- Toss를 통한 가상계좌 이체 서비스 구현
+- Naver SMS API를 이용한 휴대폰 인증 구현
+- AWS EC2, S3를 활용한 이미지/설정 파일 관리
+- Swagger API 문서환경 구축
+
+### 🔗 [Go! Frontend ReadMe](./frontend)
+
+- Customer Web
+- Employee Web
+- Employee Application
 
 <br/>
 
