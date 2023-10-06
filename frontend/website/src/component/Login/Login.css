@@ -1,0 +1,184 @@
+.LoginForm {
+    display:flex;
+    border-radius:2.6vw;
+    width:52vw;
+    height:60vh; 
+    background-color:whitesmoke;
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+  }
+  .infocha {
+    width: 25.5rem;
+    height: 40rem;
+    background-color: white;
+    opacity: 90%;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left:10vw;
+    /* border: 2px solid black; */
+  }
+
+
+  .infofirtitle {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-top: 10%;
+    margin-left: 1.8rem
+  }
+
+  .infogridx {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+  }
+
+  .infoimg {
+    margin-top: 0.2rem;
+    margin-left: 10%;
+    border-radius: 50%; /* 이미지를 원형태로 유지 */
+    width: 6rem;
+    height: 6rem; /* 원형 이미지 크기 설정 */
+  ; /* 원형 이미지 높이 설정 (원의 형태를 유지하려면 가로와 높이가 동일해야 함) */
+  }
+  
+  .infoin {
+    width: 23.375rem;
+    height: 37.5rem;
+    border-radius: 0.5rem;
+    border: 0.1rem solid black;
+    box-shadow: 0px 0.2rem 0.2rem rgba(0,0,0,0.3);
+    
+  }
+
+  .buttonta {
+    font-size: 0.05vw;
+    width: 4rem;
+    border-radius: 0.2vw;
+    color: black;
+    background-color: white;
+    border: 0.1vw solid black;
+    box-shadow: 0px 0.1vw 0px rgba(0, 0, 0, 0.3);
+  }
+
+  .buttonta:hover {
+    font-weight: bold;
+    background-color: #2D4059;
+    color: white;
+    border: 0.1vw solid #F07B3F;
+    /* border: none; */
+  }
+
+  .LoginTag {
+  color: #2D4059;
+  font-weight:bold;
+  text-align: center;
+  font-size: 2.6vw;
+  margin-top:5%;
+  margin-bottom:2%;
+}
+
+
+.idbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 46vw;
+  height:30vh; /* 원하는 너비 설정 */
+  background-color: white;
+  border-radius: 2.6vw;
+  align-content: center;
+  margin-bottom: 2vh;
+  margin-top: 2vh;
+}
+
+.input-group {
+  display: flex;
+  /* flex-direction: column; */
+  /* align-items: center; */
+}
+
+label {
+  margin-right: 0.5vw; /* 레이블과 입력란 사이의 간격 조정 */
+}
+
+.IDPASS {
+  font-size:1.4vw;
+  width:40vw;
+  height:10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.IdPassTag {
+  box-shadow:0px 0.2vw 0px rgba(0, 0, 0, 0.3);
+  border:none; 
+  background-color:#ECF0F3; 
+  width:39vw; height:7vh; 
+  border-radius:0.4vw; 
+  font-size:1.4vw; 
+  padding-left:1vw;
+  margin-top: 3vh;
+}
+
+.LoginTagDiv {
+  margin-top:4vh;
+  display: flex; 
+  justify-content: center; 
+  margin-bottom:5vh;
+}
+
+.IdPassFind {
+  display:flex;
+  justify-content:flex-end; 
+  padding-bottom:5vh; 
+  font-weight:bold; 
+  font-size:1.6vw;
+  margin-top:-0.3vh;
+}
+.LoginButtonDiv {
+  text-align: center;
+  /* margin-top: 5vh; */
+}
+.LoginButton {
+  font-size:2.1vw;
+  width: 40vw;
+  height:10vh;
+  align-self: center; 
+  text-align: center; 
+  border-radius:0.4vw;
+  color:white; 
+  background-color:#2D4059;
+  /* margin-bottom: 5vh; */
+  box-shadow: 0 0.1vw 0 rgba(0, 0, 0.2);
+}
+
+.LoginButton:hover {
+
+
+  background-image: linear-gradient(to right, #2D4059, #2D4080);
+  width: 40vw;
+  height: 10vh;
+}
+
+/* .LoginButton:hover::before {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: linear-gradient(to right, #7c08ed, #f9d5a2);
+  width: 100%;
+} */
+
+/* .LoginButtonDiv:hover::after {
+
+  height: 100%;
+  background-color: #f44336;
+  width: 50%;
+  background-image: linear-gradient(to right, #7c08ed, #f9d5a2);
+  transition: width 0.5s ease-in-out;
+  border-radius: 4px;
+} */

@@ -1,0 +1,137 @@
+.listtitle {
+  font-size:1.2vw;
+  color: #2D4059;
+  font-weight: bold;
+}
+.databox {
+  font-size: 1.0vw;
+  /* font-weight: bold; */
+}
+
+.relistdata {
+  flex: 1;
+  width:10vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dataflex {
+  flex: 3; 
+  width: 40vw;
+  display: flex;
+  align-items: center;
+}
+.relistforms {
+    width: 70vw;
+    height: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1%;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-bottom: 1%;
+    border-bottom: solid 0.01vw black;
+    border-top: solid 0.15vw black;
+    text-align: start;
+}
+
+.flexcenter {
+  display:flex;
+  justify-content: center;
+}
+
+.download:hover {
+  border-bottom: 2px solid black;
+  color:#2D4059
+}
+
+.resmodalform {
+    width: 35vw; 
+    border-radius: 1.4vw; 
+    color: #2D4059; 
+    height: 1rem; 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 1.3vw; 
+    font-weight: bold;
+}
+
+.resclosebutton {
+    display:flex; 
+    color:white; 
+    font-weight:bold;
+    cursor: pointer;
+    opacity:90%; 
+    width:3vw;
+    background-color:#2D4059; 
+    height:2rem;
+    border-radius:0.6vw; 
+    font-size: 0.8vw; 
+    justify-content:center;
+    align-items:center;
+    position: relative; 
+    z-index: 1;
+    /* margin */
+}
+
+.itemresult {
+  border-bottom: 0.15vw solid black; 
+  width: 70vw; 
+  height: 28rem;
+}
+
+.relist {
+    width:  70vw ;
+    height:  2.5rem ;
+    display:  flex ;
+    justify-content:  space-between ;
+    align-items:  center ;
+    padding-top:  0.7% ;
+    padding-left:  1% ;
+    padding-right: 1% ;
+    padding-bottom: 0.6rem ;
+    cursor: pointer ;
+    margin-left:  -1% ;
+}
+
+.relist:hover {
+  /* border: 4px solid #2D4059; */
+  background-color: #ECECEC;
+  opacity: 100%;
+  font-weight: bold;
+  
+  color: #F07B3F;
+}
+/* <Item key={index} data={data} onItemDoubleClick={handleItemDoubleClick} /> */
+.box {
+  border:none;
+  background-color: white;
+  font-weight: bold;
+  color: black;
+}
+
+.box:hover {
+  background-color: #2D4059;
+  border-radius: 0.2vw;
+  color: white;
+  font-weight: bold;
+}
+
+.resultlistinput {
+  margin-top: 1%;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.relistinput {
+    border-radius: 0.3vw;
+    text-align: center;
+    border: 3px solid #2D4059;
+    width: 20vw;
+    height: 1.5rem;
+    
+}
+

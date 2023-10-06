@@ -18,6 +18,10 @@
 .env.test.local
 .env.production.local
 .env
+<<<<<<< HEAD:frontend/customersite/.gitignore
+=======
+
+>>>>>>> frontend/web/website/release:frontend/website/.gitignore
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

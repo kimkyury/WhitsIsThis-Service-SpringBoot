@@ -1,70 +1,121 @@
-# Getting Started with Create React App
+E203
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Outline of FrontEnd
 
-## Available Scripts
+Duration : August 21, 2023 (Mon) ~ October 6, 2023 (Fri)
 
-In the project directory, you can run:
+Theme : 신축 건축물의 사전점검/홈체크 서비스
 
-### `npm start`
+Service Name : ***이게뭐징 (What is this)***
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Member : 홍진환
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 💻 Development Environment
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Os: Windows
 
-### `npm run build`
+React: 18.2.0
+    **Website**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    axios: 1.5.0
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    js-cookie: 3.0.5
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    react-beautiful-dnd: 13.1.1
 
-### `npm run eject`
+    react-datepicker: 4.17.0
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    react-dom: 18.2.0
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    react-icons: 4.11.0
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    react-router-dom: 6.16.0
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    react-scripts: 5.0.1
 
-## Learn More
+    react-to-pdf: 1.0.1
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    react-to-print: 2.14.15
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   @react-pdf/renderer: 3.1.12
 
-### Code Splitting
+    **Customersite**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+   react-icons: 4.11.0
 
-### Analyzing the Bundle Size
+   react-responsive: 9.0.2
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+   react-router-dom: 6.16.0
 
-### Making a Progressive Web App
+   react-scripts: 5.0.1
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+   react-to-pdf: 1.0.1
 
-### Advanced Configuration
+   react-to-print: 2.14.15
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+   styled-components: 6.0.8
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📑 Installation
 
-### `npm run build` fails to minify
+라이브러리 설치
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+npm install js-cookie
+npm install react-beautiful-dnd
+npm install react-datepicker
+npm intall react-to-pdf
+npm install @react-pdf/renderer --save
+npm install react-responsive
+```
+
+---
+
+## 🧬Architecture Diagram
+
+- 전체
+  
+  ![](README_assets/2023-10-06-08-38-57-image.png)
+
+---
+
+## ⚙Flow
+
+### customersite
+
+<img src="README_assets/2023-10-06-08-58-07-image.png" title="" alt="" width="129">고객의 점검 신청 => 휴대폰 인증을 통한 권한 설정
+
+<img src="README_assets/2023-10-06-08-59-25-image.png" title="" alt="" width="122">휴대폰 인증을 통한 권한 확인 후 status에 따라 결제대기(가상계좌를 통한 결제), 점검 대기, 점검 중, 점검완료 페이지로 이동
+
+<img src="README_assets/2023-10-06-09-00-38-image.png" title="" alt="" width="129">ex) 점검결과 페이지
+
+### Website
+
+![](README_assets/2023-10-06-09-02-59-image.png)접수내역(칸반보드)을 통한 대기 수락 => 날짜 기입을 통한 점검 날짜 설정
+
+![](README_assets/2023-10-06-09-03-47-image.png)
+
+결과확인을 통한 pdf와 사진자료 업로드 및 다운로드
+
+<img src="README_assets/2023-10-06-09-06-05-image.png" title="" alt="" width="330">Pdf 업로드 후
+<img src="README_assets/2023-10-06-09-06-38-image.png" title="" alt="" width="316">다운로드 기능 생성
+
+<img src="README_assets/2023-10-06-09-07-33-image.png" title="" alt="" width="303"> Pdf 다운로드 시 장면
+<img src="README_assets/2023-10-06-09-08-04-image.png" title="" alt="" width="294"> 사진 다운로드 시 장면
+
+<img src="README_assets/2023-10-06-10-12-36-image.png" title="" alt="" width="293"> 다운로드시 폴더 장면<img src="README_assets/2023-10-06-09-08-34-image.png" title="" alt="" width="287"> 검색기능
+
+----
+
+## 🌁 Role
+
+- 홍진환
+  FrontEnd
+  - 직원페이지 제작
+  - 고객페이지 제작
+  - Pdf 업로드, 다운로드
+  - dnd, pdf 등 라이브러리 적용
+  - 로그인 로그아웃 최초가입 생성

@@ -1,0 +1,244 @@
+.gridbox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  margin-top:1%;
+}
+
+.recitembox {
+    box-shadow: 0px 0.25vw 0.25vw rgba(0, 0, 0, 0.5);
+    width: 33vw;
+    height: 7.5rem;
+    border-left: 0.25vw solid #F07B3F;
+    margin-top: 1%;
+    margin-left: 1%;
+    background-color: white;
+    color: black;
+}
+
+.i:hover {
+  border-bottom: 1vw solid black;
+}
+
+.rectag {
+  margin-left: 2%; 
+  font-size: 0.8rem;
+  margin-top: 6%;
+}
+
+.iconsearch {
+    display: flex;
+    background-color: orange;
+    margin-left: 5%;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-radius: 50%;
+    color: #2D4059;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputgrid {
+ display: grid;
+ grid-template-columns: 8fr 1fr;
+ margin-right: 2%;
+ align-items: center;
+}
+
+.recspan {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 3%;
+}
+
+.left {
+  margin-left: 5%;
+  background-color: #2D4059;
+  width: 35vw;
+  height: 2.5rem;
+  font-size: 1.6vw;
+  /* border-radius: 8px; */
+  color: #ECECEC;
+  font-weight: bold;
+  border-radius: 0.2vw;
+  border: solid 0.1vw black;
+  box-shadow: 0px 0.25vw 0.25vw rgba(0,0,0,0.5);
+
+}
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+/* .modal-containers {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+} */
+
+.Modalbox {
+  width: 57vw;
+  height: 23rem;
+  border: 0.1vw solid black;
+  box-shadow: 0.05vw 0.15vw 0.15vw rgba(0, 0, 0, 0.5);
+  border-radius: 0.42vw;
+  /* display: flex; */
+  /* justify-content: center; */
+  background-color: white; 
+  display: flex; 
+  justify-content: center;
+}
+
+.Modalboxinpu {
+  width: 37vw;
+  height: 18rem;
+  margin-left: 15vw;
+  border: 0.1vw solid black;
+  box-shadow: 0.05vw 0.15vw 0.15vw rgba(0, 0, 0, 0.5);
+  border-radius: 0.42vw;
+  /* margin-top: -40vh; */
+  /* display: flex; */
+  /* justify-content: center; */
+  background-color: white; 
+  display: flex; 
+  justify-content: center;
+}
+
+.gridmodal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.vtag {
+  margin-left: 5%; 
+  /* border-bottom:2px dashed black; */
+  margin-top: -2%;
+    width:20vw;
+
+}
+
+.tagv {
+  margin-left: 5%; 
+  /* border-bottom:2px dashed black;  */
+  width:20vw
+}
+
+.recfspan {
+  margin-left: 1vw; 
+  border-bottom: 2px solid #2D4059; 
+  height: 2rem;
+}
+
+.recmodalbutton {
+  display:flex; 
+  color:white; 
+  font-weight:bold; 
+  cursor: pointer;
+  opacity:90%; 
+  width:3vw;
+  background-color:#2D4059; 
+  height:4vh;
+  border-radius:0.6vw; 
+  font-size: 0.8vw; 
+  justify-content:center;
+  align-items:center; 
+  position: relative;
+}
+.nameVtagv {
+  border: 0.1vw solid black; 
+  width: 26vw; 
+  border: none; 
+  height: 37vh;
+}
+
+.recitemdiv {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 2%;
+}
+
+.recmodalform {
+    width: 51vw; 
+    border-radius: 1.4vw; 
+    color: #2D4059; 
+    height: 4.2vh; 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 1.6vw; 
+    font-weight: bold;
+}
+.nametag {
+  margin-left: 5%;
+  border-bottom:2px solid black;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.Vtag {
+  font-size: 1.1rem;
+}
+
+.itemif {
+  margin-left: 2%;
+  font-size: 1vw;
+}
+
+.receibox {
+  margin-top: 3%;
+  padding-top: 0.5vh;
+  width: 30vw;
+  height: 62vh;
+  background-color: whitesmoke;
+  border-radius: 0.4vw;
+}
+
+
+.modalrebox {
+  
+  width: 20vw; 
+  height:37vh;
+}
+
+.modaltitlebox {
+    width: 52vw;
+    border: 0.1vw solid #2D4059;
+    box-shadow: 0px 0.15vw 0px rgba(0, 0, 0, 0.5); 
+    border-radius: 1.4vw; 
+    color: #2D4059; 
+    height: 3.3vh; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    font-size: 1.5vw; 
+    font-weight: bold;
+}
+
+.Dropbox {
+  margin-top: 3%;
+  /* padding-top: 1.5vw; */
+  width: 35vw;
+  height: 62vh;
+  background-color: whitesmoke;
+  border-radius: 0.4vw;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.recinputtag {
+
+    display: flex;
+    margin-top: 2%;
+    margin-right: 5%;
+    border-radius: 0.3vw;
+    text-align: center;
+    border: 4px solid #F07B3F;
+    width: 10vw;
+    height: 3vh;
+
+}

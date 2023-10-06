@@ -1,0 +1,82 @@
+.passbox {
+  width: 30vw;
+  height: 56vh;
+  border-radius: 0.4vw;
+  box-shadow: 0.15vw 0.27vw 0.27vw rgba(0, 0, 0, 0.3);
+  background-color: white;
+  padding-top: 3%;
+}
+.passtagbox {
+
+  margin-left: 5%; 
+  color: #2D4059; 
+  font-size: 1.6vw; 
+  font-weight: bold; 
+}
+.detailpassbox {
+  padding-left: 0.5vw; 
+  margin-left: 5%;
+  box-shadow: 0px 0.15vw 0px rgba(0, 0, 0, 0.3); 
+  background-color: #ECF0F3; 
+  border: none; 
+  color: gray; 
+  border-radius: 0.4vw; 
+  width: 24vw; 
+  height: 4.6vh; 
+  font-size: 1.4vw; 
+  font-weight: bold;
+}
+
+.Changebox {
+  width: 24vw; 
+  height: 7.5vh; 
+  border-radius: 1vw; 
+  background-color: #2D4059; 
+  color: white; 
+  font-size: 1.6vw;
+}
+
+.Changeboxx {
+  width: 12rem; 
+  height: 2.5rem; 
+  border-radius: 0.8rem; 
+  background-color: #2D4059; 
+  color: white; 
+  font-size: 1.4rem;
+}
+
+.detailpassboxs {
+  padding-left: 0.5vw; 
+  /* margin-left: 5%; */
+  box-shadow: 0px 0.15vw 0px rgba(0, 0, 0, 0.3); 
+  background-color: #ECF0F3; 
+  border: none; 
+  color: gray; 
+  border-radius: 0.4vw; 
+  width: 20rem; 
+  height: 2rem; 
+  font-size: 1rem; 
+  font-weight: bold;
+}
+
+.detailpassboxx {
+  padding-left: 0.5vw; 
+  margin-left: 5%;
+  box-shadow: 0px 0.15vw 0px rgba(0, 0, 0, 0.3); 
+  background-color: #ECF0F3; 
+  border: none; 
+  color: gray; 
+  border-radius: 0.4vw; 
+  width: 20rem; 
+  height: 2rem; 
+  font-size: 1rem; 
+  font-weight: bold;
+}
+
+.passtagboxx {
+  margin-top: 0.3rem;
+  margin-left: 5%; 
+  color: #2D4059; 
+  font-size: 1.2rem; 
+  font-weight: bold; 
+}
