@@ -71,6 +71,11 @@
 - Customer Web
 - Employee Web
 - Employee Application
+- 직원페이지 제작
+- 고객페이지 제작
+- Pdf 업로드, 다운로드
+- dnd, pdf 등 라이브러리 적용
+- 로그인 로그아웃 최초가입 생성
 
 <br/>
 
