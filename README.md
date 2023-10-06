@@ -37,9 +37,9 @@
 
 ### 이게MO징의 차별성
 
-- **AI 탑재가 된 자율주행 Bot**을 통해, 직원의 업무를 보조하여 __손상결함(바닥 흠집, 곰팡이 등)__을 발견
+- **AI 탑재가 된 자율주행 Bot**을 통해, 직원의 업무를 보조하여 **바닥 흠집, 곰팡이 등 손상 결함을** 발견
 - Application을 통해 **직원과의 점검내용을 교차 편집**
-- Application으로 작성된 **결함내역을 자동으로 PDF파일로 변환**하여 Web에서 조회가능
+- Application으로 작성된 **결함 내역을 PDF파일로 자동 변환**하여 Web에서 조회가능
 
 <br/>
 
@@ -57,10 +57,9 @@
 
 ### 🔗 [Go! Backend ReadMe](./backend)
 
-- Spring Boot, React CI/CD 구축
 - Spring Security & JWT기반 회원 보안
-- 문자SMS & Redis & Session 기반 비회원 보안
-- Gitlab, Jenkins, Nginx, Docker, AWS EC2를 활용한 
+- 문자 SMS & Redis & Session 기반 비회원 보안
+- Gitlab, Jenkins, Nginx, Docker, AWS EC2를 활용한 Spring Boot, React CI/CD 구축
 - IoT기기와 App 사이의 Socket통신 구현
 - Toss를 통한 가상계좌 이체 서비스 구현
 - Naver SMS API를 이용한 휴대폰 인증 구현
