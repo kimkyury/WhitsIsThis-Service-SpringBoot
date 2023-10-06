@@ -96,45 +96,49 @@ embedded
 
 - 전체
 
-![img](./embedded/what_is_this/img/architecture.png)
+  <img src="./embedded/what_is_this/img/architecture.png">
 
 - ROS
 
-![img](./embedded/what_is_this/img/architecture2.png)
+  <img src="./embedded/what_is_this/img/architecture2.png">
+
+
 
 ## ⚙Tech
 
 - 웹 소켓 연결 후, 업무 시작
 
-![img](./embedded/what_is_this/img/mapping.gif)
+  <img src="./embedded/what_is_this/img/mapping.gif">
 
 - 벽 면을 따라다니며 Mapping
 
-![img](./embedded/what_is_this/img/mapping2.gif)
+  <img src="./embedded/what_is_this/img/mapping2.gif">
 
 - Mapping 도중에는 탐색중으로 Application에 표시
 
-![img](./embedded/what_is_this/img/mapping3.gif)
+  <img src="./embedded/what_is_this/img/mapping3.gif">
 
 - Mapping 완료 후 경로 생성 알고리즘에 따른 Global Path 생성
 
-![img](./embedded/what_is_this/img/global.gif)
+  <img src="./embedded/what_is_this/img/global.gif">
 
 - Global Path에 따른 경로 추종
 
-![img](./embedded/what_is_this/img/pathtracking.gif)
+  <img src="./embedded/what_is_this/img/pathtracking.gif">
 
 - Local Path에 따른 경로 추종시 맵 데이터와 진행율을 Application으로 전송
 
-![img](./embedded/what_is_this/img/find.gif)
+  <img src="./embedded/what_is_this/img/find.gif">
 
 - 탐색 도중 흠집정보 인식시 좌표와 이미지를 Application으로 전송
 
-![img](./embedded/what_is_this/img/find2.gif)
+  <img src="./embedded/what_is_this/img/find2.gif">
 
 - 경로 생성의 경우 탐색 경로 간격을 조절할 수 있다.
 
-![img](./embedded/what_is_this/img/path.gif)![img](./embedded/what_is_this/img/path2.gif)
+  <img src="./embedded/what_is_this/img/path.gif"><img src="./embedded/what_is_this/img/path2.gif">
+
+
 
 ## :foggy: Role
 
