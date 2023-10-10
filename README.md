@@ -3,8 +3,11 @@
 <br/>
 
 <div align=center>
-<br/>
+
+  <br/>
+
   ![image](./contents/images/logo.png)
+
 </div>
 
 <div align="center">
@@ -92,6 +95,6 @@
 
 |   **Name**   |                 신성환                 |                 김규리                 |                 이동규                 |                 조병철                 |                 조은정                 |                 홍진환                 |
 | :----------: | :------------------------------------: | :------------------------------------: | :------------------------------------: | :------------------------------------: | :------------------------------------: | :------------------------------------: |
-| **Profile**  | ![image](./contents/images/신성환.png){: width="100" height="100"} | ![image](./contents/images/김규리.jpeg){: width="100" height="100"} | ![image](./contents/images/이동규.png){: width="100" height="100"} | ![image](./contents/images/조병철.png){: width="100" height="100"} | ![image](./contents/images/조은정.png){: width="100" height="100"} | ![image](./contents/images/홍진환.png){: width="100" height="100"} |
+| **Profile**  | <img src="./contents/images/신성환.png"  width="150" height="150"/> | <img src="./contents/images/김규리.jpeg"  width="150" height="150"/> | <img src="./contents/images/이동규.png"  width="150" height="150"/> | <img src="./contents/images/조병철.png"  width="150" height="150"/> | <img src="./contents/images/조은정.png"  width="150" height="150"/> | <img src="./contents/images/홍진환.png"  width="150" height="150"/> |
 | **Position** |         Embedded <br/> Leader          |                Backend                 |                Backend                 |        Frontend <br/> Embedded         |                Embedded                |                Frontend                |
 |   **Git**    |  [GitHub](https://github.com/hw2ny1)   | [GitHub](https://github.com/kimkyury)  |  [GitHub](https://github.com/unit74)   |  [GitHub](https://github.com/bbang7)   | [GitHub](https://github.com/jeunjeong) | [GitHub](https://github.com/RED202301) |
